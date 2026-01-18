@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Random Dot Motion Task | Perceptual Decision Making</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.5/babel.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { margin: 0; }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect, useRef, useCallback } = React;
+
+        /*
+        ╔═══════════════════════════════════════════════════════════════════════════╗
+        ║                     RANDOM DOT MOTION TASK                                ║
+        ║                                                                           ║
+        ║  A classic perceptual decision-making paradigm used to study how          ║
+        ║  observers extract signal from noise and make choices under uncertainty.  ║
+        ║                                                                           ║
+        ║  KEY PARAMETERS TO EXPLORE:                                               ║
+        ║  • coherence: proportion of dots moving in the signal direction           ║
+        ║  • stimulusDuration: how long the dots are shown                          ║
+        ║  • numDots: total number of dots in the display                           ║
+        ║  • DOT_SPEED: how fast dots move (pixels per frame)                       ║
+        ║                                                                           ║
+        ║  DISCUSSION QUESTIONS:                                                    ║
+        ║  1. How does coherence affect accuracy AND reaction time?                 ║
+        ║  2. What coherence level produces chance performance (50%)?               ║
+        ║  3. Does longer viewing time always improve accuracy?                     ║
+        ║  4. What does this reveal about how "decisions" are made?                 ║
+        ║                                                                           ║
+        ║  EXTENSION IDEAS:                                                         ║
+        ║  • Add confidence ratings after each response                             ║
+        ║  • Implement response deadlines                                           ║
+        ║  • Add asymmetric rewards for left vs right                               ║
+        ║  • Plot psychometric curves across coherence levels                       ║
+        ╚═══════════════════════════════════════════════════════════════════════════╝
+        */
+
+        const DotMotionTask = () => {
+            const canvasRef = useRef(null);
+            
+            // ═══════════════════════════════════════════════════════════════
+            // GAME STATE
+            // ═══════════════════════════════════════════════════════════════
+            const [gameState, setGameState] = useState('intro'); 
+            // States: 'intro' | 'ready' | 'stimulus' | 'feedback' | 'results'
+            
+            // ═══════════════════════════════════════════════════════════════
+            // ADJUSTABLE PARAMETERS - Try changing these!
+            // ═══════════════════════════════════════════════════════════════
+            const [coherence, setCoherence] = useState(0.3);        // 0.0 to 1.0
+            const [numDots, setNumDots] = useState(100);            // total dots
+            const [stimulusDuration, setStimulusDuration] = useState(1000); // ms
+            
+            // ═══════════════════════════════════════════════════════════════
+            // TRIAL DATA
+            // ═══════════════════════════════════════════════════════════════
+            const [trials, setTrials] = useState([]);
+            const [currentTrial, setCurrentTrial] = useState(null);
+            const [trialCount, setTrialCount] = useState(0);
+            const [totalTrials] = useState(10);
+            const [feedback, setFeedback] = useState(null);
+            const [stimulusStartTime, setStimulusStartTime] = useState(null);
+            
+            // ═══════════════════════════════════════════════════════════════
+            // DISPLAY CONSTANTS - Advanced users can modify these
+            // ═══════════════════════════════════════════════════════════════
+            const CANVAS_SIZE = 300;
+            const DOT_RADIUS = 2;
+            const DOT_SPEED = 3;          // pixels per frame
+            const APERTURE_RADIUS = 120;  // circular viewing window
+            
+            // Internal refs (don't modify unless you know what you're doing)
+            const dotsRef = useRef([]);
+            const directionRef = useRef(1);  // 1 = right, -1 = left
+            const animationRef = useRef(null);
+
+            // ═══════════════════════════════════════════════════════════════
+            // DOT INITIALIZATION
+            // Creates the dot field with signal and noise dots
+            // ═══════════════════════════════════════════════════════════════
+            const initializeDots = useCallback(() => {
+                const dots = [];
+                for (let i = 0; i < numDots; i++) {
+                    // Random position within circular aperture
+                    const angle = Math.random() * Math.PI * 2;
+                    const r = Math.random() * APERTURE_RADIUS;
+                    dots.push({
+                        x: CANVAS_SIZE/2 + Math.cos(angle) * r,
+                        y: CANVAS_SIZE/2 + Math.sin(angle) * r,
+                        // This is the key: coherence determines signal vs noise
+                        isSignal: Math.random() < coherence
+                    });
+                }
+                dotsRef.current = dots;
+            }, [numDots, coherence]);
+
+            // ═══════════════════════════════════════════════════════════════
+            // DOT MOTION UPDATE
+            // Signal dots move coherently; noise dots move randomly
+            // ═══════════════════════════════════════════════════════════════
+            const updateDots = useCallback(() => {
+                dotsRef.current = dotsRef.current.map(dot => {
+                    let newX, newY;
+                    
+                    if (dot.isSignal) {
+                        // SIGNAL: Move in the coherent direction (left or right)
+                        newX = dot.x + DOT_SPEED * directionRef.current;
+                        newY = dot.y;
+                    } else {
+                        // NOISE: Move in a random direction
+                        const randomAngle = Math.random() * Math.PI * 2;
+                        newX = dot.x + Math.cos(randomAngle) * DOT_SPEED;
+                        newY = dot.y + Math.sin(randomAngle) * DOT_SPEED;
+                    }
+                    
+                    // Wrap dots that exit the aperture
+                    const dx = newX - CANVAS_SIZE/2;
+                    const dy = newY - CANVAS_SIZE/2;
+                    const dist = Math.sqrt(dx*dx + dy*dy);
+                    
+                    if (dist > APERTURE_RADIUS) {
+                        const angle = Math.atan2(dy, dx) + Math.PI;
+                        newX = CANVAS_SIZE/2 + Math.cos(angle) * APERTURE_RADIUS * 0.9;
+                        newY = CANVAS_SIZE/2 + Math.sin(angle) * APERTURE_RADIUS * 0.9;
+                    }
+                    
+                    return { ...dot, x: newX, y: newY };
+                });
+            }, []);
+
+            // ═══════════════════════════════════════════════════════════════
+            // RENDERING
+            // ═══════════════════════════════════════════════════════════════
+            const draw = useCallback(() => {
+                const canvas = canvasRef.current;
+                if (!canvas) return;
+                const ctx = canvas.getContext('2d');
+                
+                // Background
+                ctx.fillStyle = '#1a1a2e';
+                ctx.fillRect(0, 0, CANVAS_SIZE, CANVAS_SIZE);
+                
+                // Aperture boundary
+                ctx.strokeStyle = '#4a4a6a';
+                ctx.lineWidth = 2;
+                ctx.beginPath();
+                ctx.arc(CANVAS_SIZE/2, CANVAS_SIZE/2, APERTURE_RADIUS, 0, Math.PI * 2);
+                ctx.stroke();
+                
+                // Fixation cross (helps stabilize eye position)
+                ctx.strokeStyle = '#ffffff';
+                ctx.lineWidth = 2;
+                ctx.beginPath();
+                ctx.moveTo(CANVAS_SIZE/2 - 10, CANVAS_SIZE/2);
+                ctx.lineTo(CANVAS_SIZE/2 + 10, CANVAS_SIZE/2);
+                ctx.moveTo(CANVAS_SIZE/2, CANVAS_SIZE/2 - 10);
+                ctx.lineTo(CANVAS_SIZE/2, CANVAS_SIZE/2 + 10);
+                ctx.stroke();
+                
+                // Only draw dots during stimulus presentation
+                if (gameState === 'stimulus') {
+                    ctx.fillStyle = '#ffffff';
+                    dotsRef.current.forEach(dot => {
+                        ctx.beginPath();
+                        ctx.arc(dot.x, dot.y, DOT_RADIUS, 0, Math.PI * 2);
+                        ctx.fill();
+                    });
+                }
+            }, [gameState]);
+
+            // Animation loop
+            useEffect(() => {
+                if (gameState === 'stimulus') {
+                    const animate = () => {
+                        updateDots();
+                        draw();
+                        animationRef.current = requestAnimationFrame(animate);
+                    };
+                    animate();
+                    
+                    return () => {
+                        if (animationRef.current) {
+                            cancelAnimationFrame(animationRef.current);
+                        }
+                    };
+                } else {
+                    draw();
+                }
+            }, [gameState, draw, updateDots]);
+
+            // ═══════════════════════════════════════════════════════════════
+            // TRIAL CONTROL
+            // ═══════════════════════════════════════════════════════════════
+            const startTrial = useCallback(() => {
+                // Randomly choose left (-1) or right (1) for this trial
+                directionRef.current = Math.random() < 0.5 ? -1 : 1;
+                initializeDots();
+                setGameState('stimulus');
+                setStimulusStartTime(Date.now());
+                
+                // Auto-end stimulus after duration (participant can still respond)
+                setTimeout(() => {
+                    if (animationRef.current) {
+                        cancelAnimationFrame(animationRef.current);
+                    }
+                    setGameState('ready');
+                }, stimulusDuration);
+            }, [initializeDots, stimulusDuration]);
+
+            // ═══════════════════════════════════════════════════════════════
+            // RESPONSE HANDLING
+            // Records choice, accuracy, and reaction time
+            // ═══════════════════════════════════════════════════════════════
+            const handleResponse = useCallback((response) => {
+                if (gameState !== 'stimulus' && gameState !== 'ready') return;
+                if (stimulusStartTime === null) return;
+                
+                const rt = Date.now() - stimulusStartTime;
+                const correct = (response === 'left' && directionRef.current === -1) || 
+                               (response === 'right' && directionRef.current === 1);
+                
+                const trialData = {
+                    trialNum: trialCount + 1,
+                    direction: directionRef.current === 1 ? 'right' : 'left',
+                    response,
+                    correct,
+                    rt,
+                    coherence
+                };
+                
+                setTrials(prev => [...prev, trialData]);
+                setCurrentTrial(trialData);
+                setFeedback(correct ? 'Correct!' : 'Incorrect');
+                setGameState('feedback');
+                
+                // Brief feedback, then next trial or results
+                setTimeout(() => {
+                    if (trialCount + 1 >= totalTrials) {
+                        setGameState('results');
+                    } else {
+                        setTrialCount(prev => prev + 1);
+                        setFeedback(null);
+                        setGameState('ready');
+                    }
+                }, 800);
+            }, [gameState, stimulusStartTime, trialCount, totalTrials, coherence]);
+
+            // Keyboard controls
+            useEffect(() => {
+                const handleKeyDown = (e) => {
+                    if (e.key === 'ArrowLeft') {
+                        handleResponse('left');
+                    } else if (e.key === 'ArrowRight') {
+                        handleResponse('right');
+                    } else if (e.key === ' ' && gameState === 'ready') {
+                        e.preventDefault();
+                        startTrial();
+                    }
+                };
+                
+                window.addEventListener('keydown', handleKeyDown);
+                return () => window.removeEventListener('keydown', handleKeyDown);
+            }, [handleResponse, startTrial, gameState]);
+
+            // ═══════════════════════════════════════════════════════════════
+            // RESULTS CALCULATION
+            // ═══════════════════════════════════════════════════════════════
+            const getResults = () => {
+                if (trials.length === 0) return { accuracy: 0, meanRT: 0, correctRT: 0 };
+                const accuracy = trials.filter(t => t.correct).length / trials.length;
+                const meanRT = trials.reduce((sum, t) => sum + t.rt, 0) / trials.length;
+                const correctTrials = trials.filter(t => t.correct);
+                const correctRT = correctTrials.length > 0 
+                    ? correctTrials.reduce((sum, t) => sum + t.rt, 0) / correctTrials.length 
+                    : 0;
+                return { accuracy, meanRT, correctRT };
+            };
+
+            const resetGame = () => {
+                setTrials([]);
+                setTrialCount(0);
+                setCurrentTrial(null);
+                setFeedback(null);
+                setGameState('intro');
+            };
+
+            // ═══════════════════════════════════════════════════════════════
+            // UI RENDERING
+            // ═══════════════════════════════════════════════════════════════
+            return (
+                <div className="min-h-screen bg-slate-900 text-white p-6">
+                    <div className="max-w-2xl mx-auto">
+                        <h1 className="text-2xl font-bold text-center mb-2">
+                            Random Dot Motion Task
+                        </h1>
+                        <p className="text-slate-400 text-center text-sm mb-6">
+                            A classic perceptual decision-making paradigm
+                        </p>
+
+                        {/* ─────────────────────────────────────────────────────── */}
+                        {/* INTRO SCREEN                                            */}
+                        {/* ─────────────────────────────────────────────────────── */}
+                        {gameState === 'intro' && (
+                            <div className="bg-slate-800 rounded-lg p-6 mb-6">
+                                <h2 className="text-lg font-semibold mb-4">Instructions</h2>
+                                <p className="text-slate-300 mb-4">
+                                    You'll see a cloud of moving dots. Some dots move coherently 
+                                    LEFT or RIGHT, while others move randomly. Your job is to 
+                                    decide which direction the coherent dots are moving.
+                                </p>
+                                <ul className="text-slate-300 space-y-2 mb-6">
+                                    <li>• Press <span className="bg-slate-700 px-2 py-1 rounded font-mono">SPACE</span> to start each trial</li>
+                                    <li>• Press <span className="bg-slate-700 px-2 py-1 rounded font-mono">←</span> for LEFT or <span className="bg-slate-700 px-2 py-1 rounded font-mono">→</span> for RIGHT</li>
+                                    <li>• Respond as quickly and accurately as possible</li>
+                                </ul>
+                                
+                                <div className="border-t border-slate-700 pt-4 mt-4">
+                                    <h3 className="text-sm font-semibold text-slate-400 mb-3">
+                                        PARAMETERS (adjust to explore!)
+                                    </h3>
+                                    <div className="grid grid-cols-1 gap-4">
+                                        <div>
+                                            <label className="block text-sm text-slate-400 mb-1">
+                                                Coherence: {(coherence * 100).toFixed(0)}%
+                                            </label>
+                                            <input
+                                                type="range"
+                                                min="0.05"
+                                                max="0.8"
+                                                step="0.05"
+                                                value={coherence}
+                                                onChange={(e) => setCoherence(parseFloat(e.target.value))}
+                                                className="w-full accent-blue-500"
+                                            />
+                                            <p className="text-xs text-slate-500 mt-1">
+                                                Higher = easier (more signal dots)
+                                            </p>
+                                        </div>
+                                        <div>
+                                            <label className="block text-sm text-slate-400 mb-1">
+                                                Stimulus Duration: {stimulusDuration}ms
+                                            </label>
+                                            <input
+                                                type="range"
+                                                min="200"
+                                                max="2000"
+                                                step="100"
+                                                value={stimulusDuration}
+                                                onChange={(e) => setStimulusDuration(parseInt(e.target.value))}
+                                                className="w-full accent-blue-500"
+                                            />
+                                            <p className="text-xs text-slate-500 mt-1">
+                                                Longer = more time to accumulate evidence
+                                            </p>
+                                        </div>
+                                        <div>
+                                            <label className="block text-sm text-slate-400 mb-1">
+                                                Number of Dots: {numDots}
+                                            </label>
+                                            <input
+                                                type="range"
+                                                min="50"
+                                                max="200"
+                                                step="10"
+                                                value={numDots}
+                                                onChange={(e) => setNumDots(parseInt(e.target.value))}
+                                                className="w-full accent-blue-500"
+                                            />
+                                            <p className="text-xs text-slate-500 mt-1">
+                                                More dots = more information per frame
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <button
+                                    onClick={() => setGameState('ready')}
+                                    className="w-full mt-6 bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-lg font-semibold transition"
+                                >
+                                    Start Experiment
+                                </button>
+                            </div>
+                        )}
+
+                        {/* ─────────────────────────────────────────────────────── */}
+                        {/* TRIAL SCREEN                                            */}
+                        {/* ─────────────────────────────────────────────────────── */}
+                        {(gameState === 'ready' || gameState === 'stimulus' || gameState === 'feedback') && (
+                            <div className="flex flex-col items-center">
+                                <div className="mb-4 text-sm text-slate-400">
+                                    Trial {trialCount + 1} of {totalTrials} | Coherence: {(coherence * 100).toFixed(0)}%
+                                </div>
+                                
+                                <canvas
+                                    ref={canvasRef}
+                                    width={CANVAS_SIZE}
+                                    height={CANVAS_SIZE}
+                                    className="rounded-lg mb-4"
+                                />
+                                
+                                {gameState === 'ready' && !feedback && (
+                                    <p className="text-slate-400 mb-4">Press SPACE to start trial</p>
+                                )}
+                                
+                                {feedback && (
+                                    <p className={`text-lg font-bold mb-4 ${
+                                        feedback === 'Correct!' ? 'text-green-400' : 'text-red-400'
+                                    }`}>
+                                        {feedback}
+                                    </p>
+                                )}
+                                
+                                <div className="flex gap-4">
+                                    <button
+                                        onClick={() => handleResponse('left')}
+                                        className="bg-slate-700 hover:bg-slate-600 px-8 py-3 rounded-lg font-semibold transition"
+                                    >
+                                        ← LEFT
+                                    </button>
+                                    <button
+                                        onClick={() => handleResponse('right')}
+                                        className="bg-slate-700 hover:bg-slate-600 px-8 py-3 rounded-lg font-semibold transition"
+                                    >
+                                        RIGHT →
+                                    </button>
+                                </div>
+                            </div>
+                        )}
+
+                        {/* ─────────────────────────────────────────────────────── */}
+                        {/* RESULTS SCREEN                                          */}
+                        {/* ─────────────────────────────────────────────────────── */}
+                        {gameState === 'results' && (
+                            <div className="bg-slate-800 rounded-lg p-6">
+                                <h2 className="text-xl font-bold mb-4 text-center">Results</h2>
+                                
+                                <div className="grid grid-cols-3 gap-4 mb-6">
+                                    <div className="bg-slate-700 rounded-lg p-4 text-center">
+                                        <div className="text-3xl font-bold text-blue-400">
+                                            {(getResults().accuracy * 100).toFixed(0)}%
+                                        </div>
+                                        <div className="text-sm text-slate-400">Accuracy</div>
+                                    </div>
+                                    <div className="bg-slate-700 rounded-lg p-4 text-center">
+                                        <div className="text-3xl font-bold text-green-400">
+                                            {getResults().correctRT.toFixed(0)}ms
+                                        </div>
+                                        <div className="text-sm text-slate-400">Correct RT</div>
+                                    </div>
+                                    <div className="bg-slate-700 rounded-lg p-4 text-center">
+                                        <div className="text-3xl font-bold text-yellow-400">
+                                            {(coherence * 100).toFixed(0)}%
+                                        </div>
+                                        <div className="text-sm text-slate-400">Coherence</div>
+                                    </div>
+                                </div>
+                                
+                                <div className="bg-slate-700 rounded-lg p-4 mb-6">
+                                    <h3 className="font-semibold mb-2">Trial-by-Trial Data</h3>
+                                    <div className="text-xs font-mono text-slate-400 max-h-40 overflow-y-auto">
+                                        <div className="grid grid-cols-5 gap-2 mb-1 text-slate-500 border-b border-slate-600 pb-1">
+                                            <span>Trial</span>
+                                            <span>Dir</span>
+                                            <span>Resp</span>
+                                            <span>Correct</span>
+                                            <span>RT</span>
+                                        </div>
+                                        {trials.map((t, i) => (
+                                            <div key={i} className="grid grid-cols-5 gap-2 py-0.5">
+                                                <span>{t.trialNum}</span>
+                                                <span>{t.direction}</span>
+                                                <span>{t.response}</span>
+                                                <span className={t.correct ? 'text-green-400' : 'text-red-400'}>
+                                                    {t.correct ? '✓' : '✗'}
+                                                </span>
+                                                <span>{t.rt}ms</span>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                                
+                                <div className="bg-slate-900 rounded-lg p-4 mb-6">
+                                    <h3 className="font-semibold mb-2 text-sm text-slate-400">
+                                        DISCUSSION QUESTIONS
+                                    </h3>
+                                    <ul className="text-sm text-slate-300 space-y-2">
+                                        <li>• How does lowering coherence affect accuracy AND reaction time?</li>
+                                        <li>• At what coherence level does performance approach chance (50%)?</li>
+                                        <li>• Does longer viewing time always improve accuracy? Why or why not?</li>
+                                        <li>• What does this task reveal about how "decisions" emerge?</li>
+                                    </ul>
+                                </div>
+                                
+                                <button
+                                    onClick={resetGame}
+                                    className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-lg font-semibold transition"
+                                >
+                                    Try Different Parameters
+                                </button>
+                            </div>
+                        )}
+
+                        {/* ─────────────────────────────────────────────────────── */}
+                        {/* FOOTER                                                  */}
+                        {/* ─────────────────────────────────────────────────────── */}
+                        <div className="mt-8 text-center text-xs text-slate-500">
+                            <p>
+                                Based on the random dot kinematogram paradigm 
+                                (Newsome & Paré, 1988; Shadlen & Newsome, 2001)
+                            </p>
+                            <p className="mt-1">
+                                Fork this on GitHub to create your own version!
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            );
+        };
+
+        // Mount the app
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<DotMotionTask />);
+    </script>
+</body>
+</html>
