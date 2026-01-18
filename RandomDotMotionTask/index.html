@@ -414,7 +414,7 @@
             // Trial data
             const [trials, setTrials] = useState([]);
             const [trialCount, setTrialCount] = useState(0);
-            const [totalTrials] = useState(20);
+            const [totalTrials, setTotalTrials] = useState(20);
             const [feedback, setFeedback] = useState(null);
             const [stimulusStartTime, setStimulusStartTime] = useState(null);
             
@@ -459,18 +459,29 @@
             // FIREBASE AUTHENTICATION
             // ═══════════════════════════════════════════════════════════════
             useEffect(() => {
+                console.log('Firebase initialization check...');
+                console.log('isFirebaseConfigured:', isFirebaseConfigured);
+                console.log('auth:', !!auth);
+                console.log('db:', !!db);
+                
                 if (!isFirebaseConfigured || !auth) {
+                    console.log('Firebase not configured or auth not available');
                     setFirebaseStatus('not_configured');
                     return;
                 }
                 
+                console.log('Attempting anonymous authentication...');
                 auth.signInAnonymously()
                     .then((result) => {
+                        console.log('✅ Successfully authenticated with Firebase');
+                        console.log('User ID:', result.user.uid);
                         setParticipantId(result.user.uid);
                         setFirebaseStatus('connected');
                     })
                     .catch((error) => {
-                        console.error("Auth error:", error);
+                        console.error("❌ Firebase auth error:", error);
+                        console.error("Error code:", error.code);
+                        console.error("Error message:", error.message);
                         setFirebaseStatus('error');
                     });
             }, []);
@@ -479,20 +490,26 @@
             // LOAD POPULATION DATA
             // ═══════════════════════════════════════════════════════════════
             const loadPopulationData = async () => {
-                if (!db || firebaseStatus !== 'connected') return;
+                if (!db || firebaseStatus !== 'connected') {
+                    console.log('Cannot load population data: Firebase not connected. Status:', firebaseStatus);
+                    return;
+                }
                 
+                console.log('Loading population data from Firebase...');
                 setIsLoadingPopulation(true);
                 try {
                     const snapshot = await db.collection('dot_motion_results')
-                        .where('coherence', '==', coherence)
                         .orderBy('timestamp', 'desc')
                         .limit(500)
                         .get();
                     
                     const data = snapshot.docs.map(doc => doc.data());
+                    console.log('Successfully loaded', data.length, 'results from Firebase');
                     setPopulationData(data);
                 } catch (error) {
                     console.error("Error loading population data:", error);
+                    console.error("Error message:", error.message);
+                    if (error.code) console.error("Error code:", error.code);
                 }
                 setIsLoadingPopulation(false);
             };
@@ -501,28 +518,44 @@
             // SAVE RESULTS TO FIREBASE
             // ═══════════════════════════════════════════════════════════════
             const saveResults = async (accuracy, meanRT, correctRT) => {
-                if (!db || firebaseStatus !== 'connected') return;
+                if (!db || firebaseStatus !== 'connected') {
+                    console.log('Cannot save: Firebase not connected. Status:', firebaseStatus);
+                    return;
+                }
+                
+                console.log('Attempting to save results to Firebase...');
                 
                 try {
-                    await db.collection('dot_motion_results').add({
+                    const resultData = {
                         participantId,
                         participantName: participantName || 'Anonymous',
-                        coherence,
-                        stimulusDuration,
-                        numDots,
+                        // Save summary statistics
                         accuracy,
                         meanRT,
                         correctRT,
                         totalTrials,
+                        numDots,
+                        // Save trial parameter ranges
+                        coherenceRange: '0-50%',
+                        durationRange: '250-1000ms',
+                        // Save full trial-by-trial data with individual parameters
                         trials,
                         timestamp: firebase.firestore.FieldValue.serverTimestamp(),
                         userAgent: navigator.userAgent
-                    });
+                    };
+                    
+                    console.log('Saving data:', resultData);
+                    
+                    const docRef = await db.collection('dot_motion_results').add(resultData);
+                    console.log('Successfully saved with ID:', docRef.id);
+                    
                     setDataSaved(true);
                     // Reload population data to include this result
                     await loadPopulationData();
                 } catch (error) {
                     console.error("Error saving results:", error);
+                    console.error("Error details:", error.message);
+                    alert('Failed to save results: ' + error.message);
                 }
             };
 
@@ -798,6 +831,24 @@
                                     <div className="grid grid-cols-1 gap-4">
                                         <div>
                                             <label className="block text-sm text-slate-400 mb-2">
+                                                Number of Trials: {totalTrials}
+                                            </label>
+                                            <input
+                                                type="range"
+                                                min="5"
+                                                max="50"
+                                                step="5"
+                                                value={totalTrials}
+                                                onChange={(e) => setTotalTrials(parseInt(e.target.value))}
+                                                className="w-full accent-blue-500"
+                                            />
+                                            <div className="flex justify-between text-xs text-slate-500 mt-1">
+                                                <span>5</span>
+                                                <span>50</span>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <label className="block text-sm text-slate-400 mb-2">
                                                 Coherence: Randomized per trial (0-50%)
                                             </label>
                                             <div className="bg-slate-800 rounded p-3 text-xs text-slate-300">
@@ -876,27 +927,61 @@
                         {/* ─────────────────────────────────────────────────────── */}
                         {gameState === 'results' && (
                             <div className="bg-slate-800 rounded-lg p-6">
-                                <h2 className="text-xl font-bold mb-4 text-center">Your Results</h2>
-                                
-                                {/* Your scores */}
-                                <div className="grid grid-cols-3 gap-4 mb-6">
-                                    <div className="bg-slate-700 rounded-lg p-4 text-center">
-                                        <div className="text-3xl font-bold text-blue-400">
-                                            {(myResults.accuracy * 100).toFixed(0)}%
-                                        </div>
-                                        <div className="text-sm text-slate-400">Accuracy</div>
+                                <h2 className="text-xl font-bold mb-6 text-center">Experiment Results</h2>
+
+                                {firebaseStatus !== 'connected' && (
+                                    <div className="bg-amber-900/30 border border-amber-600 rounded-lg p-4 mb-6 text-center">
+                                        <p className="text-amber-300 font-semibold mb-2">
+                                            ⚠️ Firebase Status: {firebaseStatus}
+                                        </p>
+                                        <p className="text-sm text-slate-300">
+                                            {firebaseStatus === 'not_configured' && 'Firebase not configured. Data will not be saved.'}
+                                            {firebaseStatus === 'error' && 'Firebase connection error. Check console for details.'}
+                                            {firebaseStatus === 'connecting' && 'Connecting to Firebase...'}
+                                        </p>
+                                        {firebaseStatus !== 'connecting' && (
+                                            <p className="text-xs text-slate-400 mt-2">
+                                                Open browser console (F12) for more details
+                                            </p>
+                                        )}
                                     </div>
-                                    <div className="bg-slate-700 rounded-lg p-4 text-center">
-                                        <div className="text-3xl font-bold text-green-400">
-                                            {myResults.correctRT.toFixed(0)}ms
+                                )}
+
+                                {/* Individual Performance Summary */}
+                                <div className="mb-6">
+                                    <h3 className="text-lg font-semibold mb-4 text-center">
+                                        🎯 Your Performance Summary
+                                    </h3>
+                                    <div className="bg-slate-700 rounded-lg p-4">
+                                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                                            <div className="text-center">
+                                                <div className="text-4xl font-bold text-blue-400 mb-2">
+                                                    {(myResults.accuracy * 100).toFixed(1)}%
+                                                </div>
+                                                <div className="text-sm text-slate-400">Overall Accuracy</div>
+                                                <div className="text-xs text-slate-500 mt-1">
+                                                    {trials.filter(t => t.correct).length}/{trials.length} correct
+                                                </div>
+                                            </div>
+                                            <div className="text-center">
+                                                <div className="text-4xl font-bold text-green-400 mb-2">
+                                                    {myResults.correctRT.toFixed(0)}ms
+                                                </div>
+                                                <div className="text-sm text-slate-400">Mean Correct RT</div>
+                                                <div className="text-xs text-slate-500 mt-1">
+                                                    Range: {Math.min(...trials.filter(t => t.correct).map(t => t.rt)).toFixed(0)}-{Math.max(...trials.filter(t => t.correct).map(t => t.rt)).toFixed(0)}ms
+                                                </div>
+                                            </div>
+                                            <div className="text-center">
+                                                <div className="text-4xl font-bold text-yellow-400 mb-2">
+                                                    {totalTrials}
+                                                </div>
+                                                <div className="text-sm text-slate-400">Trials Completed</div>
+                                                <div className="text-xs text-slate-500 mt-1">
+                                                    0-50% coherence range
+                                                </div>
+                                            </div>
                                         </div>
-                                        <div className="text-sm text-slate-400">Correct RT</div>
-                                    </div>
-                                    <div className="bg-slate-700 rounded-lg p-4 text-center">
-                                        <div className="text-3xl font-bold text-yellow-400">
-                                            0-50%
-                                        </div>
-                                        <div className="text-sm text-slate-400">Coherence Range</div>
                                     </div>
                                 </div>
 
@@ -915,23 +1000,62 @@
                                 {populationData.length > 1 && (
                                     <div className="mb-6">
                                         <h3 className="text-lg font-semibold mb-4 text-center">
-                                            📊 How You Compare (n={populationData.length})
+                                            📊 Population Performance (n={populationData.length})
                                         </h3>
                                         
-                                        {/* Percentile badges */}
-                                        <div className="grid grid-cols-2 gap-4 mb-4">
-                                            <div className="bg-slate-900 rounded-lg p-3 text-center">
-                                                <div className="text-2xl font-bold text-blue-400">
-                                                    {calculatePercentile(myResults.accuracy * 100, populationAccuracies)}th
+                                        {/* Population Summary Stats */}
+                                        <div className="bg-slate-900 rounded-lg p-4 mb-4">
+                                            <h4 className="font-semibold mb-3 text-center text-slate-300">Aggregate Statistics</h4>
+                                            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
+                                                <div>
+                                                    <div className="text-xl font-bold text-blue-400">
+                                                        {(populationAccuracies.reduce((a,b) => a+b, 0) / populationAccuracies.length).toFixed(1)}%
+                                                    </div>
+                                                    <div className="text-xs text-slate-400">Mean Accuracy</div>
                                                 </div>
-                                                <div className="text-xs text-slate-400">Accuracy Percentile</div>
+                                                <div>
+                                                    <div className="text-xl font-bold text-green-400">
+                                                        {(populationRTs.reduce((a,b) => a+b, 0) / populationRTs.length).toFixed(0)}ms
+                                                    </div>
+                                                    <div className="text-xs text-slate-400">Mean RT</div>
+                                                </div>
+                                                <div>
+                                                    <div className="text-xl font-bold text-purple-400">
+                                                        {Math.max(...populationAccuracies).toFixed(0)}%
+                                                    </div>
+                                                    <div className="text-xs text-slate-400">Best Accuracy</div>
+                                                </div>
+                                                <div>
+                                                    <div className="text-xl font-bold text-orange-400">
+                                                        {Math.min(...populationRTs).toFixed(0)}ms
+                                                    </div>
+                                                    <div className="text-xs text-slate-400">Fastest RT</div>
+                                                </div>
                                             </div>
-                                            <div className="bg-slate-900 rounded-lg p-3 text-center">
-                                                <div className="text-2xl font-bold text-green-400">
-                                                    {100 - calculatePercentile(myResults.correctRT, populationRTs)}th
+                                        </div>
+                                        
+                                        {/* Your Performance vs Population */}
+                                        <div className="bg-slate-900 rounded-lg p-4 mb-4">
+                                            <h4 className="font-semibold mb-3 text-center text-slate-300">Your Performance Ranking</h4>
+                                            <div className="grid grid-cols-2 gap-4">
+                                                <div className="text-center">
+                                                    <div className="text-3xl font-bold text-blue-400 mb-1">
+                                                        {calculatePercentile(myResults.accuracy * 100, populationAccuracies)}th
+                                                    </div>
+                                                    <div className="text-sm text-slate-400 mb-2">Accuracy Percentile</div>
+                                                    <div className="text-xs text-slate-500">
+                                                        You scored better than {calculatePercentile(myResults.accuracy * 100, populationAccuracies)}% of users
+                                                    </div>
                                                 </div>
-                                                <div className="text-xs text-slate-400">Speed Percentile</div>
-                                                <div className="text-xs text-slate-500">(faster = higher)</div>
+                                                <div className="text-center">
+                                                    <div className="text-3xl font-bold text-green-400 mb-1">
+                                                        {100 - calculatePercentile(myResults.correctRT, populationRTs)}th
+                                                    </div>
+                                                    <div className="text-sm text-slate-400 mb-2">Speed Percentile</div>
+                                                    <div className="text-xs text-slate-500">
+                                                        You were faster than {100 - calculatePercentile(myResults.correctRT, populationRTs)}% of users
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                         
