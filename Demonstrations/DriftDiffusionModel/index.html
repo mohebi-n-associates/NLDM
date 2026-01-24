@@ -49,6 +49,29 @@
             cursor: pointer;
         }
 
+        .param-input {
+            width: 65px;
+            padding: 2px 6px;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: #2563eb;
+            text-align: right;
+            background: #f8fafc;
+            transition: all 0.2s;
+        }
+
+        .param-input:focus {
+            outline: none;
+            border-color: #2563eb;
+            box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2);
+        }
+
+        .param-input.amber {
+            color: #d97706;
+        }
+
         .prose h2 {
             font-weight: 700;
             font-size: 1.875rem;
@@ -94,7 +117,7 @@
                     <div>
                         <div class="slider-label">
                             <span>Coherence</span>
-                            <span id="coherence-val" class="text-blue-600">20%</span>
+                            <input type="number" id="coherence-val" class="param-input" value="20" min="-100" max="100" step="1">%
                         </div>
                         <input type="range" id="coherence" min="-100" max="100" step="1" value="20">
                     </div>
@@ -102,15 +125,15 @@
                     <div>
                         <div class="slider-label">
                             <span>Noise ($\sigma$)</span>
-                            <span id="noise-val" class="text-blue-600">0.25</span>
+                            <input type="number" id="noise-val" class="param-input" value="0.25" min="0" max="1.5" step="0.01">
                         </div>
-                        <input type="range" id="noise" min="0" max="0.8" step="0.01" value="0.25">
+                        <input type="range" id="noise" min="0" max="1.5" step="0.01" value="0.25">
                     </div>
 
                     <div>
                         <div class="slider-label">
                             <span>Threshold ($a$)</span>
-                            <span id="threshold-val" class="text-blue-600">60</span>
+                            <input type="number" id="threshold-val" class="param-input" value="60" min="20" max="120" step="1">
                         </div>
                         <input type="range" id="threshold" min="20" max="120" step="1" value="60">
                     </div>
@@ -118,7 +141,7 @@
                     <div>
                         <div class="slider-label">
                             <span>Sim Speed</span>
-                            <span id="speed-val" class="text-amber-600">1.0x</span>
+                            <input type="number" id="speed-val" class="param-input amber" value="1.0" min="0.1" max="4" step="0.1">x
                         </div>
                         <input type="range" id="speed" min="0.1" max="4" step="0.1" value="1">
                     </div>
@@ -312,10 +335,19 @@
             const threshold = parseFloat(inputs.threshold.value);
             const timeScale = parseFloat(inputs.speed.value);
 
-            labels.coherence.textContent = `${Math.abs(Math.round(coherence * 100))}%`;
-            labels.noise.textContent = noise.toFixed(2);
-            labels.threshold.textContent = threshold;
-            labels.speed.textContent = `${timeScale.toFixed(1)}x`;
+            // Sync number inputs with sliders (only if not focused)
+            if (document.activeElement !== labels.coherence) {
+                labels.coherence.value = Math.round(coherence * 100);
+            }
+            if (document.activeElement !== labels.noise) {
+                labels.noise.value = noise.toFixed(2);
+            }
+            if (document.activeElement !== labels.threshold) {
+                labels.threshold.value = threshold;
+            }
+            if (document.activeElement !== labels.speed) {
+                labels.speed.value = timeScale.toFixed(1);
+            }
             labels.dotDir.textContent = coherence >= 0 ? "UPWARD" : "DOWNWARD";
 
             // Update Dots
@@ -445,6 +477,31 @@
             labels.trial.textContent = "0";
             labels.accuracy.textContent = "0%";
             labels.avgRT.textContent = "0ms";
+        });
+
+        // Sync number inputs to sliders
+        labels.coherence.addEventListener('input', () => {
+            let val = parseFloat(labels.coherence.value) || 0;
+            val = Math.max(-100, Math.min(100, val));
+            inputs.coherence.value = val;
+        });
+
+        labels.noise.addEventListener('input', () => {
+            let val = parseFloat(labels.noise.value) || 0;
+            val = Math.max(0, Math.min(1.5, val));
+            inputs.noise.value = val;
+        });
+
+        labels.threshold.addEventListener('input', () => {
+            let val = parseFloat(labels.threshold.value) || 20;
+            val = Math.max(20, Math.min(120, val));
+            inputs.threshold.value = val;
+        });
+
+        labels.speed.addEventListener('input', () => {
+            let val = parseFloat(labels.speed.value) || 0.1;
+            val = Math.max(0.1, Math.min(4, val));
+            inputs.speed.value = val;
         });
 
         window.addEventListener('resize', resize);
