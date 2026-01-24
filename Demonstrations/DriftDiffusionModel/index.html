@@ -72,6 +72,65 @@
             color: #d97706;
         }
 
+        .teaching-toggle {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+            color: white;
+            padding: 12px 16px;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: none;
+            width: 100%;
+            font-weight: 600;
+            font-size: 0.85rem;
+        }
+
+        .teaching-toggle:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.4);
+        }
+
+        .teaching-toggle .toggle-icon {
+            width: 20px;
+            height: 20px;
+            transition: transform 0.3s;
+        }
+
+        .teaching-toggle.active {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+        }
+
+        .teaching-toggle.active .toggle-icon {
+            transform: rotate(180deg);
+        }
+
+        .hideable {
+            transition: opacity 0.4s, transform 0.4s;
+        }
+
+        .teaching-mode .hideable {
+            opacity: 0;
+            pointer-events: none;
+            transform: scale(0.95);
+        }
+
+        .teaching-mode .ddm-panel {
+            display: none;
+        }
+
+        .teaching-mode .rdk-panel {
+            grid-column: span 2;
+        }
+
+        @media (max-width: 768px) {
+            .teaching-mode .rdk-panel {
+                grid-column: span 1;
+            }
+        }
+
         .prose h2 {
             font-weight: 700;
             font-size: 1.875rem;
@@ -147,6 +206,13 @@
                     </div>
 
                     <div class="pt-4 space-y-3">
+                        <button id="teaching-toggle" class="teaching-toggle">
+                            <span>Teaching Mode</span>
+                            <svg class="toggle-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                                <circle cx="12" cy="12" r="3"/>
+                            </svg>
+                        </button>
                         <button id="reset-btn" class="w-full bg-slate-900 text-white py-3 rounded-xl font-bold text-sm hover:bg-black transition-all">
                             Reset Data
                         </button>
@@ -158,13 +224,13 @@
                 </div>
 
                 <!-- Visualization Area -->
-                <div class="lg:col-span-9 space-y-6">
+                <div id="viz-area" class="lg:col-span-9 space-y-6">
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <!-- RDK Stimulus -->
-                        <div class="canvas-card">
+                        <div class="canvas-card rdk-panel">
                             <div class="bg-slate-900 px-4 py-3 flex justify-between items-center">
                                 <span class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Visual Stimulus (RDK)</span>
-                                <div class="flex items-center gap-2">
+                                <div class="flex items-center gap-2 hideable">
                                     <div class="w-2 h-2 rounded-full bg-red-500 animate-pulse"></div>
                                     <span id="dot-dir" class="text-[10px] text-white font-bold">UPWARD</span>
                                 </div>
@@ -175,7 +241,7 @@
                         </div>
 
                         <!-- DDM Graph -->
-                        <div class="canvas-card flex flex-col">
+                        <div class="canvas-card flex flex-col ddm-panel">
                             <div class="bg-slate-50 border-b border-slate-200 px-4 py-3">
                                 <span class="text-[10px] font-black text-slate-500 uppercase tracking-widest">Evidence Accumulator</span>
                             </div>
@@ -186,7 +252,7 @@
                     </div>
 
                     <!-- Statistics Bar -->
-                    <div class="flex flex-wrap gap-4 justify-center md:justify-start">
+                    <div class="flex flex-wrap gap-4 justify-center md:justify-start hideable">
                         <div class="stat-badge">
                             <span class="text-[10px] block text-slate-500 font-bold uppercase">Trials</span>
                             <span id="trial-count" class="text-2xl font-black text-slate-800">0</span>
@@ -477,6 +543,21 @@
             labels.trial.textContent = "0";
             labels.accuracy.textContent = "0%";
             labels.avgRT.textContent = "0ms";
+        });
+
+        // Teaching Mode Toggle
+        const teachingToggle = document.getElementById('teaching-toggle');
+        const vizArea = document.getElementById('viz-area');
+        
+        teachingToggle.addEventListener('click', () => {
+            teachingToggle.classList.toggle('active');
+            vizArea.classList.toggle('teaching-mode');
+            
+            const isTeaching = vizArea.classList.contains('teaching-mode');
+            teachingToggle.querySelector('span').textContent = isTeaching ? 'Show Analysis' : 'Teaching Mode';
+            
+            // Resize canvases when toggling
+            setTimeout(resize, 100);
         });
 
         // Sync number inputs to sliders
