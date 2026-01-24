@@ -206,8 +206,8 @@
                     </div>
 
                     <div class="pt-4 space-y-3">
-                        <button id="teaching-toggle" class="teaching-toggle">
-                            <span>Teaching Mode</span>
+                        <button id="teaching-toggle" class="teaching-toggle active">
+                            <span>Show Analysis</span>
                             <svg class="toggle-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
                                 <circle cx="12" cy="12" r="3"/>
@@ -224,7 +224,7 @@
                 </div>
 
                 <!-- Visualization Area -->
-                <div id="viz-area" class="lg:col-span-9 space-y-6">
+                <div id="viz-area" class="lg:col-span-9 space-y-6 teaching-mode">
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <!-- RDK Stimulus -->
                         <div class="canvas-card rdk-panel">
