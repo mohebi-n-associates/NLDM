@@ -270,7 +270,7 @@
         let noise = 0.10;
         let simSpeed = 1;
         
-        let stats = { buyCount: 0, totalCount: 0, totalRT: 0 };
+        let stats = { buyCount: 0, totalCount: 0, totalRT: 0, indecisionCount: 0 };
         let history = [];
         let currentTrial = null;
         let isAnimating = false;
@@ -323,9 +323,10 @@
         }
 
         function updateStats() {
+            const decisiveCount = stats.totalCount - stats.indecisionCount;
             if (stats.totalCount > 0) {
                 displays.buyRate.textContent = ((stats.buyCount / stats.totalCount) * 100).toFixed(1) + '%';
-                displays.avgRT.textContent = (stats.totalRT / stats.totalCount).toFixed(2) + 's';
+                displays.avgRT.textContent = decisiveCount > 0 ? (stats.totalRT / decisiveCount).toFixed(2) + 's' : '—';
             } else {
                 displays.buyRate.textContent = '0%';
                 displays.avgRT.textContent = '0.00s';
@@ -408,7 +409,13 @@
 
             // Draw Active Trial
             if (currentTrial) {
-                ctx.strokeStyle = '#3b82f6';
+                // Choose color based on decision
+                let trialColor = '#3b82f6'; // blue for in-progress
+                if (currentTrial.decision === 'BUY') trialColor = '#10b981'; // green
+                else if (currentTrial.decision === "DON'T BUY") trialColor = '#ef4444'; // red
+                else if (currentTrial.decision === 'INDECISION') trialColor = '#f59e0b'; // amber
+                
+                ctx.strokeStyle = trialColor;
                 ctx.lineWidth = 3;
                 ctx.beginPath();
                 currentTrial.path.forEach((p, i) => {
@@ -418,10 +425,16 @@
                 ctx.stroke();
 
                 const lastPoint = currentTrial.path[currentTrial.path.length - 1];
-                ctx.fillStyle = '#3b82f6';
+                ctx.fillStyle = trialColor;
                 ctx.beginPath();
                 ctx.arc(scaleX(lastPoint.x), scaleY(lastPoint.y), 5, 0, Math.PI * 2);
                 ctx.fill();
+
+                // Draw RT below the signal
+                ctx.fillStyle = '#475569';
+                ctx.font = 'bold 12px Inter, sans-serif';
+                const rtText = `RT: ${currentTrial.time.toFixed(2)}s`;
+                ctx.fillText(rtText, scaleX(lastPoint.x) + 10, scaleY(lastPoint.y) + 5);
             }
         }
 
@@ -450,8 +463,15 @@
 
                     path.push({ x: time + nonDecisionTime, y: evidence });
 
-                    if (Math.abs(evidence) >= boundary || time >= 8) {
-                        const decision = evidence >= boundary ? 'BUY' : "DON'T BUY";
+                    if (Math.abs(evidence) >= boundary || time >= 3) {
+                        let decision;
+                        if (evidence >= boundary) {
+                            decision = 'BUY';
+                        } else if (evidence <= -boundary) {
+                            decision = "DON'T BUY";
+                        } else {
+                            decision = 'INDECISION';
+                        }
                         const finalTime = time + nonDecisionTime;
                         currentTrial = { path, decision, time: finalTime };
 
@@ -459,8 +479,14 @@
                         if (history.length > 5) history.pop();
 
                         stats.totalCount++;
-                        if (decision === 'BUY') stats.buyCount++;
-                        stats.totalRT += finalTime;
+                        if (decision === 'BUY') {
+                            stats.buyCount++;
+                            stats.totalRT += finalTime;
+                        } else if (decision === "DON'T BUY") {
+                            stats.totalRT += finalTime;
+                        } else {
+                            stats.indecisionCount++;
+                        }
 
                         updateStats();
                         displays.status.textContent = `Decision: ${decision}`;
@@ -484,7 +510,7 @@
         }
 
         function resetData() {
-            stats = { buyCount: 0, totalCount: 0, totalRT: 0 };
+            stats = { buyCount: 0, totalCount: 0, totalRT: 0, indecisionCount: 0 };
             history = [];
             currentTrial = null;
             updateStats();
