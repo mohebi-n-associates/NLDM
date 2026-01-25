@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Silver Purchase DDM | Decision Making Simulator</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc;
+        }
+
+        input[type="range"] {
+            -webkit-appearance: none;
+            appearance: none;
+            height: 8px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: currentColor;
+            cursor: pointer;
+            border: 2px solid white;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .slider-blue { background: #dbeafe; color: #2563eb; }
+        .slider-emerald { background: #d1fae5; color: #059669; }
+        .slider-slate { background: #e2e8f0; color: #475569; }
+        .slider-indigo { background: #e0e7ff; color: #4f46e5; }
+
+        .param-input {
+            width: 70px;
+            padding: 2px 6px;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-align: right;
+            background: white;
+        }
+
+        .param-input:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+        }
+    </style>
+</head>
+<body class="min-h-screen p-4 md:p-8">
+    <div class="max-w-6xl mx-auto space-y-8">
+        
+        <!-- Header -->
+        <header class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <div>
+                <h1 class="text-3xl font-bold tracking-tight text-slate-900 flex items-center gap-2">
+                    <svg class="w-8 h-8 text-blue-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/>
+                        <polyline points="17 6 23 6 23 12"/>
+                    </svg>
+                    Silver Purchase DDM
+                </h1>
+                <p class="text-slate-500 italic">Watch evidence accumulate in real-time</p>
+            </div>
+            <div class="flex gap-2">
+                <button id="reset-btn" class="flex items-center gap-2 px-4 py-2 border border-slate-200 rounded-lg hover:bg-white transition-colors">
+                    <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="1 4 1 10 7 10"/>
+                        <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/>
+                    </svg>
+                    Clear Data
+                </button>
+                <button id="run-btn" class="flex items-center gap-2 px-6 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700 transition-colors shadow-lg shadow-blue-200">
+                    <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+                    </svg>
+                    <span>Run Trial</span>
+                </button>
+            </div>
+        </header>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <!-- Controls -->
+            <div class="lg:col-span-1 space-y-6 bg-white p-6 rounded-2xl shadow-sm border border-slate-100 h-fit">
+                <div class="flex items-center gap-2 text-lg font-semibold border-b pb-2 mb-4">
+                    <svg class="w-5 h-5 text-slate-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="3"/>
+                        <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+                    </svg>
+                    Parameters
+                </div>
+
+                <div class="space-y-5">
+                    <div>
+                        <div class="flex justify-between mb-2">
+                            <label class="text-sm font-medium text-slate-600">Subjective Value ($)</label>
+                            <input type="number" id="subjective-val" class="param-input text-blue-600" value="35" min="10" max="60">
+                        </div>
+                        <input type="range" id="subjective" min="10" max="60" step="1" value="35" class="w-full slider-blue">
+                    </div>
+
+                    <div>
+                        <div class="flex justify-between mb-2">
+                            <label class="text-sm font-medium text-slate-600">Market Price ($)</label>
+                            <input type="number" id="price-val" class="param-input text-emerald-600" value="30" min="10" max="60">
+                        </div>
+                        <input type="range" id="price" min="10" max="60" step="1" value="30" class="w-full slider-emerald">
+                    </div>
+
+                    <div>
+                        <div class="flex justify-between mb-2">
+                            <label class="text-sm font-medium text-slate-600 italic">Caution Threshold (a)</label>
+                            <input type="number" id="boundary-val" class="param-input text-slate-600" value="1.0" min="0.5" max="3.0" step="0.1">
+                        </div>
+                        <input type="range" id="boundary" min="0.5" max="3.0" step="0.1" value="1.0" class="w-full slider-slate">
+                    </div>
+
+                    <div>
+                        <div class="flex justify-between mb-2">
+                            <label class="text-sm font-medium text-slate-600 italic">Information Noise (s)</label>
+                            <input type="number" id="noise-val" class="param-input text-slate-600" value="0.10" min="0.01" max="0.5" step="0.01">
+                        </div>
+                        <input type="range" id="noise" min="0.01" max="0.5" step="0.01" value="0.10" class="w-full slider-slate">
+                    </div>
+
+                    <div class="pt-2 border-t border-slate-100">
+                        <div class="flex justify-between mb-2">
+                            <label class="text-sm font-semibold text-indigo-600 flex items-center gap-1">
+                                <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <polygon points="13 19 22 12 13 5 13 19"/>
+                                    <polygon points="2 19 11 12 2 5 2 19"/>
+                                </svg>
+                                Simulation Speed
+                            </label>
+                            <input type="number" id="speed-val" class="param-input text-indigo-600" value="1" min="1" max="20" step="1">x
+                        </div>
+                        <input type="range" id="speed" min="1" max="20" step="1" value="1" class="w-full slider-indigo">
+                    </div>
+                </div>
+
+                <div class="mt-6 p-4 bg-slate-50 rounded-xl border border-dashed border-slate-200">
+                    <h3 class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-2 font-mono">Net Drift</h3>
+                    <div class="flex items-end gap-2">
+                        <span id="drift-display" class="text-2xl font-black text-emerald-500">v = +5</span>
+                        <span class="text-xs text-slate-400 pb-1">$/sec</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Visualization Area -->
+            <div class="lg:col-span-2 space-y-6">
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 flex flex-col h-[450px]">
+                    <div class="flex justify-between items-center mb-4">
+                        <h2 class="font-semibold text-slate-700">Evolution of Evidence</h2>
+                        <div class="flex items-center gap-4">
+                            <div class="flex items-center gap-1">
+                                <div class="w-3 h-3 bg-blue-500 rounded-full"></div>
+                                <span class="text-[10px]">Signal</span>
+                            </div>
+                            <div id="status-text" class="text-xs text-slate-400 font-mono italic">Ready</div>
+                        </div>
+                    </div>
+                    <div class="flex-grow relative bg-slate-50/30 rounded-lg overflow-hidden">
+                        <canvas id="ddmCanvas" class="w-full h-full"></canvas>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div class="bg-white p-4 rounded-xl border border-slate-100 shadow-sm text-center">
+                        <div class="text-slate-400 text-xs font-bold uppercase mb-1">Buy Rate</div>
+                        <div id="buy-rate" class="text-2xl font-bold text-emerald-600">0%</div>
+                    </div>
+                    <div class="bg-white p-4 rounded-xl border border-slate-100 shadow-sm text-center">
+                        <div class="text-slate-400 text-xs font-bold uppercase mb-1">Avg Response Time</div>
+                        <div id="avg-rt" class="text-2xl font-bold text-blue-600">0.00s</div>
+                    </div>
+                    <div class="bg-white p-4 rounded-xl border border-slate-100 shadow-sm text-center">
+                        <div class="text-slate-400 text-xs font-bold uppercase mb-1">Total Sample</div>
+                        <div id="total-count" class="text-2xl font-bold">0</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Educational Section -->
+        <section class="bg-white p-8 rounded-3xl shadow-sm border border-slate-100 space-y-8">
+            <div class="flex items-center gap-3 border-b pb-4">
+                <svg class="w-7 h-7 text-blue-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/>
+                    <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>
+                </svg>
+                <h2 class="text-2xl font-bold">Understanding the Variables</h2>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+                <div class="space-y-6">
+                    <div class="space-y-3">
+                        <div class="flex items-center gap-2 text-blue-700 font-bold">
+                            <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M12 2a9 9 0 0 1 9 9c0 3.6-3.4 6.2-5.5 8.5-1.1 1.2-2.3 2.5-3.5 2.5s-2.4-1.3-3.5-2.5C6.4 17.2 3 14.6 3 11a9 9 0 0 1 9-9z"/>
+                            </svg>
+                            <h3>1. Economic Variables</h3>
+                        </div>
+                        <div class="space-y-4 text-sm text-slate-600">
+                            <p class="leading-relaxed">
+                                <strong class="text-slate-800 underline decoration-blue-200">Subjective Value:</strong> The internal "worth" you personally assign to the silver. This varies based on your financial goals, sentiment, or need.
+                            </p>
+                            <p class="leading-relaxed">
+                                <strong class="text-slate-800 underline decoration-emerald-200">Market Price:</strong> The actual dollar amount required to buy the silver right now.
+                            </p>
+                            <p class="font-medium p-3 bg-slate-50 rounded-lg border-l-4 border-blue-500 italic">
+                                The <strong>Drift Rate (v)</strong> is the gap between value and price: v = Subjective Value - Price. A high positive drift means the purchase is a "no-brainer."
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="space-y-3">
+                        <div class="flex items-center gap-2 text-indigo-700 font-bold">
+                            <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+                            </svg>
+                            <h3>2. The Decision Mechanism</h3>
+                        </div>
+                        <div class="space-y-4 text-sm text-slate-600">
+                            <p class="leading-relaxed">
+                                <strong class="text-slate-800 underline decoration-indigo-200">Caution Threshold (a):</strong> How much evidence you need before deciding. High caution reduces noise-induced mistakes but slows you down.
+                            </p>
+                            <p class="leading-relaxed">
+                                <strong class="text-slate-800 underline decoration-orange-200">Information Noise (s):</strong> Randomness in neural processing or market signals. High noise can lead to irrational choices.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="p-6 bg-blue-600 rounded-2xl text-white shadow-xl shadow-blue-100">
+                    <h3 class="font-bold mb-3 flex items-center gap-2 text-lg">
+                        <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"/>
+                            <line x1="12" y1="16" x2="12" y2="12"/>
+                            <line x1="12" y1="8" x2="12.01" y2="8"/>
+                        </svg>
+                        Classroom Demonstration Guide
+                    </h3>
+                    <p class="text-sm leading-relaxed opacity-95">
+                        Observe how the signal evolves in real-time. Use the <strong>Simulation Speed</strong> slider to move through trials more quickly. 
+                        Explain to students that <strong>Noise</strong> causes the jaggy path, while <strong>Drift</strong> dictates the general direction. 
+                        The <strong>Caution Threshold</strong> acts as a filter: the further apart the boundaries, the more 'noise' is filtered out, but the longer the process takes.
+                    </p>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        // --- State ---
+        let subjectiveValue = 35;
+        let price = 30;
+        let boundary = 1.0;
+        let noise = 0.10;
+        let simSpeed = 1;
+        
+        let stats = { buyCount: 0, totalCount: 0, totalRT: 0 };
+        let history = [];
+        let currentTrial = null;
+        let isAnimating = false;
+        let animationFrameId = null;
+
+        // --- Elements ---
+        const canvas = document.getElementById('ddmCanvas');
+        const ctx = canvas.getContext('2d');
+        
+        const inputs = {
+            subjective: document.getElementById('subjective'),
+            subjectiveVal: document.getElementById('subjective-val'),
+            price: document.getElementById('price'),
+            priceVal: document.getElementById('price-val'),
+            boundary: document.getElementById('boundary'),
+            boundaryVal: document.getElementById('boundary-val'),
+            noise: document.getElementById('noise'),
+            noiseVal: document.getElementById('noise-val'),
+            speed: document.getElementById('speed'),
+            speedVal: document.getElementById('speed-val')
+        };
+
+        const displays = {
+            drift: document.getElementById('drift-display'),
+            status: document.getElementById('status-text'),
+            buyRate: document.getElementById('buy-rate'),
+            avgRT: document.getElementById('avg-rt'),
+            totalCount: document.getElementById('total-count')
+        };
+
+        const runBtn = document.getElementById('run-btn');
+        const resetBtn = document.getElementById('reset-btn');
+
+        // --- Functions ---
+        function resize() {
+            const rect = canvas.parentElement.getBoundingClientRect();
+            const dpr = window.devicePixelRatio || 1;
+            canvas.width = rect.width * dpr;
+            canvas.height = rect.height * dpr;
+            ctx.scale(dpr, dpr);
+            canvas.style.width = rect.width + 'px';
+            canvas.style.height = rect.height + 'px';
+            draw();
+        }
+
+        function updateDrift() {
+            const drift = subjectiveValue - price;
+            displays.drift.textContent = `v = ${drift >= 0 ? '+' : ''}${drift}`;
+            displays.drift.className = `text-2xl font-black ${drift >= 0 ? 'text-emerald-500' : 'text-red-500'}`;
+        }
+
+        function updateStats() {
+            if (stats.totalCount > 0) {
+                displays.buyRate.textContent = ((stats.buyCount / stats.totalCount) * 100).toFixed(1) + '%';
+                displays.avgRT.textContent = (stats.totalRT / stats.totalCount).toFixed(2) + 's';
+            } else {
+                displays.buyRate.textContent = '0%';
+                displays.avgRT.textContent = '0.00s';
+            }
+            displays.totalCount.textContent = stats.totalCount;
+        }
+
+        function syncInputs() {
+            // Sync sliders to number inputs
+            inputs.subjectiveVal.value = subjectiveValue;
+            inputs.subjective.value = subjectiveValue;
+            inputs.priceVal.value = price;
+            inputs.price.value = price;
+            inputs.boundaryVal.value = boundary.toFixed(1);
+            inputs.boundary.value = boundary;
+            inputs.noiseVal.value = noise.toFixed(2);
+            inputs.noise.value = noise;
+            inputs.speedVal.value = simSpeed;
+            inputs.speed.value = simSpeed;
+            updateDrift();
+        }
+
+        function draw() {
+            const rect = canvas.getBoundingClientRect();
+            ctx.clearRect(0, 0, rect.width, rect.height);
+            
+            const padding = 40;
+            const chartWidth = rect.width - padding * 2;
+            const chartHeight = rect.height - padding * 2;
+            
+            const Y_AXIS_MAX = 3.5;
+            const scaleX = (t) => padding + (t / 5) * chartWidth;
+            const scaleY = (e) => rect.height / 2 - (e / Y_AXIS_MAX) * (chartHeight / 2);
+
+            // Draw Boundaries
+            ctx.setLineDash([5, 5]);
+            ctx.lineWidth = 2;
+
+            // Top Boundary (BUY)
+            ctx.strokeStyle = '#10b981';
+            ctx.beginPath();
+            ctx.moveTo(padding, scaleY(boundary));
+            ctx.lineTo(padding + chartWidth, scaleY(boundary));
+            ctx.stroke();
+            ctx.fillStyle = '#10b981';
+            ctx.font = 'bold 11px Inter, sans-serif';
+            ctx.fillText(`BUY BOUNDARY (+${boundary.toFixed(1)})`, padding, scaleY(boundary) - 10);
+
+            // Bottom Boundary (DON'T BUY)
+            ctx.strokeStyle = '#ef4444';
+            ctx.beginPath();
+            ctx.moveTo(padding, scaleY(-boundary));
+            ctx.lineTo(padding + chartWidth, scaleY(-boundary));
+            ctx.stroke();
+            ctx.fillStyle = '#ef4444';
+            ctx.fillText(`DON'T BUY BOUNDARY (-${boundary.toFixed(1)})`, padding, scaleY(-boundary) + 20);
+            ctx.setLineDash([]);
+
+            // Draw Axes
+            ctx.strokeStyle = '#cbd5e1';
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            ctx.moveTo(padding, padding);
+            ctx.lineTo(padding, rect.height - padding);
+            ctx.moveTo(padding, rect.height / 2);
+            ctx.lineTo(padding + chartWidth, rect.height / 2);
+            ctx.stroke();
+
+            // Draw History (faint)
+            history.forEach((trial) => {
+                ctx.strokeStyle = 'rgba(148, 163, 184, 0.2)';
+                ctx.lineWidth = 1;
+                ctx.beginPath();
+                trial.path.forEach((p, i) => {
+                    if (i === 0) ctx.moveTo(scaleX(p.x), scaleY(p.y));
+                    else ctx.lineTo(scaleX(p.x), scaleY(p.y));
+                });
+                ctx.stroke();
+            });
+
+            // Draw Active Trial
+            if (currentTrial) {
+                ctx.strokeStyle = '#3b82f6';
+                ctx.lineWidth = 3;
+                ctx.beginPath();
+                currentTrial.path.forEach((p, i) => {
+                    if (i === 0) ctx.moveTo(scaleX(p.x), scaleY(p.y));
+                    else ctx.lineTo(scaleX(p.x), scaleY(p.y));
+                });
+                ctx.stroke();
+
+                const lastPoint = currentTrial.path[currentTrial.path.length - 1];
+                ctx.fillStyle = '#3b82f6';
+                ctx.beginPath();
+                ctx.arc(scaleX(lastPoint.x), scaleY(lastPoint.y), 5, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+
+        function startSimulation() {
+            if (isAnimating) return;
+            
+            isAnimating = true;
+            runBtn.classList.add('bg-slate-300', 'cursor-not-allowed', 'text-slate-500');
+            runBtn.classList.remove('bg-blue-600', 'hover:bg-blue-700');
+            runBtn.querySelector('span').textContent = 'Simulating...';
+            displays.status.textContent = 'Accumulating...';
+
+            let evidence = 0;
+            let time = 0;
+            let path = [{ x: 0, y: 0 }];
+            const dt = 0.01;
+            const drift = subjectiveValue - price;
+            const scaledDrift = drift * 0.05;
+            const nonDecisionTime = 0.2;
+
+            const step = () => {
+                for (let i = 0; i < simSpeed; i++) {
+                    const dw = (Math.random() * 2 - 1) * noise;
+                    evidence += scaledDrift * dt + dw;
+                    time += dt;
+
+                    path.push({ x: time + nonDecisionTime, y: evidence });
+
+                    if (Math.abs(evidence) >= boundary || time >= 8) {
+                        const decision = evidence >= boundary ? 'BUY' : "DON'T BUY";
+                        const finalTime = time + nonDecisionTime;
+                        currentTrial = { path, decision, time: finalTime };
+
+                        history.unshift(currentTrial);
+                        if (history.length > 5) history.pop();
+
+                        stats.totalCount++;
+                        if (decision === 'BUY') stats.buyCount++;
+                        stats.totalRT += finalTime;
+
+                        updateStats();
+                        displays.status.textContent = `Decision: ${decision}`;
+                        
+                        isAnimating = false;
+                        runBtn.classList.remove('bg-slate-300', 'cursor-not-allowed', 'text-slate-500');
+                        runBtn.classList.add('bg-blue-600', 'hover:bg-blue-700');
+                        runBtn.querySelector('span').textContent = 'Run Trial';
+                        
+                        draw();
+                        return;
+                    }
+                }
+
+                currentTrial = { path, decision: null, time: time + nonDecisionTime };
+                draw();
+                animationFrameId = requestAnimationFrame(step);
+            };
+
+            animationFrameId = requestAnimationFrame(step);
+        }
+
+        function resetData() {
+            stats = { buyCount: 0, totalCount: 0, totalRT: 0 };
+            history = [];
+            currentTrial = null;
+            updateStats();
+            displays.status.textContent = 'Ready';
+            draw();
+        }
+
+        // --- Event Listeners ---
+        // Sliders
+        inputs.subjective.addEventListener('input', (e) => {
+            subjectiveValue = Number(e.target.value);
+            syncInputs();
+        });
+        inputs.price.addEventListener('input', (e) => {
+            price = Number(e.target.value);
+            syncInputs();
+        });
+        inputs.boundary.addEventListener('input', (e) => {
+            boundary = Number(e.target.value);
+            syncInputs();
+            draw();
+        });
+        inputs.noise.addEventListener('input', (e) => {
+            noise = Number(e.target.value);
+            syncInputs();
+        });
+        inputs.speed.addEventListener('input', (e) => {
+            simSpeed = Number(e.target.value);
+            syncInputs();
+        });
+
+        // Number inputs
+        inputs.subjectiveVal.addEventListener('input', (e) => {
+            subjectiveValue = Math.max(10, Math.min(60, Number(e.target.value) || 10));
+            syncInputs();
+        });
+        inputs.priceVal.addEventListener('input', (e) => {
+            price = Math.max(10, Math.min(60, Number(e.target.value) || 10));
+            syncInputs();
+        });
+        inputs.boundaryVal.addEventListener('input', (e) => {
+            boundary = Math.max(0.5, Math.min(3.0, Number(e.target.value) || 0.5));
+            syncInputs();
+            draw();
+        });
+        inputs.noiseVal.addEventListener('input', (e) => {
+            noise = Math.max(0.01, Math.min(0.5, Number(e.target.value) || 0.01));
+            syncInputs();
+        });
+        inputs.speedVal.addEventListener('input', (e) => {
+            simSpeed = Math.max(1, Math.min(20, Number(e.target.value) || 1));
+            syncInputs();
+        });
+
+        runBtn.addEventListener('click', startSimulation);
+        resetBtn.addEventListener('click', resetData);
+        window.addEventListener('resize', resize);
+
+        // --- Initialize ---
+        resize();
+        syncInputs();
+        draw();
+    </script>
+</body>
+</html>

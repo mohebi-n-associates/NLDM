@@ -938,10 +938,53 @@
         </div>
 
         <div class="demonstrations-grid">
-            <!-- Demo 1: Drift Diffusion Model -->
+            <!-- Demo 1: Trading Silver (Value-Based DDM) -->
             <div class="demo-item">
                 <div class="demo-header">
                     <div class="demo-number">1</div>
+                    <div class="demo-title-block">
+                        <h3>Trading Silver</h3>
+                        <span>Value-Based Decision Making</span>
+                    </div>
+                </div>
+                <div class="demo-content">
+                    <div class="demo-text">
+                        <p>Should you buy the silver? This demonstration shows how the brain weighs subjective value against market price, accumulating evidence until reaching a decision threshold.</p>
+                        <p>Watch evidence evolve in real-time as the "drift rate" (value minus price) pulls the signal toward a BUY or DON'T BUY decision boundary.</p>
+                        <ul>
+                            <li>Drift rate = Subjective Value − Market Price</li>
+                            <li>Caution threshold controls speed-accuracy tradeoff</li>
+                            <li>Information noise adds uncertainty to the process</li>
+                            <li>A classic application of DDM to economic decisions</li>
+                        </ul>
+                        <a href="./Demonstrations/TradingSilver/" target="_blank" class="demo-launch-btn">
+                            Launch Interactive Demo
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M5 12h14M12 5l7 7-7 7"/>
+                            </svg>
+                        </a>
+                    </div>
+                    <div class="demo-iframe">
+                        <iframe src="./Demonstrations/TradingSilver/" title="Trading Silver Demo"></iframe>
+                        <div class="demo-overlay">
+                            <span>Interactive Demo</span>
+                            <a href="./Demonstrations/TradingSilver/" target="_blank">
+                                Open Full Screen
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
+                                    <polyline points="15 3 21 3 21 9"/>
+                                    <line x1="10" y1="14" x2="21" y2="3"/>
+                                </svg>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Demo 2: Drift Diffusion Model -->
+            <div class="demo-item">
+                <div class="demo-header">
+                    <div class="demo-number">2</div>
                     <div class="demo-title-block">
                         <h3>The Drift Diffusion Model</h3>
                         <span>Mapping the Architecture of Choice</span>
