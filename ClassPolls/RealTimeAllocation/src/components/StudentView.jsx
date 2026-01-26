@@ -19,17 +19,7 @@ export default function StudentView() {
     const total = values.reduce((a, b) => a + b, 0);
 
     const handleChange = (index, newValue) => {
-        const currentVal = values[index];
-        const diff = newValue - currentVal;
-
-        // If increasing, check if we exceed 100
-        if (diff > 0 && total + diff > 100) {
-            // Cap the new value to what's remaining
-            const maxAllowed = 100 - (total - currentVal);
-            newValue = maxAllowed;
-        }
-
-        // Update state
+        // Update state directly without locking
         const newValues = [...values];
         newValues[index] = newValue;
         setValues(newValues);
@@ -75,6 +65,11 @@ export default function StudentView() {
                             ))}
                         </div>
                     </div>
+                    <div className="mt-8 pt-6 border-t border-gray-100">
+                        <a href="#/results" className="text-blue-600 hover:text-blue-800 font-medium text-sm">
+                            View Class Results →
+                        </a>
+                    </div>
                 </div>
             </div>
         );
@@ -93,7 +88,7 @@ export default function StudentView() {
                         <div key={index} className="space-y-2">
                             <div className="flex justify-between items-center">
                                 <label className="text-sm font-medium text-gray-700">{label}</label>
-                                <span className="text-sm font-bold text-blue-600">{values[index]}</span>
+                                <span className={`text-sm font-bold ${values[index] > 100 ? 'text-red-500' : 'text-blue-600'}`}>{values[index]}</span>
                             </div>
                             <input
                                 type="range"
@@ -110,10 +105,16 @@ export default function StudentView() {
                 <div className="pt-4 border-t border-gray-100">
                     <div className="flex justify-between items-center mb-4">
                         <span className="text-gray-600">Total Allocated:</span>
-                        <span className={`text-xl font-bold ${total === 100 ? 'text-green-600' : total > 100 ? 'text-red-600' : 'text-blue-600'}`}>
+                        <span className={`text-xl font-bold ${total === 100 ? 'text-green-600' : 'text-red-500'}`}>
                             {total} / 100
                         </span>
                     </div>
+
+                    {total !== 100 && (
+                        <p className="text-xs text-center text-red-500 mb-3 font-medium">
+                            Total must be exactly 100 to submit.
+                        </p>
+                    )}
 
                     <button
                         onClick={handleSubmit}
@@ -126,6 +127,12 @@ export default function StudentView() {
                     >
                         {loading ? 'Submitting...' : 'Submit Allocation'}
                     </button>
+
+                    <div className="mt-4 text-center">
+                        <a href="#/results" className="text-gray-400 hover:text-gray-600 text-xs transition-colors">
+                            Skip to Results
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
