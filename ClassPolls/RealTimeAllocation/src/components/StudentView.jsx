@@ -30,19 +30,31 @@ export default function StudentView() {
         setLoading(true);
 
         try {
+            console.log("Starting submission...");
             // Use a fixed session ID for now
             const sessionId = 'class_01';
-            await addDoc(collection(db, 'sessions', sessionId, 'allocations'), {
-                values: values,
-                total: total,
-                createdAt: serverTimestamp()
+
+            // Create a timeout promise that rejects after 10 seconds
+            const timeout = new Promise((_, reject) => {
+                setTimeout(() => reject(new Error("Request timed out check your internet connection")), 10000);
             });
 
+            // Race the network request against the timeout
+            await Promise.race([
+                addDoc(collection(db, 'sessions', sessionId, 'allocations'), {
+                    values: values,
+                    total: total,
+                    createdAt: serverTimestamp()
+                }),
+                timeout
+            ]);
+
+            console.log("Submission successful!");
             localStorage.setItem('allocation_submitted', 'true');
             setSubmitted(true);
         } catch (error) {
             console.error("Error submitting document: ", error);
-            alert("Failed to submit. Please try again.");
+            alert(`Failed to submit: ${error.message}. Please try again.`);
         } finally {
             setLoading(false);
         }
