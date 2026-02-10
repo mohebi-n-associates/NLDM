@@ -508,7 +508,7 @@
             useEffect(() => {
                 const coherences = [];
                 const durations = [];
-                const allowedCoherences = [0, 0.05, 0.1];
+                const allowedCoherences = [0.02, 0.05, 0.08];
 
                 for (let i = 0; i < totalTrials; i++) {
                     // Randomly select from discrete coherence levels
@@ -603,7 +603,7 @@
                         totalTrials,
                         numDots,
                         // Save fixed parameter config
-                        coherenceConfig: "Discrete: 0, 5, 10%",
+                        coherenceConfig: "Discrete: 2, 5, 8%",
                         durationConfig: "Until response",
                         // Save full trial-by-trial data with individual parameters
                         // Save full trial-by-trial data with individual parameters
@@ -914,7 +914,7 @@
                                         </div>
                                         <div>
                                             <p className="text-sm text-slate-400 mb-2">
-                                                <span className="font-semibold text-slate-300">Coherence Levels:</span> 0%, 5%, 10%
+                                                <span className="font-semibold text-slate-300">Coherence Levels:</span> 2%, 5%, 8%
                                             </p>
                                             <p className="text-sm text-slate-400">
                                                 <span className="font-semibold text-slate-300">Duration:</span> Until response
@@ -1137,6 +1137,17 @@
                                                         You were faster than {100 - calculatePercentile(myResults.correctRT, populationRTs)}% of users
                                                     </div>
                                                 </div>
+                                            </div>
+                                        </div>
+
+                                        {/* Population Average Performance */}
+                                        <div className="mb-6">
+                                            <h4 className="font-semibold mb-3 text-center text-slate-300">Population Average Performance</h4>
+                                            <PerformanceHistograms
+                                                trials={populationData.flatMap(d => d.trials || [])}
+                                            />
+                                            <div className="text-center text-xs text-slate-400">
+                                                Aggregated data from all users. Note: Coherence levels may vary across experiments.
                                             </div>
                                         </div>
 
