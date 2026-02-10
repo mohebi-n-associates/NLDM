@@ -498,10 +498,12 @@
             const DOT_RADIUS = 2;
             const DOT_SPEED = 3;
             const APERTURE_RADIUS = 120;
+            const DOT_LIFETIME = 5; // Frames (approx 83ms at 60fps)
 
             // Refs
             const dotsRef = useRef([]);
             const directionRef = useRef(1);
+            const currentCoherenceRef = useRef(0);
             const animationRef = useRef(null);
 
             // Initialize trial-specific parameters
@@ -635,39 +637,85 @@
                 for (let i = 0; i < numDots; i++) {
                     const angle = Math.random() * Math.PI * 2;
                     const r = Math.random() * APERTURE_RADIUS;
+                    const isSignal = Math.random() < trialCoherence;
+
+                    // Determine move angle: either signal direction or random
+                    let moveAngle;
+                    if (isSignal) {
+                        moveAngle = directionRef.current === 1 ? 0 : Math.PI;
+                    } else {
+                        moveAngle = Math.random() * Math.PI * 2;
+                    }
+
                     dots.push({
                         x: CANVAS_SIZE / 2 + Math.cos(angle) * r,
                         y: CANVAS_SIZE / 2 + Math.sin(angle) * r,
-                        isSignal: Math.random() < trialCoherence
+                        isSignal: isSignal,
+                        life: Math.floor(Math.random() * DOT_LIFETIME), // Staggered start
+                        moveAngle: moveAngle
                     });
                 }
                 dotsRef.current = dots;
             }, [numDots, coherence]);
 
             const updateDots = useCallback(() => {
+                const currentCoherence = currentCoherenceRef.current;
+
                 dotsRef.current = dotsRef.current.map(dot => {
-                    let newX, newY;
+                    // 1. Decrement Life
+                    let newLife = dot.life - 1;
+                    let newX, newY, newIsSignal, newMoveAngle, newLifeVal;
 
-                    if (dot.isSignal) {
-                        newX = dot.x + DOT_SPEED * directionRef.current;
-                        newY = dot.y;
+                    // 2. Check for Death
+                    if (newLife <= 0) {
+                        // Respawn at random location
+                        const angle = Math.random() * Math.PI * 2;
+                        const r = Math.random() * APERTURE_RADIUS;
+                        newX = CANVAS_SIZE / 2 + Math.cos(angle) * r;
+                        newY = CANVAS_SIZE / 2 + Math.sin(angle) * r;
+
+                        // Reset life
+                        newLifeVal = DOT_LIFETIME;
+
+                        // Re-roll signal chance
+                        newIsSignal = Math.random() < currentCoherence;
+
+                        // Assign new direction
+                        if (newIsSignal) {
+                            newMoveAngle = directionRef.current === 1 ? 0 : Math.PI;
+                        } else {
+                            newMoveAngle = Math.random() * Math.PI * 2;
+                        }
                     } else {
-                        const randomAngle = Math.random() * Math.PI * 2;
-                        newX = dot.x + Math.cos(randomAngle) * DOT_SPEED;
-                        newY = dot.y + Math.sin(randomAngle) * DOT_SPEED;
+                        // Move existing dot
+                        newLifeVal = newLife;
+                        newIsSignal = dot.isSignal;
+                        newMoveAngle = dot.moveAngle; // Keep same direction
+
+                        newX = dot.x + Math.cos(newMoveAngle) * DOT_SPEED;
+                        newY = dot.y + Math.sin(newMoveAngle) * DOT_SPEED;
+
+                        // Boundary Check (Wrap around if alive but out of bounds)
+                        // This maintains density without "killing" the dot prematurely
+                        const dx = newX - CANVAS_SIZE / 2;
+                        const dy = newY - CANVAS_SIZE / 2;
+                        const dist = Math.sqrt(dx * dx + dy * dy);
+
+                        if (dist > APERTURE_RADIUS) {
+                            const angle = Math.atan2(dy, dx) + Math.PI; // Opposite side
+                            const r = APERTURE_RADIUS * 0.95; // Slightly inside
+                            newX = CANVAS_SIZE / 2 + Math.cos(angle) * r;
+                            newY = CANVAS_SIZE / 2 + Math.sin(angle) * r;
+                        }
                     }
 
-                    const dx = newX - CANVAS_SIZE / 2;
-                    const dy = newY - CANVAS_SIZE / 2;
-                    const dist = Math.sqrt(dx * dx + dy * dy);
-
-                    if (dist > APERTURE_RADIUS) {
-                        const angle = Math.atan2(dy, dx) + Math.PI;
-                        newX = CANVAS_SIZE / 2 + Math.cos(angle) * APERTURE_RADIUS * 0.9;
-                        newY = CANVAS_SIZE / 2 + Math.sin(angle) * APERTURE_RADIUS * 0.9;
-                    }
-
-                    return { ...dot, x: newX, y: newY };
+                    return {
+                        x: newX,
+                        y: newY,
+                        life: newLifeVal,
+                        isSignal: newIsSignal,
+                        moveAngle: newMoveAngle
+                    };
                 });
             }, []);
 
@@ -729,6 +777,9 @@
                 directionRef.current = Math.random() < 0.5 ? -1 : 1;
                 const trialCoherence = trialCoherences[trialCount];
                 const trialDuration = trialDurations[trialCount];
+
+                // Set current coherence for the animation loop
+                currentCoherenceRef.current = trialCoherence;
 
                 initializeDots(trialCoherence);
                 setGameState('stimulus');
