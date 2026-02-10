@@ -745,15 +745,14 @@
                 const correct = (response === 'left' && directionRef.current === -1) ||
                     (response === 'right' && directionRef.current === 1);
 
+                const currentCoherence = trialCoherences[trialCount];
                 const trialData = {
                     trialNum: trialCount + 1,
                     direction: directionRef.current === 1 ? 'right' : 'left',
                     response,
                     correct,
                     rt,
-                    coherence: trialCoherences[trialCount] || coherence,
-                    rt,
-                    coherence: trialCoherences[trialCount] || coherence,
+                    coherence: currentCoherence !== undefined ? currentCoherence : coherence,
                     stimulusDuration: rt // Duration is the reaction time
                 };
 
