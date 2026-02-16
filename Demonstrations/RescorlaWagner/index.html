@@ -1,0 +1,845 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rescorla-Wagner Model | Learning Value Through Experience</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Lora:ital,wght@0,400;0,700;1,400&display=swap');
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc;
+            line-height: 1.7;
+            color: #1e293b;
+        }
+
+        .serif { font-family: 'Lora', serif; }
+
+        input[type="range"] {
+            -webkit-appearance: none;
+            appearance: none;
+            height: 8px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: currentColor;
+            cursor: pointer;
+            border: 2px solid white;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .slider-amber { background: #fef3c7; color: #d97706; }
+        .slider-rose { background: #ffe4e6; color: #e11d48; }
+        .slider-violet { background: #ede9fe; color: #7c3aed; }
+
+        .param-input {
+            width: 70px;
+            padding: 2px 6px;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-align: right;
+            background: white;
+        }
+
+        .param-input:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+        }
+
+        .star { color: #fbbf24; }
+        .star.empty { color: #e2e8f0; }
+
+        @keyframes feedbackPop {
+            0% { transform: scale(0.8); opacity: 0; }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .feedback-pop {
+            animation: feedbackPop 0.35s ease-out;
+        }
+
+        @keyframes pulseGlow {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(251, 191, 36, 0.4); }
+            50% { box-shadow: 0 0 0 8px rgba(251, 191, 36, 0); }
+        }
+
+        .pulse-glow {
+            animation: pulseGlow 1.5s ease-in-out infinite;
+        }
+
+        .prose h2 {
+            font-weight: 700;
+            font-size: 1.875rem;
+            margin-top: 2.5rem;
+            margin-bottom: 1.25rem;
+            color: #0f172a;
+        }
+
+        .prose p {
+            margin-bottom: 1.5rem;
+            font-size: 1.1rem;
+        }
+    </style>
+</head>
+<body class="min-h-screen p-4 md:p-8">
+    <div class="max-w-6xl mx-auto space-y-8">
+
+        <!-- Header -->
+        <header class="bg-white border-b border-slate-200 pt-12 pb-10 -mx-4 md:-mx-8 -mt-4 md:-mt-8 px-4 md:px-8 mb-4">
+            <div class="max-w-4xl mx-auto text-center">
+                <h1 class="text-3xl md:text-5xl font-extrabold text-slate-900 mb-4 leading-tight">
+                    Learning Value Through Experience:
+                    <br/><span class="text-amber-600">The Rescorla-Wagner Model</span>
+                </h1>
+                <p class="text-lg text-slate-500 serif italic max-w-2xl mx-auto">
+                    How does the brain learn the value of things? Watch an agent discover a restaurant's true quality through noisy feedback, one meal at a time.
+                </p>
+            </div>
+        </header>
+
+        <!-- Simulator -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+
+            <!-- Controls Panel -->
+            <div class="lg:col-span-1 space-y-6 bg-white p-6 rounded-2xl shadow-sm border border-slate-100 h-fit">
+                <div class="flex items-center gap-2 text-lg font-semibold border-b pb-2 mb-4">
+                    <svg class="w-5 h-5 text-slate-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="3"/>
+                        <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06A1.65 1.65 0 0 0 4.6 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06A1.65 1.65 0 0 0 9 4.6a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+                    </svg>
+                    Parameters
+                </div>
+
+                <div class="space-y-5">
+                    <!-- True Value (hidden knowledge) -->
+                    <div>
+                        <div class="flex justify-between mb-2">
+                            <label class="text-sm font-medium text-slate-600">True Value \(V^*\)</label>
+                            <div class="flex items-center gap-1">
+                                <input type="number" id="true-value-val" class="param-input text-amber-600" value="9" min="0" max="10" step="0.5">
+                                <span class="text-xs text-slate-400">/10</span>
+                            </div>
+                        </div>
+                        <input type="range" id="true-value" min="0" max="10" step="0.5" value="9" class="w-full slider-amber">
+                        <p class="text-[10px] text-slate-400 mt-1 italic">The actual quality of the restaurant (unknown to the learner)</p>
+                    </div>
+
+                    <!-- Learning Rate -->
+                    <div>
+                        <div class="flex justify-between mb-2">
+                            <label class="text-sm font-medium text-slate-600">Learning Rate \(\alpha\)</label>
+                            <input type="number" id="alpha-val" class="param-input text-violet-600" value="0.2" min="0.01" max="1.0" step="0.01">
+                        </div>
+                        <input type="range" id="alpha" min="0.01" max="1.0" step="0.01" value="0.2" class="w-full slider-violet">
+                        <p class="text-[10px] text-slate-400 mt-1 italic">How much weight to give each new experience</p>
+                    </div>
+
+                    <!-- Feedback Noise -->
+                    <div>
+                        <div class="flex justify-between mb-2">
+                            <label class="text-sm font-medium text-slate-600">Feedback Noise \(\sigma\)</label>
+                            <input type="number" id="noise-val" class="param-input text-rose-600" value="1.5" min="0" max="5" step="0.1">
+                        </div>
+                        <input type="range" id="noise" min="0" max="5" step="0.1" value="1.5" class="w-full slider-rose">
+                        <p class="text-[10px] text-slate-400 mt-1 italic">Variability in the feedback (e.g., chef's inconsistency)</p>
+                    </div>
+
+                    <!-- Initial Estimate -->
+                    <div class="pt-2 border-t border-slate-100">
+                        <div class="flex justify-between mb-2">
+                            <label class="text-sm font-medium text-slate-600">Initial Estimate \(V_0\)</label>
+                            <div class="flex items-center gap-1">
+                                <input type="number" id="initial-val" class="param-input text-slate-600" value="5" min="0" max="10" step="0.5">
+                                <span class="text-xs text-slate-400">/10</span>
+                            </div>
+                        </div>
+                        <input type="range" id="initial" min="0" max="10" step="0.5" value="5" class="w-full bg-slate-200" style="color: #475569;">
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="pt-4 space-y-3">
+                    <button id="step-btn" class="flex items-center justify-center gap-2 w-full px-6 py-3 rounded-xl bg-amber-500 text-white hover:bg-amber-600 transition-colors shadow-lg shadow-amber-200 font-bold text-sm">
+                        <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                            <polygon points="5 3 19 12 5 21 5 3"/>
+                        </svg>
+                        <span>Try the Restaurant</span>
+                    </button>
+                    <div class="flex gap-2">
+                        <button id="run10-btn" class="flex-1 flex items-center justify-center gap-1 px-3 py-2.5 rounded-xl border border-slate-200 hover:bg-slate-50 transition-colors text-xs font-bold text-slate-600">
+                            <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                                <polygon points="13 19 22 12 13 5 13 19"/>
+                                <polygon points="2 19 11 12 2 5 2 19"/>
+                            </svg>
+                            10 Visits
+                        </button>
+                        <button id="run50-btn" class="flex-1 flex items-center justify-center gap-1 px-3 py-2.5 rounded-xl border border-slate-200 hover:bg-slate-50 transition-colors text-xs font-bold text-slate-600">
+                            <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                                <polygon points="13 19 22 12 13 5 13 19"/>
+                                <polygon points="2 19 11 12 2 5 2 19"/>
+                            </svg>
+                            50 Visits
+                        </button>
+                    </div>
+                    <button id="reset-btn" class="flex items-center justify-center gap-2 w-full px-4 py-2.5 border border-slate-200 rounded-xl hover:bg-white transition-colors text-sm font-semibold text-slate-500">
+                        <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="1 4 1 10 7 10"/>
+                            <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/>
+                        </svg>
+                        Reset
+                    </button>
+                </div>
+
+                <!-- Live Update Box -->
+                <div id="update-box" class="mt-2 p-4 bg-slate-50 rounded-xl border border-dashed border-slate-200 space-y-2 hidden">
+                    <h3 class="text-[10px] font-bold text-slate-400 uppercase tracking-widest font-mono">Latest Update</h3>
+                    <div class="text-sm space-y-1 font-mono text-slate-600">
+                        <div>Feedback: <span id="last-feedback" class="font-bold text-amber-600">—</span></div>
+                        <div>Prediction Error: <span id="last-pe" class="font-bold text-rose-600">—</span></div>
+                        <div>New Estimate: <span id="last-estimate" class="font-bold text-violet-600">—</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Visualization Area -->
+            <div class="lg:col-span-2 space-y-6">
+
+                <!-- Restaurant Card -->
+                <div class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
+                    <div class="p-6 flex flex-col sm:flex-row items-center gap-6">
+                        <!-- Restaurant Icon -->
+                        <div class="w-24 h-24 rounded-2xl bg-gradient-to-br from-amber-400 to-orange-500 flex items-center justify-center text-5xl shadow-lg shadow-amber-100 flex-shrink-0">
+                            🍽️
+                        </div>
+                        <div class="flex-grow text-center sm:text-left">
+                            <h2 class="text-xl font-bold text-slate-800 mb-1">Chez Apprentissage</h2>
+                            <p class="text-sm text-slate-400 italic mb-3">How good is this restaurant, really?</p>
+                            <!-- Star Display -->
+                            <div class="flex items-center justify-center sm:justify-start gap-1">
+                                <div id="star-display" class="flex gap-0.5 text-2xl">
+                                    <!-- Stars rendered by JS -->
+                                </div>
+                                <span id="estimate-label" class="text-2xl font-black text-slate-800 ml-2">5.0</span>
+                                <span class="text-slate-400 text-sm">/10</span>
+                            </div>
+                            <p class="text-[11px] text-slate-400 mt-1">Your current estimate (the learner's belief)</p>
+                        </div>
+                        <!-- Trial Counter -->
+                        <div class="flex flex-col items-center gap-1 flex-shrink-0">
+                            <span class="text-[10px] font-bold text-slate-400 uppercase">Visits</span>
+                            <span id="trial-count" class="text-4xl font-black text-slate-800">0</span>
+                        </div>
+                    </div>
+
+                    <!-- Feedback Flash Bar -->
+                    <div id="feedback-bar" class="h-12 bg-slate-50 border-t border-slate-100 flex items-center justify-center transition-all duration-300">
+                        <span id="feedback-text" class="text-sm font-semibold text-slate-400 italic">Try the restaurant to receive feedback...</span>
+                    </div>
+                </div>
+
+                <!-- Learning Curve Chart -->
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 flex flex-col" style="height: 420px;">
+                    <div class="flex justify-between items-center mb-4">
+                        <h2 class="font-semibold text-slate-700">Learning Curve</h2>
+                        <div class="flex items-center gap-4 text-[10px] font-bold uppercase tracking-wider">
+                            <div class="flex items-center gap-1.5">
+                                <div class="w-3 h-0.5 bg-amber-400 rounded"></div>
+                                <span class="text-amber-600">True Value</span>
+                            </div>
+                            <div class="flex items-center gap-1.5">
+                                <div class="w-3 h-0.5 bg-violet-500 rounded"></div>
+                                <span class="text-violet-600">Estimate</span>
+                            </div>
+                            <div class="flex items-center gap-1.5">
+                                <div class="w-2 h-2 bg-rose-400 rounded-full opacity-60"></div>
+                                <span class="text-rose-500">Feedback</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex-grow relative bg-slate-50/30 rounded-lg overflow-hidden">
+                        <canvas id="chartCanvas" class="w-full h-full"></canvas>
+                    </div>
+                </div>
+
+                <!-- Prediction Error Chart -->
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 flex flex-col" style="height: 280px;">
+                    <div class="flex justify-between items-center mb-4">
+                        <h2 class="font-semibold text-slate-700">Prediction Error \(\delta_t = R_t - V_t\)</h2>
+                        <div class="flex items-center gap-4 text-[10px] font-bold uppercase tracking-wider">
+                            <div class="flex items-center gap-1.5">
+                                <div class="w-3 h-3 bg-emerald-400 rounded-sm opacity-60"></div>
+                                <span class="text-emerald-600">Positive (better than expected)</span>
+                            </div>
+                            <div class="flex items-center gap-1.5">
+                                <div class="w-3 h-3 bg-red-400 rounded-sm opacity-60"></div>
+                                <span class="text-red-600">Negative (worse than expected)</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex-grow relative bg-slate-50/30 rounded-lg overflow-hidden">
+                        <canvas id="peCanvas" class="w-full h-full"></canvas>
+                    </div>
+                </div>
+
+                <!-- Stats Row -->
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    <div class="bg-white p-4 rounded-xl border border-slate-100 shadow-sm text-center">
+                        <div class="text-slate-400 text-[10px] font-bold uppercase mb-1">Current Estimate</div>
+                        <div id="stat-estimate" class="text-2xl font-bold text-violet-600">5.00</div>
+                    </div>
+                    <div class="bg-white p-4 rounded-xl border border-slate-100 shadow-sm text-center">
+                        <div class="text-slate-400 text-[10px] font-bold uppercase mb-1">Absolute Error</div>
+                        <div id="stat-error" class="text-2xl font-bold text-rose-600">4.00</div>
+                    </div>
+                    <div class="bg-white p-4 rounded-xl border border-slate-100 shadow-sm text-center">
+                        <div class="text-slate-400 text-[10px] font-bold uppercase mb-1">Avg Prediction Error</div>
+                        <div id="stat-avg-pe" class="text-2xl font-bold text-slate-600">—</div>
+                    </div>
+                    <div class="bg-white p-4 rounded-xl border border-slate-100 shadow-sm text-center">
+                        <div class="text-slate-400 text-[10px] font-bold uppercase mb-1">Last PE \(\delta\)</div>
+                        <div id="stat-last-pe" class="text-2xl font-bold text-slate-600">—</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Educational Article -->
+        <article class="max-w-3xl mx-auto prose serif mt-16 pb-24">
+
+            <h2 class="text-slate-900">The Problem: Learning from Noisy Experience</h2>
+            <p>
+                Imagine you've moved to a new city and you're trying to figure out if the restaurant on the corner is any good. You can't know the "true quality" directly—all you can do is eat there and see how the meal turns out. Sometimes the chef has a great day; sometimes they don't. Each meal gives you a <strong>noisy signal</strong> of the underlying quality.
+            </p>
+            <p>
+                How should you update your beliefs? The <strong>Rescorla-Wagner model</strong> (1972) provides an elegant answer that turns out to be deeply connected to how dopamine neurons in the brain actually work.
+            </p>
+
+            <h2 class="text-slate-900">The Update Rule</h2>
+            <p>
+                The model is beautifully simple. After each experience, you update your estimate using a single equation:
+            </p>
+
+            <div class="bg-white border-l-4 border-amber-500 p-6 my-8 shadow-sm">
+                <p class="font-bold text-slate-800 mb-2 font-sans text-sm uppercase">The Rescorla-Wagner Update</p>
+                <div class="text-center py-4 bg-slate-50 rounded">
+                    $$V_{t+1} = V_t + \alpha \cdot \underbrace{(R_t - V_t)}_{\text{prediction error } \delta_t}$$
+                </div>
+                <ul class="text-sm space-y-2 mt-4 font-sans text-slate-600 list-disc ml-5">
+                    <li>\(V_t\) — your current estimated value (before this trial)</li>
+                    <li>\(R_t\) — the feedback you received this trial (true value + noise)</li>
+                    <li>\(\alpha\) — the <strong>learning rate</strong>, how much you adjust per trial (0 to 1)</li>
+                    <li>\(\delta_t = R_t - V_t\) — the <strong>prediction error</strong>, the surprise</li>
+                </ul>
+            </div>
+
+            <p>
+                The key insight is the <strong>prediction error</strong> \(\delta_t\). If the meal was better than expected (\(\delta > 0\)), you revise your estimate upward. If it was worse (\(\delta < 0\)), you revise downward. If it matches your expectation perfectly (\(\delta = 0\)), you don't change your estimate at all. <em>Learning stops when there is nothing left to be surprised about.</em>
+            </p>
+
+            <h2 class="text-slate-900">The Learning Rate \(\alpha\)</h2>
+            <p>
+                The learning rate controls the <strong>speed-stability tradeoff</strong>:
+            </p>
+            <ul class="list-disc ml-8 mb-6">
+                <li><strong>High \(\alpha\) (e.g., 0.8):</strong> You learn fast, but your estimate is volatile—each new experience swings your belief dramatically. Your estimate chases the noise.</li>
+                <li><strong>Low \(\alpha\) (e.g., 0.05):</strong> You learn slowly, but your estimate is stable and smooth. It takes many experiences to converge, but the noise is averaged out.</li>
+            </ul>
+            <p>
+                Try it in the simulator above! Set \(\alpha = 0.9\) and watch the estimate bounce around. Then try \(\alpha = 0.05\) and see how it glides smoothly toward the truth.
+            </p>
+
+            <h2 class="text-slate-900">Feedback Noise \(\sigma\)</h2>
+            <p>
+                Each time you visit, the feedback you receive is:
+            </p>
+            <div class="text-center py-4 bg-white rounded border border-slate-200 my-4">
+                $$R_t = V^* + \varepsilon_t, \quad \varepsilon_t \sim \mathcal{N}(0, \sigma^2)$$
+            </div>
+            <p>
+                With low noise, every meal closely reflects the true quality, and learning is easy. With high noise, meals vary wildly—sometimes a 10/10 experience, sometimes a 3/10—making it harder to pin down the true value.
+            </p>
+
+            <h2 class="text-slate-900">Connection to Dopamine</h2>
+            <p>
+                In 1997, Schultz, Dayan, and Montague made a landmark discovery: <strong>dopamine neurons in the midbrain fire in a pattern that looks exactly like prediction error</strong>. When a reward is better than expected, dopamine neurons burst. When it's worse, they pause. When a reward is fully predicted, they don't respond at all.
+            </p>
+            <p>
+                This means the Rescorla-Wagner model isn't just a mathematical convenience—it describes the actual learning algorithm implemented by the brain's reward system.
+            </p>
+
+            <h2 class="text-slate-900">Try These Experiments</h2>
+            <div class="bg-amber-50 border border-amber-200 rounded-xl p-6 my-4 font-sans text-sm space-y-3">
+                <p class="font-bold text-amber-800">🧪 Suggested Explorations:</p>
+                <ol class="list-decimal ml-5 space-y-2 text-slate-700">
+                    <li>Set \(\alpha = 0.1\) and \(\sigma = 1\). Run 50 trials. How close does the estimate get? Now reset and try \(\alpha = 0.5\). What changes?</li>
+                    <li>Keep \(\alpha = 0.2\), but increase noise to \(\sigma = 4\). How does high noise affect the learning curve?</li>
+                    <li>Set \(\alpha = 1.0\). What happens? Why is this a problem?</li>
+                    <li>Watch the prediction error chart as learning progresses. Why do the bars get smaller over time?</li>
+                    <li>Change the true value mid-experiment. Does the learner adapt? How does \(\alpha\) affect re-learning?</li>
+                </ol>
+            </div>
+
+        </article>
+
+        <footer class="text-center text-slate-400 text-sm py-8 border-t border-slate-100">
+            <p>Rescorla-Wagner Learning Model &middot; Interactive Educational Demonstration</p>
+            <p class="mt-1">Built for Cognitive Neuroscience Education</p>
+        </footer>
+    </div>
+
+    <script>
+        // =============================================
+        // STATE
+        // =============================================
+        let trueValue = 9;
+        let alpha = 0.2;
+        let noise = 1.5;
+        let initialEstimate = 5;
+        let currentEstimate = 5;
+
+        let trialData = []; // { trial, estimate, feedback, pe }
+        let trialCount = 0;
+
+        // =============================================
+        // DOM ELEMENTS
+        // =============================================
+        const chartCanvas = document.getElementById('chartCanvas');
+        const chartCtx = chartCanvas.getContext('2d');
+        const peCanvas = document.getElementById('peCanvas');
+        const peCtx = peCanvas.getContext('2d');
+
+        const inputs = {
+            trueValue: document.getElementById('true-value'),
+            trueValueVal: document.getElementById('true-value-val'),
+            alpha: document.getElementById('alpha'),
+            alphaVal: document.getElementById('alpha-val'),
+            noise: document.getElementById('noise'),
+            noiseVal: document.getElementById('noise-val'),
+            initial: document.getElementById('initial'),
+            initialVal: document.getElementById('initial-val'),
+        };
+
+        const els = {
+            starDisplay: document.getElementById('star-display'),
+            estimateLabel: document.getElementById('estimate-label'),
+            trialCount: document.getElementById('trial-count'),
+            feedbackBar: document.getElementById('feedback-bar'),
+            feedbackText: document.getElementById('feedback-text'),
+            updateBox: document.getElementById('update-box'),
+            lastFeedback: document.getElementById('last-feedback'),
+            lastPE: document.getElementById('last-pe'),
+            lastEstimate: document.getElementById('last-estimate'),
+            statEstimate: document.getElementById('stat-estimate'),
+            statError: document.getElementById('stat-error'),
+            statAvgPE: document.getElementById('stat-avg-pe'),
+            statLastPE: document.getElementById('stat-last-pe'),
+        };
+
+        // =============================================
+        // RESCORLA-WAGNER CORE
+        // =============================================
+        function gaussianRandom() {
+            // Box-Muller transform
+            let u1 = Math.random();
+            let u2 = Math.random();
+            while (u1 === 0) u1 = Math.random();
+            return Math.sqrt(-2.0 * Math.log(u1)) * Math.cos(2.0 * Math.PI * u2);
+        }
+
+        function runTrial() {
+            trialCount++;
+            const feedback = trueValue + gaussianRandom() * noise;
+            const pe = feedback - currentEstimate;
+            const oldEstimate = currentEstimate;
+
+            currentEstimate = currentEstimate + alpha * pe;
+
+            trialData.push({
+                trial: trialCount,
+                estimateBefore: oldEstimate,
+                estimateAfter: currentEstimate,
+                feedback: feedback,
+                pe: pe
+            });
+
+            return { feedback, pe, oldEstimate, newEstimate: currentEstimate };
+        }
+
+        // =============================================
+        // UI UPDATES
+        // =============================================
+        function renderStars(value) {
+            const clamped = Math.max(0, Math.min(10, value));
+            const fullStars = Math.floor(clamped);
+            const halfStar = (clamped - fullStars) >= 0.5;
+            let html = '';
+            for (let i = 0; i < 5; i++) {
+                const scaledVal = clamped / 2; // map 0-10 to 0-5 stars
+                if (i < Math.floor(scaledVal)) {
+                    html += '<span class="star">★</span>';
+                } else if (i === Math.floor(scaledVal) && (scaledVal - Math.floor(scaledVal)) >= 0.5) {
+                    html += '<span class="star" style="background: linear-gradient(90deg, #fbbf24 50%, #e2e8f0 50%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">★</span>';
+                } else {
+                    html += '<span class="star empty">★</span>';
+                }
+            }
+            els.starDisplay.innerHTML = html;
+        }
+
+        function updateDisplay(result) {
+            const { feedback, pe, oldEstimate, newEstimate } = result;
+
+            // Stars & estimate label
+            renderStars(newEstimate);
+            els.estimateLabel.textContent = newEstimate.toFixed(1);
+            els.trialCount.textContent = trialCount;
+
+            // Feedback bar
+            const clampedFb = Math.max(0, Math.min(10, feedback));
+            const fbEmoji = clampedFb >= 8 ? '😍' : clampedFb >= 6 ? '😊' : clampedFb >= 4 ? '😐' : clampedFb >= 2 ? '😕' : '😖';
+            els.feedbackBar.className = `h-12 border-t flex items-center justify-center transition-all duration-300 feedback-pop ${pe >= 0 ? 'bg-emerald-50 border-emerald-200' : 'bg-red-50 border-red-200'}`;
+            els.feedbackText.innerHTML = `${fbEmoji} Meal rated <strong>${feedback.toFixed(1)}</strong>/10 &mdash; ${pe >= 0 ? '<span class="text-emerald-600">better than expected!</span>' : '<span class="text-red-600">worse than expected</span>'} (δ = ${pe >= 0 ? '+' : ''}${pe.toFixed(2)})`;
+
+            // Update box
+            els.updateBox.classList.remove('hidden');
+            els.lastFeedback.textContent = feedback.toFixed(2);
+            els.lastPE.textContent = (pe >= 0 ? '+' : '') + pe.toFixed(2);
+            els.lastEstimate.textContent = newEstimate.toFixed(2);
+
+            // Stats
+            els.statEstimate.textContent = newEstimate.toFixed(2);
+            els.statError.textContent = Math.abs(trueValue - newEstimate).toFixed(2);
+            const avgPE = trialData.reduce((sum, d) => sum + Math.abs(d.pe), 0) / trialData.length;
+            els.statAvgPE.textContent = avgPE.toFixed(2);
+            els.statLastPE.textContent = (pe >= 0 ? '+' : '') + pe.toFixed(2);
+            els.statLastPE.className = `text-2xl font-bold ${pe >= 0 ? 'text-emerald-600' : 'text-red-600'}`;
+        }
+
+        // =============================================
+        // CHART RENDERING
+        // =============================================
+        function resizeCanvas(canvas) {
+            const rect = canvas.parentElement.getBoundingClientRect();
+            const dpr = window.devicePixelRatio || 1;
+            canvas.width = rect.width * dpr;
+            canvas.height = rect.height * dpr;
+            const ctx = canvas.getContext('2d');
+            ctx.scale(dpr, dpr);
+            canvas.style.width = rect.width + 'px';
+            canvas.style.height = rect.height + 'px';
+        }
+
+        function drawLearningCurve() {
+            resizeCanvas(chartCanvas);
+            const rect = chartCanvas.getBoundingClientRect();
+            const ctx = chartCtx;
+            ctx.clearRect(0, 0, rect.width, rect.height);
+
+            const padding = { top: 20, right: 30, bottom: 40, left: 50 };
+            const w = rect.width - padding.left - padding.right;
+            const h = rect.height - padding.top - padding.bottom;
+
+            const maxTrial = Math.max(trialCount, 10);
+            const yMin = -1;
+            const yMax = 11;
+
+            const scaleX = (t) => padding.left + (t / maxTrial) * w;
+            const scaleY = (v) => padding.top + h - ((v - yMin) / (yMax - yMin)) * h;
+
+            // Grid lines
+            ctx.strokeStyle = '#f1f5f9';
+            ctx.lineWidth = 1;
+            for (let v = 0; v <= 10; v += 2) {
+                ctx.beginPath();
+                ctx.moveTo(padding.left, scaleY(v));
+                ctx.lineTo(padding.left + w, scaleY(v));
+                ctx.stroke();
+            }
+
+            // Y-axis labels
+            ctx.fillStyle = '#94a3b8';
+            ctx.font = '11px Inter, sans-serif';
+            ctx.textAlign = 'right';
+            for (let v = 0; v <= 10; v += 2) {
+                ctx.fillText(v.toString(), padding.left - 8, scaleY(v) + 4);
+            }
+
+            // X-axis labels
+            ctx.textAlign = 'center';
+            const xStep = maxTrial <= 20 ? 5 : maxTrial <= 50 ? 10 : 25;
+            for (let t = 0; t <= maxTrial; t += xStep) {
+                ctx.fillText(t.toString(), scaleX(t), rect.height - padding.bottom + 20);
+            }
+            ctx.fillText('Trial', padding.left + w / 2, rect.height - 5);
+
+            // Axes
+            ctx.strokeStyle = '#cbd5e1';
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            ctx.moveTo(padding.left, padding.top);
+            ctx.lineTo(padding.left, padding.top + h);
+            ctx.lineTo(padding.left + w, padding.top + h);
+            ctx.stroke();
+
+            // True value line (dashed)
+            ctx.setLineDash([8, 4]);
+            ctx.strokeStyle = '#fbbf24';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.moveTo(padding.left, scaleY(trueValue));
+            ctx.lineTo(padding.left + w, scaleY(trueValue));
+            ctx.stroke();
+            ctx.setLineDash([]);
+
+            // Label for true value
+            ctx.fillStyle = '#d97706';
+            ctx.font = 'bold 11px Inter, sans-serif';
+            ctx.textAlign = 'left';
+            ctx.fillText(`V* = ${trueValue}`, padding.left + w - 60, scaleY(trueValue) - 8);
+
+            if (trialData.length === 0) return;
+
+            // Feedback dots
+            trialData.forEach((d) => {
+                ctx.fillStyle = 'rgba(244, 63, 94, 0.35)';
+                ctx.beginPath();
+                ctx.arc(scaleX(d.trial), scaleY(d.feedback), 4, 0, Math.PI * 2);
+                ctx.fill();
+            });
+
+            // Estimate line
+            ctx.strokeStyle = '#7c3aed';
+            ctx.lineWidth = 2.5;
+            ctx.beginPath();
+            // Start from initial estimate
+            ctx.moveTo(scaleX(0), scaleY(initialEstimate));
+            trialData.forEach((d) => {
+                ctx.lineTo(scaleX(d.trial), scaleY(d.estimateAfter));
+            });
+            ctx.stroke();
+
+            // Estimate dots
+            trialData.forEach((d) => {
+                ctx.fillStyle = '#7c3aed';
+                ctx.beginPath();
+                ctx.arc(scaleX(d.trial), scaleY(d.estimateAfter), 3, 0, Math.PI * 2);
+                ctx.fill();
+            });
+
+            // Current estimate dot (larger, glowing)
+            if (trialData.length > 0) {
+                const last = trialData[trialData.length - 1];
+                ctx.fillStyle = '#7c3aed';
+                ctx.shadowColor = 'rgba(124, 58, 237, 0.4)';
+                ctx.shadowBlur = 8;
+                ctx.beginPath();
+                ctx.arc(scaleX(last.trial), scaleY(last.estimateAfter), 6, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.shadowBlur = 0;
+            }
+        }
+
+        function drawPEChart() {
+            resizeCanvas(peCanvas);
+            const rect = peCanvas.getBoundingClientRect();
+            const ctx = peCtx;
+            ctx.clearRect(0, 0, rect.width, rect.height);
+
+            const padding = { top: 15, right: 30, bottom: 35, left: 50 };
+            const w = rect.width - padding.left - padding.right;
+            const h = rect.height - padding.top - padding.bottom;
+
+            const maxTrial = Math.max(trialCount, 10);
+            const maxPE = trialData.length > 0 ? Math.max(5, ...trialData.map(d => Math.abs(d.pe) + 1)) : 5;
+
+            const scaleX = (t) => padding.left + (t / maxTrial) * w;
+            const scaleY = (pe) => padding.top + h / 2 - (pe / maxPE) * (h / 2);
+
+            // Zero line
+            ctx.strokeStyle = '#cbd5e1';
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            ctx.moveTo(padding.left, scaleY(0));
+            ctx.lineTo(padding.left + w, scaleY(0));
+            ctx.stroke();
+
+            // Y-axis labels
+            ctx.fillStyle = '#94a3b8';
+            ctx.font = '10px Inter, sans-serif';
+            ctx.textAlign = 'right';
+            const peStep = maxPE > 8 ? 4 : 2;
+            for (let v = -Math.floor(maxPE); v <= Math.floor(maxPE); v += peStep) {
+                ctx.fillText(v.toString(), padding.left - 8, scaleY(v) + 3);
+                if (v !== 0) {
+                    ctx.strokeStyle = '#f1f5f9';
+                    ctx.beginPath();
+                    ctx.moveTo(padding.left, scaleY(v));
+                    ctx.lineTo(padding.left + w, scaleY(v));
+                    ctx.stroke();
+                }
+            }
+
+            // X-axis label
+            ctx.fillStyle = '#94a3b8';
+            ctx.textAlign = 'center';
+            ctx.fillText('Trial', padding.left + w / 2, rect.height - 5);
+
+            if (trialData.length === 0) return;
+
+            // PE bars
+            const barWidth = Math.max(2, Math.min(20, (w / maxTrial) * 0.6));
+            trialData.forEach((d) => {
+                const x = scaleX(d.trial) - barWidth / 2;
+                const y0 = scaleY(0);
+                const y1 = scaleY(d.pe);
+                const barH = y0 - y1;
+
+                ctx.fillStyle = d.pe >= 0 ? 'rgba(16, 185, 129, 0.6)' : 'rgba(239, 68, 68, 0.6)';
+                ctx.fillRect(x, Math.min(y0, y1), barWidth, Math.abs(barH));
+            });
+        }
+
+        function drawAll() {
+            drawLearningCurve();
+            drawPEChart();
+        }
+
+        // =============================================
+        // ACTIONS
+        // =============================================
+        function doStep() {
+            const result = runTrial();
+            updateDisplay(result);
+            drawAll();
+        }
+
+        function doMultipleSteps(n) {
+            let i = 0;
+            const interval = setInterval(() => {
+                if (i >= n) {
+                    clearInterval(interval);
+                    return;
+                }
+                doStep();
+                i++;
+            }, 80);
+        }
+
+        function resetAll() {
+            currentEstimate = initialEstimate;
+            trialData = [];
+            trialCount = 0;
+
+            renderStars(currentEstimate);
+            els.estimateLabel.textContent = currentEstimate.toFixed(1);
+            els.trialCount.textContent = '0';
+            els.feedbackBar.className = 'h-12 bg-slate-50 border-t border-slate-100 flex items-center justify-center transition-all duration-300';
+            els.feedbackText.innerHTML = 'Try the restaurant to receive feedback...';
+            els.updateBox.classList.add('hidden');
+            els.statEstimate.textContent = currentEstimate.toFixed(2);
+            els.statError.textContent = Math.abs(trueValue - currentEstimate).toFixed(2);
+            els.statAvgPE.textContent = '—';
+            els.statLastPE.textContent = '—';
+            els.statLastPE.className = 'text-2xl font-bold text-slate-600';
+
+            drawAll();
+        }
+
+        // =============================================
+        // INPUT SYNCING
+        // =============================================
+        function syncInputs() {
+            inputs.trueValueVal.value = trueValue;
+            inputs.trueValue.value = trueValue;
+            inputs.alphaVal.value = alpha.toFixed(2);
+            inputs.alpha.value = alpha;
+            inputs.noiseVal.value = noise.toFixed(1);
+            inputs.noise.value = noise;
+            inputs.initialVal.value = initialEstimate;
+            inputs.initial.value = initialEstimate;
+        }
+
+        // Slider listeners
+        inputs.trueValue.addEventListener('input', (e) => {
+            trueValue = Number(e.target.value);
+            syncInputs();
+            drawAll();
+        });
+        inputs.alpha.addEventListener('input', (e) => {
+            alpha = Number(e.target.value);
+            syncInputs();
+        });
+        inputs.noise.addEventListener('input', (e) => {
+            noise = Number(e.target.value);
+            syncInputs();
+        });
+        inputs.initial.addEventListener('input', (e) => {
+            initialEstimate = Number(e.target.value);
+            if (trialCount === 0) {
+                currentEstimate = initialEstimate;
+                renderStars(currentEstimate);
+                els.estimateLabel.textContent = currentEstimate.toFixed(1);
+                els.statEstimate.textContent = currentEstimate.toFixed(2);
+                els.statError.textContent = Math.abs(trueValue - currentEstimate).toFixed(2);
+            }
+            syncInputs();
+        });
+
+        // Number input listeners
+        inputs.trueValueVal.addEventListener('input', (e) => {
+            trueValue = Math.max(0, Math.min(10, Number(e.target.value) || 0));
+            syncInputs();
+            drawAll();
+        });
+        inputs.alphaVal.addEventListener('input', (e) => {
+            alpha = Math.max(0.01, Math.min(1.0, Number(e.target.value) || 0.01));
+            syncInputs();
+        });
+        inputs.noiseVal.addEventListener('input', (e) => {
+            noise = Math.max(0, Math.min(5, Number(e.target.value) || 0));
+            syncInputs();
+        });
+        inputs.initialVal.addEventListener('input', (e) => {
+            initialEstimate = Math.max(0, Math.min(10, Number(e.target.value) || 0));
+            if (trialCount === 0) {
+                currentEstimate = initialEstimate;
+                renderStars(currentEstimate);
+                els.estimateLabel.textContent = currentEstimate.toFixed(1);
+                els.statEstimate.textContent = currentEstimate.toFixed(2);
+                els.statError.textContent = Math.abs(trueValue - currentEstimate).toFixed(2);
+            }
+            syncInputs();
+        });
+
+        // Button listeners
+        document.getElementById('step-btn').addEventListener('click', doStep);
+        document.getElementById('run10-btn').addEventListener('click', () => doMultipleSteps(10));
+        document.getElementById('run50-btn').addEventListener('click', () => doMultipleSteps(50));
+        document.getElementById('reset-btn').addEventListener('click', resetAll);
+
+        // Resize
+        window.addEventListener('resize', drawAll);
+
+        // =============================================
+        // INIT
+        // =============================================
+        syncInputs();
+        renderStars(currentEstimate);
+        drawAll();
+    </script>
+</body>
+</html>
