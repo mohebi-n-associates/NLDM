@@ -1188,6 +1188,100 @@
                 </div>
             </div>
 
+            <!-- Demo 4: Temporal Difference Learning -->
+            <div class="demo-item">
+                <div class="demo-header">
+                    <div class="demo-number">4</div>
+                    <div class="demo-title-block">
+                        <h3>Learning to Anticipate</h3>
+                        <span>Temporal Difference Learning & Dopamine</span>
+                    </div>
+                </div>
+                <div class="demo-content">
+                    <div class="demo-text">
+                        <p>How does the brain learn to predict rewards before they arrive? This demonstration shows
+                            classical conditioning where a Light predicts a Tone, which predicts Food.</p>
+                        <p>Watch prediction errors shift backward through the cue sequence over learning—the exact
+                            pattern seen in dopamine neuron recordings.</p>
+                        <ul>
+                            <li>TD error = reward received − expected value</li>
+                            <li>Errors shift from reward to earliest predictive cue</li>
+                            <li>Discount factor (γ) controls value propagation</li>
+                            <li>Based on Schultz, Dayan & Montague's dopamine research</li>
+                        </ul>
+                        <a href="./Demonstrations/TemporalDifference/" target="_blank" class="demo-launch-btn">
+                            Launch Interactive Demo
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <path d="M5 12h14M12 5l7 7-7 7" />
+                            </svg>
+                        </a>
+                    </div>
+                    <div class="demo-iframe">
+                        <iframe src="./Demonstrations/TemporalDifference/" title="Temporal Difference Learning Demo"></iframe>
+                        <div class="demo-overlay">
+                            <span>Interactive Demo</span>
+                            <a href="./Demonstrations/TemporalDifference/" target="_blank">
+                                Open Full Screen
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2">
+                                    <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+                                    <polyline points="15 3 21 3 21 9" />
+                                    <line x1="10" y1="14" x2="21" y2="3" />
+                                </svg>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Demo 5: The Coffee Walk -->
+            <div class="demo-item">
+                <div class="demo-header">
+                    <div class="demo-number">5</div>
+                    <div class="demo-title-block">
+                        <h3>The Coffee Walk</h3>
+                        <span>Learning State Values</span>
+                    </div>
+                </div>
+                <div class="demo-content">
+                    <div class="demo-text">
+                        <p>Watch an agent learn that being close to coffee is valuable. Each location along the path
+                            (Home → Park → Street → Coffee Shop) acquires value through TD learning.</p>
+                        <p>See how values propagate backward from the goal, and explore how the discount factor affects
+                            how much "closer" states are valued more than distant ones.</p>
+                        <ul>
+                            <li>Values propagate backward from the reward</li>
+                            <li>Discount (γ) controls value gradient steepness</li>
+                            <li>Shop closure creates negative prediction errors</li>
+                            <li>Clear spatial intuition for state values</li>
+                        </ul>
+                        <a href="./Demonstrations/CoffeeWalk/" target="_blank" class="demo-launch-btn">
+                            Launch Interactive Demo
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <path d="M5 12h14M12 5l7 7-7 7" />
+                            </svg>
+                        </a>
+                    </div>
+                    <div class="demo-iframe">
+                        <iframe src="./Demonstrations/CoffeeWalk/" title="The Coffee Walk TD Learning Demo"></iframe>
+                        <div class="demo-overlay">
+                            <span>Interactive Demo</span>
+                            <a href="./Demonstrations/CoffeeWalk/" target="_blank">
+                                Open Full Screen
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2">
+                                    <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+                                    <polyline points="15 3 21 3 21 9" />
+                                    <line x1="10" y1="14" x2="21" y2="3" />
+                                </svg>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <!-- More demonstrations can be added here following the same pattern -->
 
         </div>
