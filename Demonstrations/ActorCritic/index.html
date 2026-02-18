@@ -93,11 +93,33 @@
         .flash-lose { animation: flashRed 0.5s ease-out; }
 
         .arm-card {
-            transition: transform 0.15s ease, box-shadow 0.15s ease;
+            transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease, border-color 0.2s ease;
+            opacity: 0.55;
         }
-        .arm-card.chosen {
-            transform: scale(1.03);
-            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.5), 0 10px 25px -5px rgba(0,0,0,0.15);
+        .arm-card.chosen-A {
+            opacity: 1;
+            transform: scale(1.04);
+            background: linear-gradient(135deg, #eff6ff, #dbeafe) !important;
+            border-color: #3b82f6 !important;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.35), 0 8px 20px -4px rgba(59, 130, 246, 0.2);
+        }
+        .arm-card.chosen-B {
+            opacity: 1;
+            transform: scale(1.04);
+            background: linear-gradient(135deg, #fff1f2, #ffe4e6) !important;
+            border-color: #e11d48 !important;
+            box-shadow: 0 0 0 3px rgba(225, 29, 72, 0.35), 0 8px 20px -4px rgba(225, 29, 72, 0.2);
+        }
+        .arm-card.not-chosen {
+            opacity: 0.45;
+            transform: scale(0.97);
+        }
+        .arm-card .chosen-label {
+            display: none;
+        }
+        .arm-card.chosen-A .chosen-label,
+        .arm-card.chosen-B .chosen-label {
+            display: inline-flex;
         }
     </style>
 </head>
@@ -310,7 +332,10 @@
                 <!-- Arm stats row -->
                 <div class="grid grid-cols-2 gap-4">
                     <div class="arm-card bg-white p-3 rounded-xl shadow-sm border-2 border-blue-100 text-center" id="card-A">
-                        <div class="font-bold text-blue-700 text-sm mb-1">🎰 Arm A</div>
+                        <div class="font-bold text-blue-700 text-sm mb-1 flex items-center justify-center gap-2">
+                            🎰 Arm A
+                            <span class="chosen-label text-[10px] font-bold uppercase tracking-wider bg-blue-600 text-white px-2 py-0.5 rounded-full">← Chosen</span>
+                        </div>
                         <div class="flex justify-center gap-6 text-xs text-slate-500">
                             <span>Chosen: <strong class="text-slate-700" id="nA">0</strong></span>
                             <span>Wins: <strong class="text-emerald-600" id="wA">0</strong></span>
@@ -318,7 +343,10 @@
                         <div class="mt-1 h-5 rounded-lg flex items-center justify-center text-xs font-semibold" id="flash-A"></div>
                     </div>
                     <div class="arm-card bg-white p-3 rounded-xl shadow-sm border-2 border-rose-100 text-center" id="card-B">
-                        <div class="font-bold text-rose-700 text-sm mb-1">🎰 Arm B</div>
+                        <div class="font-bold text-rose-700 text-sm mb-1 flex items-center justify-center gap-2">
+                            🎰 Arm B
+                            <span class="chosen-label text-[10px] font-bold uppercase tracking-wider bg-rose-600 text-white px-2 py-0.5 rounded-full">← Chosen</span>
+                        </div>
                         <div class="flex justify-center gap-6 text-xs text-slate-500">
                             <span>Chosen: <strong class="text-slate-700" id="nB">0</strong></span>
                             <span>Wins: <strong class="text-emerald-600" id="wB">0</strong></span>
@@ -656,18 +684,24 @@
             wADisplay.textContent = nWins[0];
             wBDisplay.textContent = nWins[1];
 
-            if (animate) {
-                cardA.classList.toggle('chosen', arm === 0);
-                cardB.classList.toggle('chosen', arm === 1);
+            // Always mark the last-chosen arm (persists between trials)
+            cardA.classList.remove('chosen-A', 'chosen-B', 'not-chosen');
+            cardB.classList.remove('chosen-A', 'chosen-B', 'not-chosen');
+            if (arm === 0) {
+                cardA.classList.add('chosen-A');
+                cardB.classList.add('not-chosen');
+            } else {
+                cardB.classList.add('chosen-B');
+                cardA.classList.add('not-chosen');
+            }
 
+            if (animate) {
                 const flashEl = arm === 0 ? flashA : flashB;
+                const otherFlash = arm === 0 ? flashB : flashA;
                 flashEl.className = `mt-1 h-5 rounded-lg flex items-center justify-center text-xs font-semibold ${reward ? 'flash-win text-emerald-700' : 'flash-lose text-red-600'}`;
                 flashEl.textContent = reward ? '🎉 Win! +1' : '✗ No reward';
-
-                setTimeout(() => {
-                    cardA.classList.remove('chosen');
-                    cardB.classList.remove('chosen');
-                }, 300);
+                otherFlash.className = 'mt-1 h-5 rounded-lg flex items-center justify-center text-xs font-semibold';
+                otherFlash.textContent = '';
             }
         }
 
@@ -991,6 +1025,9 @@
             flashB.textContent = '';
             flashA.className = 'mt-1 h-5 rounded-lg flex items-center justify-center text-xs font-semibold';
             flashB.className = 'mt-1 h-5 rounded-lg flex items-center justify-center text-xs font-semibold';
+
+            cardA.classList.remove('chosen-A', 'not-chosen');
+            cardB.classList.remove('chosen-B', 'not-chosen');
 
             document.getElementById('vBar').style.width = '0%';
             document.getElementById('mBarA').style.width = '50%';
