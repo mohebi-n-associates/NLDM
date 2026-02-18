@@ -1282,6 +1282,53 @@
                 </div>
             </div>
 
+            <div class="demo-item">
+                <div class="demo-header">
+                    <div class="demo-number">6</div>
+                    <div class="demo-title-block">
+                        <h3>The Softmax Bandit</h3>
+                        <span>Explore vs Exploit</span>
+                    </div>
+                </div>
+                <div class="demo-content">
+                    <div class="demo-text">
+                        <p>Two slot machines with hidden payoff rates. Should you exploit the arm you think is best, or
+                            explore the other to improve your estimates? The softmax (Boltzmann) policy provides a
+                            principled solution controlled by temperature.</p>
+                        <p>Watch Q-values converge, choice proportions shift, and cumulative reward approach optimal as
+                            the agent learns which arm pays more.</p>
+                        <ul>
+                            <li>Temperature τ controls explore/exploit balance</li>
+                            <li>Low τ = greedy exploitation, high τ = random exploration</li>
+                            <li>Cumulative regret shows the cost of exploration</li>
+                            <li>Close reward probabilities make the problem harder</li>
+                        </ul>
+                        <a href="./Demonstrations/SoftmaxBandit/" target="_blank" class="demo-launch-btn">
+                            Launch Interactive Demo
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <path d="M5 12h14M12 5l7 7-7 7" />
+                            </svg>
+                        </a>
+                    </div>
+                    <div class="demo-iframe">
+                        <iframe src="./Demonstrations/SoftmaxBandit/" title="Softmax Bandit Demo"></iframe>
+                        <div class="demo-overlay">
+                            <span>Interactive Demo</span>
+                            <a href="./Demonstrations/SoftmaxBandit/" target="_blank">
+                                Open Full Screen
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2">
+                                    <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+                                    <polyline points="15 3 21 3 21 9" />
+                                    <line x1="10" y1="14" x2="21" y2="3" />
+                                </svg>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <!-- More demonstrations can be added here following the same pattern -->
 
         </div>

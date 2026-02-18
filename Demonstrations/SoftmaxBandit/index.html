@@ -1,0 +1,947 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Softmax Bandit | Explore vs Exploit</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Lora:ital,wght@0,400;0,700;1,400&display=swap');
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc;
+            line-height: 1.7;
+            color: #1e293b;
+        }
+
+        .serif { font-family: 'Lora', serif; }
+
+        input[type="range"] {
+            -webkit-appearance: none;
+            appearance: none;
+            height: 8px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: currentColor;
+            cursor: pointer;
+            border: 2px solid white;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .slider-orange { background: #ffedd5; color: #ea580c; }
+        .slider-violet { background: #ede9fe; color: #7c3aed; }
+        .slider-blue { background: #dbeafe; color: #2563eb; }
+        .slider-rose { background: #ffe4e6; color: #e11d48; }
+
+        .param-input {
+            width: 70px;
+            padding: 2px 6px;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-align: right;
+            background: white;
+        }
+
+        .param-input:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+        }
+
+        @keyframes pulseGlow {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(234, 88, 12, 0.4); }
+            50% { box-shadow: 0 0 0 8px rgba(234, 88, 12, 0); }
+        }
+
+        .pulse-glow { animation: pulseGlow 1.5s ease-in-out infinite; }
+
+        .prose h2 {
+            font-weight: 700;
+            font-size: 1.875rem;
+            margin-top: 2.5rem;
+            margin-bottom: 1.25rem;
+            color: #0f172a;
+        }
+
+        .prose p {
+            margin-bottom: 1.5rem;
+            font-size: 1.1rem;
+        }
+
+        @keyframes flashGreen {
+            0% { background-color: #dcfce7; }
+            100% { background-color: transparent; }
+        }
+        @keyframes flashRed {
+            0% { background-color: #fee2e2; }
+            100% { background-color: transparent; }
+        }
+        .flash-win { animation: flashGreen 0.5s ease-out; }
+        .flash-lose { animation: flashRed 0.5s ease-out; }
+
+        .arm-card {
+            transition: transform 0.15s ease, box-shadow 0.15s ease;
+        }
+        .arm-card.chosen {
+            transform: scale(1.03);
+            box-shadow: 0 0 0 3px rgba(234, 88, 12, 0.5), 0 10px 25px -5px rgba(0,0,0,0.15);
+        }
+    </style>
+</head>
+<body class="min-h-screen p-4 md:p-8">
+    <div class="max-w-7xl mx-auto space-y-8">
+
+        <!-- Header -->
+        <header class="bg-white border-b border-slate-200 pt-12 pb-10 -mx-4 md:-mx-8 -mt-4 md:-mt-8 px-4 md:px-8 mb-4">
+            <div class="max-w-4xl mx-auto text-center">
+                <h1 class="text-3xl md:text-5xl font-extrabold text-slate-900 mb-4 leading-tight">
+                    Explore or Exploit?
+                    <br/><span class="text-orange-600">The Softmax Bandit</span>
+                </h1>
+                <p class="text-lg text-slate-500 serif italic max-w-2xl mx-auto">
+                    Two slot machines, unknown payoffs. How does temperature control the balance between exploring new options and exploiting the best known one?
+                </p>
+            </div>
+        </header>
+
+        <!-- Simulator -->
+        <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
+
+            <!-- Controls Panel -->
+            <div class="lg:col-span-1 space-y-5 bg-white p-5 rounded-2xl shadow-sm border border-slate-100 h-fit">
+                <div class="flex items-center gap-2 text-lg font-semibold border-b pb-2 mb-4">
+                    <svg class="w-5 h-5 text-slate-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="3"/>
+                        <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06A1.65 1.65 0 0 0 9 4.6a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+                    </svg>
+                    Parameters
+                </div>
+
+                <div class="space-y-4">
+                    <!-- Temperature -->
+                    <div>
+                        <div class="flex justify-between mb-1">
+                            <label class="text-sm font-medium text-slate-600">Temperature \(\tau\)</label>
+                            <input type="number" id="tau-val" class="param-input text-orange-600" value="0.3" min="0.01" max="10" step="0.01">
+                        </div>
+                        <input type="range" id="tau" min="0.01" max="5" step="0.01" value="0.3" class="w-full slider-orange">
+                        <p class="text-[9px] text-slate-400 mt-0.5">Low = exploit, High = explore</p>
+                    </div>
+
+                    <!-- Learning Rate -->
+                    <div>
+                        <div class="flex justify-between mb-1">
+                            <label class="text-sm font-medium text-slate-600">Learning Rate \(\alpha\)</label>
+                            <input type="number" id="alpha-val" class="param-input text-violet-600" value="0.1" min="0.01" max="1.0" step="0.01">
+                        </div>
+                        <input type="range" id="alpha" min="0.01" max="1.0" step="0.01" value="0.1" class="w-full slider-violet">
+                    </div>
+                </div>
+
+                <!-- True Reward Probabilities -->
+                <div class="pt-3 border-t">
+                    <div class="flex items-center justify-between mb-3">
+                        <div class="text-xs font-semibold text-slate-500 uppercase tracking-wide">True Reward Probs</div>
+                        <button id="toggle-reveal" class="text-[10px] px-2 py-0.5 rounded bg-slate-100 text-slate-500 hover:bg-slate-200 transition-colors">
+                            Show
+                        </button>
+                    </div>
+
+                    <div class="mb-3">
+                        <div class="flex justify-between mb-1">
+                            <label class="text-xs font-medium text-blue-600 flex items-center gap-1">
+                                <span class="inline-block w-3 h-3 rounded bg-blue-400"></span> Arm A
+                            </label>
+                            <span class="text-xs font-mono" id="pA-display">
+                                <span class="text-slate-300">hidden</span>
+                            </span>
+                        </div>
+                        <input type="range" id="pA" min="0" max="1.0" step="0.05" value="0.7" class="w-full slider-blue">
+                    </div>
+
+                    <div>
+                        <div class="flex justify-between mb-1">
+                            <label class="text-xs font-medium text-rose-600 flex items-center gap-1">
+                                <span class="inline-block w-3 h-3 rounded bg-rose-400"></span> Arm B
+                            </label>
+                            <span class="text-xs font-mono" id="pB-display">
+                                <span class="text-slate-300">hidden</span>
+                            </span>
+                        </div>
+                        <input type="range" id="pB" min="0" max="1.0" step="0.05" value="0.3" class="w-full slider-rose">
+                    </div>
+                </div>
+
+                <!-- Control Buttons -->
+                <div class="pt-3 border-t space-y-2">
+                    <button id="run-trial-btn" class="w-full flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-orange-600 text-white font-semibold hover:bg-orange-700 transition-colors shadow-lg shadow-orange-200 pulse-glow">
+                        <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polygon points="5 3 19 12 5 21 5 3"/>
+                        </svg>
+                        Run Trial
+                    </button>
+                    <div class="flex gap-2">
+                        <button id="run-10-btn" class="flex-1 flex items-center justify-center gap-1 px-3 py-2 rounded-lg border border-slate-200 text-slate-600 font-medium hover:bg-slate-50 transition-colors text-sm">
+                            ×10
+                        </button>
+                        <button id="run-100-btn" class="flex-1 flex items-center justify-center gap-1 px-3 py-2 rounded-lg border border-slate-200 text-slate-600 font-medium hover:bg-slate-50 transition-colors text-sm">
+                            ×100
+                        </button>
+                        <button id="reset-btn" class="flex-1 flex items-center justify-center gap-1 px-3 py-2 rounded-lg border border-red-200 text-red-600 font-medium hover:bg-red-50 transition-colors text-sm">
+                            Reset
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Trial Counter -->
+                <div class="bg-slate-50 rounded-xl p-3 text-center">
+                    <div class="text-2xl font-bold text-slate-800" id="trial-count">0</div>
+                    <div class="text-xs text-slate-500 uppercase tracking-wide">Trials</div>
+                </div>
+            </div>
+
+            <!-- Main Visualization -->
+            <div class="lg:col-span-3 space-y-5">
+
+                <!-- Arm Cards -->
+                <div class="grid grid-cols-2 gap-5">
+                    <!-- Arm A -->
+                    <div class="arm-card bg-white p-5 rounded-2xl shadow-sm border-2 border-blue-100" id="card-A">
+                        <div class="flex items-center gap-3 mb-4">
+                            <div class="w-10 h-10 rounded-xl bg-blue-100 flex items-center justify-center text-xl">🎰</div>
+                            <div>
+                                <div class="font-bold text-blue-700 text-lg">Arm A</div>
+                                <div class="text-[10px] text-slate-400 uppercase tracking-wide">Left Machine</div>
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-2 gap-3 text-center mb-3">
+                            <div class="bg-blue-50 rounded-lg p-2">
+                                <div class="text-[10px] text-slate-500 mb-0.5">Estimated \(Q\)</div>
+                                <div class="text-xl font-bold text-blue-700" id="qA">0.00</div>
+                            </div>
+                            <div class="bg-slate-50 rounded-lg p-2">
+                                <div class="text-[10px] text-slate-500 mb-0.5">Softmax \(P\)</div>
+                                <div class="text-xl font-bold text-slate-700" id="pSelA">50%</div>
+                            </div>
+                        </div>
+                        <div class="flex justify-between text-xs text-slate-500">
+                            <span>Chosen: <strong class="text-slate-700" id="nA">0</strong></span>
+                            <span>Wins: <strong class="text-emerald-600" id="wA">0</strong></span>
+                        </div>
+                        <!-- Reward flash area -->
+                        <div class="mt-2 h-6 rounded-lg flex items-center justify-center text-xs font-semibold" id="flash-A"></div>
+                    </div>
+
+                    <!-- Arm B -->
+                    <div class="arm-card bg-white p-5 rounded-2xl shadow-sm border-2 border-rose-100" id="card-B">
+                        <div class="flex items-center gap-3 mb-4">
+                            <div class="w-10 h-10 rounded-xl bg-rose-100 flex items-center justify-center text-xl">🎰</div>
+                            <div>
+                                <div class="font-bold text-rose-700 text-lg">Arm B</div>
+                                <div class="text-[10px] text-slate-400 uppercase tracking-wide">Right Machine</div>
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-2 gap-3 text-center mb-3">
+                            <div class="bg-rose-50 rounded-lg p-2">
+                                <div class="text-[10px] text-slate-500 mb-0.5">Estimated \(Q\)</div>
+                                <div class="text-xl font-bold text-rose-700" id="qB">0.00</div>
+                            </div>
+                            <div class="bg-slate-50 rounded-lg p-2">
+                                <div class="text-[10px] text-slate-500 mb-0.5">Softmax \(P\)</div>
+                                <div class="text-xl font-bold text-slate-700" id="pSelB">50%</div>
+                            </div>
+                        </div>
+                        <div class="flex justify-between text-xs text-slate-500">
+                            <span>Chosen: <strong class="text-slate-700" id="nB">0</strong></span>
+                            <span>Wins: <strong class="text-emerald-600" id="wB">0</strong></span>
+                        </div>
+                        <div class="mt-2 h-6 rounded-lg flex items-center justify-center text-xs font-semibold" id="flash-B"></div>
+                    </div>
+                </div>
+
+                <!-- Q-values over trials -->
+                <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-100">
+                    <h3 class="text-sm font-semibold flex items-center gap-2 text-slate-700 mb-3">
+                        <svg class="w-4 h-4 text-violet-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+                        </svg>
+                        Estimated Values \(Q(a)\) Over Trials
+                    </h3>
+                    <canvas id="q-canvas" height="160" class="w-full rounded-lg"></canvas>
+                </div>
+
+                <!-- Choice proportions -->
+                <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-100">
+                    <h3 class="text-sm font-semibold flex items-center gap-2 text-slate-700 mb-3">
+                        <svg class="w-4 h-4 text-orange-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M12 20V10M18 20V4M6 20v-4"/>
+                        </svg>
+                        Choice Proportion (rolling 20-trial window)
+                    </h3>
+                    <canvas id="choice-canvas" height="130" class="w-full rounded-lg"></canvas>
+                </div>
+
+                <!-- Cumulative reward -->
+                <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-100">
+                    <h3 class="text-sm font-semibold flex items-center gap-2 text-slate-700 mb-3">
+                        <svg class="w-4 h-4 text-emerald-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
+                        </svg>
+                        Cumulative Reward vs. Optimal
+                    </h3>
+                    <canvas id="reward-canvas" height="140" class="w-full rounded-lg"></canvas>
+                </div>
+
+                <!-- Insight Box -->
+                <div class="bg-gradient-to-r from-orange-50 to-violet-50 p-4 rounded-xl border border-orange-100">
+                    <div class="flex items-start gap-3">
+                        <span class="text-2xl">🧠</span>
+                        <div>
+                            <strong class="text-slate-800">The Explore/Exploit Insight</strong>
+                            <p class="text-slate-600 text-sm mt-1 mb-0" id="insight-text">
+                                Run trials to see how softmax balances exploration and exploitation. Watch the Q-values converge and the choice proportion shift.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Explanation Section -->
+        <div class="prose max-w-4xl mx-auto bg-white p-8 md:p-12 rounded-2xl shadow-sm border border-slate-100 mt-12">
+            <h2 class="flex items-center gap-3">
+                <svg class="w-8 h-8 text-orange-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"/>
+                    <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3M12 17h.01"/>
+                </svg>
+                The Explore/Exploit Dilemma
+            </h2>
+
+            <p>
+                Imagine you're at a casino with two slot machines. One might pay out more often than the other,
+                but you don't know which. Every pull you spend on the worse machine is lost reward. But how do you
+                <em>know</em> which is better without trying both?
+            </p>
+
+            <p>
+                This is the <strong>explore/exploit dilemma</strong>: you must balance <em>exploiting</em> the arm you
+                believe is best with <em>exploring</em> the other to improve your estimates.
+            </p>
+
+            <h3 class="text-xl font-semibold mt-8 mb-4">The Softmax (Boltzmann) Policy</h3>
+            <p>
+                Rather than choosing randomly (pure exploration) or greedily (pure exploitation), softmax converts
+                estimated values into choice probabilities through a temperature parameter:
+            </p>
+
+            <div class="bg-slate-50 p-6 rounded-xl my-6 text-center">
+                <div class="text-lg">
+                    \[P(a) = \frac{e^{Q(a)/\tau}}{\sum_{b} e^{Q(b)/\tau}}\]
+                </div>
+                <div class="text-sm text-slate-500 mt-3">
+                    Probability of choosing arm \(a\) given current value estimates and temperature \(\tau\)
+                </div>
+            </div>
+
+            <h3 class="text-xl font-semibold mt-8 mb-4">What Temperature Controls</h3>
+            <ul class="space-y-2 my-4">
+                <li><strong>\(\tau \to 0\)</strong> (cold): Pure greedy — always picks the highest Q. Fast but risky if estimates are wrong.</li>
+                <li><strong>\(\tau \approx 0.3\)</strong> (warm): Mostly exploits, occasional exploration. Good balance for many problems.</li>
+                <li><strong>\(\tau \to \infty\)</strong> (hot): Near-random choices (50/50). Maximum exploration, minimal exploitation.</li>
+            </ul>
+
+            <h3 class="text-xl font-semibold mt-8 mb-4">Value Update Rule</h3>
+            <p>After each trial, the estimated value is updated:</p>
+
+            <div class="bg-orange-50 p-6 rounded-xl my-6 text-center">
+                <div class="text-lg">
+                    \[Q(a) \leftarrow Q(a) + \alpha \cdot \left[ r - Q(a) \right]\]
+                </div>
+                <div class="text-sm text-slate-500 mt-3">
+                    Move the estimate toward the received reward \(r\) (which is 1 for win, 0 for loss)
+                </div>
+            </div>
+
+            <h3 class="text-xl font-semibold mt-8 mb-4">Greedy vs. ε-Greedy vs. Softmax</h3>
+            <ul class="space-y-2 my-4">
+                <li><strong>Greedy:</strong> Always picks max Q. No exploration at all — can permanently lock onto the wrong arm.</li>
+                <li><strong>ε-Greedy:</strong> Picks randomly with probability ε, otherwise greedy. Explores but doesn't use Q-values to guide exploration.</li>
+                <li><strong>Softmax:</strong> Exploration is <em>proportional to value</em>. Arms with similar Q get similar attention; clearly worse arms are rarely chosen. This is both smarter and more biologically plausible.</li>
+            </ul>
+
+            <div class="bg-amber-50 border border-amber-200 rounded-xl p-6 my-6">
+                <div class="flex items-start gap-3">
+                    <span class="text-2xl">💡</span>
+                    <div>
+                        <strong class="text-amber-800">Try it!</strong>
+                        <p class="text-amber-700 text-sm mt-1 mb-0">
+                            1. Run 100 trials with τ = 0.3 — the agent converges on the better arm quickly.<br>
+                            2. Set τ = 5 — choices stay near 50/50, Q-values converge but exploitation is slow.<br>
+                            3. Set τ = 0.01 — pure greedy; if early trials are unlucky, it locks onto the wrong arm.<br>
+                            4. Make the arms close (0.55 vs 0.45) — much harder to tell apart.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer class="text-center py-8 text-sm text-slate-400">
+            <p>Softmax Bandit Demonstration</p>
+            <p class="mt-1">Explore/Exploit tradeoff with Boltzmann action selection</p>
+        </footer>
+    </div>
+
+    <script>
+        // ============ STATE ============
+        let Q = [0, 0];        // Estimated values
+        let nChosen = [0, 0];  // Times each arm chosen
+        let nWins = [0, 0];    // Wins per arm
+        let trialCount = 0;
+        let qHistory = [];     // [{qA, qB}]
+        let choiceHistory = []; // 0 or 1
+        let rewardHistory = []; // 0 or 1
+        let cumReward = 0;
+        let cumOptimal = 0;
+        let cumRewardHistory = [];
+        let cumOptimalHistory = [];
+
+        let revealed = false;
+
+        // ============ DOM ============
+        const tauSlider = document.getElementById('tau');
+        const tauVal = document.getElementById('tau-val');
+        const alphaSlider = document.getElementById('alpha');
+        const alphaVal = document.getElementById('alpha-val');
+        const pASlider = document.getElementById('pA');
+        const pBSlider = document.getElementById('pB');
+        const toggleReveal = document.getElementById('toggle-reveal');
+
+        const qADisplay = document.getElementById('qA');
+        const qBDisplay = document.getElementById('qB');
+        const pSelADisplay = document.getElementById('pSelA');
+        const pSelBDisplay = document.getElementById('pSelB');
+        const nADisplay = document.getElementById('nA');
+        const nBDisplay = document.getElementById('nB');
+        const wADisplay = document.getElementById('wA');
+        const wBDisplay = document.getElementById('wB');
+        const flashA = document.getElementById('flash-A');
+        const flashB = document.getElementById('flash-B');
+        const cardA = document.getElementById('card-A');
+        const cardB = document.getElementById('card-B');
+
+        const trialCountDisplay = document.getElementById('trial-count');
+        const qCanvas = document.getElementById('q-canvas');
+        const choiceCanvas = document.getElementById('choice-canvas');
+        const rewardCanvas = document.getElementById('reward-canvas');
+
+        // ============ SLIDER SYNC ============
+        function syncSliderInput(slider, input) {
+            slider.addEventListener('input', () => input.value = slider.value);
+            input.addEventListener('change', () => {
+                let val = parseFloat(input.value);
+                val = Math.max(parseFloat(slider.min), Math.min(parseFloat(slider.max), val));
+                input.value = val;
+                slider.value = val;
+            });
+        }
+        syncSliderInput(tauSlider, tauVal);
+        syncSliderInput(alphaSlider, alphaVal);
+
+        // Reveal toggle
+        toggleReveal.addEventListener('click', () => {
+            revealed = !revealed;
+            toggleReveal.textContent = revealed ? 'Hide' : 'Show';
+            updateProbDisplay();
+        });
+
+        pASlider.addEventListener('input', updateProbDisplay);
+        pBSlider.addEventListener('input', updateProbDisplay);
+
+        function updateProbDisplay() {
+            const pAd = document.getElementById('pA-display');
+            const pBd = document.getElementById('pB-display');
+            if (revealed) {
+                pAd.innerHTML = `<span class="text-blue-600 font-semibold">${parseFloat(pASlider.value).toFixed(2)}</span>`;
+                pBd.innerHTML = `<span class="text-rose-600 font-semibold">${parseFloat(pBSlider.value).toFixed(2)}</span>`;
+            } else {
+                pAd.innerHTML = '<span class="text-slate-300">hidden</span>';
+                pBd.innerHTML = '<span class="text-slate-300">hidden</span>';
+            }
+        }
+
+        // ============ SOFTMAX ============
+        function softmaxProbs() {
+            const tau = parseFloat(tauVal.value);
+            const e0 = Math.exp(Q[0] / tau);
+            const e1 = Math.exp(Q[1] / tau);
+            const sum = e0 + e1;
+            return [e0 / sum, e1 / sum];
+        }
+
+        function chooseArm() {
+            const probs = softmaxProbs();
+            return Math.random() < probs[0] ? 0 : 1;
+        }
+
+        // ============ RUN TRIAL ============
+        function runTrial(animate = true) {
+            const alpha = parseFloat(alphaVal.value);
+            const pA = parseFloat(pASlider.value);
+            const pB = parseFloat(pBSlider.value);
+            const trueProbs = [pA, pB];
+
+            // Choose arm
+            const arm = chooseArm();
+
+            // Generate reward
+            const reward = Math.random() < trueProbs[arm] ? 1 : 0;
+
+            // Update Q
+            Q[arm] = Q[arm] + alpha * (reward - Q[arm]);
+
+            // Track
+            nChosen[arm]++;
+            if (reward) nWins[arm]++;
+            trialCount++;
+            choiceHistory.push(arm);
+            rewardHistory.push(reward);
+            qHistory.push({ qA: Q[0], qB: Q[1] });
+
+            cumReward += reward;
+            cumOptimal += Math.max(pA, pB);
+            cumRewardHistory.push(cumReward);
+            cumOptimalHistory.push(cumOptimal);
+
+            // Update displays
+            updateCards(arm, reward, animate);
+            trialCountDisplay.textContent = trialCount;
+            drawAllCharts();
+            updateInsight();
+        }
+
+        function updateCards(arm, reward, animate) {
+            const probs = softmaxProbs();
+
+            qADisplay.textContent = Q[0].toFixed(2);
+            qBDisplay.textContent = Q[1].toFixed(2);
+            pSelADisplay.textContent = `${(probs[0] * 100).toFixed(0)}%`;
+            pSelBDisplay.textContent = `${(probs[1] * 100).toFixed(0)}%`;
+            nADisplay.textContent = nChosen[0];
+            nBDisplay.textContent = nChosen[1];
+            wADisplay.textContent = nWins[0];
+            wBDisplay.textContent = nWins[1];
+
+            if (animate) {
+                // Highlight chosen card
+                cardA.classList.toggle('chosen', arm === 0);
+                cardB.classList.toggle('chosen', arm === 1);
+
+                // Flash reward
+                const flashEl = arm === 0 ? flashA : flashB;
+                flashEl.className = `mt-2 h-6 rounded-lg flex items-center justify-center text-xs font-semibold ${reward ? 'flash-win text-emerald-700' : 'flash-lose text-red-600'}`;
+                flashEl.textContent = reward ? '🎉 Win! +1' : '✗ No reward';
+
+                setTimeout(() => {
+                    cardA.classList.remove('chosen');
+                    cardB.classList.remove('chosen');
+                }, 300);
+            }
+        }
+
+        // ============ CHARTS ============
+        function drawAllCharts() {
+            drawQChart();
+            drawChoiceChart();
+            drawRewardChart();
+        }
+
+        // Shared chart utilities
+        function setupCanvas(canvas, height) {
+            const dpr = window.devicePixelRatio || 1;
+            const rect = canvas.getBoundingClientRect();
+            canvas.width = rect.width * dpr;
+            canvas.height = height * dpr;
+            const ctx = canvas.getContext('2d');
+            ctx.scale(dpr, dpr);
+            return { ctx, W: rect.width, H: height };
+        }
+
+        function drawChartFrame(ctx, W, H, margin) {
+            ctx.fillStyle = '#f8fafc';
+            ctx.fillRect(0, 0, W, H);
+            ctx.fillStyle = '#ffffff';
+            ctx.fillRect(margin.left, margin.top, W - margin.left - margin.right, H - margin.top - margin.bottom);
+            ctx.strokeStyle = '#e2e8f0';
+            ctx.lineWidth = 1;
+            ctx.strokeRect(margin.left, margin.top, W - margin.left - margin.right, H - margin.top - margin.bottom);
+        }
+
+        // ---- Q-value chart ----
+        function drawQChart() {
+            const { ctx, W, H } = setupCanvas(qCanvas, 160);
+            const margin = { top: 12, right: 15, bottom: 25, left: 40 };
+            const plotW = W - margin.left - margin.right;
+            const plotH = H - margin.top - margin.bottom;
+            drawChartFrame(ctx, W, H, margin);
+
+            if (qHistory.length === 0) {
+                ctx.fillStyle = '#94a3b8';
+                ctx.font = '12px Inter, sans-serif';
+                ctx.textAlign = 'center';
+                ctx.fillText('Run trials to see Q-values', W / 2, H / 2);
+                return;
+            }
+
+            const pA = parseFloat(pASlider.value);
+            const pB = parseFloat(pBSlider.value);
+            const maxY = Math.max(1, ...qHistory.map(h => Math.max(h.qA, h.qB))) * 1.1;
+            const minY = Math.min(0, ...qHistory.map(h => Math.min(h.qA, h.qB))) - 0.05;
+            const rangeY = maxY - minY;
+            const n = qHistory.length;
+
+            function toX(i) { return margin.left + (i / Math.max(1, n - 1)) * plotW; }
+            function toY(v) { return margin.top + plotH - ((v - minY) / rangeY) * plotH; }
+
+            // True value dashed lines
+            if (revealed) {
+                ctx.setLineDash([6, 4]);
+                ctx.lineWidth = 1.5;
+                ctx.strokeStyle = 'rgba(59, 130, 246, 0.4)';
+                ctx.beginPath();
+                ctx.moveTo(margin.left, toY(pA));
+                ctx.lineTo(margin.left + plotW, toY(pA));
+                ctx.stroke();
+
+                ctx.strokeStyle = 'rgba(225, 29, 72, 0.4)';
+                ctx.beginPath();
+                ctx.moveTo(margin.left, toY(pB));
+                ctx.lineTo(margin.left + plotW, toY(pB));
+                ctx.stroke();
+                ctx.setLineDash([]);
+            }
+
+            // Q_A line
+            ctx.strokeStyle = '#3b82f6';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            for (let i = 0; i < n; i++) {
+                const x = toX(i);
+                const y = toY(qHistory[i].qA);
+                if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+            }
+            ctx.stroke();
+
+            // Q_B line
+            ctx.strokeStyle = '#e11d48';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            for (let i = 0; i < n; i++) {
+                const x = toX(i);
+                const y = toY(qHistory[i].qB);
+                if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+            }
+            ctx.stroke();
+
+            // Y-axis labels
+            ctx.fillStyle = '#64748b';
+            ctx.font = '10px Inter, sans-serif';
+            ctx.textAlign = 'right';
+            ctx.textBaseline = 'middle';
+            ctx.fillText(maxY.toFixed(1), margin.left - 4, margin.top + 4);
+            ctx.fillText(minY.toFixed(1), margin.left - 4, margin.top + plotH - 2);
+
+            // Legend
+            ctx.font = 'bold 10px Inter, sans-serif';
+            ctx.textAlign = 'right';
+            ctx.fillStyle = '#3b82f6';
+            ctx.fillText('Q(A)', W - margin.right - 40, margin.top + 12);
+            ctx.fillStyle = '#e11d48';
+            ctx.fillText('Q(B)', W - margin.right, margin.top + 12);
+
+            // X label
+            ctx.fillStyle = '#94a3b8';
+            ctx.font = '10px Inter, sans-serif';
+            ctx.textAlign = 'center';
+            ctx.fillText('Trial', W / 2, H - 3);
+        }
+
+        // ---- Choice proportion chart ----
+        function drawChoiceChart() {
+            const { ctx, W, H } = setupCanvas(choiceCanvas, 130);
+            const margin = { top: 10, right: 15, bottom: 25, left: 40 };
+            const plotW = W - margin.left - margin.right;
+            const plotH = H - margin.top - margin.bottom;
+            drawChartFrame(ctx, W, H, margin);
+
+            if (choiceHistory.length === 0) {
+                ctx.fillStyle = '#94a3b8';
+                ctx.font = '12px Inter, sans-serif';
+                ctx.textAlign = 'center';
+                ctx.fillText('Run trials to see choice proportions', W / 2, H / 2);
+                return;
+            }
+
+            const windowSize = 20;
+            const n = choiceHistory.length;
+
+            // Compute rolling proportion of Arm A
+            const propA = [];
+            for (let i = 0; i < n; i++) {
+                const start = Math.max(0, i - windowSize + 1);
+                let countA = 0;
+                for (let j = start; j <= i; j++) {
+                    if (choiceHistory[j] === 0) countA++;
+                }
+                propA.push(countA / (i - start + 1));
+            }
+
+            function toX(i) { return margin.left + (i / Math.max(1, n - 1)) * plotW; }
+            function toY(v) { return margin.top + plotH - v * plotH; }
+
+            // 50% line
+            ctx.strokeStyle = '#e2e8f0';
+            ctx.lineWidth = 1;
+            ctx.setLineDash([4, 3]);
+            ctx.beginPath();
+            ctx.moveTo(margin.left, toY(0.5));
+            ctx.lineTo(margin.left + plotW, toY(0.5));
+            ctx.stroke();
+            ctx.setLineDash([]);
+
+            // Fill area under Arm A
+            ctx.fillStyle = 'rgba(59, 130, 246, 0.15)';
+            ctx.beginPath();
+            ctx.moveTo(margin.left, toY(0));
+            for (let i = 0; i < n; i++) {
+                ctx.lineTo(toX(i), toY(propA[i]));
+            }
+            ctx.lineTo(toX(n - 1), toY(0));
+            ctx.closePath();
+            ctx.fill();
+
+            // Fill area above for Arm B
+            ctx.fillStyle = 'rgba(225, 29, 72, 0.15)';
+            ctx.beginPath();
+            ctx.moveTo(margin.left, toY(1));
+            for (let i = 0; i < n; i++) {
+                ctx.lineTo(toX(i), toY(propA[i]));
+            }
+            ctx.lineTo(toX(n - 1), toY(1));
+            ctx.closePath();
+            ctx.fill();
+
+            // Arm A line
+            ctx.strokeStyle = '#3b82f6';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            for (let i = 0; i < n; i++) {
+                const x = toX(i);
+                const y = toY(propA[i]);
+                if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+            }
+            ctx.stroke();
+
+            // Y labels
+            ctx.fillStyle = '#64748b';
+            ctx.font = '10px Inter, sans-serif';
+            ctx.textAlign = 'right';
+            ctx.textBaseline = 'middle';
+            ctx.fillText('100%', margin.left - 4, margin.top + 4);
+            ctx.fillText('50%', margin.left - 4, toY(0.5));
+            ctx.fillText('0%', margin.left - 4, margin.top + plotH - 2);
+
+            // Legend
+            ctx.font = 'bold 10px Inter, sans-serif';
+            ctx.textAlign = 'right';
+            ctx.fillStyle = '#3b82f6';
+            ctx.fillText('Arm A', W - margin.right - 50, margin.top + 12);
+            ctx.fillStyle = '#e11d48';
+            ctx.fillText('Arm B', W - margin.right, margin.top + 12);
+
+            ctx.fillStyle = '#94a3b8';
+            ctx.font = '10px Inter, sans-serif';
+            ctx.textAlign = 'center';
+            ctx.fillText('Trial', W / 2, H - 3);
+        }
+
+        // ---- Cumulative reward chart ----
+        function drawRewardChart() {
+            const { ctx, W, H } = setupCanvas(rewardCanvas, 140);
+            const margin = { top: 10, right: 15, bottom: 25, left: 40 };
+            const plotW = W - margin.left - margin.right;
+            const plotH = H - margin.top - margin.bottom;
+            drawChartFrame(ctx, W, H, margin);
+
+            if (cumRewardHistory.length === 0) {
+                ctx.fillStyle = '#94a3b8';
+                ctx.font = '12px Inter, sans-serif';
+                ctx.textAlign = 'center';
+                ctx.fillText('Run trials to see cumulative reward', W / 2, H / 2);
+                return;
+            }
+
+            const n = cumRewardHistory.length;
+            const maxY = Math.max(cumRewardHistory[n - 1], cumOptimalHistory[n - 1]) * 1.1 || 1;
+
+            function toX(i) { return margin.left + (i / Math.max(1, n - 1)) * plotW; }
+            function toY(v) { return margin.top + plotH - (v / maxY) * plotH; }
+
+            // Optimal line
+            ctx.strokeStyle = '#94a3b8';
+            ctx.lineWidth = 1.5;
+            ctx.setLineDash([5, 3]);
+            ctx.beginPath();
+            for (let i = 0; i < n; i++) {
+                const x = toX(i);
+                const y = toY(cumOptimalHistory[i]);
+                if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+            }
+            ctx.stroke();
+            ctx.setLineDash([]);
+
+            // Actual reward line
+            ctx.strokeStyle = '#ea580c';
+            ctx.lineWidth = 2.5;
+            ctx.beginPath();
+            for (let i = 0; i < n; i++) {
+                const x = toX(i);
+                const y = toY(cumRewardHistory[i]);
+                if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+            }
+            ctx.stroke();
+
+            // Shade the regret gap
+            ctx.fillStyle = 'rgba(234, 88, 12, 0.08)';
+            ctx.beginPath();
+            for (let i = 0; i < n; i++) ctx.lineTo(toX(i), toY(cumOptimalHistory[i]));
+            for (let i = n - 1; i >= 0; i--) ctx.lineTo(toX(i), toY(cumRewardHistory[i]));
+            ctx.closePath();
+            ctx.fill();
+
+            // Y labels
+            ctx.fillStyle = '#64748b';
+            ctx.font = '10px Inter, sans-serif';
+            ctx.textAlign = 'right';
+            ctx.textBaseline = 'middle';
+            ctx.fillText(Math.round(maxY).toString(), margin.left - 4, margin.top + 4);
+            ctx.fillText('0', margin.left - 4, margin.top + plotH - 2);
+
+            // Legend
+            ctx.font = 'bold 10px Inter, sans-serif';
+            ctx.textAlign = 'right';
+            ctx.fillStyle = '#ea580c';
+            ctx.fillText('Actual', W - margin.right - 60, margin.top + 12);
+            ctx.fillStyle = '#94a3b8';
+            ctx.fillText('Optimal', W - margin.right, margin.top + 12);
+
+            ctx.fillStyle = '#94a3b8';
+            ctx.font = '10px Inter, sans-serif';
+            ctx.textAlign = 'center';
+            ctx.fillText('Trial', W / 2, H - 3);
+        }
+
+        // ============ INSIGHT ============
+        function updateInsight() {
+            const el = document.getElementById('insight-text');
+            const tau = parseFloat(tauVal.value);
+            const pA = parseFloat(pASlider.value);
+            const pB = parseFloat(pBSlider.value);
+            const bestArm = pA >= pB ? 'A' : 'B';
+            const probs = softmaxProbs();
+            const bestIdx = pA >= pB ? 0 : 1;
+            const bestProb = probs[bestIdx];
+
+            if (trialCount === 0) {
+                el.textContent = "Run trials to see how softmax balances exploration and exploitation. Watch the Q-values converge and the choice proportion shift.";
+            } else if (trialCount < 10) {
+                el.textContent = `Trial ${trialCount}: Still exploring. Both arms are being sampled. Q(A) = ${Q[0].toFixed(2)}, Q(B) = ${Q[1].toFixed(2)}.`;
+            } else if (bestProb > 0.85) {
+                const regret = (cumOptimal - cumReward).toFixed(1);
+                el.textContent = `Trial ${trialCount}: The agent has converged — choosing Arm ${bestArm} ${(bestProb * 100).toFixed(0)}% of the time. Total regret (missed reward): ${regret}.`;
+            } else if (tau > 2) {
+                el.textContent = `Trial ${trialCount}: High temperature (τ=${tau.toFixed(2)}) keeps choices near 50/50. The agent is exploring heavily but not exploiting its knowledge.`;
+            } else {
+                const regret = (cumOptimal - cumReward).toFixed(1);
+                el.textContent = `Trial ${trialCount}: Arm ${bestArm} is chosen ${(bestProb * 100).toFixed(0)}% of the time. The Q-values are still converging. Regret so far: ${regret}.`;
+            }
+        }
+
+        // ============ CONTROLS ============
+        async function runMultipleTrials(n) {
+            document.getElementById('run-trial-btn').disabled = true;
+            document.getElementById('run-10-btn').disabled = true;
+            document.getElementById('run-100-btn').disabled = true;
+
+            for (let i = 0; i < n; i++) {
+                runTrial(n <= 10);
+                if (n <= 10) await sleep(150);
+                else await sleep(8);
+            }
+
+            document.getElementById('run-trial-btn').disabled = false;
+            document.getElementById('run-10-btn').disabled = false;
+            document.getElementById('run-100-btn').disabled = false;
+        }
+
+        function sleep(ms) {
+            return new Promise(resolve => setTimeout(resolve, ms));
+        }
+
+        function reset() {
+            Q = [0, 0];
+            nChosen = [0, 0];
+            nWins = [0, 0];
+            trialCount = 0;
+            qHistory = [];
+            choiceHistory = [];
+            rewardHistory = [];
+            cumReward = 0;
+            cumOptimal = 0;
+            cumRewardHistory = [];
+            cumOptimalHistory = [];
+
+            trialCountDisplay.textContent = '0';
+            qADisplay.textContent = '0.00';
+            qBDisplay.textContent = '0.00';
+            pSelADisplay.textContent = '50%';
+            pSelBDisplay.textContent = '50%';
+            nADisplay.textContent = '0';
+            nBDisplay.textContent = '0';
+            wADisplay.textContent = '0';
+            wBDisplay.textContent = '0';
+            flashA.textContent = '';
+            flashB.textContent = '';
+            flashA.className = 'mt-2 h-6 rounded-lg flex items-center justify-center text-xs font-semibold';
+            flashB.className = 'mt-2 h-6 rounded-lg flex items-center justify-center text-xs font-semibold';
+
+            drawAllCharts();
+            updateInsight();
+        }
+
+        // ============ EVENT LISTENERS ============
+        document.getElementById('run-trial-btn').addEventListener('click', () => runTrial(true));
+        document.getElementById('run-10-btn').addEventListener('click', () => runMultipleTrials(10));
+        document.getElementById('run-100-btn').addEventListener('click', () => runMultipleTrials(100));
+        document.getElementById('reset-btn').addEventListener('click', reset);
+
+        window.addEventListener('resize', drawAllCharts);
+
+        // ============ INITIALIZE ============
+        drawAllCharts();
+        updateInsight();
+    </script>
+</body>
+</html>
