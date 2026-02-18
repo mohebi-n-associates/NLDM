@@ -450,14 +450,17 @@
             const rewards = new Array(MAX_TIMESTEPS + 1).fill(0);
             rewards[usTime] = actualR;
 
-            // Compute TD errors only from CS onward (nothing before CS is predictive)
+            // Compute TD errors from CS onward (nothing before CS is predictive)
             const tdErrors = new Array(MAX_TIMESTEPS + 1).fill(0);
             for (let t = csTime; t < MAX_TIMESTEPS; t++) {
                 tdErrors[t] = rewards[t] + gamma * V[t + 1] - V[t];
             }
 
-            // Update values only from CS onward
-            for (let t = csTime; t < MAX_TIMESTEPS; t++) {
+            // Update values from CS+1 onward only.
+            // V(CS) stays 0 — it represents the ITI→CS transition boundary.
+            // This keeps δ(CS) = γ·V(CS+1) stable, matching Schultz's
+            // persistent dopamine response at cue onset.
+            for (let t = csTime + 1; t < MAX_TIMESTEPS; t++) {
                 V[t] = V[t] + alpha * tdErrors[t];
             }
 
