@@ -60,26 +60,6 @@
             box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
         }
 
-        @keyframes dopamineBurst {
-            0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
-            50% { transform: scale(1.15); box-shadow: 0 0 20px 10px rgba(16, 185, 129, 0.3); }
-            100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
-        }
-
-        @keyframes dopamineDip {
-            0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); }
-            50% { transform: scale(0.9); box-shadow: 0 0 20px 10px rgba(239, 68, 68, 0.3); }
-            100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
-        }
-
-        .dopamine-burst {
-            animation: dopamineBurst 0.6s ease-out;
-        }
-
-        .dopamine-dip {
-            animation: dopamineDip 0.6s ease-out;
-        }
-
         @keyframes pulseGlow {
             0%, 100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.4); }
             50% { box-shadow: 0 0 0 8px rgba(16, 185, 129, 0); }
@@ -87,22 +67,6 @@
 
         .pulse-glow {
             animation: pulseGlow 1.5s ease-in-out infinite;
-        }
-
-        .timeline-node {
-            transition: all 0.3s ease;
-        }
-
-        .timeline-node.active {
-            transform: scale(1.1);
-        }
-
-        .value-bar {
-            transition: height 0.5s ease, background-color 0.3s ease;
-        }
-
-        .td-error-bar {
-            transition: height 0.3s ease, opacity 0.3s ease;
         }
 
         .prose h2 {
@@ -118,18 +82,54 @@
             font-size: 1.1rem;
         }
 
-        .cue-icon {
-            transition: all 0.3s ease;
+        /* Heatmap canvas styling */
+        .heatmap-container {
+            position: relative;
+            background: #1e293b;
+            border-radius: 8px;
+            overflow: hidden;
         }
 
-        .cue-icon.presenting {
-            transform: scale(1.2);
-            filter: brightness(1.2);
+        .heatmap-canvas {
+            display: block;
+            width: 100%;
+        }
+
+        /* Current trial line display */
+        .current-trial-line {
+            display: flex;
+            align-items: center;
+            gap: 1px;
+            height: 100px;
+            padding: 0 10px;
+        }
+
+        .trial-bar {
+            flex: 1;
+            min-width: 3px;
+            transition: height 0.15s ease;
+        }
+
+        .trial-bar-positive {
+            border-radius: 2px 2px 0 0;
+            align-self: flex-end;
+            margin-bottom: 50px;
+        }
+
+        .trial-bar-negative {
+            border-radius: 0 0 2px 2px;
+            align-self: flex-start;
+            margin-top: 50px;
+        }
+
+        .trial-bar-zero {
+            height: 2px !important;
+            margin-top: 49px;
         }
     </style>
 </head>
 <body class="min-h-screen p-4 md:p-8">
-    <div class="max-w-6xl mx-auto space-y-8">
+    <div class="max-w-7xl mx-auto space-y-8">
 
         <!-- Header -->
         <header class="bg-white border-b border-slate-200 pt-12 pb-10 -mx-4 md:-mx-8 -mt-4 md:-mt-8 px-4 md:px-8 mb-4">
@@ -139,16 +139,16 @@
                     <br/><span class="text-emerald-600">The Temporal Difference Model</span>
                 </h1>
                 <p class="text-lg text-slate-500 serif italic max-w-2xl mx-auto">
-                    How does the brain learn to predict rewards before they arrive? Watch prediction errors shift backward through a chain of cues—just like dopamine neurons.
+                    Watch prediction errors shift backward through time as cues become predictive of reward—the signature of dopamine neuron activity.
                 </p>
             </div>
         </header>
 
         <!-- Simulator -->
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
 
             <!-- Controls Panel -->
-            <div class="lg:col-span-1 space-y-6 bg-white p-6 rounded-2xl shadow-sm border border-slate-100 h-fit">
+            <div class="lg:col-span-1 space-y-5 bg-white p-5 rounded-2xl shadow-sm border border-slate-100 h-fit">
                 <div class="flex items-center gap-2 text-lg font-semibold border-b pb-2 mb-4">
                     <svg class="w-5 h-5 text-slate-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <circle cx="12" cy="12" r="3"/>
@@ -157,227 +157,205 @@
                     Parameters
                 </div>
 
-                <div class="space-y-5">
+                <div class="space-y-4">
                     <!-- Learning Rate -->
                     <div>
-                        <div class="flex justify-between mb-2">
+                        <div class="flex justify-between mb-1">
                             <label class="text-sm font-medium text-slate-600">Learning Rate \(\alpha\)</label>
                             <input type="number" id="alpha-val" class="param-input text-violet-600" value="0.3" min="0.01" max="1.0" step="0.01">
                         </div>
                         <input type="range" id="alpha" min="0.01" max="1.0" step="0.01" value="0.3" class="w-full slider-violet">
-                        <p class="text-[10px] text-slate-400 mt-1 italic">How quickly values update from prediction errors</p>
                     </div>
 
                     <!-- Discount Factor -->
                     <div>
-                        <div class="flex justify-between mb-2">
-                            <label class="text-sm font-medium text-slate-600">Discount Factor \(\gamma\)</label>
-                            <input type="number" id="gamma-val" class="param-input text-amber-600" value="0.9" min="0" max="1.0" step="0.05">
+                        <div class="flex justify-between mb-1">
+                            <label class="text-sm font-medium text-slate-600">Discount \(\gamma\)</label>
+                            <input type="number" id="gamma-val" class="param-input text-amber-600" value="0.98" min="0" max="1.0" step="0.01">
                         </div>
-                        <input type="range" id="gamma" min="0" max="1.0" step="0.05" value="0.9" class="w-full slider-amber">
-                        <p class="text-[10px] text-slate-400 mt-1 italic">How much future rewards are discounted</p>
+                        <input type="range" id="gamma" min="0" max="1.0" step="0.01" value="0.98" class="w-full slider-amber">
                     </div>
 
                     <!-- Reward Magnitude -->
                     <div>
-                        <div class="flex justify-between mb-2">
-                            <label class="text-sm font-medium text-slate-600">Reward Magnitude \(R\)</label>
-                            <input type="number" id="reward-val" class="param-input text-emerald-600" value="10" min="0" max="20" step="1">
+                        <div class="flex justify-between mb-1">
+                            <label class="text-sm font-medium text-slate-600">Reward \(R\)</label>
+                            <input type="number" id="reward-val" class="param-input text-emerald-600" value="1.0" min="0" max="2" step="0.1">
                         </div>
-                        <input type="range" id="reward" min="0" max="20" step="1" value="10" class="w-full slider-emerald">
-                        <p class="text-[10px] text-slate-400 mt-1 italic">The value of the food reward</p>
+                        <input type="range" id="reward" min="0" max="2" step="0.1" value="1.0" class="w-full slider-emerald">
                     </div>
 
                     <!-- Reward Probability -->
                     <div>
-                        <div class="flex justify-between mb-2">
-                            <label class="text-sm font-medium text-slate-600">Reward Probability</label>
+                        <div class="flex justify-between mb-1">
+                            <label class="text-sm font-medium text-slate-600">Reward Prob</label>
                             <input type="number" id="prob-val" class="param-input text-blue-600" value="1.0" min="0" max="1.0" step="0.1">
                         </div>
                         <input type="range" id="prob" min="0" max="1.0" step="0.1" value="1.0" class="w-full slider-blue">
-                        <p class="text-[10px] text-slate-400 mt-1 italic">Probability that reward is delivered</p>
+                        <p class="text-[9px] text-slate-400 mt-0.5">Set &lt;1 to see omission dips</p>
+                    </div>
+                </div>
+
+                <!-- Timing Section -->
+                <div class="pt-3 border-t">
+                    <div class="text-xs font-semibold text-slate-500 uppercase tracking-wide mb-3">Timing (microstates)</div>
+                    
+                    <!-- Cue 1 Time -->
+                    <div class="mb-3">
+                        <div class="flex justify-between mb-1">
+                            <label class="text-xs font-medium text-slate-600 flex items-center gap-1">
+                                <span class="text-yellow-500">💡</span> Cue 1
+                            </label>
+                            <span class="text-xs font-mono text-yellow-600" id="cue1-display">t=10</span>
+                        </div>
+                        <input type="range" id="cue1" min="5" max="25" step="1" value="10" class="w-full slider-amber">
+                    </div>
+
+                    <!-- Cue 2 Time -->
+                    <div class="mb-3">
+                        <div class="flex justify-between mb-1">
+                            <label class="text-xs font-medium text-slate-600 flex items-center gap-1">
+                                <span class="text-blue-500">🔔</span> Cue 2
+                            </label>
+                            <span class="text-xs font-mono text-blue-600" id="cue2-display">t=25</span>
+                        </div>
+                        <input type="range" id="cue2" min="15" max="40" step="1" value="25" class="w-full slider-blue">
+                    </div>
+
+                    <!-- Reward Time -->
+                    <div>
+                        <div class="flex justify-between mb-1">
+                            <label class="text-xs font-medium text-slate-600 flex items-center gap-1">
+                                <span class="text-emerald-500">🍖</span> Reward
+                            </label>
+                            <span class="text-xs font-mono text-emerald-600" id="reward-time-display">t=50</span>
+                        </div>
+                        <input type="range" id="reward-time" min="30" max="60" step="1" value="50" class="w-full slider-emerald">
                     </div>
                 </div>
 
                 <!-- Control Buttons -->
-                <div class="pt-4 border-t space-y-3">
-                    <button id="run-trial-btn" class="w-full flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-emerald-600 text-white font-semibold hover:bg-emerald-700 transition-colors shadow-lg shadow-emerald-200 pulse-glow">
+                <div class="pt-3 border-t space-y-2">
+                    <button id="run-trial-btn" class="w-full flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-emerald-600 text-white font-semibold hover:bg-emerald-700 transition-colors shadow-lg shadow-emerald-200 pulse-glow">
                         <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <polygon points="5 3 19 12 5 21 5 3"/>
                         </svg>
                         Run Trial
                     </button>
                     <div class="flex gap-2">
-                        <button id="run-10-btn" class="flex-1 flex items-center justify-center gap-1 px-4 py-2 rounded-lg border border-slate-200 text-slate-600 font-medium hover:bg-slate-50 transition-colors text-sm">
-                            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <polygon points="13 19 22 12 13 5 13 19"/>
-                                <polygon points="2 19 11 12 2 5 2 19"/>
-                            </svg>
-                            Run 10
+                        <button id="run-10-btn" class="flex-1 flex items-center justify-center gap-1 px-3 py-2 rounded-lg border border-slate-200 text-slate-600 font-medium hover:bg-slate-50 transition-colors text-sm">
+                            ×10
                         </button>
-                        <button id="reset-btn" class="flex-1 flex items-center justify-center gap-1 px-4 py-2 rounded-lg border border-slate-200 text-slate-600 font-medium hover:bg-slate-50 transition-colors text-sm">
-                            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <polyline points="1 4 1 10 7 10"/>
-                                <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/>
-                            </svg>
+                        <button id="run-50-btn" class="flex-1 flex items-center justify-center gap-1 px-3 py-2 rounded-lg border border-slate-200 text-slate-600 font-medium hover:bg-slate-50 transition-colors text-sm">
+                            ×50
+                        </button>
+                        <button id="reset-btn" class="flex-1 flex items-center justify-center gap-1 px-3 py-2 rounded-lg border border-red-200 text-red-600 font-medium hover:bg-red-50 transition-colors text-sm">
                             Reset
                         </button>
                     </div>
                 </div>
 
                 <!-- Trial Counter -->
-                <div class="bg-slate-50 rounded-xl p-4 text-center">
-                    <div class="text-3xl font-bold text-slate-800" id="trial-count">0</div>
+                <div class="bg-slate-50 rounded-xl p-3 text-center">
+                    <div class="text-2xl font-bold text-slate-800" id="trial-count">0</div>
                     <div class="text-xs text-slate-500 uppercase tracking-wide">Trials</div>
                 </div>
             </div>
 
             <!-- Main Visualization -->
-            <div class="lg:col-span-2 space-y-6">
+            <div class="lg:col-span-3 space-y-5">
 
-                <!-- Timeline Visualization -->
-                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
-                    <h3 class="text-lg font-semibold mb-6 flex items-center gap-2">
-                        <svg class="w-5 h-5 text-emerald-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <circle cx="12" cy="12" r="10"/>
-                            <polyline points="12 6 12 12 16 14"/>
-                        </svg>
-                        Conditioning Timeline
-                    </h3>
-                    
-                    <!-- Timeline -->
-                    <div class="relative py-8">
-                        <!-- Timeline Line -->
-                        <div class="absolute top-1/2 left-0 right-0 h-1 bg-slate-200 -translate-y-1/2"></div>
-                        
-                        <!-- Timeline Nodes -->
-                        <div class="relative flex justify-between items-center px-8">
-                            <!-- Light -->
-                            <div class="timeline-node flex flex-col items-center" id="node-light">
-                                <div class="w-20 h-20 rounded-full bg-yellow-100 border-4 border-yellow-400 flex items-center justify-center mb-3 cue-icon" id="icon-light">
-                                    <svg class="w-10 h-10 text-yellow-500" viewBox="0 0 24 24" fill="currentColor">
-                                        <path d="M12 2a7 7 0 0 0-7 7c0 2.38 1.19 4.47 3 5.74V17a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1v-2.26c1.81-1.27 3-3.36 3-5.74a7 7 0 0 0-7-7zM9 21a1 1 0 0 0 1 1h4a1 1 0 0 0 1-1v-1H9v1z"/>
-                                    </svg>
-                                </div>
-                                <span class="text-sm font-semibold text-slate-700">Light</span>
-                                <span class="text-xs text-slate-400">t = 0</span>
-                            </div>
-
-                            <!-- Arrow -->
-                            <svg class="w-8 h-8 text-slate-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M5 12h14M12 5l7 7-7 7"/>
-                            </svg>
-
-                            <!-- Tone -->
-                            <div class="timeline-node flex flex-col items-center" id="node-tone">
-                                <div class="w-20 h-20 rounded-full bg-blue-100 border-4 border-blue-400 flex items-center justify-center mb-3 cue-icon" id="icon-tone">
-                                    <svg class="w-10 h-10 text-blue-500" viewBox="0 0 24 24" fill="currentColor">
-                                        <path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/>
-                                    </svg>
-                                </div>
-                                <span class="text-sm font-semibold text-slate-700">Tone</span>
-                                <span class="text-xs text-slate-400">t = 1</span>
-                            </div>
-
-                            <!-- Arrow -->
-                            <svg class="w-8 h-8 text-slate-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M5 12h14M12 5l7 7-7 7"/>
-                            </svg>
-
-                            <!-- Food -->
-                            <div class="timeline-node flex flex-col items-center" id="node-food">
-                                <div class="w-20 h-20 rounded-full bg-emerald-100 border-4 border-emerald-400 flex items-center justify-center mb-3 cue-icon" id="icon-food">
-                                    <svg class="w-10 h-10 text-emerald-500" viewBox="0 0 24 24" fill="currentColor">
-                                        <path d="M18.06 23h1.66c.84 0 1.53-.65 1.63-1.47L23 5.05h-5V1h-1.97v4.05h-4.97l.3 2.34c1.71.47 3.31 1.32 4.27 2.26 1.44 1.42 2.43 2.89 2.43 5.29v8.06zm-1.06-7c0-1.12-.64-2.08-1.57-2.73l-2.24 3.14c-.55.77-.91 1.66-.91 2.59v4h3V16h1.72V16zm-11 7v-3.5c0-.66-.52-1.19-1.17-1.24l-.33-.01c-.82 0-1.5.68-1.5 1.5v3.25zm4 0v-4H7v4.25h2.95zm0-6.25h-3V22h3v-5.25zm-4 0H3v5.25h3v-5.25zm1-4.5H2v3.25h5v-3.25zm0-3.75H2V14h5v-3.5zm7 3.5H9v3.25h5v-3.25zm0-3.75H9V14h5v-3.5z"/>
-                                    </svg>
-                                </div>
-                                <span class="text-sm font-semibold text-slate-700">Food</span>
-                                <span class="text-xs text-slate-400">t = 2</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Value & TD Error Display -->
-                <div class="grid grid-cols-2 gap-6">
-                    <!-- Learned Values -->
-                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
-                        <h3 class="text-lg font-semibold mb-4 flex items-center gap-2">
-                            <svg class="w-5 h-5 text-violet-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M12 20V10M18 20V4M6 20v-4"/>
-                            </svg>
-                            Learned Values \(V(s)\)
-                        </h3>
-                        <div class="flex justify-around items-end h-48 border-b border-slate-200 pb-2">
-                            <div class="flex flex-col items-center">
-                                <div class="w-16 bg-yellow-200 rounded-t value-bar" id="value-light" style="height: 0%"></div>
-                                <span class="text-xs font-medium text-slate-600 mt-2">Light</span>
-                                <span class="text-sm font-bold text-yellow-600" id="value-light-num">0.00</span>
-                            </div>
-                            <div class="flex flex-col items-center">
-                                <div class="w-16 bg-blue-200 rounded-t value-bar" id="value-tone" style="height: 0%"></div>
-                                <span class="text-xs font-medium text-slate-600 mt-2">Tone</span>
-                                <span class="text-sm font-bold text-blue-600" id="value-tone-num">0.00</span>
-                            </div>
-                            <div class="flex flex-col items-center">
-                                <div class="w-16 bg-emerald-200 rounded-t value-bar" id="value-food" style="height: 0%"></div>
-                                <span class="text-xs font-medium text-slate-600 mt-2">Food</span>
-                                <span class="text-sm font-bold text-emerald-600" id="value-food-num">0.00</span>
-                            </div>
-                        </div>
-                        <div class="text-xs text-slate-400 mt-2 text-center">Height = learned value (max 20)</div>
-                    </div>
-
-                    <!-- TD Errors (Dopamine) -->
-                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
-                        <h3 class="text-lg font-semibold mb-4 flex items-center gap-2">
-                            <svg class="w-5 h-5 text-emerald-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <!-- Current Trial Display -->
+                <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-100">
+                    <div class="flex items-center justify-between mb-2">
+                        <h3 class="text-sm font-semibold flex items-center gap-2 text-slate-700">
+                            <svg class="w-4 h-4 text-emerald-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
                             </svg>
-                            TD Error \(\delta\) <span class="text-xs font-normal text-slate-400">(≈ Dopamine)</span>
+                            Current Trial: Prediction Error \(\delta(t)\)
                         </h3>
-                        <div class="flex justify-around items-center h-48 relative">
-                            <!-- Zero line -->
-                            <div class="absolute left-0 right-0 top-1/2 h-px bg-slate-300"></div>
-                            <div class="absolute right-2 top-1/2 -translate-y-1/2 text-[10px] text-slate-400">0</div>
-                            
-                            <div class="flex flex-col items-center relative h-full justify-center">
-                                <div class="w-12 td-error-bar rounded transition-all" id="td-light" style="height: 0px; background: #10b981;"></div>
-                                <span class="text-xs font-medium text-slate-600 absolute -bottom-6">Light</span>
-                            </div>
-                            <div class="flex flex-col items-center relative h-full justify-center">
-                                <div class="w-12 td-error-bar rounded transition-all" id="td-tone" style="height: 0px; background: #10b981;"></div>
-                                <span class="text-xs font-medium text-slate-600 absolute -bottom-6">Tone</span>
-                            </div>
-                            <div class="flex flex-col items-center relative h-full justify-center">
-                                <div class="w-12 td-error-bar rounded transition-all" id="td-food" style="height: 0px; background: #10b981;"></div>
-                                <span class="text-xs font-medium text-slate-600 absolute -bottom-6">Food</span>
-                            </div>
+                        <div class="flex items-center gap-4 text-xs">
+                            <span class="flex items-center gap-1"><span class="w-3 h-3 rounded bg-emerald-500"></span> δ &gt; 0</span>
+                            <span class="flex items-center gap-1"><span class="w-3 h-3 rounded bg-red-500"></span> δ &lt; 0</span>
                         </div>
-                        <div class="flex justify-between text-[10px] text-slate-400 mt-8 px-4">
-                            <span class="text-red-400">↓ Below expected</span>
-                            <span class="text-emerald-500">↑ Better than expected</span>
+                    </div>
+                    <div class="relative bg-slate-900 rounded-lg p-3">
+                        <!-- Zero line indicator -->
+                        <div class="absolute left-3 right-3 top-1/2 h-px bg-slate-600 z-0"></div>
+                        <div class="current-trial-line relative z-10" id="current-td-line">
+                            <!-- Bars will be dynamically generated -->
+                        </div>
+                        <!-- Time axis labels -->
+                        <div class="flex justify-between text-[10px] text-slate-500 px-3 mt-1">
+                            <span>t = 0</span>
+                            <span id="axis-cue1" class="text-yellow-400">💡</span>
+                            <span id="axis-cue2" class="text-blue-400">🔔</span>
+                            <span id="axis-reward" class="text-emerald-400">🍖</span>
                         </div>
                     </div>
                 </div>
 
-                <!-- Last Trial Info -->
-                <div class="bg-gradient-to-r from-slate-50 to-emerald-50 p-4 rounded-xl border border-slate-100">
-                    <div class="flex items-center justify-between">
-                        <div class="flex items-center gap-3">
-                            <div class="w-10 h-10 rounded-full bg-white flex items-center justify-center border border-slate-200">
-                                <span class="text-lg" id="outcome-icon">🎯</span>
-                            </div>
-                            <div>
-                                <div class="text-sm font-semibold text-slate-700" id="outcome-text">Ready to learn</div>
-                                <div class="text-xs text-slate-500" id="outcome-detail">Press "Run Trial" to begin conditioning</div>
+                <!-- Heatmaps Grid -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                    
+                    <!-- Prediction Error Heatmap -->
+                    <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-100">
+                        <h3 class="text-sm font-semibold mb-3 flex items-center gap-2 text-slate-700">
+                            <svg class="w-4 h-4 text-violet-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
+                            </svg>
+                            Prediction Error \(\delta(t)\) Over Trials
+                        </h3>
+                        <div class="heatmap-container">
+                            <canvas id="td-heatmap" class="heatmap-canvas" height="200"></canvas>
+                        </div>
+                        <div class="flex justify-between text-[10px] text-slate-500 mt-2">
+                            <span>Time →</span>
+                            <div class="flex items-center gap-2">
+                                <span class="w-3 h-3 rounded" style="background: #ef4444;"></span>
+                                <span>−δ</span>
+                                <span class="w-3 h-3 rounded" style="background: #1e293b;"></span>
+                                <span>0</span>
+                                <span class="w-3 h-3 rounded" style="background: #10b981;"></span>
+                                <span>+δ</span>
                             </div>
                         </div>
-                        <div class="text-right">
-                            <div class="text-xs text-slate-500">Current TD Error</div>
-                            <div class="text-xl font-bold" id="current-td-display">
-                                <span class="text-slate-300">—</span>
+                        <div class="text-[10px] text-slate-400 mt-1">↓ Trial (newest at bottom)</div>
+                    </div>
+
+                    <!-- Value Function Heatmap -->
+                    <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-100">
+                        <h3 class="text-sm font-semibold mb-3 flex items-center gap-2 text-slate-700">
+                            <svg class="w-4 h-4 text-amber-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M12 20V10M18 20V4M6 20v-4"/>
+                            </svg>
+                            Value Function \(V(t)\) Over Trials
+                        </h3>
+                        <div class="heatmap-container">
+                            <canvas id="value-heatmap" class="heatmap-canvas" height="200"></canvas>
+                        </div>
+                        <div class="flex justify-between text-[10px] text-slate-500 mt-2">
+                            <span>Time →</span>
+                            <div class="flex items-center gap-2">
+                                <span class="w-3 h-3 rounded" style="background: #1e293b;"></span>
+                                <span>Low</span>
+                                <span class="w-3 h-3 rounded" style="background: #f59e0b;"></span>
+                                <span>High</span>
                             </div>
+                        </div>
+                        <div class="text-[10px] text-slate-400 mt-1">↓ Trial (newest at bottom)</div>
+                    </div>
+                </div>
+
+                <!-- Key Insight Box -->
+                <div class="bg-gradient-to-r from-emerald-50 to-violet-50 p-4 rounded-xl border border-emerald-100">
+                    <div class="flex items-start gap-3">
+                        <span class="text-2xl">🧠</span>
+                        <div>
+                            <strong class="text-slate-800">The Dopamine Insight</strong>
+                            <p class="text-slate-600 text-sm mt-1 mb-0" id="insight-text">
+                                Run trials to see the prediction error shift backward from the reward to the earliest predictive cue—exactly like dopamine neuron recordings.
+                            </p>
                         </div>
                     </div>
                 </div>
@@ -395,48 +373,49 @@
             </h2>
 
             <p>
-                Imagine you're a dog in Pavlov's lab. Every day, a light turns on, then a tone plays, then food arrives. 
-                At first, you're only excited when you see the food. But over time, you learn to get excited earlier—
-                first when you hear the tone, then when you see the light. This is <strong>temporal difference learning</strong>.
+                In the brain, time is represented as a sequence of <strong>microstates</strong>—each moment is a distinct state that can carry its own value. 
+                When a cue reliably predicts a future reward, TD learning gradually assigns value to each timestep, propagating backward from the reward.
             </p>
 
             <h3 class="text-xl font-semibold mt-8 mb-4">The TD Learning Rule</h3>
             <p>
-                The core idea is simple: at each moment, compare what you <em>expected</em> to happen with what 
-                <em>actually</em> happened. The difference is the <strong>prediction error</strong>:
+                At each timestep \(t\), the agent computes a <strong>prediction error</strong>:
             </p>
 
             <div class="bg-slate-50 p-6 rounded-xl my-6 text-center">
                 <div class="text-lg">
-                    \[\delta_t = R_t + \gamma V(s_{t+1}) - V(s_t)\]
+                    \[\delta(t) = r(t) + \gamma \cdot V(t+1) - V(t)\]
                 </div>
                 <div class="text-sm text-slate-500 mt-3">
-                    TD Error = Reward received + Discounted value of next state − Current state's value
+                    Prediction error at time t = Reward at t + Discounted next value − Current value
                 </div>
             </div>
 
             <p>
-                When the prediction error is positive (better than expected), increase your estimate. When negative 
-                (worse than expected), decrease it:
+                Then update the value at t:
             </p>
 
             <div class="bg-emerald-50 p-6 rounded-xl my-6 text-center">
                 <div class="text-lg">
-                    \[V(s_t) \leftarrow V(s_t) + \alpha \cdot \delta_t\]
+                    \[V(t) \leftarrow V(t) + \alpha \cdot \delta(t)\]
                 </div>
             </div>
 
-            <h3 class="text-xl font-semibold mt-8 mb-4">The Dopamine Connection</h3>
+            <h3 class="text-xl font-semibold mt-8 mb-4">The Backward Shift</h3>
             <p>
-                In a landmark 1997 paper, Schultz, Dayan, and Montague showed that <strong>dopamine neurons behave 
-                exactly like TD errors</strong>:
+                The magic happens over trials:
             </p>
-
             <ul class="space-y-2 my-4">
-                <li><strong>Before learning:</strong> Dopamine fires when the unexpected reward arrives</li>
-                <li><strong>After learning:</strong> Dopamine fires at the earliest predictive cue, not the reward</li>
-                <li><strong>Omitted reward:</strong> Dopamine <em>dips below baseline</em> when expected reward doesn't come</li>
+                <li><strong>Trial 1:</strong> Only the reward time has a positive error (unexpected reward)</li>
+                <li><strong>Trial 5:</strong> Error starts appearing at Cue 2 (which now predicts reward)</li>
+                <li><strong>Trial 20:</strong> Error shifts to Cue 1 (the earliest predictor)</li>
+                <li><strong>Converged:</strong> Error <em>only</em> at Cue 1; reward time has δ ≈ 0 (fully expected)</li>
             </ul>
+
+            <p>
+                This backward shift is <strong>exactly what Schultz observed in dopamine neurons</strong>: early in learning, 
+                dopamine fires at reward; later, it fires at the earliest predictive cue.
+            </p>
 
             <div class="bg-amber-50 border border-amber-200 rounded-xl p-6 my-6">
                 <div class="flex items-start gap-3">
@@ -444,35 +423,35 @@
                     <div>
                         <strong class="text-amber-800">Try it!</strong>
                         <p class="text-amber-700 text-sm mt-1 mb-0">
-                            Run 20+ trials to see TD errors shift from Food → Tone → Light. Then reduce the 
-                            reward probability to 0.5 and watch what happens when expected rewards don't arrive!
+                            1. Run 50 trials and watch the green band shift from reward time to Cue 1.<br>
+                            2. Set reward probability to 0.5 and see red bands when expected rewards are omitted.<br>
+                            3. Try γ=0.8 vs γ=0.98—lower discount means slower backward propagation.
                         </p>
                     </div>
                 </div>
             </div>
-
-            <h3 class="text-xl font-semibold mt-8 mb-4">Key Parameters</h3>
-            <ul class="space-y-2">
-                <li><strong>\(\alpha\) (Learning Rate):</strong> Higher = faster learning, but noisier estimates</li>
-                <li><strong>\(\gamma\) (Discount Factor):</strong> Higher = values propagate further back in time. At \(\gamma = 1\), all future rewards are equally valued</li>
-                <li><strong>Reward Probability:</strong> When < 1, you'll see negative TD errors on trials where reward is omitted</li>
-            </ul>
         </div>
 
         <!-- Footer -->
         <footer class="text-center py-8 text-sm text-slate-400">
             <p>Temporal Difference Learning Demonstration</p>
-            <p class="mt-1">Based on Sutton & Barto's Reinforcement Learning and Schultz et al.'s dopamine research</p>
+            <p class="mt-1">Based on Schultz, Dayan & Montague (1997) and Sutton & Barto</p>
         </footer>
     </div>
 
     <script>
-        // State
-        let values = { light: 0, tone: 0, food: 0 };
-        let tdErrors = { light: 0, tone: 0, food: 0 };
-        let trialCount = 0;
+        // ============ CONFIG ============
+        const MAX_TIMESTEPS = 65;
+        const MAX_HISTORY = 50; // trials to show in heatmap
 
-        // DOM Elements
+        // ============ STATE ============
+        let V = new Array(MAX_TIMESTEPS + 1).fill(0); // Value at each timestep
+        let trialCount = 0;
+        let tdHistory = []; // Array of arrays: TD errors per trial
+        let valueHistory = []; // Array of arrays: Values per trial
+        let currentTD = new Array(MAX_TIMESTEPS + 1).fill(0);
+
+        // ============ DOM ELEMENTS ============
         const alphaSlider = document.getElementById('alpha');
         const alphaVal = document.getElementById('alpha-val');
         const gammaSlider = document.getElementById('gamma');
@@ -481,12 +460,21 @@
         const rewardVal = document.getElementById('reward-val');
         const probSlider = document.getElementById('prob');
         const probVal = document.getElementById('prob-val');
+        const cue1Slider = document.getElementById('cue1');
+        const cue2Slider = document.getElementById('cue2');
+        const rewardTimeSlider = document.getElementById('reward-time');
+
         const runTrialBtn = document.getElementById('run-trial-btn');
         const run10Btn = document.getElementById('run-10-btn');
+        const run50Btn = document.getElementById('run-50-btn');
         const resetBtn = document.getElementById('reset-btn');
         const trialCountDisplay = document.getElementById('trial-count');
 
-        // Sync sliders with inputs
+        const tdHeatmapCanvas = document.getElementById('td-heatmap');
+        const valueHeatmapCanvas = document.getElementById('value-heatmap');
+        const currentTDLine = document.getElementById('current-td-line');
+
+        // ============ SLIDER SYNC ============
         function syncSliderInput(slider, input) {
             slider.addEventListener('input', () => input.value = slider.value);
             input.addEventListener('change', () => {
@@ -502,184 +490,388 @@
         syncSliderInput(rewardSlider, rewardVal);
         syncSliderInput(probSlider, probVal);
 
-        // Update value display
-        function updateValueDisplay() {
-            const maxVal = 20;
+        // Update timing displays
+        cue1Slider.addEventListener('input', () => {
+            document.getElementById('cue1-display').textContent = `t=${cue1Slider.value}`;
+        });
+        cue2Slider.addEventListener('input', () => {
+            document.getElementById('cue2-display').textContent = `t=${cue2Slider.value}`;
+        });
+        rewardTimeSlider.addEventListener('input', () => {
+            document.getElementById('reward-time-display').textContent = `t=${rewardTimeSlider.value}`;
+        });
+
+        // ============ TD LEARNING ============
+        function runTrial() {
+            const alpha = parseFloat(alphaVal.value);
+            const gamma = parseFloat(gammaVal.value);
+            const R = parseFloat(rewardVal.value);
+            const rewardProb = parseFloat(probVal.value);
+            const cue1Time = parseInt(cue1Slider.value);
+            const cue2Time = parseInt(cue2Slider.value);
+            const rewardTime = parseInt(rewardTimeSlider.value);
+
+            // Determine if reward is delivered this trial
+            const rewardDelivered = Math.random() < rewardProb;
+            const actualR = rewardDelivered ? R : 0;
+
+            // Build reward vector
+            const rewards = new Array(MAX_TIMESTEPS + 1).fill(0);
+            rewards[rewardTime] = actualR;
+
+            // Compute TD errors and update values
+            const tdErrors = new Array(MAX_TIMESTEPS + 1).fill(0);
             
-            ['light', 'tone', 'food'].forEach(state => {
-                const bar = document.getElementById(`value-${state}`);
-                const num = document.getElementById(`value-${state}-num`);
-                const height = Math.min(100, (values[state] / maxVal) * 100);
-                bar.style.height = `${height}%`;
-                num.textContent = values[state].toFixed(2);
-            });
+            // Note: We iterate forward, computing TD error at each step
+            // TD(t) = r(t) + γV(t+1) - V(t)
+            // But we update V(t) based on this error
+            
+            for (let t = 0; t < MAX_TIMESTEPS; t++) {
+                const nextV = V[t + 1];
+                tdErrors[t] = rewards[t] + gamma * nextV - V[t];
+            }
+            
+            // Update values
+            for (let t = 0; t < MAX_TIMESTEPS; t++) {
+                V[t] = V[t] + alpha * tdErrors[t];
+            }
+
+            // Store current TD errors
+            currentTD = [...tdErrors];
+
+            // Add to history
+            tdHistory.push([...tdErrors]);
+            valueHistory.push([...V]);
+
+            // Trim history to MAX_HISTORY
+            if (tdHistory.length > MAX_HISTORY) {
+                tdHistory.shift();
+                valueHistory.shift();
+            }
+
+            trialCount++;
+            trialCountDisplay.textContent = trialCount;
+
+            updateCurrentTDDisplay();
+            drawHeatmaps();
+            updateInsight(rewardDelivered);
         }
 
-        // Update TD error display
-        function updateTDDisplay() {
-            const maxError = 10;
-            
-            ['light', 'tone', 'food'].forEach(state => {
-                const bar = document.getElementById(`td-${state}`);
-                const error = tdErrors[state];
-                const normalizedHeight = Math.min(Math.abs(error) / maxError, 1) * 80;
+        // ============ VISUALIZATION ============
+        function updateCurrentTDDisplay() {
+            const rewardTime = parseInt(rewardTimeSlider.value);
+            const cue1Time = parseInt(cue1Slider.value);
+            const cue2Time = parseInt(cue2Slider.value);
+
+            // Clear existing bars
+            currentTDLine.innerHTML = '';
+
+            // Show timesteps from 0 to reward time + buffer
+            const maxT = Math.min(rewardTime + 5, MAX_TIMESTEPS);
+
+            for (let t = 0; t <= maxT; t++) {
+                const bar = document.createElement('div');
+                bar.className = 'trial-bar';
                 
-                if (error >= 0) {
-                    bar.style.height = `${normalizedHeight}px`;
-                    bar.style.background = '#10b981';
-                    bar.style.marginTop = '0';
-                    bar.style.marginBottom = 'auto';
-                    bar.style.alignSelf = 'flex-end';
-                    bar.style.transform = `translateY(-${normalizedHeight/2}px)`;
+                const td = currentTD[t];
+                const maxHeight = 45; // pixels (half of 100px container minus zero line)
+                const height = Math.min(Math.abs(td), 1.5) / 1.5 * maxHeight;
+                
+                if (td > 0.01) {
+                    bar.classList.add('trial-bar-positive');
+                    bar.style.height = `${height}px`;
+                    bar.style.background = `rgba(16, 185, 129, ${Math.min(1, Math.abs(td) * 0.8 + 0.2)})`;
+                } else if (td < -0.01) {
+                    bar.classList.add('trial-bar-negative');
+                    bar.style.height = `${height}px`;
+                    bar.style.background = `rgba(239, 68, 68, ${Math.min(1, Math.abs(td) * 0.8 + 0.2)})`;
                 } else {
-                    bar.style.height = `${normalizedHeight}px`;
-                    bar.style.background = '#ef4444';
-                    bar.style.marginTop = 'auto';
-                    bar.style.marginBottom = '0';
-                    bar.style.alignSelf = 'flex-start';
-                    bar.style.transform = `translateY(${normalizedHeight/2}px)`;
+                    bar.classList.add('trial-bar-zero');
+                    bar.style.background = '#475569';
                 }
-            });
+
+                // Add markers for cue/reward times
+                if (t === cue1Time) {
+                    bar.style.borderLeft = '2px solid #fbbf24';
+                } else if (t === cue2Time) {
+                    bar.style.borderLeft = '2px solid #3b82f6';
+                } else if (t === rewardTime) {
+                    bar.style.borderLeft = '2px solid #10b981';
+                }
+
+                currentTDLine.appendChild(bar);
+            }
         }
 
-        // Animate cue presentation
-        async function presentCue(cueId, duration = 300) {
-            const icon = document.getElementById(`icon-${cueId}`);
-            icon.classList.add('presenting');
-            await sleep(duration);
-            icon.classList.remove('presenting');
+        function drawHeatmaps() {
+            drawTDHeatmap();
+            drawValueHeatmap();
+        }
+
+        function drawTDHeatmap() {
+            const canvas = tdHeatmapCanvas;
+            const ctx = canvas.getContext('2d');
+            const rewardTime = parseInt(rewardTimeSlider.value);
+            const maxT = Math.min(rewardTime + 5, MAX_TIMESTEPS);
+
+            // Set canvas size for retina
+            const dpr = window.devicePixelRatio || 1;
+            const rect = canvas.getBoundingClientRect();
+            canvas.width = rect.width * dpr;
+            canvas.height = 200 * dpr;
+            ctx.scale(dpr, dpr);
+
+            const width = rect.width;
+            const height = 200;
+
+            // Clear
+            ctx.fillStyle = '#1e293b';
+            ctx.fillRect(0, 0, width, height);
+
+            if (tdHistory.length === 0) return;
+
+            const numTrials = tdHistory.length;
+            const cellWidth = width / (maxT + 1);
+            const cellHeight = height / MAX_HISTORY;
+
+            // Draw heatmap (newest trial at bottom)
+            for (let i = 0; i < numTrials; i++) {
+                const trial = tdHistory[i];
+                const y = (MAX_HISTORY - numTrials + i) * cellHeight;
+                
+                for (let t = 0; t <= maxT; t++) {
+                    const x = t * cellWidth;
+                    const td = trial[t];
+                    
+                    let color;
+                    if (td > 0) {
+                        const intensity = Math.min(1, td * 1.5);
+                        color = `rgba(16, 185, 129, ${intensity})`;
+                    } else if (td < 0) {
+                        const intensity = Math.min(1, Math.abs(td) * 1.5);
+                        color = `rgba(239, 68, 68, ${intensity})`;
+                    } else {
+                        color = '#1e293b';
+                    }
+
+                    ctx.fillStyle = color;
+                    ctx.fillRect(x, y, cellWidth + 1, cellHeight + 1);
+                }
+            }
+
+            // Draw cue/reward markers
+            const cue1Time = parseInt(cue1Slider.value);
+            const cue2Time = parseInt(cue2Slider.value);
+
+            ctx.strokeStyle = 'rgba(251, 191, 36, 0.6)';
+            ctx.lineWidth = 2;
+            ctx.setLineDash([3, 3]);
+            ctx.beginPath();
+            ctx.moveTo(cue1Time * cellWidth + cellWidth/2, 0);
+            ctx.lineTo(cue1Time * cellWidth + cellWidth/2, height);
+            ctx.stroke();
+
+            ctx.strokeStyle = 'rgba(59, 130, 246, 0.6)';
+            ctx.beginPath();
+            ctx.moveTo(cue2Time * cellWidth + cellWidth/2, 0);
+            ctx.lineTo(cue2Time * cellWidth + cellWidth/2, height);
+            ctx.stroke();
+
+            ctx.strokeStyle = 'rgba(16, 185, 129, 0.6)';
+            ctx.beginPath();
+            ctx.moveTo(rewardTime * cellWidth + cellWidth/2, 0);
+            ctx.lineTo(rewardTime * cellWidth + cellWidth/2, height);
+            ctx.stroke();
+
+            ctx.setLineDash([]);
+        }
+
+        function drawValueHeatmap() {
+            const canvas = valueHeatmapCanvas;
+            const ctx = canvas.getContext('2d');
+            const rewardTime = parseInt(rewardTimeSlider.value);
+            const maxT = Math.min(rewardTime + 5, MAX_TIMESTEPS);
+
+            // Set canvas size for retina
+            const dpr = window.devicePixelRatio || 1;
+            const rect = canvas.getBoundingClientRect();
+            canvas.width = rect.width * dpr;
+            canvas.height = 200 * dpr;
+            ctx.scale(dpr, dpr);
+
+            const width = rect.width;
+            const height = 200;
+
+            // Clear
+            ctx.fillStyle = '#1e293b';
+            ctx.fillRect(0, 0, width, height);
+
+            if (valueHistory.length === 0) return;
+
+            const numTrials = valueHistory.length;
+            const cellWidth = width / (maxT + 1);
+            const cellHeight = height / MAX_HISTORY;
+
+            // Find max value for normalization
+            let maxVal = 0.01;
+            for (const trial of valueHistory) {
+                for (let t = 0; t <= maxT; t++) {
+                    maxVal = Math.max(maxVal, Math.abs(trial[t]));
+                }
+            }
+
+            // Draw heatmap (newest trial at bottom)
+            for (let i = 0; i < numTrials; i++) {
+                const trial = valueHistory[i];
+                const y = (MAX_HISTORY - numTrials + i) * cellHeight;
+                
+                for (let t = 0; t <= maxT; t++) {
+                    const x = t * cellWidth;
+                    const v = trial[t];
+                    
+                    // Amber color gradient
+                    const intensity = Math.min(1, Math.abs(v) / maxVal);
+                    const r = Math.floor(30 + intensity * 215);
+                    const g = Math.floor(41 + intensity * 117);
+                    const b = Math.floor(59 - intensity * 48);
+                    
+                    ctx.fillStyle = `rgb(${r}, ${g}, ${b})`;
+                    ctx.fillRect(x, y, cellWidth + 1, cellHeight + 1);
+                }
+            }
+
+            // Draw cue/reward markers
+            const cue1Time = parseInt(cue1Slider.value);
+            const cue2Time = parseInt(cue2Slider.value);
+
+            ctx.strokeStyle = 'rgba(251, 191, 36, 0.4)';
+            ctx.lineWidth = 2;
+            ctx.setLineDash([3, 3]);
+            ctx.beginPath();
+            ctx.moveTo(cue1Time * cellWidth + cellWidth/2, 0);
+            ctx.lineTo(cue1Time * cellWidth + cellWidth/2, height);
+            ctx.stroke();
+
+            ctx.strokeStyle = 'rgba(59, 130, 246, 0.4)';
+            ctx.beginPath();
+            ctx.moveTo(cue2Time * cellWidth + cellWidth/2, 0);
+            ctx.lineTo(cue2Time * cellWidth + cellWidth/2, height);
+            ctx.stroke();
+
+            ctx.strokeStyle = 'rgba(16, 185, 129, 0.4)';
+            ctx.beginPath();
+            ctx.moveTo(rewardTime * cellWidth + cellWidth/2, 0);
+            ctx.lineTo(rewardTime * cellWidth + cellWidth/2, height);
+            ctx.stroke();
+
+            ctx.setLineDash([]);
+        }
+
+        function updateInsight(rewardDelivered = true) {
+            const insightText = document.getElementById('insight-text');
+            const rewardTime = parseInt(rewardTimeSlider.value);
+            const cue1Time = parseInt(cue1Slider.value);
+            const cue2Time = parseInt(cue2Slider.value);
+
+            // Find where the max positive TD error is
+            let maxTDTime = 0;
+            let maxTDVal = 0;
+            for (let t = 0; t <= rewardTime; t++) {
+                if (currentTD[t] > maxTDVal) {
+                    maxTDVal = currentTD[t];
+                    maxTDTime = t;
+                }
+            }
+
+            // Check for negative TD at reward time (omission)
+            const rewardTD = currentTD[rewardTime];
+
+            if (trialCount === 0) {
+                insightText.textContent = "Run trials to see the prediction error shift backward from the reward to the earliest predictive cue—exactly like dopamine neuron recordings.";
+            } else if (!rewardDelivered && rewardTD < -0.1) {
+                insightText.textContent = `Trial ${trialCount}: Reward omitted! Notice the negative δ (red) at t=${rewardTime}—this is the "disappointment" signal when an expected reward doesn't arrive.`;
+            } else if (trialCount < 3) {
+                insightText.textContent = `Trial ${trialCount}: The prediction error is strongest at the reward (t=${rewardTime}). The reward is still surprising!`;
+            } else if (maxTDTime >= rewardTime - 3) {
+                insightText.textContent = `Trial ${trialCount}: Error starting to shift backward. Value is now being assigned to states before the reward.`;
+            } else if (maxTDTime > cue1Time + 3) {
+                insightText.textContent = `Trial ${trialCount}: Error has shifted to t≈${maxTDTime}. The value "ramp" is building backward toward Cue 1.`;
+            } else {
+                insightText.textContent = `Trial ${trialCount}: Error is now at Cue 1 (t=${cue1Time})! The reward at t=${rewardTime} is fully predicted—δ≈0 there. This is exactly what dopamine neurons do.`;
+            }
+        }
+
+        // ============ CONTROLS ============
+        async function runMultipleTrials(n) {
+            runTrialBtn.disabled = true;
+            run10Btn.disabled = true;
+            run50Btn.disabled = true;
+
+            for (let i = 0; i < n; i++) {
+                runTrial();
+                if (n <= 10) await sleep(80);
+                else await sleep(20);
+            }
+
+            runTrialBtn.disabled = false;
+            run10Btn.disabled = false;
+            run50Btn.disabled = false;
         }
 
         function sleep(ms) {
             return new Promise(resolve => setTimeout(resolve, ms));
         }
 
-        // Run a single trial
-        async function runTrial(animate = true) {
-            const alpha = parseFloat(alphaVal.value);
-            const gamma = parseFloat(gammaVal.value);
-            const rewardMagnitude = parseFloat(rewardVal.value);
-            const rewardProb = parseFloat(probVal.value);
-
-            // Determine if reward is delivered
-            const rewardDelivered = Math.random() < rewardProb;
-            const R = rewardDelivered ? rewardMagnitude : 0;
-
-            // Calculate TD errors for each state (working backwards)
-            // At Food: δ = R + γ*V(terminal) - V(food), but V(terminal) = 0
-            // Since food IS the reward, we model it as: the transition from tone→food
-            // and the reward is received at food.
-
-            // States: Light (t=0) → Tone (t=1) → Food/Terminal (t=2)
-            // R is only received at the transition to Food state
-            
-            // TD Error at Light: δ = 0 + γ*V(tone) - V(light)
-            tdErrors.light = 0 + gamma * values.tone - values.light;
-            
-            // TD Error at Tone: δ = 0 + γ*V(food) - V(tone)  
-            // But wait, the reward comes WITH food, so:
-            // TD Error at Tone: δ = R + γ*0 - V(tone) = R - V(tone)
-            // Actually let's think of it as: TD error when transitioning TO next state
-            // When at Tone, we get R and transition to terminal (value 0)
-            tdErrors.tone = R + gamma * 0 - values.tone;
-            
-            // For the food state itself, we can show error at receiving reward
-            // This is a bit artificial but pedagogically useful
-            tdErrors.food = R - values.tone; // Same as tone, since that's when reward is evaluated
-
-            // Animate presentation
-            if (animate) {
-                await presentCue('light', 200);
-                await sleep(100);
-                await presentCue('tone', 200);
-                await sleep(100);
-                
-                const foodIcon = document.getElementById('icon-food');
-                if (rewardDelivered) {
-                    foodIcon.classList.add('dopamine-burst');
-                    setTimeout(() => foodIcon.classList.remove('dopamine-burst'), 600);
-                } else {
-                    foodIcon.classList.add('dopamine-dip');
-                    setTimeout(() => foodIcon.classList.remove('dopamine-dip'), 600);
-                }
-            }
-
-            // Update values using TD learning
-            values.light += alpha * tdErrors.light;
-            values.tone += alpha * tdErrors.tone;
-            // Food value stays 0 (terminal state)
-
-            trialCount++;
-            trialCountDisplay.textContent = trialCount;
-
-            updateValueDisplay();
-            updateTDDisplay();
-            updateOutcomeDisplay(rewardDelivered, R, tdErrors.tone);
-        }
-
-        function updateOutcomeDisplay(rewarded, R, tdError) {
-            const outcomeIcon = document.getElementById('outcome-icon');
-            const outcomeText = document.getElementById('outcome-text');
-            const outcomeDetail = document.getElementById('outcome-detail');
-            const tdDisplay = document.getElementById('current-td-display');
-
-            if (rewarded) {
-                outcomeIcon.textContent = '🍖';
-                outcomeText.textContent = `Reward delivered! (+${R})`;
-            } else {
-                outcomeIcon.textContent = '❌';
-                outcomeText.textContent = 'No reward this trial';
-            }
-
-            const expectedVal = values.tone; // What was expected
-            outcomeDetail.textContent = `Expected ≈ ${expectedVal.toFixed(1)}, Got ${R}`;
-
-            if (tdError > 0.1) {
-                tdDisplay.innerHTML = `<span class="text-emerald-500">+${tdError.toFixed(2)}</span>`;
-            } else if (tdError < -0.1) {
-                tdDisplay.innerHTML = `<span class="text-red-500">${tdError.toFixed(2)}</span>`;
-            } else {
-                tdDisplay.innerHTML = `<span class="text-slate-400">${tdError.toFixed(2)}</span>`;
-            }
-        }
-
-        // Run multiple trials
-        async function runMultipleTrials(n) {
-            runTrialBtn.disabled = true;
-            run10Btn.disabled = true;
-            
-            for (let i = 0; i < n; i++) {
-                await runTrial(false);
-                await sleep(50);
-            }
-            
-            runTrialBtn.disabled = false;
-            run10Btn.disabled = false;
-        }
-
-        // Reset
         function reset() {
-            values = { light: 0, tone: 0, food: 0 };
-            tdErrors = { light: 0, tone: 0, food: 0 };
+            V = new Array(MAX_TIMESTEPS + 1).fill(0);
             trialCount = 0;
+            tdHistory = [];
+            valueHistory = [];
+            currentTD = new Array(MAX_TIMESTEPS + 1).fill(0);
+
             trialCountDisplay.textContent = '0';
-            updateValueDisplay();
-            updateTDDisplay();
             
-            document.getElementById('outcome-icon').textContent = '🎯';
-            document.getElementById('outcome-text').textContent = 'Ready to learn';
-            document.getElementById('outcome-detail').textContent = 'Press "Run Trial" to begin conditioning';
-            document.getElementById('current-td-display').innerHTML = '<span class="text-slate-300">—</span>';
+            // Reinitialize the current TD display
+            initializeCurrentTDDisplay();
+            
+            // Clear canvases
+            const ctx1 = tdHeatmapCanvas.getContext('2d');
+            const ctx2 = valueHeatmapCanvas.getContext('2d');
+            ctx1.fillStyle = '#1e293b';
+            ctx1.fillRect(0, 0, tdHeatmapCanvas.width, tdHeatmapCanvas.height);
+            ctx2.fillStyle = '#1e293b';
+            ctx2.fillRect(0, 0, valueHeatmapCanvas.width, valueHeatmapCanvas.height);
+
+            updateInsight();
         }
 
-        // Event listeners
-        runTrialBtn.addEventListener('click', () => runTrial(true));
+        function initializeCurrentTDDisplay() {
+            currentTDLine.innerHTML = '';
+            const rewardTime = parseInt(rewardTimeSlider.value);
+            const maxT = Math.min(rewardTime + 5, MAX_TIMESTEPS);
+
+            for (let t = 0; t <= maxT; t++) {
+                const bar = document.createElement('div');
+                bar.className = 'trial-bar trial-bar-zero';
+                bar.style.background = '#475569';
+                currentTDLine.appendChild(bar);
+            }
+        }
+
+        // ============ EVENT LISTENERS ============
+        runTrialBtn.addEventListener('click', () => runTrial());
         run10Btn.addEventListener('click', () => runMultipleTrials(10));
+        run50Btn.addEventListener('click', () => runMultipleTrials(50));
         resetBtn.addEventListener('click', reset);
 
-        // Initialize
-        updateValueDisplay();
-        updateTDDisplay();
+        // Redraw on window resize
+        window.addEventListener('resize', () => {
+            drawHeatmaps();
+        });
+
+        // ============ INITIALIZE ============
+        initializeCurrentTDDisplay();
+        updateInsight();
     </script>
 </body>
 </html>
