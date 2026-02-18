@@ -329,21 +329,29 @@
                         </svg>
                         Learned State Values \(V(s)\)
                     </h3>
-                    <div class="flex justify-around items-end h-40 border-b border-slate-200 pb-2 mb-4">
-                        <div class="flex flex-col items-center w-1/4">
-                            <div class="w-full max-w-[60px] bg-blue-200 rounded-t value-indicator transition-all" id="bar-0" style="height: 0%"></div>
+                    <div class="flex justify-around items-end border-b border-slate-200 pb-2 mb-4" style="height: 160px;">
+                        <div class="flex flex-col items-center justify-end w-1/4 h-full">
+                            <div class="relative w-full max-w-[60px]" style="height: 140px;">
+                                <div class="absolute bottom-0 left-0 right-0 bg-blue-300 rounded-t transition-all duration-300" id="bar-0" style="height: 0px;"></div>
+                            </div>
                             <span class="text-xs font-medium text-slate-600 mt-2">🏠 Home</span>
                         </div>
-                        <div class="flex flex-col items-center w-1/4">
-                            <div class="w-full max-w-[60px] bg-green-200 rounded-t value-indicator transition-all" id="bar-1" style="height: 0%"></div>
+                        <div class="flex flex-col items-center justify-end w-1/4 h-full">
+                            <div class="relative w-full max-w-[60px]" style="height: 140px;">
+                                <div class="absolute bottom-0 left-0 right-0 bg-green-300 rounded-t transition-all duration-300" id="bar-1" style="height: 0px;"></div>
+                            </div>
                             <span class="text-xs font-medium text-slate-600 mt-2">🌳 Park</span>
                         </div>
-                        <div class="flex flex-col items-center w-1/4">
-                            <div class="w-full max-w-[60px] bg-slate-200 rounded-t value-indicator transition-all" id="bar-2" style="height: 0%"></div>
+                        <div class="flex flex-col items-center justify-end w-1/4 h-full">
+                            <div class="relative w-full max-w-[60px]" style="height: 140px;">
+                                <div class="absolute bottom-0 left-0 right-0 bg-red-300 rounded-t transition-all duration-300" id="bar-2" style="height: 0px;"></div>
+                            </div>
                             <span class="text-xs font-medium text-slate-600 mt-2">🚗 Street</span>
                         </div>
-                        <div class="flex flex-col items-center w-1/4">
-                            <div class="w-full max-w-[60px] bg-amber-200 rounded-t value-indicator transition-all" id="bar-3" style="height: 0%"></div>
+                        <div class="flex flex-col items-center justify-end w-1/4 h-full">
+                            <div class="relative w-full max-w-[60px]" style="height: 140px;">
+                                <div class="absolute bottom-0 left-0 right-0 bg-amber-300 rounded-t transition-all duration-300" id="bar-3" style="height: 0px;"></div>
+                            </div>
                             <span class="text-xs font-medium text-slate-600 mt-2">☕ Goal</span>
                         </div>
                     </div>
@@ -550,12 +558,13 @@
         // Update value displays
         function updateValueDisplay() {
             const maxVal = parseFloat(rewardVal.value) * 1.2;
+            const maxHeight = 140; // pixels
             
             for (let i = 0; i < 4; i++) {
                 const bar = document.getElementById(`bar-${i}`);
                 const valDisplay = document.getElementById(`val-${i}`);
-                const height = Math.max(0, Math.min(100, (values[i] / maxVal) * 100));
-                bar.style.height = `${height}%`;
+                const height = Math.max(0, Math.min(maxHeight, (values[i] / maxVal) * maxHeight));
+                bar.style.height = `${height}px`;
                 
                 if (i < 3) {
                     valDisplay.textContent = values[i].toFixed(2);
