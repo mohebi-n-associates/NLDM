@@ -236,6 +236,19 @@
                     <canvas id="current-td-canvas" height="180" class="w-full rounded-lg"></canvas>
                 </div>
 
+                <!-- Current Value V(t) — Canvas bar chart -->
+                <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-100">
+                    <div class="flex items-center justify-between mb-3">
+                        <h3 class="text-sm font-semibold flex items-center gap-2 text-slate-700">
+                            <svg class="w-4 h-4 text-amber-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M12 20V10M18 20V4M6 20v-4"/>
+                            </svg>
+                            Current Value Function \(V(t)\)
+                        </h3>
+                    </div>
+                    <canvas id="current-value-canvas" height="150" class="w-full rounded-lg"></canvas>
+                </div>
+
                 <!-- Heatmaps Grid -->
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
                     
@@ -408,6 +421,7 @@
         const trialCountDisplay = document.getElementById('trial-count');
 
         const currentTDCanvas = document.getElementById('current-td-canvas');
+        const currentValueCanvas = document.getElementById('current-value-canvas');
         const tdHeatmapCanvas = document.getElementById('td-heatmap');
         const valueHeatmapCanvas = document.getElementById('value-heatmap');
 
@@ -477,6 +491,7 @@
             trialCountDisplay.textContent = trialCount;
 
             drawCurrentTD();
+            drawCurrentValue();
             drawHeatmaps();
             updateInsight(rewardDelivered);
         }
@@ -613,6 +628,125 @@
             ctx.fillText('0', margin.left, margin.top + plotH + 14);
 
             // t=max label
+            ctx.textAlign = 'right';
+            ctx.fillText(String(maxT), margin.left + plotW, margin.top + plotH + 14);
+        }
+
+        // ============ CURRENT VALUE — CANVAS BAR CHART ============
+        function drawCurrentValue() {
+            const canvas = currentValueCanvas;
+            const ctx = canvas.getContext('2d');
+            const csTime = parseInt(csSlider.value);
+            const usTime = parseInt(usSlider.value);
+            const maxT = Math.min(usTime + 8, MAX_TIMESTEPS);
+
+            const dpr = window.devicePixelRatio || 1;
+            const rect = canvas.getBoundingClientRect();
+            canvas.width = rect.width * dpr;
+            canvas.height = 150 * dpr;
+            ctx.scale(dpr, dpr);
+
+            const W = rect.width;
+            const H = 150;
+            const margin = { top: 15, right: 15, bottom: 35, left: 45 };
+            const plotW = W - margin.left - margin.right;
+            const plotH = H - margin.top - margin.bottom;
+
+            // Background
+            ctx.fillStyle = '#f8fafc';
+            ctx.fillRect(0, 0, W, H);
+
+            // Plot area
+            ctx.fillStyle = '#ffffff';
+            ctx.fillRect(margin.left, margin.top, plotW, plotH);
+            ctx.strokeStyle = '#e2e8f0';
+            ctx.lineWidth = 1;
+            ctx.strokeRect(margin.left, margin.top, plotW, plotH);
+
+            // Find max V for scaling
+            let maxV = 0.1;
+            for (let t = 0; t <= maxT; t++) {
+                maxV = Math.max(maxV, V[t]);
+            }
+            maxV *= 1.15;
+
+            // Zero line at bottom of plot
+            const baseY = margin.top + plotH;
+
+            // Y-axis labels
+            ctx.fillStyle = '#64748b';
+            ctx.font = '11px Inter, sans-serif';
+            ctx.textAlign = 'right';
+            ctx.textBaseline = 'middle';
+            ctx.fillText(maxV.toFixed(2), margin.left - 5, margin.top + 4);
+            ctx.fillText('0', margin.left - 5, baseY);
+
+            // V(t) label
+            ctx.save();
+            ctx.translate(12, margin.top + plotH / 2);
+            ctx.rotate(-Math.PI / 2);
+            ctx.textAlign = 'center';
+            ctx.font = '12px Inter, sans-serif';
+            ctx.fillStyle = '#475569';
+            ctx.fillText('V(t)', 0, 0);
+            ctx.restore();
+
+            // Draw bars
+            const barCount = maxT + 1;
+            const barW = Math.max(2, plotW / barCount - 1);
+            const gap = (plotW - barW * barCount) / barCount;
+
+            for (let t = 0; t <= maxT; t++) {
+                const v = V[t];
+                const x = margin.left + t * (barW + gap) + gap / 2;
+                const barH = (v / maxV) * plotH;
+
+                if (v > 0.001) {
+                    ctx.fillStyle = '#f59e0b';
+                    ctx.fillRect(x, baseY - barH, barW, barH);
+                }
+            }
+
+            // CS marker
+            const csX = margin.left + csTime * (barW + gap) + gap / 2 + barW / 2;
+            ctx.strokeStyle = '#f59e0b';
+            ctx.lineWidth = 2;
+            ctx.setLineDash([4, 2]);
+            ctx.beginPath();
+            ctx.moveTo(csX, margin.top);
+            ctx.lineTo(csX, margin.top + plotH);
+            ctx.stroke();
+            ctx.setLineDash([]);
+
+            ctx.fillStyle = '#f59e0b';
+            ctx.font = 'bold 11px Inter, sans-serif';
+            ctx.textAlign = 'center';
+            ctx.fillText('CS', csX, margin.top + plotH + 14);
+
+            // US marker
+            const usX = margin.left + usTime * (barW + gap) + gap / 2 + barW / 2;
+            ctx.strokeStyle = '#10b981';
+            ctx.lineWidth = 2;
+            ctx.setLineDash([4, 2]);
+            ctx.beginPath();
+            ctx.moveTo(usX, margin.top);
+            ctx.lineTo(usX, margin.top + plotH);
+            ctx.stroke();
+            ctx.setLineDash([]);
+
+            ctx.fillStyle = '#10b981';
+            ctx.font = 'bold 11px Inter, sans-serif';
+            ctx.textAlign = 'center';
+            ctx.fillText('US', usX, margin.top + plotH + 14);
+
+            // X-axis label
+            ctx.fillStyle = '#94a3b8';
+            ctx.font = '11px Inter, sans-serif';
+            ctx.textAlign = 'center';
+            ctx.fillText('Time (t)', W / 2, H - 4);
+
+            ctx.textAlign = 'left';
+            ctx.fillText('0', margin.left, margin.top + plotH + 14);
             ctx.textAlign = 'right';
             ctx.fillText(String(maxT), margin.left + plotW, margin.top + plotH + 14);
         }
@@ -819,6 +953,7 @@
 
             trialCountDisplay.textContent = '0';
             drawCurrentTD();
+            drawCurrentValue();
 
             const ctx1 = tdHeatmapCanvas.getContext('2d');
             const ctx2 = valueHeatmapCanvas.getContext('2d');
@@ -838,11 +973,13 @@
 
         window.addEventListener('resize', () => {
             drawCurrentTD();
+            drawCurrentValue();
             drawHeatmaps();
         });
 
         // ============ INITIALIZE ============
         drawCurrentTD();
+        drawCurrentValue();
         updateInsight();
     </script>
 </body>
