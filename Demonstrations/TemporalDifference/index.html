@@ -450,14 +450,14 @@
             const rewards = new Array(MAX_TIMESTEPS + 1).fill(0);
             rewards[usTime] = actualR;
 
-            // Compute TD errors forward
+            // Compute TD errors only from CS onward (nothing before CS is predictive)
             const tdErrors = new Array(MAX_TIMESTEPS + 1).fill(0);
-            for (let t = 0; t < MAX_TIMESTEPS; t++) {
+            for (let t = csTime; t < MAX_TIMESTEPS; t++) {
                 tdErrors[t] = rewards[t] + gamma * V[t + 1] - V[t];
             }
 
-            // Update values
-            for (let t = 0; t < MAX_TIMESTEPS; t++) {
+            // Update values only from CS onward
+            for (let t = csTime; t < MAX_TIMESTEPS; t++) {
                 V[t] = V[t] + alpha * tdErrors[t];
             }
 
