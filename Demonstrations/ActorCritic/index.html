@@ -1,0 +1,1018 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Actor-Critic Model | State Values & Action Preferences</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Lora:ital,wght@0,400;0,700;1,400&display=swap');
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc;
+            line-height: 1.7;
+            color: #1e293b;
+        }
+
+        .serif { font-family: 'Lora', serif; }
+
+        input[type="range"] {
+            -webkit-appearance: none;
+            appearance: none;
+            height: 8px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: currentColor;
+            cursor: pointer;
+            border: 2px solid white;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .slider-indigo { background: #e0e7ff; color: #4f46e5; }
+        .slider-teal { background: #ccfbf1; color: #0d9488; }
+        .slider-amber { background: #fef3c7; color: #d97706; }
+        .slider-blue { background: #dbeafe; color: #2563eb; }
+        .slider-rose { background: #ffe4e6; color: #e11d48; }
+
+        .param-input {
+            width: 70px;
+            padding: 2px 6px;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-align: right;
+            background: white;
+        }
+
+        .param-input:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+        }
+
+        @keyframes pulseGlow {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(79, 70, 229, 0.4); }
+            50% { box-shadow: 0 0 0 8px rgba(79, 70, 229, 0); }
+        }
+
+        .pulse-glow { animation: pulseGlow 1.5s ease-in-out infinite; }
+
+        .prose h2 {
+            font-weight: 700;
+            font-size: 1.875rem;
+            margin-top: 2.5rem;
+            margin-bottom: 1.25rem;
+            color: #0f172a;
+        }
+
+        .prose p {
+            margin-bottom: 1.5rem;
+            font-size: 1.1rem;
+        }
+
+        @keyframes flashGreen {
+            0% { background-color: #dcfce7; }
+            100% { background-color: transparent; }
+        }
+        @keyframes flashRed {
+            0% { background-color: #fee2e2; }
+            100% { background-color: transparent; }
+        }
+        .flash-win { animation: flashGreen 0.5s ease-out; }
+        .flash-lose { animation: flashRed 0.5s ease-out; }
+
+        .arm-card {
+            transition: transform 0.15s ease, box-shadow 0.15s ease;
+        }
+        .arm-card.chosen {
+            transform: scale(1.03);
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.5), 0 10px 25px -5px rgba(0,0,0,0.15);
+        }
+    </style>
+</head>
+<body class="min-h-screen p-4 md:p-8">
+    <div class="max-w-7xl mx-auto space-y-8">
+
+        <!-- Header -->
+        <header class="bg-white border-b border-slate-200 pt-12 pb-10 -mx-4 md:-mx-8 -mt-4 md:-mt-8 px-4 md:px-8 mb-4">
+            <div class="max-w-4xl mx-auto text-center">
+                <h1 class="text-3xl md:text-5xl font-extrabold text-slate-900 mb-4 leading-tight">
+                    The Actor-Critic Model
+                    <br/><span class="text-indigo-600">Separating Evaluation from Action</span>
+                </h1>
+                <p class="text-lg text-slate-500 serif italic max-w-2xl mx-auto">
+                    The Critic learns how good things are (state value). The Actor learns what to do (action preferences). Dopamine carries the prediction error that teaches both.
+                </p>
+            </div>
+        </header>
+
+        <!-- Simulator -->
+        <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
+
+            <!-- Controls Panel -->
+            <div class="lg:col-span-1 space-y-5 bg-white p-5 rounded-2xl shadow-sm border border-slate-100 h-fit">
+                <div class="flex items-center gap-2 text-lg font-semibold border-b pb-2 mb-4">
+                    <svg class="w-5 h-5 text-slate-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="3"/>
+                        <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06A1.65 1.65 0 0 0 9 4.6a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+                    </svg>
+                    Parameters
+                </div>
+
+                <div class="space-y-4">
+                    <!-- Critic Learning Rate -->
+                    <div>
+                        <div class="flex justify-between mb-1">
+                            <label class="text-sm font-medium text-slate-600">Critic \(\alpha_v\)</label>
+                            <input type="number" id="alpha-v-val" class="param-input text-teal-600" value="0.1" min="0.01" max="1.0" step="0.01">
+                        </div>
+                        <input type="range" id="alpha-v" min="0.01" max="1.0" step="0.01" value="0.1" class="w-full slider-teal">
+                        <p class="text-[9px] text-slate-400 mt-0.5">State value learning rate</p>
+                    </div>
+
+                    <!-- Actor Learning Rate -->
+                    <div>
+                        <div class="flex justify-between mb-1">
+                            <label class="text-sm font-medium text-slate-600">Actor \(\alpha_m\)</label>
+                            <input type="number" id="alpha-m-val" class="param-input text-indigo-600" value="0.3" min="0.01" max="1.0" step="0.01">
+                        </div>
+                        <input type="range" id="alpha-m" min="0.01" max="1.0" step="0.01" value="0.3" class="w-full slider-indigo">
+                        <p class="text-[9px] text-slate-400 mt-0.5">Action preference learning rate</p>
+                    </div>
+
+                    <!-- Temperature -->
+                    <div>
+                        <div class="flex justify-between mb-1">
+                            <label class="text-sm font-medium text-slate-600">Temperature \(\tau\)</label>
+                            <input type="number" id="tau-val" class="param-input text-amber-600" value="1.0" min="0.01" max="10" step="0.01">
+                        </div>
+                        <input type="range" id="tau" min="0.01" max="5" step="0.01" value="1.0" class="w-full slider-amber">
+                    </div>
+                </div>
+
+                <!-- True Reward Probabilities -->
+                <div class="pt-3 border-t">
+                    <div class="flex items-center justify-between mb-3">
+                        <div class="text-xs font-semibold text-slate-500 uppercase tracking-wide">True Reward Probs</div>
+                        <button id="toggle-reveal" class="text-[10px] px-2 py-0.5 rounded bg-slate-100 text-slate-500 hover:bg-slate-200 transition-colors">
+                            Show
+                        </button>
+                    </div>
+
+                    <div class="mb-3">
+                        <div class="flex justify-between mb-1">
+                            <label class="text-xs font-medium text-blue-600 flex items-center gap-1">
+                                <span class="inline-block w-3 h-3 rounded bg-blue-400"></span> Arm A
+                            </label>
+                            <span class="text-xs font-mono" id="pA-display">
+                                <span class="text-slate-300">hidden</span>
+                            </span>
+                        </div>
+                        <input type="range" id="pA" min="0" max="1.0" step="0.05" value="0.7" class="w-full slider-blue">
+                    </div>
+
+                    <div>
+                        <div class="flex justify-between mb-1">
+                            <label class="text-xs font-medium text-rose-600 flex items-center gap-1">
+                                <span class="inline-block w-3 h-3 rounded bg-rose-400"></span> Arm B
+                            </label>
+                            <span class="text-xs font-mono" id="pB-display">
+                                <span class="text-slate-300">hidden</span>
+                            </span>
+                        </div>
+                        <input type="range" id="pB" min="0" max="1.0" step="0.05" value="0.3" class="w-full slider-rose">
+                    </div>
+                </div>
+
+                <!-- Control Buttons -->
+                <div class="pt-3 border-t space-y-2">
+                    <button id="run-trial-btn" class="w-full flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-indigo-600 text-white font-semibold hover:bg-indigo-700 transition-colors shadow-lg shadow-indigo-200 pulse-glow">
+                        <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polygon points="5 3 19 12 5 21 5 3"/>
+                        </svg>
+                        Run Trial
+                    </button>
+                    <div class="flex gap-2">
+                        <button id="run-10-btn" class="flex-1 flex items-center justify-center gap-1 px-3 py-2 rounded-lg border border-slate-200 text-slate-600 font-medium hover:bg-slate-50 transition-colors text-sm">
+                            ×10
+                        </button>
+                        <button id="run-100-btn" class="flex-1 flex items-center justify-center gap-1 px-3 py-2 rounded-lg border border-slate-200 text-slate-600 font-medium hover:bg-slate-50 transition-colors text-sm">
+                            ×100
+                        </button>
+                        <button id="reset-btn" class="flex-1 flex items-center justify-center gap-1 px-3 py-2 rounded-lg border border-red-200 text-red-600 font-medium hover:bg-red-50 transition-colors text-sm">
+                            Reset
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Trial Counter -->
+                <div class="bg-slate-50 rounded-xl p-3 text-center">
+                    <div class="text-2xl font-bold text-slate-800" id="trial-count">0</div>
+                    <div class="text-xs text-slate-500 uppercase tracking-wide">Trials</div>
+                </div>
+            </div>
+
+            <!-- Main Visualization -->
+            <div class="lg:col-span-3 space-y-5">
+
+                <!-- Top row: Critic V, Actor m(a), Policy P(a) side by side -->
+                <div class="grid grid-cols-3 gap-4">
+
+                    <!-- Critic: State Value V -->
+                    <div class="bg-white p-4 rounded-2xl shadow-sm border border-teal-100">
+                        <h3 class="text-xs font-semibold text-teal-700 uppercase tracking-wide mb-3 flex items-center gap-1.5">
+                            <span class="w-2 h-2 rounded-full bg-teal-400"></span>
+                            Critic — \(V\)
+                        </h3>
+                        <div class="flex items-center justify-between text-xs mb-1">
+                            <span class="text-slate-500">State Value</span>
+                            <span class="font-mono font-semibold text-teal-700" id="vDisplay">0.00</span>
+                        </div>
+                        <div class="w-full h-7 bg-teal-50 rounded-full overflow-hidden">
+                            <div class="h-full bg-teal-400 rounded-full transition-all duration-300" id="vBar" style="width: 0%"></div>
+                        </div>
+                        <div class="mt-3 flex items-center justify-between text-xs">
+                            <span class="text-slate-500">Last \(\delta\)</span>
+                            <span class="font-mono font-bold text-base" id="deltaDisplay">
+                                <span class="text-slate-300">—</span>
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- Actor: Preferences m(a) -->
+                    <div class="bg-white p-4 rounded-2xl shadow-sm border border-indigo-100">
+                        <h3 class="text-xs font-semibold text-indigo-700 uppercase tracking-wide mb-3 flex items-center gap-1.5">
+                            <span class="w-2 h-2 rounded-full bg-indigo-400"></span>
+                            Actor — \(m(a)\)
+                        </h3>
+                        <div class="space-y-2">
+                            <div>
+                                <div class="flex items-center justify-between text-[10px] mb-0.5">
+                                    <span class="font-semibold text-blue-600">Arm A</span>
+                                    <span class="font-mono font-semibold text-blue-700" id="mA">0.00</span>
+                                </div>
+                                <div class="w-full h-5 bg-blue-50 rounded-full overflow-hidden">
+                                    <div class="h-full bg-blue-400 rounded-full transition-all duration-300" id="mBarA" style="width: 50%"></div>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="flex items-center justify-between text-[10px] mb-0.5">
+                                    <span class="font-semibold text-rose-600">Arm B</span>
+                                    <span class="font-mono font-semibold text-rose-700" id="mB">0.00</span>
+                                </div>
+                                <div class="w-full h-5 bg-rose-50 rounded-full overflow-hidden">
+                                    <div class="h-full bg-rose-400 rounded-full transition-all duration-300" id="mBarB" style="width: 50%"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Policy P(a) -->
+                    <div class="bg-white p-4 rounded-2xl shadow-sm border border-slate-100">
+                        <h3 class="text-xs font-semibold text-slate-600 uppercase tracking-wide mb-3 flex items-center gap-1.5">
+                            <span class="w-2 h-2 rounded-full bg-slate-400"></span>
+                            Policy — \(P(a)\)
+                        </h3>
+                        <div class="space-y-2">
+                            <div>
+                                <div class="flex items-center justify-between text-[10px] mb-0.5">
+                                    <span class="font-semibold text-blue-600">Arm A</span>
+                                    <span class="font-mono font-semibold text-slate-700" id="pSelA">50%</span>
+                                </div>
+                                <div class="w-full h-5 bg-blue-50 rounded-full overflow-hidden">
+                                    <div class="h-full bg-blue-400 rounded-full transition-all duration-300" id="pBarA" style="width: 50%"></div>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="flex items-center justify-between text-[10px] mb-0.5">
+                                    <span class="font-semibold text-rose-600">Arm B</span>
+                                    <span class="font-mono font-semibold text-slate-700" id="pSelB">50%</span>
+                                </div>
+                                <div class="w-full h-5 bg-rose-50 rounded-full overflow-hidden">
+                                    <div class="h-full bg-rose-400 rounded-full transition-all duration-300" id="pBarB" style="width: 50%"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Arm stats row -->
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="arm-card bg-white p-3 rounded-xl shadow-sm border-2 border-blue-100 text-center" id="card-A">
+                        <div class="font-bold text-blue-700 text-sm mb-1">🎰 Arm A</div>
+                        <div class="flex justify-center gap-6 text-xs text-slate-500">
+                            <span>Chosen: <strong class="text-slate-700" id="nA">0</strong></span>
+                            <span>Wins: <strong class="text-emerald-600" id="wA">0</strong></span>
+                        </div>
+                        <div class="mt-1 h-5 rounded-lg flex items-center justify-center text-xs font-semibold" id="flash-A"></div>
+                    </div>
+                    <div class="arm-card bg-white p-3 rounded-xl shadow-sm border-2 border-rose-100 text-center" id="card-B">
+                        <div class="font-bold text-rose-700 text-sm mb-1">🎰 Arm B</div>
+                        <div class="flex justify-center gap-6 text-xs text-slate-500">
+                            <span>Chosen: <strong class="text-slate-700" id="nB">0</strong></span>
+                            <span>Wins: <strong class="text-emerald-600" id="wB">0</strong></span>
+                        </div>
+                        <div class="mt-1 h-5 rounded-lg flex items-center justify-center text-xs font-semibold" id="flash-B"></div>
+                    </div>
+                </div>
+
+                <!-- Prediction Error δ over trials -->
+                <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-100">
+                    <h3 class="text-sm font-semibold flex items-center gap-2 text-slate-700 mb-3">
+                        <svg class="w-4 h-4 text-amber-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
+                        </svg>
+                        Prediction Error \(\delta\) Over Trials
+                    </h3>
+                    <canvas id="delta-canvas" height="130" class="w-full rounded-lg"></canvas>
+                </div>
+
+                <!-- V and m(a) over trials -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                    <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-100">
+                        <h3 class="text-sm font-semibold flex items-center gap-2 text-slate-700 mb-3">
+                            <svg class="w-4 h-4 text-teal-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+                            </svg>
+                            State Value \(V\) Over Trials
+                        </h3>
+                        <canvas id="v-canvas" height="140" class="w-full rounded-lg"></canvas>
+                    </div>
+                    <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-100">
+                        <h3 class="text-sm font-semibold flex items-center gap-2 text-slate-700 mb-3">
+                            <svg class="w-4 h-4 text-indigo-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M12 20V10M18 20V4M6 20v-4"/>
+                            </svg>
+                            Action Preferences \(m(a)\) Over Trials
+                        </h3>
+                        <canvas id="m-canvas" height="140" class="w-full rounded-lg"></canvas>
+                    </div>
+                </div>
+
+                <!-- Insight Box -->
+                <div class="bg-gradient-to-r from-indigo-50 to-teal-50 p-4 rounded-xl border border-indigo-100">
+                    <div class="flex items-start gap-3">
+                        <span class="text-2xl">🧠</span>
+                        <div>
+                            <strong class="text-slate-800">The Actor-Critic Insight</strong>
+                            <p class="text-slate-600 text-sm mt-1 mb-0" id="insight-text">
+                                Run trials to see how the Critic learns the average reward (state value) while the Actor learns which arm to prefer.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Explanation Section -->
+        <div class="prose max-w-4xl mx-auto bg-white p-8 md:p-12 rounded-2xl shadow-sm border border-slate-100 mt-12">
+            <h2 class="flex items-center gap-3">
+                <svg class="w-8 h-8 text-indigo-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"/>
+                    <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3M12 17h.01"/>
+                </svg>
+                How the Actor-Critic Model Works
+            </h2>
+
+            <p>
+                The brain doesn't just evaluate situations—it also decides what to do. The <strong>Actor-Critic</strong>
+                model captures this division of labor with two separate systems that cooperate through a shared
+                <strong>prediction error</strong> signal.
+            </p>
+
+            <h3 class="text-xl font-semibold mt-8 mb-4">The Two Components</h3>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 my-6">
+                <div class="bg-teal-50 p-5 rounded-xl border border-teal-200">
+                    <div class="font-bold text-teal-800 mb-2">🎭 The Critic</div>
+                    <p class="text-sm text-teal-700 mb-0">
+                        Learns the <strong>state value</strong> \(V\) — "How good is it to be in this situation overall?"
+                        In a bandit, \(V\) converges to the average reward rate across both arms, weighted by how often each is chosen.
+                    </p>
+                </div>
+                <div class="bg-indigo-50 p-5 rounded-xl border border-indigo-200">
+                    <div class="font-bold text-indigo-800 mb-2">🎯 The Actor</div>
+                    <p class="text-sm text-indigo-700 mb-0">
+                        Learns <strong>action preferences</strong> \(m(a)\) — "Which action should I favor?"
+                        These preferences are converted to a policy via softmax. The actor adjusts preferences based on whether the chosen action led to better or worse outcomes than expected.
+                    </p>
+                </div>
+            </div>
+
+            <h3 class="text-xl font-semibold mt-8 mb-4">The Learning Rules</h3>
+
+            <p><strong>Step 1: Compute the Prediction Error (δ)</strong></p>
+            <div class="bg-slate-50 p-6 rounded-xl my-4 text-center">
+                <div class="text-lg">
+                    \[\delta = r - V\]
+                </div>
+                <div class="text-sm text-slate-500 mt-2">
+                    Was the reward better (+δ) or worse (−δ) than expected?
+                </div>
+            </div>
+
+            <p><strong>Step 2: Update the Critic</strong></p>
+            <div class="bg-teal-50 p-6 rounded-xl my-4 text-center">
+                <div class="text-lg">
+                    \[V \leftarrow V + \alpha_v \cdot \delta\]
+                </div>
+                <div class="text-sm text-teal-600 mt-2">
+                    Move the state value toward the actual reward
+                </div>
+            </div>
+
+            <p><strong>Step 3: Update the Actor</strong></p>
+            <div class="bg-indigo-50 p-6 rounded-xl my-4 text-center">
+                <div class="text-lg">
+                    \[m(a_{\text{chosen}}) \leftarrow m(a_{\text{chosen}}) + \alpha_m \cdot \delta\]
+                </div>
+                <div class="text-sm text-indigo-600 mt-2">
+                    If δ > 0: strengthen the chosen action preference<br>
+                    If δ < 0: weaken the chosen action preference
+                </div>
+            </div>
+
+            <p><strong>Step 4: Policy via Softmax</strong></p>
+            <div class="bg-slate-50 p-6 rounded-xl my-4 text-center">
+                <div class="text-lg">
+                    \[P(a) = \frac{e^{m(a)/\tau}}{\sum_b e^{m(b)/\tau}}\]
+                </div>
+            </div>
+
+            <h3 class="text-xl font-semibold mt-8 mb-4">Neural Implementation</h3>
+            <ul class="space-y-2 my-4">
+                <li><strong>Critic ≈ Ventral Striatum / OFC:</strong> Encodes expected value of the current state</li>
+                <li><strong>Actor ≈ Dorsal Striatum:</strong> Encodes action preferences and habits</li>
+                <li><strong>δ ≈ Dopamine (VTA/SNc):</strong> The prediction error signal that teaches both systems</li>
+            </ul>
+
+            <h3 class="text-xl font-semibold mt-8 mb-4">Why Separate Actor and Critic?</h3>
+            <p>
+                The Critic's job is to <em>evaluate</em>. It answers "how good is this state?" but doesn't specify an action.
+                The Actor's job is to <em>decide</em>. It uses the same δ signal to adjust <em>which action</em>
+                led to the better-or-worse-than-expected outcome.
+            </p>
+            <p>
+                This separation means the model can generalize: the Critic can evaluate novel states, while
+                the Actor can transfer learned preferences. It also explains why striatal lesions in different
+                regions produce different behavioral deficits.
+            </p>
+
+            <div class="bg-amber-50 border border-amber-200 rounded-xl p-6 my-6">
+                <div class="flex items-start gap-3">
+                    <span class="text-2xl">💡</span>
+                    <div>
+                        <strong class="text-amber-800">Try it!</strong>
+                        <p class="text-amber-700 text-sm mt-1 mb-0">
+                            1. Run 100 trials — watch V converge to the weighted average reward, and m(A) pull ahead of m(B).<br>
+                            2. Set α<sub>v</sub> = 0.5, α<sub>m</sub> = 0.05 — the Critic learns fast but the Actor is sluggish.<br>
+                            3. Set α<sub>v</sub> = 0.05, α<sub>m</sub> = 0.5 — the Actor over-reacts to noisy prediction errors.<br>
+                            4. Make arms close (0.55 vs 0.45) — δ fluctuates more and convergence is slower.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer class="text-center py-8 text-sm text-slate-400">
+            <p>Actor-Critic Model Demonstration</p>
+            <p class="mt-1">Separating evaluation (Critic) from action selection (Actor)</p>
+        </footer>
+    </div>
+
+    <script>
+        // ============ STATE ============
+        let V_state = 0;       // Critic's state value
+        let m = [0, 0];        // Actor's action preferences
+        let nChosen = [0, 0];
+        let nWins = [0, 0];
+        let trialCount = 0;
+        let lastDelta = 0;
+
+        let vHistory = [];          // V after each trial
+        let mHistory = [];          // {mA, mB}
+        let deltaHistory = [];      // δ per trial
+        let choiceHistory = [];
+        let revealed = false;
+
+        // ============ DOM ============
+        const alphaVSlider = document.getElementById('alpha-v');
+        const alphaVVal = document.getElementById('alpha-v-val');
+        const alphaMSlider = document.getElementById('alpha-m');
+        const alphaMVal = document.getElementById('alpha-m-val');
+        const tauSlider = document.getElementById('tau');
+        const tauVal = document.getElementById('tau-val');
+        const pASlider = document.getElementById('pA');
+        const pBSlider = document.getElementById('pB');
+        const toggleReveal = document.getElementById('toggle-reveal');
+
+        const vDisplay = document.getElementById('vDisplay');
+        const deltaDisplay = document.getElementById('deltaDisplay');
+        const mADisplay = document.getElementById('mA');
+        const mBDisplay = document.getElementById('mB');
+        const pSelADisplay = document.getElementById('pSelA');
+        const pSelBDisplay = document.getElementById('pSelB');
+        const nADisplay = document.getElementById('nA');
+        const nBDisplay = document.getElementById('nB');
+        const wADisplay = document.getElementById('wA');
+        const wBDisplay = document.getElementById('wB');
+        const flashA = document.getElementById('flash-A');
+        const flashB = document.getElementById('flash-B');
+        const cardA = document.getElementById('card-A');
+        const cardB = document.getElementById('card-B');
+
+        const trialCountDisplay = document.getElementById('trial-count');
+        const deltaCanvas = document.getElementById('delta-canvas');
+        const vCanvas = document.getElementById('v-canvas');
+        const mCanvas = document.getElementById('m-canvas');
+
+        // ============ SLIDER SYNC ============
+        function syncSliderInput(slider, input) {
+            slider.addEventListener('input', () => input.value = slider.value);
+            input.addEventListener('change', () => {
+                let val = parseFloat(input.value);
+                val = Math.max(parseFloat(slider.min), Math.min(parseFloat(slider.max), val));
+                input.value = val;
+                slider.value = val;
+            });
+        }
+        syncSliderInput(alphaVSlider, alphaVVal);
+        syncSliderInput(alphaMSlider, alphaMVal);
+        syncSliderInput(tauSlider, tauVal);
+
+        toggleReveal.addEventListener('click', () => {
+            revealed = !revealed;
+            toggleReveal.textContent = revealed ? 'Hide' : 'Show';
+            updateProbDisplay();
+        });
+        pASlider.addEventListener('input', updateProbDisplay);
+        pBSlider.addEventListener('input', updateProbDisplay);
+
+        function updateProbDisplay() {
+            const pAd = document.getElementById('pA-display');
+            const pBd = document.getElementById('pB-display');
+            if (revealed) {
+                pAd.innerHTML = `<span class="text-blue-600 font-semibold">${parseFloat(pASlider.value).toFixed(2)}</span>`;
+                pBd.innerHTML = `<span class="text-rose-600 font-semibold">${parseFloat(pBSlider.value).toFixed(2)}</span>`;
+            } else {
+                pAd.innerHTML = '<span class="text-slate-300">hidden</span>';
+                pBd.innerHTML = '<span class="text-slate-300">hidden</span>';
+            }
+        }
+
+        // ============ SOFTMAX ============
+        function softmaxProbs() {
+            const tau = parseFloat(tauVal.value);
+            const e0 = Math.exp(m[0] / tau);
+            const e1 = Math.exp(m[1] / tau);
+            const sum = e0 + e1;
+            return [e0 / sum, e1 / sum];
+        }
+
+        function chooseArm() {
+            const probs = softmaxProbs();
+            return Math.random() < probs[0] ? 0 : 1;
+        }
+
+        // ============ RUN TRIAL ============
+        function runTrial(animate = true) {
+            const alphaV = parseFloat(alphaVVal.value);
+            const alphaM = parseFloat(alphaMVal.value);
+            const pA = parseFloat(pASlider.value);
+            const pB = parseFloat(pBSlider.value);
+            const trueProbs = [pA, pB];
+
+            const arm = chooseArm();
+            const reward = Math.random() < trueProbs[arm] ? 1 : 0;
+
+            // Prediction error
+            const delta = reward - V_state;
+
+            // Critic update
+            V_state = V_state + alphaV * delta;
+
+            // Actor update — only the chosen arm
+            m[arm] = m[arm] + alphaM * delta;
+
+            lastDelta = delta;
+            nChosen[arm]++;
+            if (reward) nWins[arm]++;
+            trialCount++;
+
+            choiceHistory.push(arm);
+            deltaHistory.push(delta);
+            vHistory.push(V_state);
+            mHistory.push({ mA: m[0], mB: m[1] });
+
+            updateDisplays(arm, reward, animate);
+            trialCountDisplay.textContent = trialCount;
+            drawAllCharts();
+            updateInsight();
+        }
+
+        function updateDisplays(arm, reward, animate) {
+            const probs = softmaxProbs();
+
+            // Critic
+            vDisplay.textContent = V_state.toFixed(2);
+            document.getElementById('vBar').style.width = `${Math.max(0, Math.min(100, V_state * 100))}%`;
+
+            // Delta display
+            const dColor = lastDelta >= 0 ? 'text-emerald-600' : 'text-red-500';
+            const dSign = lastDelta >= 0 ? '+' : '';
+            deltaDisplay.innerHTML = `<span class="${dColor}">${dSign}${lastDelta.toFixed(2)}</span>`;
+
+            // Actor preferences — map to bar width
+            // m can be negative, so we use a relative scale: 50% = 0, more = wider
+            const mMax = Math.max(Math.abs(m[0]), Math.abs(m[1]), 0.5);
+            const mBarA = 50 + (m[0] / mMax) * 45;
+            const mBarB = 50 + (m[1] / mMax) * 45;
+            document.getElementById('mBarA').style.width = `${Math.max(2, Math.min(98, mBarA))}%`;
+            document.getElementById('mBarB').style.width = `${Math.max(2, Math.min(98, mBarB))}%`;
+            mADisplay.textContent = m[0].toFixed(2);
+            mBDisplay.textContent = m[1].toFixed(2);
+
+            // Policy
+            pSelADisplay.textContent = `${(probs[0] * 100).toFixed(0)}%`;
+            pSelBDisplay.textContent = `${(probs[1] * 100).toFixed(0)}%`;
+            document.getElementById('pBarA').style.width = `${(probs[0] * 100).toFixed(0)}%`;
+            document.getElementById('pBarB').style.width = `${(probs[1] * 100).toFixed(0)}%`;
+
+            // Arm stats
+            nADisplay.textContent = nChosen[0];
+            nBDisplay.textContent = nChosen[1];
+            wADisplay.textContent = nWins[0];
+            wBDisplay.textContent = nWins[1];
+
+            if (animate) {
+                cardA.classList.toggle('chosen', arm === 0);
+                cardB.classList.toggle('chosen', arm === 1);
+
+                const flashEl = arm === 0 ? flashA : flashB;
+                flashEl.className = `mt-1 h-5 rounded-lg flex items-center justify-center text-xs font-semibold ${reward ? 'flash-win text-emerald-700' : 'flash-lose text-red-600'}`;
+                flashEl.textContent = reward ? '🎉 Win! +1' : '✗ No reward';
+
+                setTimeout(() => {
+                    cardA.classList.remove('chosen');
+                    cardB.classList.remove('chosen');
+                }, 300);
+            }
+        }
+
+        // ============ CHARTS ============
+        function drawAllCharts() {
+            drawDeltaChart();
+            drawVChart();
+            drawMChart();
+        }
+
+        function setupCanvas(canvas, height) {
+            const dpr = window.devicePixelRatio || 1;
+            const rect = canvas.getBoundingClientRect();
+            canvas.width = rect.width * dpr;
+            canvas.height = height * dpr;
+            const ctx = canvas.getContext('2d');
+            ctx.scale(dpr, dpr);
+            return { ctx, W: rect.width, H: height };
+        }
+
+        function drawChartFrame(ctx, W, H, margin) {
+            ctx.fillStyle = '#f8fafc';
+            ctx.fillRect(0, 0, W, H);
+            ctx.fillStyle = '#ffffff';
+            ctx.fillRect(margin.left, margin.top, W - margin.left - margin.right, H - margin.top - margin.bottom);
+            ctx.strokeStyle = '#e2e8f0';
+            ctx.lineWidth = 1;
+            ctx.strokeRect(margin.left, margin.top, W - margin.left - margin.right, H - margin.top - margin.bottom);
+        }
+
+        // ---- δ chart (bar chart) ----
+        function drawDeltaChart() {
+            const { ctx, W, H } = setupCanvas(deltaCanvas, 130);
+            const margin = { top: 10, right: 15, bottom: 25, left: 40 };
+            const plotW = W - margin.left - margin.right;
+            const plotH = H - margin.top - margin.bottom;
+            const zeroY = margin.top + plotH / 2;
+            drawChartFrame(ctx, W, H, margin);
+
+            if (deltaHistory.length === 0) {
+                ctx.fillStyle = '#94a3b8';
+                ctx.font = '12px Inter, sans-serif';
+                ctx.textAlign = 'center';
+                ctx.fillText('Run trials to see prediction errors', W / 2, H / 2);
+                return;
+            }
+
+            const n = deltaHistory.length;
+            let maxAbs = 0.1;
+            for (const d of deltaHistory) maxAbs = Math.max(maxAbs, Math.abs(d));
+            maxAbs *= 1.1;
+
+            // Zero line
+            ctx.strokeStyle = '#94a3b8';
+            ctx.lineWidth = 1;
+            ctx.setLineDash([4, 3]);
+            ctx.beginPath();
+            ctx.moveTo(margin.left, zeroY);
+            ctx.lineTo(margin.left + plotW, zeroY);
+            ctx.stroke();
+            ctx.setLineDash([]);
+
+            const barW = Math.max(1, plotW / n - 0.5);
+            const gap = plotW / n;
+
+            for (let i = 0; i < n; i++) {
+                const d = deltaHistory[i];
+                const x = margin.left + i * gap;
+                const barH = (Math.abs(d) / maxAbs) * (plotH / 2);
+
+                if (d >= 0) {
+                    ctx.fillStyle = `rgba(16, 185, 129, ${Math.min(1, 0.3 + Math.abs(d) / maxAbs)})`;
+                    ctx.fillRect(x, zeroY - barH, barW, barH);
+                } else {
+                    ctx.fillStyle = `rgba(239, 68, 68, ${Math.min(1, 0.3 + Math.abs(d) / maxAbs)})`;
+                    ctx.fillRect(x, zeroY, barW, barH);
+                }
+            }
+
+            // Y labels
+            ctx.fillStyle = '#64748b';
+            ctx.font = '10px Inter, sans-serif';
+            ctx.textAlign = 'right';
+            ctx.textBaseline = 'middle';
+            ctx.fillText(`+${maxAbs.toFixed(1)}`, margin.left - 4, margin.top + 4);
+            ctx.fillText('0', margin.left - 4, zeroY);
+            ctx.fillText(`−${maxAbs.toFixed(1)}`, margin.left - 4, margin.top + plotH - 2);
+
+            ctx.fillStyle = '#94a3b8';
+            ctx.font = '10px Inter, sans-serif';
+            ctx.textAlign = 'center';
+            ctx.fillText('Trial', W / 2, H - 3);
+        }
+
+        // ---- V chart (line) ----
+        function drawVChart() {
+            const { ctx, W, H } = setupCanvas(vCanvas, 140);
+            const margin = { top: 10, right: 15, bottom: 25, left: 40 };
+            const plotW = W - margin.left - margin.right;
+            const plotH = H - margin.top - margin.bottom;
+            drawChartFrame(ctx, W, H, margin);
+
+            if (vHistory.length === 0) {
+                ctx.fillStyle = '#94a3b8';
+                ctx.font = '12px Inter, sans-serif';
+                ctx.textAlign = 'center';
+                ctx.fillText('Run trials to see state value', W / 2, H / 2);
+                return;
+            }
+
+            const n = vHistory.length;
+            const maxY = Math.max(1, ...vHistory) * 1.15;
+            const minY = Math.min(0, ...vHistory) - 0.05;
+            const rangeY = maxY - minY;
+
+            function toX(i) { return margin.left + (i / Math.max(1, n - 1)) * plotW; }
+            function toY(v) { return margin.top + plotH - ((v - minY) / rangeY) * plotH; }
+
+            // True average reward lines
+            if (revealed) {
+                const pA = parseFloat(pASlider.value);
+                const pB = parseFloat(pBSlider.value);
+                // Weighted average converges toward max(pA,pB) as policy becomes greedy
+                ctx.setLineDash([6, 4]);
+                ctx.lineWidth = 1;
+                ctx.strokeStyle = 'rgba(59, 130, 246, 0.3)';
+                ctx.beginPath();
+                ctx.moveTo(margin.left, toY(pA));
+                ctx.lineTo(margin.left + plotW, toY(pA));
+                ctx.stroke();
+                ctx.strokeStyle = 'rgba(225, 29, 72, 0.3)';
+                ctx.beginPath();
+                ctx.moveTo(margin.left, toY(pB));
+                ctx.lineTo(margin.left + plotW, toY(pB));
+                ctx.stroke();
+                ctx.setLineDash([]);
+            }
+
+            // V line
+            ctx.strokeStyle = '#0d9488';
+            ctx.lineWidth = 2.5;
+            ctx.beginPath();
+            for (let i = 0; i < n; i++) {
+                const x = toX(i);
+                const y = toY(vHistory[i]);
+                if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+            }
+            ctx.stroke();
+
+            // Y labels
+            ctx.fillStyle = '#64748b';
+            ctx.font = '10px Inter, sans-serif';
+            ctx.textAlign = 'right';
+            ctx.textBaseline = 'middle';
+            ctx.fillText(maxY.toFixed(1), margin.left - 4, margin.top + 4);
+            ctx.fillText(minY.toFixed(1), margin.left - 4, margin.top + plotH - 2);
+
+            ctx.font = 'bold 10px Inter, sans-serif';
+            ctx.fillStyle = '#0d9488';
+            ctx.textAlign = 'right';
+            ctx.fillText('V', W - margin.right, margin.top + 12);
+
+            ctx.fillStyle = '#94a3b8';
+            ctx.font = '10px Inter, sans-serif';
+            ctx.textAlign = 'center';
+            ctx.fillText('Trial', W / 2, H - 3);
+        }
+
+        // ---- m(a) chart (two lines) ----
+        function drawMChart() {
+            const { ctx, W, H } = setupCanvas(mCanvas, 140);
+            const margin = { top: 10, right: 15, bottom: 25, left: 40 };
+            const plotW = W - margin.left - margin.right;
+            const plotH = H - margin.top - margin.bottom;
+            drawChartFrame(ctx, W, H, margin);
+
+            if (mHistory.length === 0) {
+                ctx.fillStyle = '#94a3b8';
+                ctx.font = '12px Inter, sans-serif';
+                ctx.textAlign = 'center';
+                ctx.fillText('Run trials to see action preferences', W / 2, H / 2);
+                return;
+            }
+
+            const n = mHistory.length;
+            let maxY = 0.5, minY = -0.5;
+            for (const h of mHistory) {
+                maxY = Math.max(maxY, h.mA, h.mB);
+                minY = Math.min(minY, h.mA, h.mB);
+            }
+            maxY *= 1.15; minY = minY < 0 ? minY * 1.15 : minY - 0.05;
+            const rangeY = maxY - minY || 1;
+
+            function toX(i) { return margin.left + (i / Math.max(1, n - 1)) * plotW; }
+            function toY(v) { return margin.top + plotH - ((v - minY) / rangeY) * plotH; }
+
+            // Zero line
+            if (minY < 0 && maxY > 0) {
+                ctx.strokeStyle = '#e2e8f0';
+                ctx.lineWidth = 1;
+                ctx.setLineDash([4, 3]);
+                ctx.beginPath();
+                ctx.moveTo(margin.left, toY(0));
+                ctx.lineTo(margin.left + plotW, toY(0));
+                ctx.stroke();
+                ctx.setLineDash([]);
+            }
+
+            // m(A) line
+            ctx.strokeStyle = '#3b82f6';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            for (let i = 0; i < n; i++) {
+                const x = toX(i);
+                const y = toY(mHistory[i].mA);
+                if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+            }
+            ctx.stroke();
+
+            // m(B) line
+            ctx.strokeStyle = '#e11d48';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            for (let i = 0; i < n; i++) {
+                const x = toX(i);
+                const y = toY(mHistory[i].mB);
+                if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+            }
+            ctx.stroke();
+
+            // Y labels
+            ctx.fillStyle = '#64748b';
+            ctx.font = '10px Inter, sans-serif';
+            ctx.textAlign = 'right';
+            ctx.textBaseline = 'middle';
+            ctx.fillText(maxY.toFixed(1), margin.left - 4, margin.top + 4);
+            ctx.fillText(minY.toFixed(1), margin.left - 4, margin.top + plotH - 2);
+
+            // Legend
+            ctx.font = 'bold 10px Inter, sans-serif';
+            ctx.textAlign = 'right';
+            ctx.fillStyle = '#3b82f6';
+            ctx.fillText('m(A)', W - margin.right - 40, margin.top + 12);
+            ctx.fillStyle = '#e11d48';
+            ctx.fillText('m(B)', W - margin.right, margin.top + 12);
+
+            ctx.fillStyle = '#94a3b8';
+            ctx.font = '10px Inter, sans-serif';
+            ctx.textAlign = 'center';
+            ctx.fillText('Trial', W / 2, H - 3);
+        }
+
+        // ============ INSIGHT ============
+        function updateInsight() {
+            const el = document.getElementById('insight-text');
+            const probs = softmaxProbs();
+            const pA = parseFloat(pASlider.value);
+            const pB = parseFloat(pBSlider.value);
+            const bestArm = pA >= pB ? 'A' : 'B';
+            const bestIdx = pA >= pB ? 0 : 1;
+
+            if (trialCount === 0) {
+                el.textContent = "Run trials to see how the Critic learns the average reward (state value) while the Actor learns which arm to prefer.";
+            } else if (trialCount < 5) {
+                el.textContent = `Trial ${trialCount}: The Critic is forming its first estimate (V = ${V_state.toFixed(2)}). δ = ${lastDelta >= 0 ? '+' : ''}${lastDelta.toFixed(2)} — ${lastDelta >= 0 ? 'better than expected!' : 'worse than expected.'}`;
+            } else if (Math.abs(m[0] - m[1]) < 0.2) {
+                el.textContent = `Trial ${trialCount}: Actor preferences are still close (m(A) = ${m[0].toFixed(2)}, m(B) = ${m[1].toFixed(2)}). The Actor hasn't differentiated the arms yet.`;
+            } else if (probs[bestIdx] > 0.8) {
+                el.textContent = `Trial ${trialCount}: The Actor has learned to prefer Arm ${bestArm} (P = ${(probs[bestIdx] * 100).toFixed(0)}%). The Critic's V (${V_state.toFixed(2)}) reflects the converging reward rate.`;
+            } else {
+                const stronger = m[0] > m[1] ? 'A' : 'B';
+                el.textContent = `Trial ${trialCount}: The Actor is leaning toward Arm ${stronger}. V = ${V_state.toFixed(2)}. Prediction errors (δ) are driving both systems.`;
+            }
+        }
+
+        // ============ CONTROLS ============
+        async function runMultipleTrials(n) {
+            document.getElementById('run-trial-btn').disabled = true;
+            document.getElementById('run-10-btn').disabled = true;
+            document.getElementById('run-100-btn').disabled = true;
+
+            for (let i = 0; i < n; i++) {
+                runTrial(n <= 10);
+                if (n <= 10) await sleep(150);
+                else await sleep(8);
+            }
+
+            document.getElementById('run-trial-btn').disabled = false;
+            document.getElementById('run-10-btn').disabled = false;
+            document.getElementById('run-100-btn').disabled = false;
+        }
+
+        function sleep(ms) {
+            return new Promise(resolve => setTimeout(resolve, ms));
+        }
+
+        function reset() {
+            V_state = 0;
+            m = [0, 0];
+            nChosen = [0, 0];
+            nWins = [0, 0];
+            trialCount = 0;
+            lastDelta = 0;
+            vHistory = [];
+            mHistory = [];
+            deltaHistory = [];
+            choiceHistory = [];
+
+            trialCountDisplay.textContent = '0';
+            vDisplay.textContent = '0.00';
+            deltaDisplay.innerHTML = '<span class="text-slate-300">—</span>';
+            mADisplay.textContent = '0.00';
+            mBDisplay.textContent = '0.00';
+            pSelADisplay.textContent = '50%';
+            pSelBDisplay.textContent = '50%';
+            nADisplay.textContent = '0';
+            nBDisplay.textContent = '0';
+            wADisplay.textContent = '0';
+            wBDisplay.textContent = '0';
+            flashA.textContent = '';
+            flashB.textContent = '';
+            flashA.className = 'mt-1 h-5 rounded-lg flex items-center justify-center text-xs font-semibold';
+            flashB.className = 'mt-1 h-5 rounded-lg flex items-center justify-center text-xs font-semibold';
+
+            document.getElementById('vBar').style.width = '0%';
+            document.getElementById('mBarA').style.width = '50%';
+            document.getElementById('mBarB').style.width = '50%';
+            document.getElementById('pBarA').style.width = '50%';
+            document.getElementById('pBarB').style.width = '50%';
+
+            drawAllCharts();
+            updateInsight();
+        }
+
+        // ============ EVENT LISTENERS ============
+        document.getElementById('run-trial-btn').addEventListener('click', () => runTrial(true));
+        document.getElementById('run-10-btn').addEventListener('click', () => runMultipleTrials(10));
+        document.getElementById('run-100-btn').addEventListener('click', () => runMultipleTrials(100));
+        document.getElementById('reset-btn').addEventListener('click', reset);
+
+        window.addEventListener('resize', drawAllCharts);
+
+        // ============ INITIALIZE ============
+        drawAllCharts();
+        updateInsight();
+    </script>
+</body>
+</html>

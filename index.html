@@ -1329,6 +1329,53 @@
                 </div>
             </div>
 
+            <div class="demo-item">
+                <div class="demo-header">
+                    <div class="demo-number">7</div>
+                    <div class="demo-title-block">
+                        <h3>The Actor-Critic Model</h3>
+                        <span>Separating Evaluation from Action</span>
+                    </div>
+                </div>
+                <div class="demo-content">
+                    <div class="demo-text">
+                        <p>The brain doesn't just evaluate situations—it also decides what to do. The Actor-Critic
+                            model separates a Critic that learns state value V from an Actor that learns action
+                            preferences m(a), both taught by a shared dopamine-like prediction error δ.</p>
+                        <p>Watch the Critic converge to the average reward while the Actor learns which arm to
+                            prefer through the same teaching signal.</p>
+                        <ul>
+                            <li>Critic (ventral striatum) learns V — "how good is this state?"</li>
+                            <li>Actor (dorsal striatum) learns m(a) — "which action to prefer?"</li>
+                            <li>δ = r − V drives updates to both systems</li>
+                            <li>Compare different learning rates for Actor vs Critic</li>
+                        </ul>
+                        <a href="./Demonstrations/ActorCritic/" target="_blank" class="demo-launch-btn">
+                            Launch Interactive Demo
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <path d="M5 12h14M12 5l7 7-7 7" />
+                            </svg>
+                        </a>
+                    </div>
+                    <div class="demo-iframe">
+                        <iframe src="./Demonstrations/ActorCritic/" title="Actor-Critic Demo"></iframe>
+                        <div class="demo-overlay">
+                            <span>Interactive Demo</span>
+                            <a href="./Demonstrations/ActorCritic/" target="_blank">
+                                Open Full Screen
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2">
+                                    <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+                                    <polyline points="15 3 21 3 21 9" />
+                                    <line x1="10" y1="14" x2="21" y2="3" />
+                                </svg>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <!-- More demonstrations can be added here following the same pattern -->
 
         </div>
