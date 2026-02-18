@@ -65,9 +65,7 @@
             50% { box-shadow: 0 0 0 8px rgba(16, 185, 129, 0); }
         }
 
-        .pulse-glow {
-            animation: pulseGlow 1.5s ease-in-out infinite;
-        }
+        .pulse-glow { animation: pulseGlow 1.5s ease-in-out infinite; }
 
         .prose h2 {
             font-weight: 700;
@@ -82,7 +80,6 @@
             font-size: 1.1rem;
         }
 
-        /* Heatmap canvas styling */
         .heatmap-container {
             position: relative;
             background: #1e293b;
@@ -93,38 +90,6 @@
         .heatmap-canvas {
             display: block;
             width: 100%;
-        }
-
-        /* Current trial line display */
-        .current-trial-line {
-            display: flex;
-            align-items: center;
-            gap: 1px;
-            height: 100px;
-            padding: 0 10px;
-        }
-
-        .trial-bar {
-            flex: 1;
-            min-width: 3px;
-            transition: height 0.15s ease;
-        }
-
-        .trial-bar-positive {
-            border-radius: 2px 2px 0 0;
-            align-self: flex-end;
-            margin-bottom: 50px;
-        }
-
-        .trial-bar-negative {
-            border-radius: 0 0 2px 2px;
-            align-self: flex-start;
-            margin-top: 50px;
-        }
-
-        .trial-bar-zero {
-            height: 2px !important;
-            margin-top: 49px;
         }
     </style>
 </head>
@@ -139,7 +104,7 @@
                     <br/><span class="text-emerald-600">The Temporal Difference Model</span>
                 </h1>
                 <p class="text-lg text-slate-500 serif italic max-w-2xl mx-auto">
-                    Watch prediction errors shift backward through time as cues become predictive of reward—the signature of dopamine neuron activity.
+                    Watch prediction errors shift from the reward to the cue—the signature of dopamine neuron activity (Schultz, Dayan & Montague, 1997).
                 </p>
             </div>
         </header>
@@ -192,45 +157,34 @@
                             <input type="number" id="prob-val" class="param-input text-blue-600" value="1.0" min="0" max="1.0" step="0.1">
                         </div>
                         <input type="range" id="prob" min="0" max="1.0" step="0.1" value="1.0" class="w-full slider-blue">
-                        <p class="text-[9px] text-slate-400 mt-0.5">Set &lt;1 to see omission dips</p>
+                        <p class="text-[9px] text-slate-400 mt-0.5">Set &lt; 1 to see omission dips</p>
                     </div>
                 </div>
 
                 <!-- Timing Section -->
                 <div class="pt-3 border-t">
-                    <div class="text-xs font-semibold text-slate-500 uppercase tracking-wide mb-3">Timing (microstates)</div>
+                    <div class="text-xs font-semibold text-slate-500 uppercase tracking-wide mb-3">Timing (timesteps)</div>
                     
-                    <!-- Cue 1 Time -->
+                    <!-- CS Time -->
                     <div class="mb-3">
                         <div class="flex justify-between mb-1">
                             <label class="text-xs font-medium text-slate-600 flex items-center gap-1">
-                                <span class="text-yellow-500">💡</span> Cue 1
+                                <span class="inline-block w-3 h-3 rounded bg-amber-400"></span> CS (cue)
                             </label>
-                            <span class="text-xs font-mono text-yellow-600" id="cue1-display">t=10</span>
+                            <span class="text-xs font-mono text-amber-600" id="cs-display">t = 10</span>
                         </div>
-                        <input type="range" id="cue1" min="5" max="25" step="1" value="10" class="w-full slider-amber">
+                        <input type="range" id="cs-time" min="3" max="25" step="1" value="10" class="w-full slider-amber">
                     </div>
 
-                    <!-- Cue 2 Time -->
-                    <div class="mb-3">
-                        <div class="flex justify-between mb-1">
-                            <label class="text-xs font-medium text-slate-600 flex items-center gap-1">
-                                <span class="text-blue-500">🔔</span> Cue 2
-                            </label>
-                            <span class="text-xs font-mono text-blue-600" id="cue2-display">t=25</span>
-                        </div>
-                        <input type="range" id="cue2" min="15" max="40" step="1" value="25" class="w-full slider-blue">
-                    </div>
-
-                    <!-- Reward Time -->
+                    <!-- US Time -->
                     <div>
                         <div class="flex justify-between mb-1">
                             <label class="text-xs font-medium text-slate-600 flex items-center gap-1">
-                                <span class="text-emerald-500">🍖</span> Reward
+                                <span class="inline-block w-3 h-3 rounded bg-emerald-400"></span> US (reward)
                             </label>
-                            <span class="text-xs font-mono text-emerald-600" id="reward-time-display">t=50</span>
+                            <span class="text-xs font-mono text-emerald-600" id="us-display">t = 40</span>
                         </div>
-                        <input type="range" id="reward-time" min="30" max="60" step="1" value="50" class="w-full slider-emerald">
+                        <input type="range" id="us-time" min="15" max="55" step="1" value="40" class="w-full slider-emerald">
                     </div>
                 </div>
 
@@ -265,9 +219,9 @@
             <!-- Main Visualization -->
             <div class="lg:col-span-3 space-y-5">
 
-                <!-- Current Trial Display -->
+                <!-- Current Trial δ(t) — Canvas bar chart -->
                 <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-100">
-                    <div class="flex items-center justify-between mb-2">
+                    <div class="flex items-center justify-between mb-3">
                         <h3 class="text-sm font-semibold flex items-center gap-2 text-slate-700">
                             <svg class="w-4 h-4 text-emerald-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
@@ -279,20 +233,7 @@
                             <span class="flex items-center gap-1"><span class="w-3 h-3 rounded bg-red-500"></span> δ &lt; 0</span>
                         </div>
                     </div>
-                    <div class="relative bg-slate-900 rounded-lg p-3">
-                        <!-- Zero line indicator -->
-                        <div class="absolute left-3 right-3 top-1/2 h-px bg-slate-600 z-0"></div>
-                        <div class="current-trial-line relative z-10" id="current-td-line">
-                            <!-- Bars will be dynamically generated -->
-                        </div>
-                        <!-- Time axis labels -->
-                        <div class="flex justify-between text-[10px] text-slate-500 px-3 mt-1">
-                            <span>t = 0</span>
-                            <span id="axis-cue1" class="text-yellow-400">💡</span>
-                            <span id="axis-cue2" class="text-blue-400">🔔</span>
-                            <span id="axis-reward" class="text-emerald-400">🍖</span>
-                        </div>
-                    </div>
+                    <canvas id="current-td-canvas" height="180" class="w-full rounded-lg"></canvas>
                 </div>
 
                 <!-- Heatmaps Grid -->
@@ -354,7 +295,7 @@
                         <div>
                             <strong class="text-slate-800">The Dopamine Insight</strong>
                             <p class="text-slate-600 text-sm mt-1 mb-0" id="insight-text">
-                                Run trials to see the prediction error shift backward from the reward to the earliest predictive cue—exactly like dopamine neuron recordings.
+                                Run trials to see the prediction error shift backward from the US (reward) to the CS (cue)—exactly like dopamine neuron recordings.
                             </p>
                         </div>
                     </div>
@@ -373,13 +314,14 @@
             </h2>
 
             <p>
-                In the brain, time is represented as a sequence of <strong>microstates</strong>—each moment is a distinct state that can carry its own value. 
-                When a cue reliably predicts a future reward, TD learning gradually assigns value to each timestep, propagating backward from the reward.
+                Dopamine neurons fire when something <strong>surprising</strong> happens. Schultz (1997) showed that early in
+                conditioning, dopamine fires at reward delivery. After learning, dopamine instead fires at the CS (cue) that
+                <em>predicts</em> the reward—and no longer at the reward itself. TD learning explains this.
             </p>
 
             <h3 class="text-xl font-semibold mt-8 mb-4">The TD Learning Rule</h3>
             <p>
-                At each timestep \(t\), the agent computes a <strong>prediction error</strong>:
+                Time is divided into small steps (microstates). At each timestep \(t\), the agent computes a <strong>prediction error</strong>:
             </p>
 
             <div class="bg-slate-50 p-6 rounded-xl my-6 text-center">
@@ -387,13 +329,11 @@
                     \[\delta(t) = r(t) + \gamma \cdot V(t+1) - V(t)\]
                 </div>
                 <div class="text-sm text-slate-500 mt-3">
-                    Prediction error at time t = Reward at t + Discounted next value − Current value
+                    Prediction error = Reward received + Discounted next value − Current value
                 </div>
             </div>
 
-            <p>
-                Then update the value at t:
-            </p>
+            <p>Then update the value at \(t\):</p>
 
             <div class="bg-emerald-50 p-6 rounded-xl my-6 text-center">
                 <div class="text-lg">
@@ -402,19 +342,17 @@
             </div>
 
             <h3 class="text-xl font-semibold mt-8 mb-4">The Backward Shift</h3>
-            <p>
-                The magic happens over trials:
-            </p>
+            <p>Over trials, the prediction error shifts backward:</p>
             <ul class="space-y-2 my-4">
-                <li><strong>Trial 1:</strong> Only the reward time has a positive error (unexpected reward)</li>
-                <li><strong>Trial 5:</strong> Error starts appearing at Cue 2 (which now predicts reward)</li>
-                <li><strong>Trial 20:</strong> Error shifts to Cue 1 (the earliest predictor)</li>
-                <li><strong>Converged:</strong> Error <em>only</em> at Cue 1; reward time has δ ≈ 0 (fully expected)</li>
+                <li><strong>Trial 1:</strong> Only the US time has a positive δ (unexpected reward)</li>
+                <li><strong>Trials 5–10:</strong> δ starts appearing at timesteps just before the US</li>
+                <li><strong>Trials 20–30:</strong> δ shifts back to the CS (the earliest predictor)</li>
+                <li><strong>Converged:</strong> δ is only at the CS; at the US, δ ≈ 0 (fully predicted)</li>
             </ul>
 
             <p>
-                This backward shift is <strong>exactly what Schultz observed in dopamine neurons</strong>: early in learning, 
-                dopamine fires at reward; later, it fires at the earliest predictive cue.
+                This is <strong>exactly what Schultz observed in dopamine neurons</strong>: early in learning,
+                dopamine fires at reward delivery; after learning, it fires at the predictive cue.
             </p>
 
             <div class="bg-amber-50 border border-amber-200 rounded-xl p-6 my-6">
@@ -423,9 +361,9 @@
                     <div>
                         <strong class="text-amber-800">Try it!</strong>
                         <p class="text-amber-700 text-sm mt-1 mb-0">
-                            1. Run 50 trials and watch the green band shift from reward time to Cue 1.<br>
-                            2. Set reward probability to 0.5 and see red bands when expected rewards are omitted.<br>
-                            3. Try γ=0.8 vs γ=0.98—lower discount means slower backward propagation.
+                            1. Run 50 trials and watch the green peak shift from US to CS in the heatmap.<br>
+                            2. Set reward probability to 0.5 — red bands appear when expected rewards are omitted.<br>
+                            3. Try γ = 0.8 vs γ = 0.98 — lower discount slows the backward propagation.
                         </p>
                     </div>
                 </div>
@@ -441,14 +379,14 @@
 
     <script>
         // ============ CONFIG ============
-        const MAX_TIMESTEPS = 65;
-        const MAX_HISTORY = 50; // trials to show in heatmap
+        const MAX_TIMESTEPS = 60;
+        const MAX_HISTORY = 60;
 
         // ============ STATE ============
-        let V = new Array(MAX_TIMESTEPS + 1).fill(0); // Value at each timestep
+        let V = new Array(MAX_TIMESTEPS + 1).fill(0);
         let trialCount = 0;
-        let tdHistory = []; // Array of arrays: TD errors per trial
-        let valueHistory = []; // Array of arrays: Values per trial
+        let tdHistory = [];
+        let valueHistory = [];
         let currentTD = new Array(MAX_TIMESTEPS + 1).fill(0);
 
         // ============ DOM ELEMENTS ============
@@ -460,9 +398,8 @@
         const rewardVal = document.getElementById('reward-val');
         const probSlider = document.getElementById('prob');
         const probVal = document.getElementById('prob-val');
-        const cue1Slider = document.getElementById('cue1');
-        const cue2Slider = document.getElementById('cue2');
-        const rewardTimeSlider = document.getElementById('reward-time');
+        const csSlider = document.getElementById('cs-time');
+        const usSlider = document.getElementById('us-time');
 
         const runTrialBtn = document.getElementById('run-trial-btn');
         const run10Btn = document.getElementById('run-10-btn');
@@ -470,9 +407,9 @@
         const resetBtn = document.getElementById('reset-btn');
         const trialCountDisplay = document.getElementById('trial-count');
 
+        const currentTDCanvas = document.getElementById('current-td-canvas');
         const tdHeatmapCanvas = document.getElementById('td-heatmap');
         const valueHeatmapCanvas = document.getElementById('value-heatmap');
-        const currentTDLine = document.getElementById('current-td-line');
 
         // ============ SLIDER SYNC ============
         function syncSliderInput(slider, input) {
@@ -490,15 +427,11 @@
         syncSliderInput(rewardSlider, rewardVal);
         syncSliderInput(probSlider, probVal);
 
-        // Update timing displays
-        cue1Slider.addEventListener('input', () => {
-            document.getElementById('cue1-display').textContent = `t=${cue1Slider.value}`;
+        csSlider.addEventListener('input', () => {
+            document.getElementById('cs-display').textContent = `t = ${csSlider.value}`;
         });
-        cue2Slider.addEventListener('input', () => {
-            document.getElementById('cue2-display').textContent = `t=${cue2Slider.value}`;
-        });
-        rewardTimeSlider.addEventListener('input', () => {
-            document.getElementById('reward-time-display').textContent = `t=${rewardTimeSlider.value}`;
+        usSlider.addEventListener('input', () => {
+            document.getElementById('us-display').textContent = `t = ${usSlider.value}`;
         });
 
         // ============ TD LEARNING ============
@@ -507,43 +440,31 @@
             const gamma = parseFloat(gammaVal.value);
             const R = parseFloat(rewardVal.value);
             const rewardProb = parseFloat(probVal.value);
-            const cue1Time = parseInt(cue1Slider.value);
-            const cue2Time = parseInt(cue2Slider.value);
-            const rewardTime = parseInt(rewardTimeSlider.value);
+            const csTime = parseInt(csSlider.value);
+            const usTime = parseInt(usSlider.value);
 
-            // Determine if reward is delivered this trial
             const rewardDelivered = Math.random() < rewardProb;
             const actualR = rewardDelivered ? R : 0;
 
-            // Build reward vector
+            // Build reward vector — reward only at US time
             const rewards = new Array(MAX_TIMESTEPS + 1).fill(0);
-            rewards[rewardTime] = actualR;
+            rewards[usTime] = actualR;
 
-            // Compute TD errors and update values
+            // Compute TD errors forward
             const tdErrors = new Array(MAX_TIMESTEPS + 1).fill(0);
-            
-            // Note: We iterate forward, computing TD error at each step
-            // TD(t) = r(t) + γV(t+1) - V(t)
-            // But we update V(t) based on this error
-            
             for (let t = 0; t < MAX_TIMESTEPS; t++) {
-                const nextV = V[t + 1];
-                tdErrors[t] = rewards[t] + gamma * nextV - V[t];
+                tdErrors[t] = rewards[t] + gamma * V[t + 1] - V[t];
             }
-            
+
             // Update values
             for (let t = 0; t < MAX_TIMESTEPS; t++) {
                 V[t] = V[t] + alpha * tdErrors[t];
             }
 
-            // Store current TD errors
             currentTD = [...tdErrors];
-
-            // Add to history
             tdHistory.push([...tdErrors]);
             valueHistory.push([...V]);
 
-            // Trim history to MAX_HISTORY
             if (tdHistory.length > MAX_HISTORY) {
                 tdHistory.shift();
                 valueHistory.shift();
@@ -552,57 +473,148 @@
             trialCount++;
             trialCountDisplay.textContent = trialCount;
 
-            updateCurrentTDDisplay();
+            drawCurrentTD();
             drawHeatmaps();
             updateInsight(rewardDelivered);
         }
 
-        // ============ VISUALIZATION ============
-        function updateCurrentTDDisplay() {
-            const rewardTime = parseInt(rewardTimeSlider.value);
-            const cue1Time = parseInt(cue1Slider.value);
-            const cue2Time = parseInt(cue2Slider.value);
+        // ============ CURRENT TRIAL — CANVAS BAR CHART ============
+        function drawCurrentTD() {
+            const canvas = currentTDCanvas;
+            const ctx = canvas.getContext('2d');
+            const csTime = parseInt(csSlider.value);
+            const usTime = parseInt(usSlider.value);
+            const maxT = Math.min(usTime + 8, MAX_TIMESTEPS);
 
-            // Clear existing bars
-            currentTDLine.innerHTML = '';
+            const dpr = window.devicePixelRatio || 1;
+            const rect = canvas.getBoundingClientRect();
+            canvas.width = rect.width * dpr;
+            canvas.height = 180 * dpr;
+            ctx.scale(dpr, dpr);
 
-            // Show timesteps from 0 to reward time + buffer
-            const maxT = Math.min(rewardTime + 5, MAX_TIMESTEPS);
+            const W = rect.width;
+            const H = 180;
+            const margin = { top: 15, right: 15, bottom: 35, left: 45 };
+            const plotW = W - margin.left - margin.right;
+            const plotH = H - margin.top - margin.bottom;
+            const zeroY = margin.top + plotH / 2;
+
+            // Background
+            ctx.fillStyle = '#f8fafc';
+            ctx.fillRect(0, 0, W, H);
+
+            // Plot area background
+            ctx.fillStyle = '#ffffff';
+            ctx.fillRect(margin.left, margin.top, plotW, plotH);
+            ctx.strokeStyle = '#e2e8f0';
+            ctx.lineWidth = 1;
+            ctx.strokeRect(margin.left, margin.top, plotW, plotH);
+
+            // Find max |δ| for scaling
+            let maxAbsD = 0.1; // minimum to avoid division by zero
+            for (let t = 0; t <= maxT; t++) {
+                maxAbsD = Math.max(maxAbsD, Math.abs(currentTD[t]));
+            }
+            maxAbsD *= 1.15; // padding
+
+            // Zero line
+            ctx.strokeStyle = '#94a3b8';
+            ctx.lineWidth = 1;
+            ctx.setLineDash([4, 3]);
+            ctx.beginPath();
+            ctx.moveTo(margin.left, zeroY);
+            ctx.lineTo(margin.left + plotW, zeroY);
+            ctx.stroke();
+            ctx.setLineDash([]);
+
+            // Y-axis label
+            ctx.fillStyle = '#64748b';
+            ctx.font = '11px Inter, sans-serif';
+            ctx.textAlign = 'right';
+            ctx.textBaseline = 'middle';
+            ctx.fillText(`+${maxAbsD.toFixed(2)}`, margin.left - 5, margin.top + 4);
+            ctx.fillText(`−${maxAbsD.toFixed(2)}`, margin.left - 5, margin.top + plotH - 4);
+            ctx.fillText('0', margin.left - 5, zeroY);
+
+            // δ(t) label
+            ctx.save();
+            ctx.translate(12, zeroY);
+            ctx.rotate(-Math.PI / 2);
+            ctx.textAlign = 'center';
+            ctx.font = '12px Inter, sans-serif';
+            ctx.fillStyle = '#475569';
+            ctx.fillText('δ(t)', 0, 0);
+            ctx.restore();
+
+            // Draw bars
+            const barCount = maxT + 1;
+            const barW = Math.max(2, plotW / barCount - 1);
+            const gap = (plotW - barW * barCount) / barCount;
 
             for (let t = 0; t <= maxT; t++) {
-                const bar = document.createElement('div');
-                bar.className = 'trial-bar';
-                
                 const td = currentTD[t];
-                const maxHeight = 45; // pixels (half of 100px container minus zero line)
-                const height = Math.min(Math.abs(td), 1.5) / 1.5 * maxHeight;
-                
-                if (td > 0.01) {
-                    bar.classList.add('trial-bar-positive');
-                    bar.style.height = `${height}px`;
-                    bar.style.background = `rgba(16, 185, 129, ${Math.min(1, Math.abs(td) * 0.8 + 0.2)})`;
-                } else if (td < -0.01) {
-                    bar.classList.add('trial-bar-negative');
-                    bar.style.height = `${height}px`;
-                    bar.style.background = `rgba(239, 68, 68, ${Math.min(1, Math.abs(td) * 0.8 + 0.2)})`;
-                } else {
-                    bar.classList.add('trial-bar-zero');
-                    bar.style.background = '#475569';
-                }
+                const x = margin.left + t * (barW + gap) + gap / 2;
+                const barH = (Math.abs(td) / maxAbsD) * (plotH / 2);
 
-                // Add markers for cue/reward times
-                if (t === cue1Time) {
-                    bar.style.borderLeft = '2px solid #fbbf24';
-                } else if (t === cue2Time) {
-                    bar.style.borderLeft = '2px solid #3b82f6';
-                } else if (t === rewardTime) {
-                    bar.style.borderLeft = '2px solid #10b981';
+                if (td > 0.001) {
+                    ctx.fillStyle = '#10b981';
+                    ctx.fillRect(x, zeroY - barH, barW, barH);
+                } else if (td < -0.001) {
+                    ctx.fillStyle = '#ef4444';
+                    ctx.fillRect(x, zeroY, barW, barH);
                 }
-
-                currentTDLine.appendChild(bar);
             }
+
+            // CS marker
+            const csX = margin.left + csTime * (barW + gap) + gap / 2 + barW / 2;
+            ctx.strokeStyle = '#f59e0b';
+            ctx.lineWidth = 2;
+            ctx.setLineDash([4, 2]);
+            ctx.beginPath();
+            ctx.moveTo(csX, margin.top);
+            ctx.lineTo(csX, margin.top + plotH);
+            ctx.stroke();
+            ctx.setLineDash([]);
+
+            // CS label
+            ctx.fillStyle = '#f59e0b';
+            ctx.font = 'bold 11px Inter, sans-serif';
+            ctx.textAlign = 'center';
+            ctx.fillText('CS', csX, margin.top + plotH + 14);
+
+            // US marker
+            const usX = margin.left + usTime * (barW + gap) + gap / 2 + barW / 2;
+            ctx.strokeStyle = '#10b981';
+            ctx.lineWidth = 2;
+            ctx.setLineDash([4, 2]);
+            ctx.beginPath();
+            ctx.moveTo(usX, margin.top);
+            ctx.lineTo(usX, margin.top + plotH);
+            ctx.stroke();
+            ctx.setLineDash([]);
+
+            // US label
+            ctx.fillStyle = '#10b981';
+            ctx.font = 'bold 11px Inter, sans-serif';
+            ctx.textAlign = 'center';
+            ctx.fillText('US', usX, margin.top + plotH + 14);
+
+            // X-axis label
+            ctx.fillStyle = '#94a3b8';
+            ctx.font = '11px Inter, sans-serif';
+            ctx.textAlign = 'center';
+            ctx.fillText('Time (t)', W / 2, H - 4);
+
+            // t=0 label
+            ctx.textAlign = 'left';
+            ctx.fillText('0', margin.left, margin.top + plotH + 14);
+
+            // t=max label
+            ctx.textAlign = 'right';
+            ctx.fillText(String(maxT), margin.left + plotW, margin.top + plotH + 14);
         }
 
+        // ============ HEATMAPS ============
         function drawHeatmaps() {
             drawTDHeatmap();
             drawValueHeatmap();
@@ -611,10 +623,10 @@
         function drawTDHeatmap() {
             const canvas = tdHeatmapCanvas;
             const ctx = canvas.getContext('2d');
-            const rewardTime = parseInt(rewardTimeSlider.value);
-            const maxT = Math.min(rewardTime + 5, MAX_TIMESTEPS);
+            const usTime = parseInt(usSlider.value);
+            const csTime = parseInt(csSlider.value);
+            const maxT = Math.min(usTime + 8, MAX_TIMESTEPS);
 
-            // Set canvas size for retina
             const dpr = window.devicePixelRatio || 1;
             const rect = canvas.getBoundingClientRect();
             canvas.width = rect.width * dpr;
@@ -624,7 +636,6 @@
             const width = rect.width;
             const height = 200;
 
-            // Clear
             ctx.fillStyle = '#1e293b';
             ctx.fillRect(0, 0, width, height);
 
@@ -634,65 +645,53 @@
             const cellWidth = width / (maxT + 1);
             const cellHeight = height / MAX_HISTORY;
 
-            // Draw heatmap (newest trial at bottom)
             for (let i = 0; i < numTrials; i++) {
                 const trial = tdHistory[i];
                 const y = (MAX_HISTORY - numTrials + i) * cellHeight;
-                
+
                 for (let t = 0; t <= maxT; t++) {
                     const x = t * cellWidth;
                     const td = trial[t];
-                    
-                    let color;
+
                     if (td > 0) {
                         const intensity = Math.min(1, td * 1.5);
-                        color = `rgba(16, 185, 129, ${intensity})`;
+                        ctx.fillStyle = `rgba(16, 185, 129, ${intensity})`;
                     } else if (td < 0) {
                         const intensity = Math.min(1, Math.abs(td) * 1.5);
-                        color = `rgba(239, 68, 68, ${intensity})`;
+                        ctx.fillStyle = `rgba(239, 68, 68, ${intensity})`;
                     } else {
-                        color = '#1e293b';
+                        ctx.fillStyle = '#1e293b';
                     }
 
-                    ctx.fillStyle = color;
                     ctx.fillRect(x, y, cellWidth + 1, cellHeight + 1);
                 }
             }
 
-            // Draw cue/reward markers
-            const cue1Time = parseInt(cue1Slider.value);
-            const cue2Time = parseInt(cue2Slider.value);
-
-            ctx.strokeStyle = 'rgba(251, 191, 36, 0.6)';
+            // CS marker
+            ctx.strokeStyle = 'rgba(245, 158, 11, 0.6)';
             ctx.lineWidth = 2;
             ctx.setLineDash([3, 3]);
             ctx.beginPath();
-            ctx.moveTo(cue1Time * cellWidth + cellWidth/2, 0);
-            ctx.lineTo(cue1Time * cellWidth + cellWidth/2, height);
+            ctx.moveTo(csTime * cellWidth + cellWidth / 2, 0);
+            ctx.lineTo(csTime * cellWidth + cellWidth / 2, height);
             ctx.stroke();
 
-            ctx.strokeStyle = 'rgba(59, 130, 246, 0.6)';
-            ctx.beginPath();
-            ctx.moveTo(cue2Time * cellWidth + cellWidth/2, 0);
-            ctx.lineTo(cue2Time * cellWidth + cellWidth/2, height);
-            ctx.stroke();
-
+            // US marker
             ctx.strokeStyle = 'rgba(16, 185, 129, 0.6)';
             ctx.beginPath();
-            ctx.moveTo(rewardTime * cellWidth + cellWidth/2, 0);
-            ctx.lineTo(rewardTime * cellWidth + cellWidth/2, height);
+            ctx.moveTo(usTime * cellWidth + cellWidth / 2, 0);
+            ctx.lineTo(usTime * cellWidth + cellWidth / 2, height);
             ctx.stroke();
-
             ctx.setLineDash([]);
         }
 
         function drawValueHeatmap() {
             const canvas = valueHeatmapCanvas;
             const ctx = canvas.getContext('2d');
-            const rewardTime = parseInt(rewardTimeSlider.value);
-            const maxT = Math.min(rewardTime + 5, MAX_TIMESTEPS);
+            const usTime = parseInt(usSlider.value);
+            const csTime = parseInt(csSlider.value);
+            const maxT = Math.min(usTime + 8, MAX_TIMESTEPS);
 
-            // Set canvas size for retina
             const dpr = window.devicePixelRatio || 1;
             const rect = canvas.getBoundingClientRect();
             canvas.width = rect.width * dpr;
@@ -702,7 +701,6 @@
             const width = rect.width;
             const height = 200;
 
-            // Clear
             ctx.fillStyle = '#1e293b';
             ctx.fillRect(0, 0, width, height);
 
@@ -720,84 +718,71 @@
                 }
             }
 
-            // Draw heatmap (newest trial at bottom)
             for (let i = 0; i < numTrials; i++) {
                 const trial = valueHistory[i];
                 const y = (MAX_HISTORY - numTrials + i) * cellHeight;
-                
+
                 for (let t = 0; t <= maxT; t++) {
                     const x = t * cellWidth;
                     const v = trial[t];
-                    
-                    // Amber color gradient
                     const intensity = Math.min(1, Math.abs(v) / maxVal);
                     const r = Math.floor(30 + intensity * 215);
                     const g = Math.floor(41 + intensity * 117);
                     const b = Math.floor(59 - intensity * 48);
-                    
+
                     ctx.fillStyle = `rgb(${r}, ${g}, ${b})`;
                     ctx.fillRect(x, y, cellWidth + 1, cellHeight + 1);
                 }
             }
 
-            // Draw cue/reward markers
-            const cue1Time = parseInt(cue1Slider.value);
-            const cue2Time = parseInt(cue2Slider.value);
-
-            ctx.strokeStyle = 'rgba(251, 191, 36, 0.4)';
+            // CS marker
+            ctx.strokeStyle = 'rgba(245, 158, 11, 0.4)';
             ctx.lineWidth = 2;
             ctx.setLineDash([3, 3]);
             ctx.beginPath();
-            ctx.moveTo(cue1Time * cellWidth + cellWidth/2, 0);
-            ctx.lineTo(cue1Time * cellWidth + cellWidth/2, height);
+            ctx.moveTo(csTime * cellWidth + cellWidth / 2, 0);
+            ctx.lineTo(csTime * cellWidth + cellWidth / 2, height);
             ctx.stroke();
 
-            ctx.strokeStyle = 'rgba(59, 130, 246, 0.4)';
-            ctx.beginPath();
-            ctx.moveTo(cue2Time * cellWidth + cellWidth/2, 0);
-            ctx.lineTo(cue2Time * cellWidth + cellWidth/2, height);
-            ctx.stroke();
-
+            // US marker
             ctx.strokeStyle = 'rgba(16, 185, 129, 0.4)';
             ctx.beginPath();
-            ctx.moveTo(rewardTime * cellWidth + cellWidth/2, 0);
-            ctx.lineTo(rewardTime * cellWidth + cellWidth/2, height);
+            ctx.moveTo(usTime * cellWidth + cellWidth / 2, 0);
+            ctx.lineTo(usTime * cellWidth + cellWidth / 2, height);
             ctx.stroke();
-
             ctx.setLineDash([]);
         }
 
+        // ============ INSIGHT TEXT ============
         function updateInsight(rewardDelivered = true) {
             const insightText = document.getElementById('insight-text');
-            const rewardTime = parseInt(rewardTimeSlider.value);
-            const cue1Time = parseInt(cue1Slider.value);
-            const cue2Time = parseInt(cue2Slider.value);
+            const usTime = parseInt(usSlider.value);
+            const csTime = parseInt(csSlider.value);
 
             // Find where the max positive TD error is
             let maxTDTime = 0;
             let maxTDVal = 0;
-            for (let t = 0; t <= rewardTime; t++) {
+            for (let t = 0; t <= usTime; t++) {
                 if (currentTD[t] > maxTDVal) {
                     maxTDVal = currentTD[t];
                     maxTDTime = t;
                 }
             }
 
-            // Check for negative TD at reward time (omission)
-            const rewardTD = currentTD[rewardTime];
+            const rewardTD = currentTD[usTime];
 
             if (trialCount === 0) {
-                insightText.textContent = "Run trials to see the prediction error shift backward from the reward to the earliest predictive cue—exactly like dopamine neuron recordings.";
+                insightText.textContent = "Run trials to see the prediction error shift backward from the US (reward) to the CS (cue)—exactly like dopamine neuron recordings.";
             } else if (!rewardDelivered && rewardTD < -0.1) {
-                insightText.textContent = `Trial ${trialCount}: Reward omitted! Notice the negative δ (red) at t=${rewardTime}—this is the "disappointment" signal when an expected reward doesn't arrive.`;
+                insightText.textContent = `Trial ${trialCount}: Reward omitted! The negative δ (red) at US time reflects \"disappointment\"—the expected reward didn't arrive.`;
             } else if (trialCount < 3) {
-                insightText.textContent = `Trial ${trialCount}: The prediction error is strongest at the reward (t=${rewardTime}). The reward is still surprising!`;
-            } else if (maxTDTime >= rewardTime - 3) {
-                insightText.textContent = `Trial ${trialCount}: Error starting to shift backward. Value is now being assigned to states before the reward.`;
-            } else if (maxTDTime > cue1Time + 3) {
-                insightText.textContent = `Trial ${trialCount}: Error has shifted to t≈${maxTDTime}. The value "ramp" is building backward toward Cue 1.`;
+                insightText.textContent = `Trial ${trialCount}: The prediction error δ is strongest at US time (t=${usTime}). The reward is still surprising!`;
+            } else if (maxTDTime >= usTime - 3) {
+                insightText.textContent = `Trial ${trialCount}: δ is starting to shift backward from the US. Value is being assigned to earlier timesteps.`;
+            } else if (maxTDTime > csTime + 3) {
+                insightText.textContent = `Trial ${trialCount}: δ has moved to t≈${maxTDTime}. The value \"ramp\" is propagating backward toward the CS.`;
             } else {
-                insightText.textContent = `Trial ${trialCount}: Error is now at Cue 1 (t=${cue1Time})! The reward at t=${rewardTime} is fully predicted—δ≈0 there. This is exactly what dopamine neurons do.`;
+                insightText.textContent = `Trial ${trialCount}: δ is now at the CS (t=${csTime})! The US is fully predicted — δ ≈ 0 at reward time. This matches dopamine neuron recordings.`;
             }
         }
 
@@ -830,11 +815,8 @@
             currentTD = new Array(MAX_TIMESTEPS + 1).fill(0);
 
             trialCountDisplay.textContent = '0';
-            
-            // Reinitialize the current TD display
-            initializeCurrentTDDisplay();
-            
-            // Clear canvases
+            drawCurrentTD();
+
             const ctx1 = tdHeatmapCanvas.getContext('2d');
             const ctx2 = valueHeatmapCanvas.getContext('2d');
             ctx1.fillStyle = '#1e293b';
@@ -845,32 +827,19 @@
             updateInsight();
         }
 
-        function initializeCurrentTDDisplay() {
-            currentTDLine.innerHTML = '';
-            const rewardTime = parseInt(rewardTimeSlider.value);
-            const maxT = Math.min(rewardTime + 5, MAX_TIMESTEPS);
-
-            for (let t = 0; t <= maxT; t++) {
-                const bar = document.createElement('div');
-                bar.className = 'trial-bar trial-bar-zero';
-                bar.style.background = '#475569';
-                currentTDLine.appendChild(bar);
-            }
-        }
-
         // ============ EVENT LISTENERS ============
         runTrialBtn.addEventListener('click', () => runTrial());
         run10Btn.addEventListener('click', () => runMultipleTrials(10));
         run50Btn.addEventListener('click', () => runMultipleTrials(50));
         resetBtn.addEventListener('click', reset);
 
-        // Redraw on window resize
         window.addEventListener('resize', () => {
+            drawCurrentTD();
             drawHeatmaps();
         });
 
         // ============ INITIALIZE ============
-        initializeCurrentTDDisplay();
+        drawCurrentTD();
         updateInsight();
     </script>
 </body>
