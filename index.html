@@ -527,189 +527,174 @@
             padding: 4rem 2rem 6rem;
         }
 
-        .demonstrations-grid {
-            display: flex;
-            flex-direction: column;
-            gap: 3rem;
+        .demo-category {
+            margin-bottom: 3rem;
         }
 
-        .demo-item {
+        .demo-category-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 1.25rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+        }
+
+        .demo-category-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+            flex-shrink: 0;
+        }
+
+        .demo-category-header h3 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--light);
+            letter-spacing: 0.02em;
+        }
+
+        .demo-category-header span {
+            font-size: 0.8rem;
+            color: var(--gray);
+        }
+
+        .demonstrations-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+            gap: 1.25rem;
+        }
+
+        .demo-card {
             background: linear-gradient(135deg, var(--dark-light), rgba(30, 41, 59, 0.5));
             border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 24px;
-            padding: 2.5rem;
+            border-radius: 16px;
+            padding: 1.5rem;
             position: relative;
             overflow: hidden;
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
         }
 
-        .demo-item::before {
+        .demo-card:hover {
+            border-color: rgba(99, 102, 241, 0.3);
+            transform: translateY(-3px);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .demo-card::before {
             content: '';
             position: absolute;
             top: 0;
             left: 0;
             right: 0;
-            height: 3px;
+            height: 2px;
             background: linear-gradient(90deg, var(--primary), var(--accent));
+            opacity: 0;
+            transition: opacity 0.3s;
         }
 
-        .demo-header {
+        .demo-card:hover::before {
+            opacity: 1;
+        }
+
+        .demo-card-top {
             display: flex;
-            align-items: center;
-            gap: 1rem;
-            margin-bottom: 1.5rem;
+            align-items: flex-start;
+            gap: 0.85rem;
+            margin-bottom: 0.85rem;
         }
 
         .demo-number {
-            width: 48px;
-            height: 48px;
-            border-radius: 12px;
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
             background: linear-gradient(135deg, var(--primary), var(--secondary));
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.25rem;
+            font-size: 0.95rem;
             font-weight: 700;
             flex-shrink: 0;
         }
 
-        .demo-title-block h3 {
-            font-size: 1.5rem;
+        .demo-card-title h4 {
+            font-size: 1.05rem;
             font-weight: 600;
-            margin-bottom: 0.25rem;
+            margin-bottom: 0.15rem;
+            line-height: 1.3;
         }
 
-        .demo-title-block span {
-            font-size: 0.9rem;
+        .demo-card-title span {
+            font-size: 0.78rem;
             color: var(--gray);
         }
 
-        .demo-content {
-            display: grid;
-            grid-template-columns: 1fr 1.5fr;
-            gap: 2rem;
-            align-items: start;
+        .demo-card-desc {
+            color: var(--gray);
+            font-size: 0.88rem;
+            line-height: 1.6;
+            margin-bottom: 1rem;
+            flex-grow: 1;
         }
 
-        .demo-text p {
-            color: var(--gray);
-            font-size: 1rem;
-            line-height: 1.8;
+        .demo-card-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.4rem;
             margin-bottom: 1rem;
         }
 
-        .demo-text ul {
-            list-style: none;
-            margin-top: 1rem;
-        }
-
-        .demo-text ul li {
-            color: var(--light);
-            font-size: 0.95rem;
-            padding: 0.5rem 0;
-            padding-left: 1.5rem;
-            position: relative;
-        }
-
-        .demo-text ul li::before {
-            content: '→';
-            position: absolute;
-            left: 0;
-            color: var(--primary);
+        .demo-tag {
+            font-size: 0.7rem;
+            padding: 0.2rem 0.55rem;
+            border-radius: 6px;
+            background: rgba(99, 102, 241, 0.12);
+            color: rgba(165, 163, 255, 0.9);
+            font-weight: 500;
         }
 
         .demo-launch-btn {
             display: inline-flex;
             align-items: center;
-            gap: 0.75rem;
-            margin-top: 1.5rem;
-            padding: 1rem 1.75rem;
+            justify-content: center;
+            gap: 0.5rem;
+            padding: 0.65rem 1.25rem;
             background: linear-gradient(135deg, var(--primary), var(--secondary));
             color: var(--white);
             text-decoration: none;
-            border-radius: 12px;
+            border-radius: 10px;
             font-weight: 600;
-            font-size: 1rem;
+            font-size: 0.85rem;
             transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
+            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.25);
+            align-self: stretch;
+            text-align: center;
         }
 
         .demo-launch-btn:hover {
-            transform: translateY(-2px);
+            transform: translateY(-1px);
             box-shadow: 0 8px 25px rgba(99, 102, 241, 0.4);
         }
 
         .demo-launch-btn svg {
             transition: transform 0.3s ease;
+            width: 16px;
+            height: 16px;
         }
 
         .demo-launch-btn:hover svg {
-            transform: translateX(4px);
+            transform: translateX(3px);
         }
 
-        .demo-iframe {
-            background: var(--dark);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 16px;
-            overflow: hidden;
-            position: relative;
-        }
-
-        .demo-iframe iframe {
-            width: 100%;
-            height: 500px;
-            border: none;
-            display: block;
-        }
-
-        .demo-overlay {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            padding: 1rem 1.5rem;
-            background: linear-gradient(transparent, rgba(15, 23, 42, 0.95));
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .demo-overlay span {
-            font-size: 0.85rem;
-            color: var(--gray);
-        }
-
-        .demo-overlay a {
-            font-size: 0.85rem;
-            color: var(--primary);
-            text-decoration: none;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            transition: color 0.3s;
-        }
-
-        .demo-overlay a:hover {
-            color: var(--accent);
-        }
-
-        @media (max-width: 968px) {
-            .demo-content {
+        @media (max-width: 768px) {
+            .demonstrations-grid {
                 grid-template-columns: 1fr;
-            }
-
-            .demo-iframe iframe {
-                height: 400px;
-            }
-        }
-
-        @media (max-width: 600px) {
-            .demo-header {
-                flex-direction: column;
-                text-align: center;
-            }
-
-            .demo-iframe iframe {
-                height: 350px;
             }
         }
 
@@ -1044,341 +1029,182 @@
                 how the brain makes decisions.</p>
         </div>
 
-        <div class="demonstrations-grid">
-            <!-- Demo 1: Trading Silver (Value-Based DDM) -->
-            <div class="demo-item">
-                <div class="demo-header">
-                    <div class="demo-number">1</div>
-                    <div class="demo-title-block">
-                        <h3>Trading Silver</h3>
-                        <span>Value-Based Decision Making</span>
-                    </div>
-                </div>
-                <div class="demo-content">
-                    <div class="demo-text">
-                        <p>Should you buy the silver? This demonstration shows how the brain weighs subjective value
-                            against market price, accumulating evidence until reaching a decision threshold.</p>
-                        <p>Watch evidence evolve in real-time as the "drift rate" (value minus price) pulls the signal
-                            toward a BUY or DON'T BUY decision boundary.</p>
-                        <ul>
-                            <li>Drift rate = Subjective Value − Market Price</li>
-                            <li>Caution threshold controls speed-accuracy tradeoff</li>
-                            <li>Information noise adds uncertainty to the process</li>
-                            <li>A classic application of DDM to economic decisions</li>
-                        </ul>
-                        <a href="./Demonstrations/TradingSilver/" target="_blank" class="demo-launch-btn">
-                            Launch Interactive Demo
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                stroke-width="2">
-                                <path d="M5 12h14M12 5l7 7-7 7" />
-                            </svg>
-                        </a>
-                    </div>
-                    <div class="demo-iframe">
-                        <iframe src="./Demonstrations/TradingSilver/" title="Trading Silver Demo"></iframe>
-                        <div class="demo-overlay">
-                            <span>Interactive Demo</span>
-                            <a href="./Demonstrations/TradingSilver/" target="_blank">
-                                Open Full Screen
-                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                    stroke-width="2">
-                                    <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
-                                    <polyline points="15 3 21 3 21 9" />
-                                    <line x1="10" y1="14" x2="21" y2="3" />
-                                </svg>
-                            </a>
-                        </div>
-                    </div>
+        <!-- Category: Decision Making -->
+        <div class="demo-category">
+            <div class="demo-category-header">
+                <div class="demo-category-icon" style="background: rgba(6, 182, 212, 0.15);">⚖️</div>
+                <div>
+                    <h3>Decision Making</h3>
+                    <span>How the brain accumulates evidence and commits to choices</span>
                 </div>
             </div>
-
-            <!-- Demo 2: Drift Diffusion Model -->
-            <div class="demo-item">
-                <div class="demo-header">
-                    <div class="demo-number">2</div>
-                    <div class="demo-title-block">
-                        <h3>The Drift Diffusion Model</h3>
-                        <span>Mapping the Architecture of Choice</span>
-                    </div>
-                </div>
-                <div class="demo-content">
-                    <div class="demo-text">
-                        <p>How does the brain decide what we perceive? The Drift Diffusion Model (DDM) reveals the
-                            neural mechanisms of perceptual decisions—particularly how the brain accumulates noisy
-                            sensory evidence over time until reaching a decision threshold.</p>
-                        <p>Watch the random dot motion stimulus and see how the brain's "evidence accumulator"
-                            integrates information until it commits to a choice.</p>
-                        <ul>
-                            <li>Coherence controls the drift rate (signal strength)</li>
-                            <li>Threshold determines the speed-accuracy tradeoff</li>
-                            <li>Noise adds randomness—the source of errors</li>
-                            <li>Based on research by Newsome, Shadlen & Ratcliff</li>
-                        </ul>
-                        <a href="./Demonstrations/DriftDiffusionModel/" target="_blank" class="demo-launch-btn">
-                            Launch Interactive Demo
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                stroke-width="2">
-                                <path d="M5 12h14M12 5l7 7-7 7" />
-                            </svg>
-                        </a>
-                    </div>
-                    <div class="demo-iframe">
-                        <iframe src="./Demonstrations/DriftDiffusionModel/" title="Drift Diffusion Model Demo"></iframe>
-                        <div class="demo-overlay">
-                            <span>Interactive Demo</span>
-                            <a href="./Demonstrations/DriftDiffusionModel/" target="_blank">
-                                Open Full Screen
-                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                    stroke-width="2">
-                                    <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
-                                    <polyline points="15 3 21 3 21 9" />
-                                    <line x1="10" y1="14" x2="21" y2="3" />
-                                </svg>
-                            </a>
+            <div class="demonstrations-grid">
+                <div class="demo-card">
+                    <div class="demo-card-top">
+                        <div class="demo-number">1</div>
+                        <div class="demo-card-title">
+                            <h4>Trading Silver</h4>
+                            <span>Value-Based Decision Making</span>
                         </div>
                     </div>
+                    <p class="demo-card-desc">Should you buy the silver? Watch the brain weigh subjective value against market price, accumulating evidence toward a BUY or DON'T BUY boundary.</p>
+                    <div class="demo-card-tags">
+                        <span class="demo-tag">Drift Rate</span>
+                        <span class="demo-tag">Threshold</span>
+                        <span class="demo-tag">DDM</span>
+                    </div>
+                    <a href="./Demonstrations/TradingSilver/" target="_blank" class="demo-launch-btn">
+                        Launch Demo
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                    </a>
                 </div>
-            </div>
 
-            <!-- Demo 3: Rescorla-Wagner Model -->
-            <div class="demo-item">
-                <div class="demo-header">
-                    <div class="demo-number">3</div>
-                    <div class="demo-title-block">
-                        <h3>Learning Value Through Experience</h3>
-                        <span>The Rescorla-Wagner Model</span>
-                    </div>
-                </div>
-                <div class="demo-content">
-                    <div class="demo-text">
-                        <p>How does the brain learn the value of things? This demonstration shows how an agent discovers
-                            a restaurant's true quality through noisy feedback, updating its estimate one meal at a
-                            time using the Rescorla-Wagner learning rule.</p>
-                        <p>Watch the prediction error shrink as the learner's estimate converges on the true value—the
-                            same signal carried by dopamine neurons in the brain.</p>
-                        <ul>
-                            <li>Learning rate (α) controls speed vs. stability</li>
-                            <li>Feedback noise (σ) varies experience quality</li>
-                            <li>Prediction error δ drives all learning</li>
-                            <li>Connected to dopamine &amp; temporal difference learning</li>
-                        </ul>
-                        <a href="./Demonstrations/RescorlaWagner/" target="_blank" class="demo-launch-btn">
-                            Launch Interactive Demo
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                stroke-width="2">
-                                <path d="M5 12h14M12 5l7 7-7 7" />
-                            </svg>
-                        </a>
-                    </div>
-                    <div class="demo-iframe">
-                        <iframe src="./Demonstrations/RescorlaWagner/" title="Rescorla-Wagner Learning Demo"></iframe>
-                        <div class="demo-overlay">
-                            <span>Interactive Demo</span>
-                            <a href="./Demonstrations/RescorlaWagner/" target="_blank">
-                                Open Full Screen
-                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                    stroke-width="2">
-                                    <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
-                                    <polyline points="15 3 21 3 21 9" />
-                                    <line x1="10" y1="14" x2="21" y2="3" />
-                                </svg>
-                            </a>
+                <div class="demo-card">
+                    <div class="demo-card-top">
+                        <div class="demo-number">2</div>
+                        <div class="demo-card-title">
+                            <h4>The Drift Diffusion Model</h4>
+                            <span>Mapping the Architecture of Choice</span>
                         </div>
                     </div>
+                    <p class="demo-card-desc">How does the brain decide what we perceive? See how an evidence accumulator integrates noisy sensory signals until committing to a choice.</p>
+                    <div class="demo-card-tags">
+                        <span class="demo-tag">Coherence</span>
+                        <span class="demo-tag">Speed-Accuracy</span>
+                        <span class="demo-tag">Shadlen & Newsome</span>
+                    </div>
+                    <a href="./Demonstrations/DriftDiffusionModel/" target="_blank" class="demo-launch-btn">
+                        Launch Demo
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                    </a>
                 </div>
             </div>
-
-            <!-- Demo 4: Temporal Difference Learning -->
-            <div class="demo-item">
-                <div class="demo-header">
-                    <div class="demo-number">4</div>
-                    <div class="demo-title-block">
-                        <h3>Learning to Anticipate</h3>
-                        <span>Temporal Difference Learning & Dopamine</span>
-                    </div>
-                </div>
-                <div class="demo-content">
-                    <div class="demo-text">
-                        <p>How does the brain learn to predict rewards before they arrive? This demonstration shows
-                            classical conditioning where a Light predicts a Tone, which predicts Food.</p>
-                        <p>Watch prediction errors shift backward through the cue sequence over learning—the exact
-                            pattern seen in dopamine neuron recordings.</p>
-                        <ul>
-                            <li>TD error = reward received − expected value</li>
-                            <li>Errors shift from reward to earliest predictive cue</li>
-                            <li>Discount factor (γ) controls value propagation</li>
-                            <li>Based on Schultz, Dayan & Montague's dopamine research</li>
-                        </ul>
-                        <a href="./Demonstrations/TemporalDifference/" target="_blank" class="demo-launch-btn">
-                            Launch Interactive Demo
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                stroke-width="2">
-                                <path d="M5 12h14M12 5l7 7-7 7" />
-                            </svg>
-                        </a>
-                    </div>
-                    <div class="demo-iframe">
-                        <iframe src="./Demonstrations/TemporalDifference/" title="Temporal Difference Learning Demo"></iframe>
-                        <div class="demo-overlay">
-                            <span>Interactive Demo</span>
-                            <a href="./Demonstrations/TemporalDifference/" target="_blank">
-                                Open Full Screen
-                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                    stroke-width="2">
-                                    <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
-                                    <polyline points="15 3 21 3 21 9" />
-                                    <line x1="10" y1="14" x2="21" y2="3" />
-                                </svg>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Demo 5: The Coffee Walk -->
-            <div class="demo-item">
-                <div class="demo-header">
-                    <div class="demo-number">5</div>
-                    <div class="demo-title-block">
-                        <h3>The Coffee Walk</h3>
-                        <span>Learning State Values</span>
-                    </div>
-                </div>
-                <div class="demo-content">
-                    <div class="demo-text">
-                        <p>Watch an agent learn that being close to coffee is valuable. Each location along the path
-                            (Home → Park → Street → Coffee Shop) acquires value through TD learning.</p>
-                        <p>See how values propagate backward from the goal, and explore how the discount factor affects
-                            how much "closer" states are valued more than distant ones.</p>
-                        <ul>
-                            <li>Values propagate backward from the reward</li>
-                            <li>Discount (γ) controls value gradient steepness</li>
-                            <li>Shop closure creates negative prediction errors</li>
-                            <li>Clear spatial intuition for state values</li>
-                        </ul>
-                        <a href="./Demonstrations/CoffeeWalk/" target="_blank" class="demo-launch-btn">
-                            Launch Interactive Demo
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                stroke-width="2">
-                                <path d="M5 12h14M12 5l7 7-7 7" />
-                            </svg>
-                        </a>
-                    </div>
-                    <div class="demo-iframe">
-                        <iframe src="./Demonstrations/CoffeeWalk/" title="The Coffee Walk TD Learning Demo"></iframe>
-                        <div class="demo-overlay">
-                            <span>Interactive Demo</span>
-                            <a href="./Demonstrations/CoffeeWalk/" target="_blank">
-                                Open Full Screen
-                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                    stroke-width="2">
-                                    <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
-                                    <polyline points="15 3 21 3 21 9" />
-                                    <line x1="10" y1="14" x2="21" y2="3" />
-                                </svg>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="demo-item">
-                <div class="demo-header">
-                    <div class="demo-number">6</div>
-                    <div class="demo-title-block">
-                        <h3>The Softmax Bandit</h3>
-                        <span>Explore vs Exploit</span>
-                    </div>
-                </div>
-                <div class="demo-content">
-                    <div class="demo-text">
-                        <p>Two slot machines with hidden payoff rates. Should you exploit the arm you think is best, or
-                            explore the other to improve your estimates? The softmax (Boltzmann) policy provides a
-                            principled solution controlled by temperature.</p>
-                        <p>Watch Q-values converge, choice proportions shift, and cumulative reward approach optimal as
-                            the agent learns which arm pays more.</p>
-                        <ul>
-                            <li>Temperature τ controls explore/exploit balance</li>
-                            <li>Low τ = greedy exploitation, high τ = random exploration</li>
-                            <li>Cumulative regret shows the cost of exploration</li>
-                            <li>Close reward probabilities make the problem harder</li>
-                        </ul>
-                        <a href="./Demonstrations/SoftmaxBandit/" target="_blank" class="demo-launch-btn">
-                            Launch Interactive Demo
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                stroke-width="2">
-                                <path d="M5 12h14M12 5l7 7-7 7" />
-                            </svg>
-                        </a>
-                    </div>
-                    <div class="demo-iframe">
-                        <iframe src="./Demonstrations/SoftmaxBandit/" title="Softmax Bandit Demo"></iframe>
-                        <div class="demo-overlay">
-                            <span>Interactive Demo</span>
-                            <a href="./Demonstrations/SoftmaxBandit/" target="_blank">
-                                Open Full Screen
-                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                    stroke-width="2">
-                                    <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
-                                    <polyline points="15 3 21 3 21 9" />
-                                    <line x1="10" y1="14" x2="21" y2="3" />
-                                </svg>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="demo-item">
-                <div class="demo-header">
-                    <div class="demo-number">7</div>
-                    <div class="demo-title-block">
-                        <h3>The Actor-Critic Model</h3>
-                        <span>Separating Evaluation from Action</span>
-                    </div>
-                </div>
-                <div class="demo-content">
-                    <div class="demo-text">
-                        <p>The brain doesn't just evaluate situations—it also decides what to do. The Actor-Critic
-                            model separates a Critic that learns state value V from an Actor that learns action
-                            preferences m(a), both taught by a shared dopamine-like prediction error δ.</p>
-                        <p>Watch the Critic converge to the average reward while the Actor learns which arm to
-                            prefer through the same teaching signal.</p>
-                        <ul>
-                            <li>Critic (ventral striatum) learns V — "how good is this state?"</li>
-                            <li>Actor (dorsal striatum) learns m(a) — "which action to prefer?"</li>
-                            <li>δ = r − V drives updates to both systems</li>
-                            <li>Compare different learning rates for Actor vs Critic</li>
-                        </ul>
-                        <a href="./Demonstrations/ActorCritic/" target="_blank" class="demo-launch-btn">
-                            Launch Interactive Demo
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                stroke-width="2">
-                                <path d="M5 12h14M12 5l7 7-7 7" />
-                            </svg>
-                        </a>
-                    </div>
-                    <div class="demo-iframe">
-                        <iframe src="./Demonstrations/ActorCritic/" title="Actor-Critic Demo"></iframe>
-                        <div class="demo-overlay">
-                            <span>Interactive Demo</span>
-                            <a href="./Demonstrations/ActorCritic/" target="_blank">
-                                Open Full Screen
-                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                    stroke-width="2">
-                                    <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
-                                    <polyline points="15 3 21 3 21 9" />
-                                    <line x1="10" y1="14" x2="21" y2="3" />
-                                </svg>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- More demonstrations can be added here following the same pattern -->
-
         </div>
+
+        <!-- Category: Learning -->
+        <div class="demo-category">
+            <div class="demo-category-header">
+                <div class="demo-category-icon" style="background: rgba(16, 185, 129, 0.15);">🧠</div>
+                <div>
+                    <h3>Learning & Prediction</h3>
+                    <span>How dopamine signals teach the brain to predict rewards</span>
+                </div>
+            </div>
+            <div class="demonstrations-grid">
+                <div class="demo-card">
+                    <div class="demo-card-top">
+                        <div class="demo-number">3</div>
+                        <div class="demo-card-title">
+                            <h4>Learning Value Through Experience</h4>
+                            <span>The Rescorla-Wagner Model</span>
+                        </div>
+                    </div>
+                    <p class="demo-card-desc">An agent discovers a restaurant's true quality through noisy feedback, updating its estimate one meal at a time. Watch prediction errors shrink as learning converges.</p>
+                    <div class="demo-card-tags">
+                        <span class="demo-tag">Learning Rate α</span>
+                        <span class="demo-tag">Prediction Error δ</span>
+                        <span class="demo-tag">Dopamine</span>
+                    </div>
+                    <a href="./Demonstrations/RescorlaWagner/" target="_blank" class="demo-launch-btn">
+                        Launch Demo
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                    </a>
+                </div>
+
+                <div class="demo-card">
+                    <div class="demo-card-top">
+                        <div class="demo-number">4</div>
+                        <div class="demo-card-title">
+                            <h4>Learning to Anticipate</h4>
+                            <span>TD Learning & Dopamine</span>
+                        </div>
+                    </div>
+                    <p class="demo-card-desc">Prediction errors shift backward from reward to the earliest predictive cue over learning — the exact pattern seen in dopamine neuron recordings.</p>
+                    <div class="demo-card-tags">
+                        <span class="demo-tag">TD Error</span>
+                        <span class="demo-tag">Discount γ</span>
+                        <span class="demo-tag">Schultz 1997</span>
+                    </div>
+                    <a href="./Demonstrations/TemporalDifference/" target="_blank" class="demo-launch-btn">
+                        Launch Demo
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                    </a>
+                </div>
+
+                <div class="demo-card">
+                    <div class="demo-card-top">
+                        <div class="demo-number">5</div>
+                        <div class="demo-card-title">
+                            <h4>The Coffee Walk</h4>
+                            <span>Learning State Values</span>
+                        </div>
+                    </div>
+                    <p class="demo-card-desc">Watch values propagate backward from a goal as an agent walks Home → Park → Street → Coffee Shop. See how discount factor shapes the value gradient.</p>
+                    <div class="demo-card-tags">
+                        <span class="demo-tag">State Values</span>
+                        <span class="demo-tag">Spatial TD</span>
+                        <span class="demo-tag">Discount γ</span>
+                    </div>
+                    <a href="./Demonstrations/CoffeeWalk/" target="_blank" class="demo-launch-btn">
+                        Launch Demo
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Category: Action Selection -->
+        <div class="demo-category">
+            <div class="demo-category-header">
+                <div class="demo-category-icon" style="background: rgba(99, 102, 241, 0.15);">🎯</div>
+                <div>
+                    <h3>Action Selection</h3>
+                    <span>How the brain chooses between competing actions under uncertainty</span>
+                </div>
+            </div>
+            <div class="demonstrations-grid">
+                <div class="demo-card">
+                    <div class="demo-card-top">
+                        <div class="demo-number">6</div>
+                        <div class="demo-card-title">
+                            <h4>The Softmax Bandit</h4>
+                            <span>Explore vs Exploit</span>
+                        </div>
+                    </div>
+                    <p class="demo-card-desc">Two slot machines with hidden payoff rates. Should you exploit the best arm or explore? Temperature τ controls the balance in this Boltzmann policy demo.</p>
+                    <div class="demo-card-tags">
+                        <span class="demo-tag">Temperature τ</span>
+                        <span class="demo-tag">Q-Values</span>
+                        <span class="demo-tag">Regret</span>
+                    </div>
+                    <a href="./Demonstrations/SoftmaxBandit/" target="_blank" class="demo-launch-btn">
+                        Launch Demo
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                    </a>
+                </div>
+
+                <div class="demo-card">
+                    <div class="demo-card-top">
+                        <div class="demo-number">7</div>
+                        <div class="demo-card-title">
+                            <h4>The Actor-Critic Model</h4>
+                            <span>Separating Evaluation from Action</span>
+                        </div>
+                    </div>
+                    <p class="demo-card-desc">The Critic learns state value V, the Actor learns action preferences m(a), both taught by a shared dopamine-like prediction error δ. Compare learning rates for each system.</p>
+                    <div class="demo-card-tags">
+                        <span class="demo-tag">Critic (V)</span>
+                        <span class="demo-tag">Actor (m)</span>
+                        <span class="demo-tag">Striatum</span>
+                    </div>
+                    <a href="./Demonstrations/ActorCritic/" target="_blank" class="demo-launch-btn">
+                        Launch Demo
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                    </a>
+                </div>
+            </div>
+        </div>
+
     </section>
 
     <!-- Experiments Section -->
