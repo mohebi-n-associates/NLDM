@@ -226,21 +226,30 @@
                                 <div class="text-[10px] text-slate-400 uppercase tracking-wide">Left Machine</div>
                             </div>
                         </div>
-                        <div class="grid grid-cols-2 gap-3 text-center mb-3">
-                            <div class="bg-blue-50 rounded-lg p-2">
-                                <div class="text-[10px] text-slate-500 mb-0.5">Estimated \(Q\)</div>
-                                <div class="text-xl font-bold text-blue-700" id="qA">0.00</div>
+                        <!-- Q bar -->
+                        <div class="mb-2">
+                            <div class="flex items-center justify-between text-[10px] text-slate-500 mb-1">
+                                <span>Estimated \(Q\)</span>
+                                <span class="font-mono font-semibold text-blue-700" id="qA">0.00</span>
                             </div>
-                            <div class="bg-slate-50 rounded-lg p-2">
-                                <div class="text-[10px] text-slate-500 mb-0.5">Softmax \(P\)</div>
-                                <div class="text-xl font-bold text-slate-700" id="pSelA">50%</div>
+                            <div class="w-full h-5 bg-blue-50 rounded-full overflow-hidden">
+                                <div class="h-full bg-blue-400 rounded-full transition-all duration-300" id="qBarA" style="width: 0%"></div>
+                            </div>
+                        </div>
+                        <!-- P bar -->
+                        <div class="mb-3">
+                            <div class="flex items-center justify-between text-[10px] text-slate-500 mb-1">
+                                <span>Softmax \(P\)</span>
+                                <span class="font-mono font-semibold text-slate-700" id="pSelA">50%</span>
+                            </div>
+                            <div class="w-full h-5 bg-slate-100 rounded-full overflow-hidden">
+                                <div class="h-full bg-slate-400 rounded-full transition-all duration-300" id="pBarA" style="width: 50%"></div>
                             </div>
                         </div>
                         <div class="flex justify-between text-xs text-slate-500">
                             <span>Chosen: <strong class="text-slate-700" id="nA">0</strong></span>
                             <span>Wins: <strong class="text-emerald-600" id="wA">0</strong></span>
                         </div>
-                        <!-- Reward flash area -->
                         <div class="mt-2 h-6 rounded-lg flex items-center justify-center text-xs font-semibold" id="flash-A"></div>
                     </div>
 
@@ -253,14 +262,24 @@
                                 <div class="text-[10px] text-slate-400 uppercase tracking-wide">Right Machine</div>
                             </div>
                         </div>
-                        <div class="grid grid-cols-2 gap-3 text-center mb-3">
-                            <div class="bg-rose-50 rounded-lg p-2">
-                                <div class="text-[10px] text-slate-500 mb-0.5">Estimated \(Q\)</div>
-                                <div class="text-xl font-bold text-rose-700" id="qB">0.00</div>
+                        <!-- Q bar -->
+                        <div class="mb-2">
+                            <div class="flex items-center justify-between text-[10px] text-slate-500 mb-1">
+                                <span>Estimated \(Q\)</span>
+                                <span class="font-mono font-semibold text-rose-700" id="qB">0.00</span>
                             </div>
-                            <div class="bg-slate-50 rounded-lg p-2">
-                                <div class="text-[10px] text-slate-500 mb-0.5">Softmax \(P\)</div>
-                                <div class="text-xl font-bold text-slate-700" id="pSelB">50%</div>
+                            <div class="w-full h-5 bg-rose-50 rounded-full overflow-hidden">
+                                <div class="h-full bg-rose-400 rounded-full transition-all duration-300" id="qBarB" style="width: 0%"></div>
+                            </div>
+                        </div>
+                        <!-- P bar -->
+                        <div class="mb-3">
+                            <div class="flex items-center justify-between text-[10px] text-slate-500 mb-1">
+                                <span>Softmax \(P\)</span>
+                                <span class="font-mono font-semibold text-slate-700" id="pSelB">50%</span>
+                            </div>
+                            <div class="w-full h-5 bg-slate-100 rounded-full overflow-hidden">
+                                <div class="h-full bg-slate-400 rounded-full transition-all duration-300" id="pBarB" style="width: 50%"></div>
                             </div>
                         </div>
                         <div class="flex justify-between text-xs text-slate-500">
@@ -543,6 +562,13 @@
             nBDisplay.textContent = nChosen[1];
             wADisplay.textContent = nWins[0];
             wBDisplay.textContent = nWins[1];
+
+            // Update Q bars (0–1 range)
+            document.getElementById('qBarA').style.width = `${Math.max(0, Math.min(100, Q[0] * 100))}%`;
+            document.getElementById('qBarB').style.width = `${Math.max(0, Math.min(100, Q[1] * 100))}%`;
+            // Update P bars (0–100%)
+            document.getElementById('pBarA').style.width = `${(probs[0] * 100).toFixed(0)}%`;
+            document.getElementById('pBarB').style.width = `${(probs[1] * 100).toFixed(0)}%`;
 
             if (animate) {
                 // Highlight chosen card
@@ -926,6 +952,11 @@
             flashB.textContent = '';
             flashA.className = 'mt-2 h-6 rounded-lg flex items-center justify-center text-xs font-semibold';
             flashB.className = 'mt-2 h-6 rounded-lg flex items-center justify-center text-xs font-semibold';
+
+            document.getElementById('qBarA').style.width = '0%';
+            document.getElementById('qBarB').style.width = '0%';
+            document.getElementById('pBarA').style.width = '50%';
+            document.getElementById('pBarB').style.width = '50%';
 
             drawAllCharts();
             updateInsight();
