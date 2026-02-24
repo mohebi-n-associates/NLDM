@@ -1,0 +1,988 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Word-Stem Completion | Implicit Memory &amp; Priming</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Lora:ital,wght@0,400;0,700;1,400&display=swap');
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc;
+            line-height: 1.7;
+            color: #1e293b;
+        }
+
+        .serif { font-family: 'Lora', serif; }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes pulseGlow {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(139, 92, 246, 0.4); }
+            50% { box-shadow: 0 0 0 8px rgba(139, 92, 246, 0); }
+        }
+
+        @keyframes wordFlash {
+            0% { opacity: 0; transform: scale(0.9); }
+            15% { opacity: 1; transform: scale(1); }
+            85% { opacity: 1; transform: scale(1); }
+            100% { opacity: 0; transform: scale(0.95); }
+        }
+
+        @keyframes typeReveal {
+            from { width: 0; }
+            to { width: 100%; }
+        }
+
+        @keyframes correctPop {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .fade-in-up { animation: fadeInUp 0.5s ease-out; }
+        .fade-in { animation: fadeIn 0.4s ease-out; }
+        .pulse-glow { animation: pulseGlow 1.5s ease-in-out infinite; }
+        .correct-pop { animation: correctPop 0.3s ease-out; }
+
+        .word-display {
+            font-size: 3rem;
+            font-weight: 800;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            font-family: 'Inter', monospace;
+            transition: all 0.3s ease;
+        }
+
+        .stem-input {
+            font-size: 2rem;
+            font-weight: 700;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            font-family: 'Inter', monospace;
+            background: transparent;
+            border: none;
+            outline: none;
+            caret-color: #8b5cf6;
+            width: 100%;
+            text-align: center;
+        }
+
+        .stem-input::placeholder {
+            color: #cbd5e1;
+        }
+
+        .blank-char {
+            display: inline-block;
+            width: 0.6em;
+            border-bottom: 3px solid #cbd5e1;
+            margin: 0 1px;
+        }
+
+        .primed-bar {
+            background: linear-gradient(90deg, #8b5cf6, #a78bfa);
+            transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .unprimed-bar {
+            background: linear-gradient(90deg, #94a3b8, #cbd5e1);
+            transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .progress-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+        }
+
+        .progress-dot.completed { background: #8b5cf6; }
+        .progress-dot.current { background: #8b5cf6; box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.3); transform: scale(1.3); }
+        .progress-dot.pending { background: #e2e8f0; }
+
+        .result-row {
+            transition: all 0.3s ease;
+        }
+
+        .result-row:hover {
+            background-color: #f8fafc;
+        }
+
+        .prose h2 {
+            font-weight: 700;
+            font-size: 1.875rem;
+            margin-top: 2.5rem;
+            margin-bottom: 1.25rem;
+            color: #0f172a;
+        }
+
+        .prose p {
+            margin-bottom: 1.5rem;
+            font-size: 1.1rem;
+        }
+    </style>
+</head>
+<body class="min-h-screen p-4 md:p-8">
+    <div class="max-w-6xl mx-auto space-y-8">
+
+        <!-- Header -->
+        <header class="bg-white border-b border-slate-200 pt-12 pb-10 -mx-4 md:-mx-8 -mt-4 md:-mt-8 px-4 md:px-8 mb-4">
+            <div class="max-w-4xl mx-auto text-center">
+                <h1 class="text-3xl md:text-5xl font-extrabold text-slate-900 mb-4 leading-tight">
+                    The Echoes of Experience:
+                    <br/><span class="text-violet-600">Word-Stem Completion &amp; Priming</span>
+                </h1>
+                <p class="text-lg text-slate-500 serif italic max-w-2xl mx-auto">
+                    You've seen a word before — even briefly. Later, when asked to complete a word stem, that prior exposure quietly shapes what comes to mind first. Experience it yourself.
+                </p>
+            </div>
+        </header>
+
+        <!-- Main Task Area -->
+        <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
+
+            <!-- Left Panel: Info & Controls -->
+            <div class="lg:col-span-1 space-y-5">
+
+                <!-- Phase Indicator -->
+                <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-100">
+                    <div class="flex items-center gap-2 text-lg font-semibold border-b pb-2 mb-4">
+                        <svg class="w-5 h-5 text-slate-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/>
+                        </svg>
+                        Task Phase
+                    </div>
+
+                    <div id="phase-display" class="text-center">
+                        <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-violet-50 text-violet-700 font-bold text-sm mb-3">
+                            <span id="phase-icon">📖</span>
+                            <span id="phase-label">Ready to Begin</span>
+                        </div>
+                        <p id="phase-desc" class="text-xs text-slate-400">Press Start to begin the study phase. You'll read a list of words, then complete word stems.</p>
+                    </div>
+
+                    <!-- Progress -->
+                    <div class="mt-4 pt-3 border-t border-slate-100">
+                        <div class="flex justify-between text-xs text-slate-400 mb-2">
+                            <span>Progress</span>
+                            <span id="progress-text">0 / 0</span>
+                        </div>
+                        <div class="w-full h-2 bg-slate-100 rounded-full overflow-hidden">
+                            <div id="progress-bar" class="h-full bg-violet-500 rounded-full transition-all duration-500" style="width: 0%"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Settings -->
+                <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-100">
+                    <div class="flex items-center gap-2 text-lg font-semibold border-b pb-2 mb-4">
+                        <svg class="w-5 h-5 text-slate-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="3"/>
+                            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06A1.65 1.65 0 0 0 4.6 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06A1.65 1.65 0 0 0 9 4.6a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+                        </svg>
+                        Settings
+                    </div>
+
+                    <div class="space-y-4">
+                        <div>
+                            <div class="flex justify-between mb-1">
+                                <label class="text-sm font-medium text-slate-600">Study Duration</label>
+                                <span id="duration-val" class="text-sm font-bold text-violet-600">2.0s</span>
+                            </div>
+                            <input type="range" id="study-duration" min="0.5" max="5" step="0.5" value="2"
+                                class="w-full h-2 rounded-full cursor-pointer appearance-none"
+                                style="background: #ede9fe; color: #7c3aed;"
+                                oninput="document.getElementById('duration-val').textContent = this.value + 's'">
+                            <p class="text-[9px] text-slate-400 mt-0.5">How long each word is displayed</p>
+                        </div>
+
+                        <div>
+                            <div class="flex justify-between mb-1">
+                                <label class="text-sm font-medium text-slate-600">Word Set Size</label>
+                                <span id="setsize-val" class="text-sm font-bold text-violet-600">10</span>
+                            </div>
+                            <input type="range" id="set-size" min="6" max="16" step="2" value="10"
+                                class="w-full h-2 rounded-full cursor-pointer appearance-none"
+                                style="background: #ede9fe; color: #7c3aed;"
+                                oninput="document.getElementById('setsize-val').textContent = this.value">
+                            <p class="text-[9px] text-slate-400 mt-0.5">Words per group (primed &amp; unprimed)</p>
+                        </div>
+                    </div>
+
+                    <!-- Start / Reset -->
+                    <div class="pt-4 space-y-2">
+                        <button id="start-btn" class="w-full flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-violet-600 text-white font-semibold hover:bg-violet-700 transition-colors shadow-lg shadow-violet-200 pulse-glow">
+                            <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polygon points="5 3 19 12 5 21 5 3"/>
+                            </svg>
+                            Start Experiment
+                        </button>
+                        <button id="reset-btn" class="w-full flex items-center justify-center gap-2 px-4 py-2 rounded-lg border border-slate-200 text-slate-500 font-medium hover:bg-slate-50 transition-colors text-sm hidden">
+                            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="1 4 1 10 7 10"/>
+                                <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/>
+                            </svg>
+                            Restart
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Legend (visible during results) -->
+                <div id="legend-panel" class="bg-white p-5 rounded-2xl shadow-sm border border-slate-100 hidden">
+                    <h3 class="text-sm font-semibold text-slate-700 mb-3">Understanding Priming</h3>
+                    <div class="space-y-3 text-xs text-slate-500">
+                        <div class="flex items-start gap-2">
+                            <div class="w-3 h-3 rounded bg-violet-500 mt-0.5 flex-shrink-0"></div>
+                            <span><strong class="text-violet-700">Primed stems</strong> — these match words you studied. Prior exposure biases you toward completing them with the studied word.</span>
+                        </div>
+                        <div class="flex items-start gap-2">
+                            <div class="w-3 h-3 rounded bg-slate-400 mt-0.5 flex-shrink-0"></div>
+                            <span><strong class="text-slate-700">Unprimed stems</strong> — no prior exposure. Your completions reflect baseline word frequency.</span>
+                        </div>
+                        <div class="pt-2 border-t">
+                            <span>The <strong>priming effect</strong> = the difference in target-completion rate between primed and unprimed stems.</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Main Display Area -->
+            <div class="lg:col-span-3 space-y-5">
+
+                <!-- Task Display Card -->
+                <div id="task-card" class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden" style="min-height: 320px;">
+
+                    <!-- Welcome State -->
+                    <div id="state-welcome" class="p-12 flex flex-col items-center justify-center text-center" style="min-height: 320px;">
+                        <div class="text-6xl mb-6">🧠</div>
+                        <h2 class="text-2xl font-bold text-slate-800 mb-3">Word-Stem Completion Task</h2>
+                        <p class="text-slate-500 max-w-md mb-6">This experiment has two phases: first you'll <strong>study</strong> a list of words, then you'll <strong>complete word stems</strong>. The question is: does seeing a word earlier make it more likely to come to mind later?</p>
+                        <div class="flex items-center gap-8 text-sm text-slate-400">
+                            <div class="flex items-center gap-2">
+                                <div class="w-8 h-8 rounded-lg bg-violet-100 flex items-center justify-center text-violet-600 font-bold">1</div>
+                                <span>Study words</span>
+                            </div>
+                            <svg class="w-4 h-4 text-slate-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                            <div class="flex items-center gap-2">
+                                <div class="w-8 h-8 rounded-lg bg-violet-100 flex items-center justify-center text-violet-600 font-bold">2</div>
+                                <span>Complete stems</span>
+                            </div>
+                            <svg class="w-4 h-4 text-slate-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                            <div class="flex items-center gap-2">
+                                <div class="w-8 h-8 rounded-lg bg-violet-100 flex items-center justify-center text-violet-600 font-bold">3</div>
+                                <span>See priming effect</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Study Phase -->
+                    <div id="state-study" class="p-12 flex flex-col items-center justify-center text-center hidden" style="min-height: 320px;">
+                        <p class="text-xs font-bold text-violet-500 uppercase tracking-widest mb-2">Study Phase — Read Each Word</p>
+                        <div id="study-word" class="word-display text-slate-800 mb-4">—</div>
+                        <div id="study-progress-dots" class="flex gap-2 mt-4"></div>
+                    </div>
+
+                    <!-- Transition -->
+                    <div id="state-transition" class="p-12 flex flex-col items-center justify-center text-center hidden" style="min-height: 320px;">
+                        <div class="text-5xl mb-6">✏️</div>
+                        <h2 class="text-2xl font-bold text-slate-800 mb-3">Now: Complete the Stems</h2>
+                        <p class="text-slate-500 max-w-md mb-6">You'll see word stems with missing letters. Type the <strong>first word that comes to mind</strong> to complete each stem. Don't overthink it — go with your gut.</p>
+                        <button id="begin-test-btn" class="px-6 py-3 rounded-xl bg-violet-600 text-white font-semibold hover:bg-violet-700 transition-colors shadow-lg shadow-violet-200">
+                            Begin Completion Phase →
+                        </button>
+                    </div>
+
+                    <!-- Test Phase -->
+                    <div id="state-test" class="p-8 hidden" style="min-height: 320px;">
+                        <div class="flex flex-col items-center justify-center text-center" style="min-height: 260px;">
+                            <p class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-1">Complete the Word</p>
+                            <p id="test-stem-hint" class="text-xs text-slate-300 mb-6">Type a word that starts with these letters, then press Enter</p>
+
+                            <div class="relative mb-6">
+                                <div class="flex items-center justify-center gap-1">
+                                    <span id="stem-prefix" class="word-display text-slate-800"></span>
+                                    <input id="stem-input" class="stem-input text-violet-600" type="text" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="...">
+                                </div>
+                                <div class="mt-2 h-1 bg-slate-100 rounded-full overflow-hidden">
+                                    <div id="input-indicator" class="h-full bg-violet-400 rounded-full transition-all duration-200" style="width: 0%"></div>
+                                </div>
+                            </div>
+
+                            <div id="test-feedback" class="h-8 flex items-center justify-center text-sm font-semibold"></div>
+                            <div id="test-progress-dots" class="flex gap-2 mt-4"></div>
+                        </div>
+                    </div>
+
+                    <!-- Results Phase -->
+                    <div id="state-results" class="p-8 hidden">
+                        <div class="text-center mb-6">
+                            <h2 class="text-2xl font-bold text-slate-800 mb-2">Your Priming Effect</h2>
+                            <p class="text-slate-400 text-sm">Did studying the words influence your completions?</p>
+                        </div>
+
+                        <!-- Big Number Summary -->
+                        <div class="grid grid-cols-3 gap-4 mb-8">
+                            <div class="bg-violet-50 rounded-xl p-5 text-center border border-violet-100">
+                                <div id="result-primed-pct" class="text-3xl font-black text-violet-700">—</div>
+                                <div class="text-xs font-semibold text-violet-500 uppercase tracking-wide mt-1">Primed Completion</div>
+                                <div class="text-[10px] text-violet-400 mt-0.5">Target words for studied stems</div>
+                            </div>
+                            <div class="bg-slate-50 rounded-xl p-5 text-center border border-slate-200">
+                                <div id="result-unprimed-pct" class="text-3xl font-black text-slate-600">—</div>
+                                <div class="text-xs font-semibold text-slate-500 uppercase tracking-wide mt-1">Unprimed Completion</div>
+                                <div class="text-[10px] text-slate-400 mt-0.5">Target words for unstudied stems</div>
+                            </div>
+                            <div class="rounded-xl p-5 text-center border-2 border-dashed border-emerald-200 bg-emerald-50/50">
+                                <div id="result-effect" class="text-3xl font-black text-emerald-700">—</div>
+                                <div class="text-xs font-semibold text-emerald-600 uppercase tracking-wide mt-1">Priming Effect</div>
+                                <div class="text-[10px] text-emerald-500 mt-0.5">Difference in rates</div>
+                            </div>
+                        </div>
+
+                        <!-- Bar Chart -->
+                        <div class="bg-white rounded-xl border border-slate-100 p-6 mb-6">
+                            <h3 class="text-sm font-semibold text-slate-700 mb-4">Target-Word Completion Rate</h3>
+                            <div class="space-y-4">
+                                <div>
+                                    <div class="flex justify-between text-xs font-semibold mb-1">
+                                        <span class="text-violet-700">Primed Stems</span>
+                                        <span id="bar-primed-label" class="text-violet-600">0%</span>
+                                    </div>
+                                    <div class="w-full h-8 bg-violet-50 rounded-lg overflow-hidden">
+                                        <div id="bar-primed" class="primed-bar h-full rounded-lg" style="width: 0%"></div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="flex justify-between text-xs font-semibold mb-1">
+                                        <span class="text-slate-600">Unprimed Stems</span>
+                                        <span id="bar-unprimed-label" class="text-slate-500">0%</span>
+                                    </div>
+                                    <div class="w-full h-8 bg-slate-50 rounded-lg overflow-hidden">
+                                        <div id="bar-unprimed" class="unprimed-bar h-full rounded-lg" style="width: 0%"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-center gap-2 text-xs text-slate-400">
+                                <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83"/>
+                                </svg>
+                                <span>A larger gap = a stronger priming effect</span>
+                            </div>
+                        </div>
+
+                        <!-- Detailed Results Table -->
+                        <div class="bg-white rounded-xl border border-slate-100 overflow-hidden">
+                            <div class="px-5 py-3 border-b border-slate-100 flex justify-between items-center">
+                                <h3 class="text-sm font-semibold text-slate-700">Detailed Responses</h3>
+                                <div class="flex items-center gap-3 text-[10px]">
+                                    <span class="flex items-center gap-1"><span class="w-2 h-2 rounded bg-violet-500"></span> Primed</span>
+                                    <span class="flex items-center gap-1"><span class="w-2 h-2 rounded bg-slate-400"></span> Unprimed</span>
+                                    <span class="flex items-center gap-1"><span class="w-2 h-2 rounded bg-emerald-500"></span> Target Match</span>
+                                </div>
+                            </div>
+                            <div id="results-table" class="divide-y divide-slate-50 max-h-80 overflow-y-auto"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Cumulative Priming Chart (visible during & after test) -->
+                <div id="chart-panel" class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 hidden" style="height: 300px;">
+                    <div class="flex justify-between items-center mb-4">
+                        <h2 class="font-semibold text-slate-700">Cumulative Completion Rate Over Trials</h2>
+                        <div class="flex items-center gap-4 text-[10px] font-bold uppercase tracking-wider">
+                            <div class="flex items-center gap-1.5">
+                                <div class="w-3 h-0.5 bg-violet-500 rounded"></div>
+                                <span class="text-violet-600">Primed</span>
+                            </div>
+                            <div class="flex items-center gap-1.5">
+                                <div class="w-3 h-0.5 bg-slate-400 rounded"></div>
+                                <span class="text-slate-500">Unprimed</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex-grow relative bg-slate-50/30 rounded-lg overflow-hidden" style="height: 220px;">
+                        <canvas id="chartCanvas"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Explanation Section -->
+        <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-8 md:p-12 mt-8 prose max-w-none">
+            <div class="max-w-3xl mx-auto">
+                <h2 class="flex items-center gap-3">
+                    <span class="text-3xl">📚</span> What Is Priming?
+                </h2>
+                <p>
+                    <strong>Priming</strong> is a phenomenon in which exposure to a stimulus influences the response to a later stimulus, without conscious awareness. In the word-stem completion task, participants who have recently seen a word (e.g., <em>MOTEL</em>) are significantly more likely to complete the stem <em>MOT___</em> with that word, compared to participants who were not exposed to it.
+                </p>
+                <p>
+                    This is a hallmark of <strong>implicit memory</strong> — memory that influences behavior without requiring conscious recollection. Unlike explicit recall ("What words were on the list?"), priming operates automatically and often outside awareness.
+                </p>
+
+                <h2 class="flex items-center gap-3">
+                    <span class="text-3xl">🧪</span> The Experimental Design
+                </h2>
+                <p>
+                    The classic word-stem completion paradigm has a simple structure:
+                </p>
+                <div class="bg-slate-50 rounded-xl p-6 my-6 border border-slate-100 not-prose">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <div class="flex items-center gap-2 mb-3">
+                                <div class="w-7 h-7 rounded-lg bg-violet-100 flex items-center justify-center text-violet-600 font-bold text-xs">1</div>
+                                <span class="font-semibold text-slate-700">Study Phase</span>
+                            </div>
+                            <p class="text-sm text-slate-500">Participants read a list of words (e.g., MOTEL, BASKET, GARDEN). Some of these words are <em>targets</em> — they correspond to stems that will appear in the test phase.</p>
+                        </div>
+                        <div>
+                            <div class="flex items-center gap-2 mb-3">
+                                <div class="w-7 h-7 rounded-lg bg-violet-100 flex items-center justify-center text-violet-600 font-bold text-xs">2</div>
+                                <span class="font-semibold text-slate-700">Test Phase</span>
+                            </div>
+                            <p class="text-sm text-slate-500">Participants see word stems (e.g., MOT___, BAS___, GAR___) and complete them with the first word that comes to mind. Crucially, some stems match studied words (<strong>primed</strong>) and some don't (<strong>unprimed</strong>).</p>
+                        </div>
+                    </div>
+                </div>
+                <p>
+                    The <strong>priming effect</strong> is measured as the difference in the rate at which participants produce the target completion for primed vs. unprimed stems. A typical finding is:
+                </p>
+                <div class="bg-violet-50 rounded-xl p-5 my-6 border border-violet-100 not-prose text-center">
+                    <p class="text-sm text-violet-600 mb-2 font-semibold">Typical Priming Effect</p>
+                    <p class="text-slate-700 text-lg">
+                        \[P(\text{target} \mid \text{primed}) \approx 0.50\text{–}0.70 \quad\text{vs.}\quad P(\text{target} \mid \text{unprimed}) \approx 0.10\text{–}0.30\]
+                    </p>
+                </div>
+
+                <h2 class="flex items-center gap-3">
+                    <span class="text-3xl">🧠</span> Why This Matters for Neuroscience
+                </h2>
+                <p>
+                    The word-stem completion task provided early, powerful evidence that <strong>memory is not a single system</strong>. The famous case of patient <strong>H.M.</strong> (and later studies with amnesic patients) showed that individuals with severe hippocampal damage — who could not consciously remember the study list — still showed <em>normal priming effects</em>.
+                </p>
+                <p>
+                    This double dissociation between explicit and implicit memory helped establish a fundamental distinction in memory neuroscience:
+                </p>
+                <div class="bg-slate-50 rounded-xl p-6 my-6 border border-slate-100 not-prose">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="text-center">
+                            <div class="text-3xl mb-2">🏛️</div>
+                            <p class="font-bold text-slate-700 mb-1">Explicit (Declarative) Memory</p>
+                            <p class="text-sm text-slate-500">Depends on the <strong>hippocampus</strong> and medial temporal lobe. Conscious recall of facts and events. Impaired in amnesia.</p>
+                        </div>
+                        <div class="text-center">
+                            <div class="text-3xl mb-2">⚡</div>
+                            <p class="font-bold text-slate-700 mb-1">Implicit (Non-declarative) Memory</p>
+                            <p class="text-sm text-slate-500">Depends on <strong>neocortical areas</strong> (perceptual priming) and <strong>basal ganglia</strong> (procedural learning). Operates without awareness. Preserved in amnesia.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <h2 class="flex items-center gap-3">
+                    <span class="text-3xl">📖</span> Key References
+                </h2>
+                <ul class="text-sm text-slate-600 space-y-2">
+                    <li><strong>Graf, P., & Schacter, D. L. (1985).</strong> Implicit and explicit memory for new associations in normal and amnesic subjects. <em>Journal of Experimental Psychology: Learning, Memory, and Cognition, 11</em>(3), 501–518.</li>
+                    <li><strong>Warrington, E. K., & Weiskrantz, L. (1974).</strong> The effect of prior learning on subsequent retention in amnesic patients. <em>Neuropsychologia, 12</em>(4), 419–428.</li>
+                    <li><strong>Tulving, E., Schacter, D. L., & Stark, H. A. (1982).</strong> Priming effects in word-fragment completion are independent of recognition memory. <em>Journal of Experimental Psychology: Learning, Memory, and Cognition, 8</em>(4), 336–342.</li>
+                    <li><strong>Squire, L. R. (1992).</strong> Memory and the hippocampus: A synthesis from findings with rats, monkeys, and humans. <em>Psychological Review, 99</em>(2), 195–231.</li>
+                </ul>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+    // ===== WORD-STEM COMPLETION TASK =====
+
+    // Word bank: each entry has { word, stem, stemLen }
+    // stem = the visible prefix, stemLen = how many blanks to show
+    // All stems are ambiguous (multiple valid completions exist)
+    const WORD_BANK = [
+        { word: "MOTEL",    stem: "MOT",   blanks: 2 },
+        { word: "BASKET",   stem: "BAS",   blanks: 3 },
+        { word: "GARDEN",   stem: "GAR",   blanks: 3 },
+        { word: "ABSENT",   stem: "ABS",   blanks: 3 },
+        { word: "WINDOW",   stem: "WIN",   blanks: 3 },
+        { word: "PLANET",   stem: "PLA",   blanks: 3 },
+        { word: "SILVER",   stem: "SIL",   blanks: 3 },
+        { word: "THREAD",   stem: "THR",   blanks: 3 },
+        { word: "BLANKET",  stem: "BLA",   blanks: 4 },
+        { word: "CACTUS",   stem: "CAC",   blanks: 3 },
+        { word: "MARKET",   stem: "MAR",   blanks: 3 },
+        { word: "PENCIL",   stem: "PEN",   blanks: 3 },
+        { word: "TUNNEL",   stem: "TUN",   blanks: 3 },
+        { word: "BUTTON",   stem: "BUT",   blanks: 3 },
+        { word: "MAGNET",   stem: "MAG",   blanks: 3 },
+        { word: "CHISEL",   stem: "CHI",   blanks: 3 },
+        { word: "PARCEL",   stem: "PAR",   blanks: 3 },
+        { word: "TEMPLE",   stem: "TEM",   blanks: 3 },
+        { word: "COMBAT",   stem: "COM",   blanks: 3 },
+        { word: "RIBBON",   stem: "RIB",   blanks: 3 },
+        { word: "SPIDER",   stem: "SPI",   blanks: 3 },
+        { word: "CLOSET",   stem: "CLO",   blanks: 3 },
+        { word: "FOREST",   stem: "FOR",   blanks: 3 },
+        { word: "HELMET",   stem: "HEL",   blanks: 3 },
+        { word: "CASTLE",   stem: "CAS",   blanks: 3 },
+        { word: "BRIDGE",   stem: "BRI",   blanks: 3 },
+        { word: "NAPKIN",   stem: "NAP",   blanks: 3 },
+        { word: "FOSSIL",   stem: "FOS",   blanks: 3 },
+        { word: "VELVET",   stem: "VEL",   blanks: 3 },
+        { word: "SOCKET",   stem: "SOC",   blanks: 3 },
+        { word: "TABLET",   stem: "TAB",   blanks: 3 },
+        { word: "KITTEN",   stem: "KIT",   blanks: 3 },
+    ];
+
+    // Filler words for study phase (not tested as stems)
+    const FILLER_WORDS = [
+        "ORANGE", "CLOUD", "MUSIC", "RIVER", "CHAIR",
+        "FLAME", "STONE", "GENTLE", "WISDOM", "COPPER",
+        "PUZZLE", "BREEZE", "LANTERN", "MEADOW", "SUNSET",
+        "ANCHOR", "FEATHER", "CRYSTAL", "VOYAGE", "MARBLE"
+    ];
+
+    // State
+    let state = {
+        phase: 'welcome', // welcome, study, transition, test, results
+        studyDuration: 2000,
+        setSize: 10,
+        primedItems: [],    // items shown in study & tested
+        unprimedItems: [],  // items NOT shown but tested
+        fillerItems: [],    // shown in study but not tested
+        studyList: [],      // full study list (primed + fillers, shuffled)
+        testList: [],       // full test list (primed stems + unprimed stems, shuffled)
+        studyIndex: 0,
+        testIndex: 0,
+        responses: [],      // { stem, target, response, primed, matchesTarget }
+        studyTimer: null,
+        chartData: { primed: [], unprimed: [] }
+    };
+
+    // DOM refs
+    const $ = id => document.getElementById(id);
+
+    // Shuffle array in-place (Fisher-Yates)
+    function shuffle(arr) {
+        for (let i = arr.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [arr[i], arr[j]] = [arr[j], arr[i]];
+        }
+        return arr;
+    }
+
+    // Pick n random items from array, removing them
+    function pickRandom(arr, n) {
+        const shuffled = shuffle([...arr]);
+        return shuffled.slice(0, n);
+    }
+
+    // Initialize a new experiment
+    function initExperiment() {
+        const setSize = parseInt($('set-size').value);
+        state.setSize = setSize;
+        state.studyDuration = parseFloat($('study-duration').value) * 1000;
+
+        // Pick primed and unprimed items from WORD_BANK
+        const shuffledBank = shuffle([...WORD_BANK]);
+        state.primedItems = shuffledBank.slice(0, setSize);
+        state.unprimedItems = shuffledBank.slice(setSize, setSize * 2);
+
+        // Pick filler words for study phase
+        const numFillers = Math.max(3, Math.floor(setSize * 0.4));
+        state.fillerItems = pickRandom(FILLER_WORDS, numFillers);
+
+        // Build study list: primed words + fillers, shuffled
+        state.studyList = shuffle([
+            ...state.primedItems.map(item => item.word),
+            ...state.fillerItems
+        ]);
+
+        // Build test list: primed + unprimed stems, shuffled
+        state.testList = shuffle([
+            ...state.primedItems.map(item => ({ ...item, primed: true })),
+            ...state.unprimedItems.map(item => ({ ...item, primed: false }))
+        ]);
+
+        state.studyIndex = 0;
+        state.testIndex = 0;
+        state.responses = [];
+        state.chartData = { primed: [], unprimed: [] };
+    }
+
+    // Phase transitions
+    function showPhase(phase) {
+        state.phase = phase;
+        ['welcome', 'study', 'transition', 'test', 'results'].forEach(p => {
+            $('state-' + p).classList.toggle('hidden', p !== phase);
+        });
+
+        const phaseLabels = {
+            welcome: ['📖', 'Ready to Begin', 'Press Start to begin the study phase.'],
+            study: ['👁️', 'Study Phase', 'Read each word carefully as it appears.'],
+            transition: ['✏️', 'Get Ready', 'Prepare to complete word stems.'],
+            test: ['✍️', 'Test Phase', 'Type the first word that comes to mind.'],
+            results: ['📊', 'Results', 'See how prior exposure influenced your completions.']
+        };
+
+        const [icon, label, desc] = phaseLabels[phase];
+        $('phase-icon').textContent = icon;
+        $('phase-label').textContent = label;
+        $('phase-desc').textContent = desc;
+    }
+
+    // Study phase
+    function startStudy() {
+        initExperiment();
+        showPhase('study');
+        $('start-btn').classList.add('hidden');
+        $('reset-btn').classList.remove('hidden');
+        $('study-duration').disabled = true;
+        $('set-size').disabled = true;
+        updateStudyProgress();
+        showNextStudyWord();
+    }
+
+    function updateStudyProgress() {
+        const total = state.studyList.length;
+        const current = state.studyIndex;
+        $('progress-text').textContent = `${current} / ${total}`;
+        $('progress-bar').style.width = `${(current / total) * 100}%`;
+
+        // Dots
+        const dotsHtml = state.studyList.map((_, i) => {
+            let cls = 'progress-dot ';
+            if (i < current) cls += 'completed';
+            else if (i === current) cls += 'current';
+            else cls += 'pending';
+            return `<div class="${cls}"></div>`;
+        }).join('');
+        $('study-progress-dots').innerHTML = dotsHtml;
+    }
+
+    function showNextStudyWord() {
+        if (state.studyIndex >= state.studyList.length) {
+            showPhase('transition');
+            return;
+        }
+
+        const word = state.studyList[state.studyIndex];
+        const wordEl = $('study-word');
+        wordEl.textContent = word;
+        wordEl.style.opacity = '0';
+        wordEl.style.transform = 'scale(0.9)';
+
+        requestAnimationFrame(() => {
+            wordEl.style.transition = 'opacity 0.3s, transform 0.3s';
+            wordEl.style.opacity = '1';
+            wordEl.style.transform = 'scale(1)';
+        });
+
+        state.studyTimer = setTimeout(() => {
+            wordEl.style.opacity = '0';
+            wordEl.style.transform = 'scale(0.95)';
+
+            setTimeout(() => {
+                state.studyIndex++;
+                updateStudyProgress();
+                showNextStudyWord();
+            }, 300);
+        }, state.studyDuration);
+    }
+
+    // Test phase
+    function startTest() {
+        showPhase('test');
+        $('chart-panel').classList.remove('hidden');
+        updateTestProgress();
+        showNextStem();
+    }
+
+    function updateTestProgress() {
+        const total = state.testList.length;
+        const current = state.testIndex;
+        $('progress-text').textContent = `${current} / ${total}`;
+        $('progress-bar').style.width = `${(current / total) * 100}%`;
+
+        const dotsHtml = state.testList.map((_, i) => {
+            let cls = 'progress-dot ';
+            if (i < current) cls += 'completed';
+            else if (i === current) cls += 'current';
+            else cls += 'pending';
+            return `<div class="${cls}"></div>`;
+        }).join('');
+        $('test-progress-dots').innerHTML = dotsHtml;
+    }
+
+    function showNextStem() {
+        if (state.testIndex >= state.testList.length) {
+            showResults();
+            return;
+        }
+
+        const item = state.testList[state.testIndex];
+        $('stem-prefix').textContent = item.stem;
+        $('stem-input').value = '';
+        $('stem-input').placeholder = '_'.repeat(item.blanks);
+        $('stem-input').focus();
+        $('test-feedback').textContent = '';
+        $('input-indicator').style.width = '0%';
+
+        // Color code: subtle hint if primed (don't reveal to user though!)
+        // No visual difference for scientific validity
+    }
+
+    function handleStemSubmit() {
+        const item = state.testList[state.testIndex];
+        const response = $('stem-input').value.trim().toUpperCase();
+
+        if (response.length === 0) return;
+
+        // Check if the response starts with the stem
+        if (!response.startsWith(item.stem) && response.length > 0) {
+            // The full word should start with the stem
+            // Accept the response anyway but build the full word
+        }
+
+        const fullWord = response.startsWith(item.stem) ? response : item.stem + response;
+        const matchesTarget = fullWord === item.word;
+
+        const entry = {
+            stem: item.stem,
+            blanks: item.blanks,
+            target: item.word,
+            response: fullWord,
+            primed: item.primed,
+            matchesTarget: matchesTarget
+        };
+        state.responses.push(entry);
+
+        // Show brief feedback
+        const feedbackEl = $('test-feedback');
+        feedbackEl.textContent = `${fullWord} ✓`;
+        feedbackEl.className = 'h-8 flex items-center justify-center text-sm font-semibold fade-in';
+        if (matchesTarget && item.primed) {
+            feedbackEl.classList.add('text-violet-500');
+        } else if (matchesTarget) {
+            feedbackEl.classList.add('text-emerald-500');
+        } else {
+            feedbackEl.classList.add('text-slate-400');
+        }
+
+        // Update running chart data
+        updateChartData();
+
+        state.testIndex++;
+        updateTestProgress();
+
+        setTimeout(() => {
+            showNextStem();
+        }, 500);
+    }
+
+    function updateChartData() {
+        // Calculate cumulative rates after each response
+        const primedResponses = state.responses.filter(r => r.primed);
+        const unprimedResponses = state.responses.filter(r => !r.primed);
+
+        const primedHits = primedResponses.filter(r => r.matchesTarget).length;
+        const unprimedHits = unprimedResponses.filter(r => r.matchesTarget).length;
+
+        state.chartData.primed.push(primedResponses.length > 0 ? primedHits / primedResponses.length : 0);
+        state.chartData.unprimed.push(unprimedResponses.length > 0 ? unprimedHits / unprimedResponses.length : 0);
+
+        drawChart();
+    }
+
+    // Canvas chart
+    function drawChart() {
+        const canvas = $('chartCanvas');
+        const ctx = canvas.getContext('2d');
+        const rect = canvas.parentElement.getBoundingClientRect();
+        canvas.width = rect.width * 2;
+        canvas.height = rect.height * 2;
+        canvas.style.width = rect.width + 'px';
+        canvas.style.height = rect.height + 'px';
+        ctx.scale(2, 2);
+
+        const W = rect.width;
+        const H = rect.height;
+        const pad = { top: 20, right: 20, bottom: 35, left: 45 };
+        const plotW = W - pad.left - pad.right;
+        const plotH = H - pad.top - pad.bottom;
+
+        ctx.clearRect(0, 0, W, H);
+
+        const totalTrials = state.testList.length;
+        const n = state.chartData.primed.length;
+        if (n === 0) return;
+
+        // Grid
+        ctx.strokeStyle = '#f1f5f9';
+        ctx.lineWidth = 1;
+        for (let y = 0; y <= 1; y += 0.25) {
+            const py = pad.top + plotH * (1 - y);
+            ctx.beginPath();
+            ctx.moveTo(pad.left, py);
+            ctx.lineTo(pad.left + plotW, py);
+            ctx.stroke();
+
+            ctx.fillStyle = '#94a3b8';
+            ctx.font = '10px Inter, sans-serif';
+            ctx.textAlign = 'right';
+            ctx.fillText((y * 100).toFixed(0) + '%', pad.left - 8, py + 3);
+        }
+
+        // X-axis labels
+        ctx.fillStyle = '#94a3b8';
+        ctx.font = '10px Inter, sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillText('Trial', pad.left + plotW / 2, H - 5);
+
+        // Draw lines
+        function drawLine(data, color) {
+            if (data.length < 1) return;
+            ctx.strokeStyle = color;
+            ctx.lineWidth = 2.5;
+            ctx.lineJoin = 'round';
+            ctx.lineCap = 'round';
+            ctx.beginPath();
+            data.forEach((val, i) => {
+                const x = pad.left + (i / Math.max(totalTrials - 1, 1)) * plotW;
+                const y = pad.top + plotH * (1 - val);
+                if (i === 0) ctx.moveTo(x, y);
+                else ctx.lineTo(x, y);
+            });
+            ctx.stroke();
+
+            // Draw endpoint dot
+            if (data.length > 0) {
+                const lastI = data.length - 1;
+                const x = pad.left + (lastI / Math.max(totalTrials - 1, 1)) * plotW;
+                const y = pad.top + plotH * (1 - data[lastI]);
+                ctx.fillStyle = color;
+                ctx.beginPath();
+                ctx.arc(x, y, 4, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+
+        drawLine(state.chartData.primed, '#8b5cf6');
+        drawLine(state.chartData.unprimed, '#94a3b8');
+    }
+
+    // Results
+    function showResults() {
+        showPhase('results');
+        $('legend-panel').classList.remove('hidden');
+
+        const primedResponses = state.responses.filter(r => r.primed);
+        const unprimedResponses = state.responses.filter(r => !r.primed);
+        const primedHits = primedResponses.filter(r => r.matchesTarget).length;
+        const unprimedHits = unprimedResponses.filter(r => r.matchesTarget).length;
+
+        const primedRate = primedResponses.length > 0 ? primedHits / primedResponses.length : 0;
+        const unprimedRate = unprimedResponses.length > 0 ? unprimedHits / unprimedResponses.length : 0;
+        const effect = primedRate - unprimedRate;
+
+        // Animate numbers
+        $('result-primed-pct').textContent = (primedRate * 100).toFixed(0) + '%';
+        $('result-unprimed-pct').textContent = (unprimedRate * 100).toFixed(0) + '%';
+        $('result-effect').textContent = (effect >= 0 ? '+' : '') + (effect * 100).toFixed(0) + '%';
+
+        // Color the effect
+        if (effect > 0) {
+            $('result-effect').classList.add('text-emerald-700');
+        } else if (effect < 0) {
+            $('result-effect').classList.add('text-red-600');
+        }
+
+        // Animate bars
+        setTimeout(() => {
+            $('bar-primed').style.width = (primedRate * 100) + '%';
+            $('bar-primed-label').textContent = (primedRate * 100).toFixed(0) + '%';
+            $('bar-unprimed').style.width = (unprimedRate * 100) + '%';
+            $('bar-unprimed-label').textContent = (unprimedRate * 100).toFixed(0) + '%';
+        }, 200);
+
+        // Build results table
+        const tableHtml = state.responses.map((r, i) => {
+            const primeBadge = r.primed
+                ? '<span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold bg-violet-100 text-violet-700">PRIMED</span>'
+                : '<span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold bg-slate-100 text-slate-500">UNPRIMED</span>';
+            const matchBadge = r.matchesTarget
+                ? '<span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-700">✓ TARGET</span>'
+                : '<span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold bg-slate-50 text-slate-400">—</span>';
+
+            return `
+                <div class="result-row px-5 py-3 flex items-center gap-4 text-sm">
+                    <span class="w-6 text-xs font-bold text-slate-300">${i + 1}</span>
+                    <span class="font-mono font-bold text-slate-700 w-20">${r.stem}<span class="text-slate-300">${'_'.repeat(r.blanks)}</span></span>
+                    <span class="font-mono font-semibold ${r.matchesTarget ? 'text-emerald-700' : 'text-slate-600'} flex-1">${r.response}</span>
+                    <span class="font-mono text-xs text-slate-400 w-20">${r.target}</span>
+                    ${primeBadge}
+                    ${matchBadge}
+                </div>
+            `;
+        }).join('');
+        $('results-table').innerHTML = tableHtml;
+
+        // Final chart update
+        drawChart();
+    }
+
+    // Reset
+    function resetExperiment() {
+        if (state.studyTimer) clearTimeout(state.studyTimer);
+        state = { ...state, phase: 'welcome', studyIndex: 0, testIndex: 0, responses: [], chartData: { primed: [], unprimed: [] }};
+        showPhase('welcome');
+        $('start-btn').classList.remove('hidden');
+        $('start-btn').classList.add('pulse-glow');
+        $('reset-btn').classList.add('hidden');
+        $('chart-panel').classList.add('hidden');
+        $('legend-panel').classList.add('hidden');
+        $('study-duration').disabled = false;
+        $('set-size').disabled = false;
+        $('progress-bar').style.width = '0%';
+        $('progress-text').textContent = '0 / 0';
+    }
+
+    // Event Listeners
+    $('start-btn').addEventListener('click', startStudy);
+    $('begin-test-btn').addEventListener('click', startTest);
+    $('reset-btn').addEventListener('click', resetExperiment);
+
+    $('stem-input').addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+            handleStemSubmit();
+        }
+    });
+
+    $('stem-input').addEventListener('input', () => {
+        const item = state.testList[state.testIndex];
+        if (!item) return;
+        const val = $('stem-input').value.length;
+        const target = item.blanks;
+        $('input-indicator').style.width = Math.min(100, (val / target) * 100) + '%';
+    });
+
+    // Window resize handler for chart
+    window.addEventListener('resize', () => {
+        if (state.chartData.primed.length > 0) drawChart();
+    });
+
+    // Init
+    showPhase('welcome');
+    </script>
+</body>
+</html>

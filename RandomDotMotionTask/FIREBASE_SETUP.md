@@ -11,7 +11,7 @@ This guide will help you enable data collection and population comparison for th
 
 1. Go to [Firebase Console](https://console.firebase.google.com/)
 2. Click **"Create a project"** (or "Add project")
-3. Name it something like `dot-motion-task` or `nbldm-experiments`
+3. Name it something like `dot-motion-task` or `nldm-experiments`
 4. Disable Google Analytics (not needed) or enable if you want
 5. Click **Create project**
 
