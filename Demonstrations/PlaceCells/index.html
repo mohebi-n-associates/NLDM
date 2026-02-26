@@ -489,7 +489,7 @@ function drawMaze() {
 
     // Draw accumulated place field heatmap on maze
     const step = 4;
-    const norm = heatmapMax * 0.5 + 0.01;
+    const norm = heatmapMax * 0.3 + 0.001;
     for (let x = 0; x < mazeCanvas.width; x += step) {
         for (let y = 0; y < mazeCanvas.height; y += step) {
             const info = pointInMazeAt(x, y);
@@ -498,27 +498,30 @@ function drawMaze() {
                 const idx = y * HMAP_W + x;
                 const accumulated = idx >= 0 && idx < heatmapData.length ? heatmapData[idx] : 0;
                 const t = Math.min(1, accumulated / norm);
-                if (t > 0.01) {
-                    // Fire colormap: blue → cyan → green → yellow → red
+                if (t > 0.005) {
+                    // Bold fire colormap: deep blue → cyan → green → yellow → bright red
                     let r, g, b;
-                    if (t < 0.25) {
-                        const s = t / 0.25;
-                        r = Math.round(30 * s); g = Math.round(58 + 120 * s); b = Math.round(95 + 60 * s);
-                    } else if (t < 0.5) {
-                        const s = (t - 0.25) / 0.25;
-                        r = Math.round(30 + 100 * s); g = Math.round(178 + 30 * s); b = Math.round(155 * (1 - s));
-                    } else if (t < 0.75) {
-                        const s = (t - 0.5) / 0.25;
-                        r = Math.round(130 + 115 * s); g = Math.round(208 - 20 * s); b = Math.round(10);
+                    if (t < 0.2) {
+                        const s = t / 0.2;
+                        r = Math.round(10); g = Math.round(40 + 140 * s); b = Math.round(140 + 80 * s);
+                    } else if (t < 0.4) {
+                        const s = (t - 0.2) / 0.2;
+                        r = Math.round(10 + 80 * s); g = Math.round(180 + 60 * s); b = Math.round(220 - 180 * s);
+                    } else if (t < 0.6) {
+                        const s = (t - 0.4) / 0.2;
+                        r = Math.round(90 + 130 * s); g = Math.round(240 - 20 * s); b = Math.round(40 - 30 * s);
+                    } else if (t < 0.8) {
+                        const s = (t - 0.6) / 0.2;
+                        r = Math.round(220 + 35 * s); g = Math.round(220 - 100 * s); b = Math.round(10);
                     } else {
-                        const s = (t - 0.75) / 0.25;
-                        r = Math.round(245 - 15 * s); g = Math.round(188 - 130 * s); b = Math.round(10 + 40 * s);
+                        const s = (t - 0.8) / 0.2;
+                        r = Math.round(255); g = Math.round(120 - 90 * s); b = Math.round(10 + 30 * s);
                     }
-                    ctx.fillStyle = `rgba(${r},${g},${b},${0.3 + 0.6 * t})`;
+                    ctx.fillStyle = `rgba(${r},${g},${b},${0.65 + 0.35 * t})`;
                     ctx.fillRect(x - step/2, y - step/2, step, step);
                 } else {
                     // Unvisited maze area — light fill
-                    ctx.fillStyle = 'rgba(241,245,249,0.3)';
+                    ctx.fillStyle = 'rgba(241,245,249,0.35)';
                     ctx.fillRect(x - step/2, y - step/2, step, step);
                 }
             }
@@ -767,7 +770,7 @@ function updateHeatmap() {
             const px = hx + dx, py = hy + dy;
             if (px >= 0 && px < HMAP_W && py >= 0 && py < HMAP_H) {
                 const w = Math.exp(-(dx*dx + dy*dy) / (2 * 4));
-                heatmapData[py * HMAP_W + px] += rate * w * 0.015;
+                heatmapData[py * HMAP_W + px] += rate * w * 0.05;
             }
         }
     }
