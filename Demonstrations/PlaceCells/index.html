@@ -258,9 +258,12 @@
                 <!-- Three-Armed Maze Canvas -->
                 <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-6">
                     <div class="flex items-center justify-between mb-4">
-                        <h3 class="font-bold text-lg text-slate-800">Three-Armed Maze</h3>
-                        <div id="condition-label" class="text-sm font-semibold text-emerald-600 bg-emerald-50 px-3 py-1 rounded-full">
-                            Condition A: Initial Position
+                        <h3 class="font-bold text-lg text-slate-800">Three-Armed Maze <span class="text-sm font-normal text-slate-400">— Place Field Map</span></h3>
+                        <div class="flex items-center gap-3">
+                            <button onclick="clearHeatmap()" class="text-xs text-slate-400 hover:text-slate-600 border border-slate-200 rounded-lg px-3 py-1">Clear Map</button>
+                            <div id="condition-label" class="text-sm font-semibold text-emerald-600 bg-emerald-50 px-3 py-1 rounded-full">
+                                Condition A: Initial Position
+                            </div>
                         </div>
                     </div>
                     <div class="flex justify-center">
@@ -275,19 +278,7 @@
                     <canvas id="spike-canvas" width="560" height="140" class="w-full rounded-lg border border-slate-200"></canvas>
                 </div>
 
-                <!-- Place Field Heatmap (large) -->
-                <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-6">
-                    <div class="flex items-center justify-between mb-2">
-                        <div>
-                            <h3 class="font-bold text-lg text-slate-800">Place Field Map</h3>
-                            <p class="text-xs text-slate-400 mt-1">Accumulated firing rate across all visited locations</p>
-                        </div>
-                        <button onclick="clearHeatmap()" class="text-xs text-slate-400 hover:text-slate-600 border border-slate-200 rounded-lg px-3 py-1">Clear Map</button>
-                    </div>
-                    <div class="flex justify-center">
-                        <canvas id="heatmap-canvas" width="560" height="400" class="rounded-xl border border-slate-200" style="max-width:100%;"></canvas>
-                    </div>
-                </div>
+
 
                 <!-- Arm comparison bars -->
                 <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-6">
@@ -395,8 +386,7 @@ const mazeCanvas = document.getElementById('maze-canvas');
 const mazeCtx = mazeCanvas.getContext('2d');
 const spikeCanvas = document.getElementById('spike-canvas');
 const spikeCtx = spikeCanvas.getContext('2d');
-const heatmapCanvas = document.getElementById('heatmap-canvas');
-const heatmapCtx = heatmapCanvas.getContext('2d');
+
 
 // ─── Maze Geometry ──────────────────────
 const CX = 280, CY = 250;          // center of maze on canvas
@@ -497,15 +487,40 @@ function drawMaze() {
     const arms = getArmEndpoints(currentCondition);
     const cond = CONDITIONS[currentCondition];
 
-    // Draw heatmap overlay on maze
-    const step = 6;
+    // Draw accumulated place field heatmap on maze
+    const step = 4;
+    const norm = heatmapMax * 0.5 + 0.01;
     for (let x = 0; x < mazeCanvas.width; x += step) {
         for (let y = 0; y < mazeCanvas.height; y += step) {
             const info = pointInMazeAt(x, y);
             if (info.inside) {
-                const rate = firingRate(x, y);
-                ctx.fillStyle = heatColor(rate);
-                ctx.fillRect(x - step/2, y - step/2, step, step);
+                // Get accumulated value
+                const idx = y * HMAP_W + x;
+                const accumulated = idx >= 0 && idx < heatmapData.length ? heatmapData[idx] : 0;
+                const t = Math.min(1, accumulated / norm);
+                if (t > 0.01) {
+                    // Fire colormap: blue → cyan → green → yellow → red
+                    let r, g, b;
+                    if (t < 0.25) {
+                        const s = t / 0.25;
+                        r = Math.round(30 * s); g = Math.round(58 + 120 * s); b = Math.round(95 + 60 * s);
+                    } else if (t < 0.5) {
+                        const s = (t - 0.25) / 0.25;
+                        r = Math.round(30 + 100 * s); g = Math.round(178 + 30 * s); b = Math.round(155 * (1 - s));
+                    } else if (t < 0.75) {
+                        const s = (t - 0.5) / 0.25;
+                        r = Math.round(130 + 115 * s); g = Math.round(208 - 20 * s); b = Math.round(10);
+                    } else {
+                        const s = (t - 0.75) / 0.25;
+                        r = Math.round(245 - 15 * s); g = Math.round(188 - 130 * s); b = Math.round(10 + 40 * s);
+                    }
+                    ctx.fillStyle = `rgba(${r},${g},${b},${0.3 + 0.6 * t})`;
+                    ctx.fillRect(x - step/2, y - step/2, step, step);
+                } else {
+                    // Unvisited maze area — light fill
+                    ctx.fillStyle = 'rgba(241,245,249,0.3)';
+                    ctx.fillRect(x - step/2, y - step/2, step, step);
+                }
             }
         }
     }
@@ -735,64 +750,41 @@ function updateSpikes() {
     ctx.fillText(`${rate.toFixed(1)} Hz`, W - 8, 22);
 }
 
-// ─── Heatmap (accumulated) ──────────────
-const HMAP_W = 560, HMAP_H = 400;
+// ─── Heatmap (accumulated, rendered on maze) ──────────────
+const HMAP_W = mazeCanvas.width, HMAP_H = mazeCanvas.height;
 let heatmapData = new Float32Array(HMAP_W * HMAP_H);
 let heatmapMax = 1;
 
 function updateHeatmap() {
-    // Map rat position to heatmap coordinates
-    const scaleX = HMAP_W / mazeCanvas.width;
-    const scaleY = HMAP_H / mazeCanvas.height;
-    const hx = Math.floor(ratX * scaleX);
-    const hy = Math.floor(ratY * scaleY);
+    const hx = Math.floor(ratX);
+    const hy = Math.floor(ratY);
     const rate = firingRate(ratX, ratY);
 
-    // Splat a small area
-    const r = 3;
+    // Splat a small Gaussian blob at the rat's position
+    const r = 6;
     for (let dy = -r; dy <= r; dy++) {
         for (let dx = -r; dx <= r; dx++) {
             const px = hx + dx, py = hy + dy;
             if (px >= 0 && px < HMAP_W && py >= 0 && py < HMAP_H) {
-                const w = Math.exp(-(dx*dx + dy*dy) / (2 * 1.5));
-                heatmapData[py * HMAP_W + px] += rate * w * 0.02;
+                const w = Math.exp(-(dx*dx + dy*dy) / (2 * 4));
+                heatmapData[py * HMAP_W + px] += rate * w * 0.015;
             }
         }
     }
 
-    heatmapMax = Math.max(heatmapMax, ...heatmapData);
-
-    // Render
-    const ctx = heatmapCtx;
-    const imgData = ctx.createImageData(HMAP_W, HMAP_H);
-    for (let i = 0; i < heatmapData.length; i++) {
-        const t = Math.min(1, heatmapData[i] / (heatmapMax * 0.5 + 0.01));
-        const idx = i * 4;
-        // Blue → Cyan → Green → Yellow → Red
-        if (t < 0.25) {
-            const s = t / 0.25;
-            imgData.data[idx]     = Math.round(30 * s);
-            imgData.data[idx + 1] = Math.round(58 + 100 * s);
-            imgData.data[idx + 2] = Math.round(95 + 60 * s);
-        } else if (t < 0.5) {
-            const s = (t - 0.25) / 0.25;
-            imgData.data[idx]     = Math.round(30 + 100 * s);
-            imgData.data[idx + 1] = Math.round(158 + 50 * s);
-            imgData.data[idx + 2] = Math.round(155 * (1 - s));
-        } else if (t < 0.75) {
-            const s = (t - 0.5) / 0.25;
-            imgData.data[idx]     = Math.round(130 + 115 * s);
-            imgData.data[idx + 1] = Math.round(208 - 40 * s);
-            imgData.data[idx + 2] = Math.round(20 * (1 - s));
-        } else {
-            const s = (t - 0.75) / 0.25;
-            imgData.data[idx]     = Math.round(245 - 15 * s);
-            imgData.data[idx + 1] = Math.round(168 - 110 * s);
-            imgData.data[idx + 2] = Math.round(10 + 50 * s);
+    // Track max for normalization
+    let localMax = heatmapMax;
+    const cx = hx, cy = hy;
+    for (let dy = -r; dy <= r; dy++) {
+        for (let dx = -r; dx <= r; dx++) {
+            const px = cx + dx, py = cy + dy;
+            if (px >= 0 && px < HMAP_W && py >= 0 && py < HMAP_H) {
+                const v = heatmapData[py * HMAP_W + px];
+                if (v > localMax) localMax = v;
+            }
         }
-        imgData.data[idx + 3] = t > 0.01 ? Math.round(80 + 175 * t) : 0;
     }
-    ctx.putImageData(imgData, 0, 0);
+    heatmapMax = localMax;
 }
 
 function clearHeatmap() {
@@ -1002,9 +994,9 @@ function autoStep() {
 // ─── Main Loop ──────────────────────────
 function mainLoop() {
     autoStep();
+    updateHeatmap();
     drawMaze();
     updateSpikes();
-    updateHeatmap();
     updateArmBars();
     updateInfoPanel();
     requestAnimationFrame(mainLoop);
