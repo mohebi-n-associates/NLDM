@@ -268,21 +268,24 @@
                     </div>
                 </div>
 
-                <!-- Firing Rate Displays -->
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <!-- Spike Raster -->
-                    <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-6">
-                        <h3 class="font-bold text-lg text-slate-800 mb-2">Place Cell Spikes</h3>
-                        <p class="text-xs text-slate-400 mb-3">Real-time spiking activity of the recorded place cell</p>
-                        <canvas id="spike-canvas" width="400" height="140" class="w-full rounded-lg border border-slate-200"></canvas>
-                    </div>
+                <!-- Spike Raster -->
+                <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-6">
+                    <h3 class="font-bold text-lg text-slate-800 mb-2">Place Cell Spikes</h3>
+                    <p class="text-xs text-slate-400 mb-3">Real-time spiking activity of the recorded place cell</p>
+                    <canvas id="spike-canvas" width="560" height="140" class="w-full rounded-lg border border-slate-200"></canvas>
+                </div>
 
-                    <!-- Heatmap thumbnail -->
-                    <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-6">
-                        <h3 class="font-bold text-lg text-slate-800 mb-2">Place Field Map</h3>
-                        <p class="text-xs text-slate-400 mb-3">Accumulated firing rate across all visited locations</p>
-                        <canvas id="heatmap-canvas" width="400" height="140" class="w-full rounded-lg border border-slate-200"></canvas>
-                        <button onclick="clearHeatmap()" class="mt-2 text-xs text-slate-400 hover:text-slate-600 underline">Clear Map</button>
+                <!-- Place Field Heatmap (large) -->
+                <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-6">
+                    <div class="flex items-center justify-between mb-2">
+                        <div>
+                            <h3 class="font-bold text-lg text-slate-800">Place Field Map</h3>
+                            <p class="text-xs text-slate-400 mt-1">Accumulated firing rate across all visited locations</p>
+                        </div>
+                        <button onclick="clearHeatmap()" class="text-xs text-slate-400 hover:text-slate-600 border border-slate-200 rounded-lg px-3 py-1">Clear Map</button>
+                    </div>
+                    <div class="flex justify-center">
+                        <canvas id="heatmap-canvas" width="560" height="400" class="rounded-xl border border-slate-200" style="max-width:100%;"></canvas>
                     </div>
                 </div>
 
@@ -733,7 +736,7 @@ function updateSpikes() {
 }
 
 // ─── Heatmap (accumulated) ──────────────
-const HMAP_W = 400, HMAP_H = 140;
+const HMAP_W = 560, HMAP_H = 400;
 let heatmapData = new Float32Array(HMAP_W * HMAP_H);
 let heatmapMax = 1;
 
