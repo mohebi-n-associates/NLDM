@@ -1,0 +1,1017 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Place Cells &amp; Visual Landmarks | Hippocampal Spatial Coding</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Lora:ital,wght@0,400;0,700;1,400&display=swap');
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc;
+            line-height: 1.7;
+            color: #1e293b;
+        }
+
+        .serif { font-family: 'Lora', serif; }
+
+        input[type="range"] {
+            -webkit-appearance: none;
+            appearance: none;
+            height: 8px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: currentColor;
+            cursor: pointer;
+            border: 2px solid white;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .slider-emerald { background: #d1fae5; color: #059669; }
+        .slider-violet { background: #ede9fe; color: #7c3aed; }
+        .slider-amber { background: #fef3c7; color: #d97706; }
+        .slider-blue { background: #dbeafe; color: #2563eb; }
+        .slider-rose { background: #ffe4e6; color: #e11d48; }
+
+        .param-input {
+            width: 70px;
+            padding: 2px 6px;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-align: right;
+            background: white;
+        }
+
+        .param-input:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+        }
+
+        @keyframes pulseGlow {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.4); }
+            50% { box-shadow: 0 0 0 8px rgba(16, 185, 129, 0); }
+        }
+
+        .pulse-glow { animation: pulseGlow 1.5s ease-in-out infinite; }
+
+        @keyframes neuronFire {
+            0% { transform: scale(1); opacity: 0.7; }
+            50% { transform: scale(1.15); opacity: 1; }
+            100% { transform: scale(1); opacity: 0.7; }
+        }
+
+        .neuron-fire { animation: neuronFire 0.6s ease-in-out; }
+
+        .prose h2 {
+            font-weight: 700;
+            font-size: 1.875rem;
+            margin-top: 2.5rem;
+            margin-bottom: 1.25rem;
+            color: #0f172a;
+        }
+
+        .prose p {
+            margin-bottom: 1.5rem;
+            font-size: 1.1rem;
+        }
+
+        canvas { display: block; }
+
+        .condition-btn {
+            transition: all 0.2s ease;
+            border: 2px solid transparent;
+        }
+        .condition-btn.active {
+            border-color: #059669;
+            background: #ecfdf5;
+            box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.15);
+        }
+        .condition-btn:hover:not(.active) {
+            border-color: #d1d5db;
+            background: #f9fafb;
+        }
+
+        .firing-bar {
+            transition: width 0.4s ease, background-color 0.4s ease;
+        }
+
+        .spike-line {
+            animation: spikeAppear 0.15s ease-out;
+        }
+        @keyframes spikeAppear {
+            0% { transform: scaleY(0); }
+            100% { transform: scaleY(1); }
+        }
+
+        .legend-gradient {
+            background: linear-gradient(to right, #1e3a5f, #1a4d7a, #2d7d9a, #5aaa5a, #b8d44a, #f5c542, #f58442, #e63946);
+            height: 14px;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body class="min-h-screen p-4 md:p-8">
+    <div class="max-w-6xl mx-auto space-y-8">
+
+        <!-- Header -->
+        <header class="bg-white border-b border-slate-200 pt-12 pb-10 -mx-4 md:-mx-8 -mt-4 md:-mt-8 px-4 md:px-8 mb-4">
+            <div class="max-w-4xl mx-auto text-center">
+                <h1 class="text-3xl md:text-5xl font-extrabold text-slate-900 mb-4 leading-tight">
+                    Where Am I? The Brain's GPS:
+                    <br/><span class="text-emerald-600">Place Cells &amp; Visual Landmarks</span>
+                </h1>
+                <p class="text-lg text-slate-500 serif italic max-w-2xl mx-auto">
+                    Hippocampal place cells fire when an animal is in a specific location. But what defines "location"? 
+                    Explore how visual landmarks anchor a place cell's firing field.
+                </p>
+            </div>
+        </header>
+
+        <!-- Main Demo Area -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+
+            <!-- Controls Panel -->
+            <div class="lg:col-span-1 space-y-6 bg-white p-6 rounded-2xl shadow-sm border border-slate-100 h-fit">
+                <div class="flex items-center gap-2 text-lg font-semibold border-b pb-2 mb-4">
+                    <svg class="w-5 h-5 text-slate-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="3"/>
+                        <path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83"/>
+                    </svg>
+                    Experiment Controls
+                </div>
+
+                <!-- Condition Selector -->
+                <div>
+                    <label class="text-sm font-semibold text-slate-600 uppercase tracking-wider mb-3 block">Experimental Condition</label>
+                    <div class="space-y-2">
+                        <button onclick="setCondition(0)" id="cond-btn-0" class="condition-btn active w-full text-left p-3 rounded-xl text-sm">
+                            <div class="font-bold text-slate-800">A &mdash; Initial Position</div>
+                            <div class="text-slate-500 text-xs mt-0.5">Maze and card in starting orientation</div>
+                        </button>
+                        <button onclick="setCondition(1)" id="cond-btn-1" class="condition-btn w-full text-left p-3 rounded-xl text-sm">
+                            <div class="font-bold text-slate-800">B &mdash; Rotate Maze + Card 120°</div>
+                            <div class="text-slate-500 text-xs mt-0.5">Both rotate together — place field follows card</div>
+                        </button>
+                        <button onclick="setCondition(2)" id="cond-btn-2" class="condition-btn w-full text-left p-3 rounded-xl text-sm">
+                            <div class="font-bold text-slate-800">C &mdash; Rotate Maze 240°, Card Back</div>
+                            <div class="text-slate-500 text-xs mt-0.5">Card returns to original spot — field follows card</div>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Place Field Parameters -->
+                <div class="space-y-4 border-t pt-4">
+                    <label class="text-sm font-semibold text-slate-600 uppercase tracking-wider block">Place Field Parameters</label>
+
+                    <div>
+                        <div class="flex justify-between items-center mb-1">
+                            <span class="text-sm text-slate-600">Field Width (σ)</span>
+                            <input type="text" id="sigma-val" class="param-input" value="35" readonly>
+                        </div>
+                        <input type="range" id="sigma-slider" min="15" max="60" value="35"
+                            class="w-full slider-emerald" oninput="updateParam('sigma')">
+                        <div class="flex justify-between text-xs text-slate-400 mt-0.5">
+                            <span>Narrow</span><span>Wide</span>
+                        </div>
+                    </div>
+
+                    <div>
+                        <div class="flex justify-between items-center mb-1">
+                            <span class="text-sm text-slate-600">Peak Firing Rate (Hz)</span>
+                            <input type="text" id="peak-val" class="param-input" value="40" readonly>
+                        </div>
+                        <input type="range" id="peak-slider" min="10" max="80" value="40"
+                            class="w-full slider-amber" oninput="updateParam('peak')">
+                        <div class="flex justify-between text-xs text-slate-400 mt-0.5">
+                            <span>10 Hz</span><span>80 Hz</span>
+                        </div>
+                    </div>
+
+                    <div>
+                        <div class="flex justify-between items-center mb-1">
+                            <span class="text-sm text-slate-600">Background Rate (Hz)</span>
+                            <input type="text" id="bg-val" class="param-input" value="1" readonly>
+                        </div>
+                        <input type="range" id="bg-slider" min="0" max="5" step="0.5" value="1"
+                            class="w-full slider-violet" oninput="updateParam('bg')">
+                        <div class="flex justify-between text-xs text-slate-400 mt-0.5">
+                            <span>0 Hz</span><span>5 Hz</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Rat Control -->
+                <div class="border-t pt-4">
+                    <label class="text-sm font-semibold text-slate-600 uppercase tracking-wider mb-2 block">Rat Position</label>
+                    <p class="text-xs text-slate-400 mb-3">Click anywhere in the maze to move the rat. Watch the place cell response change in real time.</p>
+                    <div class="bg-slate-50 rounded-xl p-3 space-y-2">
+                        <div class="flex justify-between text-sm">
+                            <span class="text-slate-500">Current Arm:</span>
+                            <span id="current-arm" class="font-bold text-emerald-700">Center</span>
+                        </div>
+                        <div class="flex justify-between text-sm">
+                            <span class="text-slate-500">Firing Rate:</span>
+                            <span id="current-rate" class="font-bold text-amber-600">0.0 Hz</span>
+                        </div>
+                        <div class="flex justify-between text-sm">
+                            <span class="text-slate-500">Relative to Card:</span>
+                            <span id="rel-to-card" class="font-bold text-violet-600">&mdash;</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Legend -->
+                <div class="border-t pt-4">
+                    <label class="text-sm font-semibold text-slate-600 uppercase tracking-wider mb-2 block">Firing Rate Legend</label>
+                    <div class="legend-gradient mb-1"></div>
+                    <div class="flex justify-between text-xs text-slate-400">
+                        <span>None</span><span>Low</span><span>High</span>
+                    </div>
+                </div>
+
+                <!-- Auto-Explore Button -->
+                <button onclick="toggleAutoExplore()" id="auto-btn"
+                    class="w-full py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl transition-colors flex items-center justify-center gap-2">
+                    <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polygon points="5 3 19 12 5 21 5 3"/>
+                    </svg>
+                    <span id="auto-btn-text">Auto-Explore Maze</span>
+                </button>
+            </div>
+
+            <!-- Visualization Panel -->
+            <div class="lg:col-span-2 space-y-6">
+                <!-- Three-Armed Maze Canvas -->
+                <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-6">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="font-bold text-lg text-slate-800">Three-Armed Maze</h3>
+                        <div id="condition-label" class="text-sm font-semibold text-emerald-600 bg-emerald-50 px-3 py-1 rounded-full">
+                            Condition A: Initial Position
+                        </div>
+                    </div>
+                    <div class="flex justify-center">
+                        <canvas id="maze-canvas" width="560" height="480" class="rounded-xl border border-slate-200 cursor-crosshair" style="max-width:100%;"></canvas>
+                    </div>
+                </div>
+
+                <!-- Firing Rate Displays -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- Spike Raster -->
+                    <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-6">
+                        <h3 class="font-bold text-lg text-slate-800 mb-2">Place Cell Spikes</h3>
+                        <p class="text-xs text-slate-400 mb-3">Real-time spiking activity of the recorded place cell</p>
+                        <canvas id="spike-canvas" width="400" height="140" class="w-full rounded-lg border border-slate-200"></canvas>
+                    </div>
+
+                    <!-- Heatmap thumbnail -->
+                    <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-6">
+                        <h3 class="font-bold text-lg text-slate-800 mb-2">Place Field Map</h3>
+                        <p class="text-xs text-slate-400 mb-3">Accumulated firing rate across all visited locations</p>
+                        <canvas id="heatmap-canvas" width="400" height="140" class="w-full rounded-lg border border-slate-200"></canvas>
+                        <button onclick="clearHeatmap()" class="mt-2 text-xs text-slate-400 hover:text-slate-600 underline">Clear Map</button>
+                    </div>
+                </div>
+
+                <!-- Arm comparison bars -->
+                <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-6">
+                    <h3 class="font-bold text-lg text-slate-800 mb-1">Firing Rate by Arm</h3>
+                    <p class="text-xs text-slate-400 mb-4">Average place cell firing rate when the rat is in each arm</p>
+                    <div class="space-y-3" id="arm-bars">
+                        <div class="flex items-center gap-3">
+                            <span class="text-sm font-semibold w-16 text-right text-slate-600">Arm 1</span>
+                            <div class="flex-1 bg-slate-100 rounded-full h-6 overflow-hidden">
+                                <div id="bar-arm1" class="firing-bar h-full rounded-full bg-emerald-500" style="width:0%"></div>
+                            </div>
+                            <span id="bar-val-arm1" class="text-sm font-bold w-14 text-slate-600">0 Hz</span>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <span class="text-sm font-semibold w-16 text-right text-slate-600">Arm 2</span>
+                            <div class="flex-1 bg-slate-100 rounded-full h-6 overflow-hidden">
+                                <div id="bar-arm2" class="firing-bar h-full rounded-full bg-amber-500" style="width:0%"></div>
+                            </div>
+                            <span id="bar-val-arm2" class="text-sm font-bold w-14 text-slate-600">0 Hz</span>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <span class="text-sm font-semibold w-16 text-right text-slate-600">Arm 3</span>
+                            <div class="flex-1 bg-slate-100 rounded-full h-6 overflow-hidden">
+                                <div id="bar-arm3" class="firing-bar h-full rounded-full bg-violet-500" style="width:0%"></div>
+                            </div>
+                            <span id="bar-val-arm3" class="text-sm font-bold w-14 text-slate-600">0 Hz</span>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <span class="text-sm font-semibold w-16 text-right text-slate-600">Center</span>
+                            <div class="flex-1 bg-slate-100 rounded-full h-6 overflow-hidden">
+                                <div id="bar-center" class="firing-bar h-full rounded-full bg-slate-400" style="width:0%"></div>
+                            </div>
+                            <span id="bar-val-center" class="text-sm font-bold w-14 text-slate-600">0 Hz</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Explanatory Text -->
+        <div class="max-w-4xl mx-auto prose bg-white rounded-2xl shadow-sm border border-slate-100 p-8 md:p-12 mt-8">
+            <h2>🧠 Place Cells: The Brain's Spatial Map</h2>
+            <p>
+                In 1971, John O'Keefe and Jonathan Dostrovsky discovered neurons in the rat hippocampus that fire 
+                whenever the animal occupies a specific location in its environment. These <strong>place cells</strong> 
+                collectively tile the environment, forming an internal cognitive map — a discovery that earned O'Keefe 
+                a share of the 2014 Nobel Prize in Physiology or Medicine.
+            </p>
+            <p>
+                Each place cell has a <strong>place field</strong> — a circumscribed region of the environment where 
+                the cell fires at high rates (typically 20–80 Hz), while remaining nearly silent elsewhere (0–2 Hz). 
+                The firing rate as a function of position is often modeled as a 2D Gaussian:
+            </p>
+            <p style="text-align:center;">
+                \[ f(\mathbf{x}) = f_{\text{bg}} + f_{\text{peak}} \cdot \exp\!\left(-\frac{\|\mathbf{x} - \mathbf{x}_{\text{field}}\|^2}{2\sigma^2}\right) \]
+            </p>
+            <p>
+                where \(\mathbf{x}\) is the rat's position, \(\mathbf{x}_{\text{field}}\) is the center of the place 
+                field, \(\sigma\) controls the field width, \(f_{\text{peak}}\) is the peak firing rate, and 
+                \(f_{\text{bg}}\) is the background rate.
+            </p>
+
+            <h2>🃏 What Defines "Location"? The Role of Visual Landmarks</h2>
+            <p>
+                A critical question is: what anchors a place field? Is it the absolute position in the room, or the 
+                rat's position <em>relative to visual cues</em>? Classic experiments by Muller &amp; Kubie (1987) and 
+                others addressed this using a three-armed radial maze with a single visual landmark (a cue card).
+            </p>
+            <p>
+                The key finding, illustrated in this demo:
+            </p>
+            <ul class="list-disc pl-6 space-y-2 mb-6">
+                <li><strong>Condition A (Initial Position):</strong> The place cell fires maximally when the rat is 
+                in Arm 2 (nearest the card). This is the cell's place field.</li>
+                <li><strong>Condition B (Maze + Card rotated 120°):</strong> Both the maze and card rotate together. 
+                The place field follows — it still fires in the arm nearest the card. The cell doesn't track 
+                absolute room position.</li>
+                <li><strong>Condition C (Maze rotated 240°, Card back to original):</strong> The maze rotates further 
+                but the card returns to its original position. The place field tracks the card — it now fires in 
+                whichever arm is closest to the card's location, even though this is a different physical arm.</li>
+            </ul>
+            <p>
+                This demonstrates that place cell firing is anchored to the visual landmark, not to idiothetic (self-motion) 
+                cues or the maze geometry alone. The hippocampus constructs a spatial representation relative to 
+                salient environmental cues — a key principle of allocentric spatial coding.
+            </p>
+
+            <h2>📖 Key References</h2>
+            <ul class="list-disc pl-6 space-y-1 text-base">
+                <li>O'Keefe, J. &amp; Dostrovsky, J. (1971). The hippocampus as a spatial map. <em>Brain Research, 34</em>(1), 171–175.</li>
+                <li>O'Keefe, J. &amp; Nadel, L. (1978). <em>The Hippocampus as a Cognitive Map.</em> Oxford University Press.</li>
+                <li>Muller, R. U. &amp; Kubie, J. L. (1987). The effects of changes in the environment on the spatial firing of hippocampal complex-spike cells. <em>Journal of Neuroscience, 7</em>(7), 1951–1968.</li>
+                <li>Gluck, M. A., Mercado, E., &amp; Myers, C. E. (2020). <em>Learning and Memory: From Brain to Behavior</em> (4th ed.). Worth Publishers.</li>
+            </ul>
+        </div>
+
+    </div>
+
+<script>
+// ═══════════════════════════════════════
+//  PLACE CELLS DEMONSTRATION
+// ═══════════════════════════════════════
+
+const mazeCanvas = document.getElementById('maze-canvas');
+const mazeCtx = mazeCanvas.getContext('2d');
+const spikeCanvas = document.getElementById('spike-canvas');
+const spikeCtx = spikeCanvas.getContext('2d');
+const heatmapCanvas = document.getElementById('heatmap-canvas');
+const heatmapCtx = heatmapCanvas.getContext('2d');
+
+// ─── Maze Geometry ──────────────────────
+const CX = 280, CY = 250;          // center of maze on canvas
+const ARM_LENGTH = 140;
+const ARM_WIDTH = 48;
+const CENTER_RADIUS = 40;
+
+// Three arms at 90°, 210°, 330° (top, bottom-left, bottom-right) — will be rotated per condition
+const BASE_ARM_ANGLES = [270, 30, 150]; // degrees: up, lower-right, lower-left (matching figure)
+
+// Condition: { mazeRotation (deg), cardAngle (deg from center) }
+// Card is placed at the end of one arm direction
+const CONDITIONS = [
+    { mazeRotation: 0,   cardAngle: 270, label: 'A: Initial Position',            labelShort: 'A' },
+    { mazeRotation: 120, cardAngle: 30,  label: 'B: Maze + Card Rotated 120°',    labelShort: 'B' },
+    { mazeRotation: 240, cardAngle: 270, label: 'C: Maze 240°, Card Back',        labelShort: 'C' },
+];
+
+let currentCondition = 0;
+let sigma = 35;
+let peakRate = 40;
+let bgRate = 1;
+
+// Rat position
+let ratX = CX, ratY = CY;
+
+// Place field center is always near the card
+function getPlaceFieldCenter() {
+    const cond = CONDITIONS[currentCondition];
+    const angle = cond.cardAngle * Math.PI / 180;
+    const dist = ARM_LENGTH * 0.6;
+    return {
+        x: CX + Math.cos(angle) * dist,
+        y: CY + Math.sin(angle) * dist
+    };
+}
+
+// Firing rate at a point
+function firingRate(px, py) {
+    const pf = getPlaceFieldCenter();
+    const dx = px - pf.x;
+    const dy = py - pf.y;
+    const distSq = dx * dx + dy * dy;
+    const rate = bgRate + peakRate * Math.exp(-distSq / (2 * sigma * sigma));
+    return rate;
+}
+
+// ─── Check if point is inside maze ──────
+function getArmEndpoints(condition) {
+    const cond = CONDITIONS[condition];
+    return BASE_ARM_ANGLES.map((baseAngle, i) => {
+        const a = (baseAngle + cond.mazeRotation) % 360;
+        const rad = a * Math.PI / 180;
+        return {
+            angle: a,
+            rad: rad,
+            armIndex: i,
+            endX: CX + Math.cos(rad) * ARM_LENGTH,
+            endY: CY + Math.sin(rad) * ARM_LENGTH
+        };
+    });
+}
+
+function pointInMaze(px, py) {
+    // Check center circle
+    const dx = px - CX, dy = py - CY;
+    if (dx * dx + dy * dy <= CENTER_RADIUS * CENTER_RADIUS) return { inside: true, region: 'Center' };
+
+    // Check each arm (as a rotated rectangle)
+    const arms = getArmEndpoints(currentCondition);
+    for (const arm of arms) {
+        // Project point onto arm axis
+        const ax = Math.cos(arm.rad), ay = Math.sin(arm.rad);
+        const along = (px - CX) * ax + (py - CY) * ay;
+        const perp = Math.abs((px - CX) * (-ay) + (py - CY) * ax);
+        if (along >= 0 && along <= ARM_LENGTH && perp <= ARM_WIDTH / 2) {
+            return { inside: true, region: `Arm ${arm.armIndex + 1}` };
+        }
+    }
+    return { inside: false, region: 'Outside' };
+}
+
+// ─── Drawing ──────────────────────────
+function heatColor(rate) {
+    const t = Math.min(1, Math.max(0, (rate - bgRate) / peakRate));
+    // Cool (blue) → Warm (red/yellow)
+    const r = Math.round(30 + 225 * Math.pow(t, 0.8));
+    const g = Math.round(58 + 150 * t * (1 - 0.5 * t));
+    const b = Math.round(95 * (1 - t));
+    const a = 0.15 + 0.6 * t;
+    return `rgba(${r},${g},${b},${a})`;
+}
+
+function drawMaze() {
+    const ctx = mazeCtx;
+    ctx.clearRect(0, 0, mazeCanvas.width, mazeCanvas.height);
+
+    const arms = getArmEndpoints(currentCondition);
+    const cond = CONDITIONS[currentCondition];
+
+    // Draw heatmap overlay on maze
+    const step = 6;
+    for (let x = 0; x < mazeCanvas.width; x += step) {
+        for (let y = 0; y < mazeCanvas.height; y += step) {
+            const info = pointInMazeAt(x, y);
+            if (info.inside) {
+                const rate = firingRate(x, y);
+                ctx.fillStyle = heatColor(rate);
+                ctx.fillRect(x - step/2, y - step/2, step, step);
+            }
+        }
+    }
+
+    // Draw arm walls
+    ctx.lineWidth = 3;
+    ctx.strokeStyle = '#475569';
+    ctx.fillStyle = '#f1f5f9';
+
+    for (const arm of arms) {
+        ctx.save();
+        ctx.translate(CX, CY);
+        ctx.rotate(arm.rad);
+
+        // Arm body (transparent - we already drew heatmap)
+        ctx.beginPath();
+        ctx.rect(0, -ARM_WIDTH / 2, ARM_LENGTH, ARM_WIDTH);
+        ctx.strokeStyle = '#64748b';
+        ctx.lineWidth = 3;
+        ctx.stroke();
+
+        // Arm end cap
+        ctx.beginPath();
+        ctx.arc(ARM_LENGTH, 0, ARM_WIDTH / 2, -Math.PI / 2, Math.PI / 2);
+        ctx.stroke();
+
+        // Arm number label
+        ctx.fillStyle = '#334155';
+        ctx.font = 'bold 16px Inter, sans-serif';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        const labelDist = ARM_LENGTH + ARM_WIDTH / 2 + 16;
+        ctx.fillText(`${arm.armIndex + 1}`, labelDist, 0);
+
+        ctx.restore();
+    }
+
+    // Center circle
+    ctx.beginPath();
+    ctx.arc(CX, CY, CENTER_RADIUS, 0, Math.PI * 2);
+    ctx.strokeStyle = '#64748b';
+    ctx.lineWidth = 3;
+    ctx.stroke();
+
+    // Draw card (visual landmark)
+    const cardAngle = cond.cardAngle * Math.PI / 180;
+    const cardDist = ARM_LENGTH + ARM_WIDTH / 2 + 8;
+    const cardX = CX + Math.cos(cardAngle) * cardDist;
+    const cardY = CY + Math.sin(cardAngle) * cardDist;
+
+    ctx.save();
+    ctx.translate(cardX, cardY);
+    ctx.rotate(cardAngle + Math.PI / 2);
+
+    // Card rectangle  
+    const cardW = 36, cardH = 48;
+    ctx.fillStyle = '#ffffff';
+    ctx.strokeStyle = '#e11d48';
+    ctx.lineWidth = 3;
+    ctx.beginPath();
+    ctx.roundRect(-cardW / 2, -cardH / 2, cardW, cardH, 4);
+    ctx.fill();
+    ctx.stroke();
+
+    // Card label
+    ctx.fillStyle = '#e11d48';
+    ctx.font = 'bold 11px Inter, sans-serif';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText('CARD', 0, -6);
+
+    // Card icon (simple diamond)
+    ctx.fillStyle = '#e11d48';
+    ctx.beginPath();
+    ctx.moveTo(0, 6);
+    ctx.lineTo(6, 14);
+    ctx.lineTo(0, 22);
+    ctx.lineTo(-6, 14);
+    ctx.closePath();
+    ctx.fill();
+
+    ctx.restore();
+
+    // "Card" label outside
+    ctx.fillStyle = '#be123c';
+    ctx.font = 'bold 12px Inter, sans-serif';
+    ctx.textAlign = 'center';
+    const labelCardDist = cardDist + 38;
+    ctx.fillText('Visual Cue', CX + Math.cos(cardAngle) * labelCardDist, CY + Math.sin(cardAngle) * labelCardDist);
+
+    // Place field center marker (subtle)
+    const pf = getPlaceFieldCenter();
+    ctx.beginPath();
+    ctx.arc(pf.x, pf.y, 6, 0, Math.PI * 2);
+    ctx.fillStyle = 'rgba(220, 38, 38, 0.2)';
+    ctx.fill();
+    ctx.strokeStyle = 'rgba(220, 38, 38, 0.4)';
+    ctx.lineWidth = 1.5;
+    ctx.stroke();
+
+    // Draw rat
+    drawRat(ctx, ratX, ratY);
+}
+
+function pointInMazeAt(px, py) {
+    const dx = px - CX, dy = py - CY;
+    if (dx * dx + dy * dy <= CENTER_RADIUS * CENTER_RADIUS) return { inside: true, region: 'Center' };
+
+    const arms = getArmEndpoints(currentCondition);
+    for (const arm of arms) {
+        const ax = Math.cos(arm.rad), ay = Math.sin(arm.rad);
+        const along = (px - CX) * ax + (py - CY) * ay;
+        const perp = Math.abs((px - CX) * (-ay) + (py - CY) * ax);
+        if (along >= 0 && along <= ARM_LENGTH && perp <= ARM_WIDTH / 2) {
+            return { inside: true, region: `Arm ${arm.armIndex + 1}` };
+        }
+    }
+    return { inside: false, region: 'Outside' };
+}
+
+function drawRat(ctx, x, y) {
+    ctx.save();
+    ctx.translate(x, y);
+
+    // Body
+    ctx.beginPath();
+    ctx.ellipse(0, 0, 12, 8, 0, 0, Math.PI * 2);
+    ctx.fillStyle = '#92400e';
+    ctx.fill();
+    ctx.strokeStyle = '#78350f';
+    ctx.lineWidth = 1.5;
+    ctx.stroke();
+
+    // Head
+    ctx.beginPath();
+    ctx.ellipse(10, 0, 6, 5, 0, 0, Math.PI * 2);
+    ctx.fillStyle = '#a16207';
+    ctx.fill();
+    ctx.stroke();
+
+    // Ears
+    ctx.beginPath();
+    ctx.arc(13, -5, 3, 0, Math.PI * 2);
+    ctx.fillStyle = '#fbbf24';
+    ctx.fill();
+    ctx.beginPath();
+    ctx.arc(13, 5, 3, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Eye
+    ctx.beginPath();
+    ctx.arc(14, -1.5, 1.5, 0, Math.PI * 2);
+    ctx.fillStyle = '#1e293b';
+    ctx.fill();
+
+    // Tail
+    ctx.beginPath();
+    ctx.moveTo(-12, 0);
+    ctx.quadraticCurveTo(-20, -8, -22, 2);
+    ctx.strokeStyle = '#a16207';
+    ctx.lineWidth = 1.5;
+    ctx.stroke();
+
+    ctx.restore();
+}
+
+// ─── Spike raster ──────────────────────
+let spikeHistory = [];      // array of { time, rate }
+const SPIKE_WINDOW = 3000;  // ms of history to show
+
+function updateSpikes() {
+    const now = Date.now();
+    const rate = firingRate(ratX, ratY);
+    
+    // Generate spikes (Poisson process, evaluated every ~30ms)
+    const dt = 0.03;
+    const nSpikes = Math.random() < rate * dt ? 1 : 0;
+    if (nSpikes > 0) {
+        spikeHistory.push({ time: now, rate: rate });
+    }
+    
+    // Prune old
+    spikeHistory = spikeHistory.filter(s => now - s.time < SPIKE_WINDOW);
+
+    // Draw
+    const ctx = spikeCtx;
+    const W = spikeCanvas.width, H = spikeCanvas.height;
+    ctx.clearRect(0, 0, W, H);
+
+    // Background
+    ctx.fillStyle = '#0f172a';
+    ctx.fillRect(0, 0, W, H);
+
+    // Time axis
+    ctx.strokeStyle = '#334155';
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(0, H - 20);
+    ctx.lineTo(W, H - 20);
+    ctx.stroke();
+
+    ctx.fillStyle = '#64748b';
+    ctx.font = '10px Inter, sans-serif';
+    ctx.textAlign = 'center';
+    for (let t = 0; t <= 3; t++) {
+        const x = (t / 3) * W;
+        ctx.fillText(`${t}s`, x, H - 6);
+    }
+
+    // Spike lines
+    for (const spike of spikeHistory) {
+        const x = ((now - spike.time) / SPIKE_WINDOW) * W;
+        const drawX = W - x;
+        
+        ctx.beginPath();
+        ctx.moveTo(drawX, 10);
+        ctx.lineTo(drawX, H - 25);
+        ctx.strokeStyle = '#34d399';
+        ctx.lineWidth = 1.5;
+        ctx.stroke();
+    }
+
+    // Current rate text
+    ctx.fillStyle = '#34d399';
+    ctx.font = 'bold 12px Inter, sans-serif';
+    ctx.textAlign = 'right';
+    ctx.fillText(`${rate.toFixed(1)} Hz`, W - 8, 22);
+}
+
+// ─── Heatmap (accumulated) ──────────────
+const HMAP_W = 400, HMAP_H = 140;
+let heatmapData = new Float32Array(HMAP_W * HMAP_H);
+let heatmapMax = 1;
+
+function updateHeatmap() {
+    // Map rat position to heatmap coordinates
+    const scaleX = HMAP_W / mazeCanvas.width;
+    const scaleY = HMAP_H / mazeCanvas.height;
+    const hx = Math.floor(ratX * scaleX);
+    const hy = Math.floor(ratY * scaleY);
+    const rate = firingRate(ratX, ratY);
+
+    // Splat a small area
+    const r = 3;
+    for (let dy = -r; dy <= r; dy++) {
+        for (let dx = -r; dx <= r; dx++) {
+            const px = hx + dx, py = hy + dy;
+            if (px >= 0 && px < HMAP_W && py >= 0 && py < HMAP_H) {
+                const w = Math.exp(-(dx*dx + dy*dy) / (2 * 1.5));
+                heatmapData[py * HMAP_W + px] += rate * w * 0.02;
+            }
+        }
+    }
+
+    heatmapMax = Math.max(heatmapMax, ...heatmapData);
+
+    // Render
+    const ctx = heatmapCtx;
+    const imgData = ctx.createImageData(HMAP_W, HMAP_H);
+    for (let i = 0; i < heatmapData.length; i++) {
+        const t = Math.min(1, heatmapData[i] / (heatmapMax * 0.5 + 0.01));
+        const idx = i * 4;
+        // Blue → Cyan → Green → Yellow → Red
+        if (t < 0.25) {
+            const s = t / 0.25;
+            imgData.data[idx]     = Math.round(30 * s);
+            imgData.data[idx + 1] = Math.round(58 + 100 * s);
+            imgData.data[idx + 2] = Math.round(95 + 60 * s);
+        } else if (t < 0.5) {
+            const s = (t - 0.25) / 0.25;
+            imgData.data[idx]     = Math.round(30 + 100 * s);
+            imgData.data[idx + 1] = Math.round(158 + 50 * s);
+            imgData.data[idx + 2] = Math.round(155 * (1 - s));
+        } else if (t < 0.75) {
+            const s = (t - 0.5) / 0.25;
+            imgData.data[idx]     = Math.round(130 + 115 * s);
+            imgData.data[idx + 1] = Math.round(208 - 40 * s);
+            imgData.data[idx + 2] = Math.round(20 * (1 - s));
+        } else {
+            const s = (t - 0.75) / 0.25;
+            imgData.data[idx]     = Math.round(245 - 15 * s);
+            imgData.data[idx + 1] = Math.round(168 - 110 * s);
+            imgData.data[idx + 2] = Math.round(10 + 50 * s);
+        }
+        imgData.data[idx + 3] = t > 0.01 ? Math.round(80 + 175 * t) : 0;
+    }
+    ctx.putImageData(imgData, 0, 0);
+}
+
+function clearHeatmap() {
+    heatmapData.fill(0);
+    heatmapMax = 1;
+    armAccum = { arm1: { sum: 0, n: 0 }, arm2: { sum: 0, n: 0 }, arm3: { sum: 0, n: 0 }, center: { sum: 0, n: 0 } };
+    updateArmBars();
+}
+
+// ─── Arm bars ──────────────────────────
+let armAccum = { arm1: { sum: 0, n: 0 }, arm2: { sum: 0, n: 0 }, arm3: { sum: 0, n: 0 }, center: { sum: 0, n: 0 } };
+
+function updateArmBars() {
+    const info = pointInMaze(ratX, ratY);
+    const rate = firingRate(ratX, ratY);
+
+    if (info.inside) {
+        const key = info.region.toLowerCase().replace(' ', '');
+        if (armAccum[key]) {
+            armAccum[key].sum += rate;
+            armAccum[key].n += 1;
+        }
+    }
+
+    const maxRate = peakRate + bgRate;
+    for (const [key, data] of Object.entries(armAccum)) {
+        const avg = data.n > 0 ? data.sum / data.n : 0;
+        const pct = Math.min(100, (avg / maxRate) * 100);
+        const bar = document.getElementById(`bar-${key}`);
+        const val = document.getElementById(`bar-val-${key}`);
+        if (bar) bar.style.width = `${pct}%`;
+        if (val) val.textContent = `${avg.toFixed(1)} Hz`;
+    }
+}
+
+// ─── UI Updates ─────────────────────────
+function updateParam(which) {
+    if (which === 'sigma') {
+        sigma = parseInt(document.getElementById('sigma-slider').value);
+        document.getElementById('sigma-val').value = sigma;
+    } else if (which === 'peak') {
+        peakRate = parseInt(document.getElementById('peak-slider').value);
+        document.getElementById('peak-val').value = peakRate;
+    } else if (which === 'bg') {
+        bgRate = parseFloat(document.getElementById('bg-slider').value);
+        document.getElementById('bg-val').value = bgRate;
+    }
+    drawMaze();
+}
+
+function setCondition(idx) {
+    currentCondition = idx;
+    // Update buttons
+    for (let i = 0; i < 3; i++) {
+        const btn = document.getElementById(`cond-btn-${i}`);
+        btn.classList.toggle('active', i === idx);
+    }
+    document.getElementById('condition-label').textContent = `Condition ${CONDITIONS[idx].label}`;
+    
+    // Clear accumulated data on condition change
+    clearHeatmap();
+    spikeHistory = [];
+    
+    drawMaze();
+    updateInfoPanel();
+}
+
+function updateInfoPanel() {
+    const info = pointInMaze(ratX, ratY);
+    const rate = firingRate(ratX, ratY);
+    
+    document.getElementById('current-arm').textContent = info.inside ? info.region : 'Outside';
+    document.getElementById('current-rate').textContent = `${rate.toFixed(1)} Hz`;
+    
+    // Distance to card
+    const cond = CONDITIONS[currentCondition];
+    const cardAngle = cond.cardAngle * Math.PI / 180;
+    const cardX = CX + Math.cos(cardAngle) * (ARM_LENGTH + ARM_WIDTH/2);
+    const cardY = CY + Math.sin(cardAngle) * (ARM_LENGTH + ARM_WIDTH/2);
+    const dist = Math.sqrt((ratX - cardX) ** 2 + (ratY - cardY) ** 2);
+    
+    if (dist < 60) {
+        document.getElementById('rel-to-card').textContent = 'Near card';
+        document.getElementById('rel-to-card').className = 'font-bold text-emerald-600';
+    } else if (dist < 120) {
+        document.getElementById('rel-to-card').textContent = 'Medium';
+        document.getElementById('rel-to-card').className = 'font-bold text-amber-600';
+    } else {
+        document.getElementById('rel-to-card').textContent = 'Far from card';
+        document.getElementById('rel-to-card').className = 'font-bold text-rose-600';
+    }
+}
+
+// ─── Mouse Interaction ──────────────────
+mazeCanvas.addEventListener('click', (e) => {
+    const rect = mazeCanvas.getBoundingClientRect();
+    const scaleX = mazeCanvas.width / rect.width;
+    const scaleY = mazeCanvas.height / rect.height;
+    const mx = (e.clientX - rect.left) * scaleX;
+    const my = (e.clientY - rect.top) * scaleY;
+    
+    const info = pointInMazeAt(mx, my);
+    if (info.inside) {
+        ratX = mx;
+        ratY = my;
+        drawMaze();
+        updateInfoPanel();
+    }
+});
+
+let isDragging = false;
+mazeCanvas.addEventListener('mousedown', (e) => {
+    isDragging = true;
+});
+mazeCanvas.addEventListener('mouseup', () => { isDragging = false; });
+mazeCanvas.addEventListener('mouseleave', () => { isDragging = false; });
+mazeCanvas.addEventListener('mousemove', (e) => {
+    if (!isDragging) return;
+    const rect = mazeCanvas.getBoundingClientRect();
+    const scaleX = mazeCanvas.width / rect.width;
+    const scaleY = mazeCanvas.height / rect.height;
+    const mx = (e.clientX - rect.left) * scaleX;
+    const my = (e.clientY - rect.top) * scaleY;
+    
+    const info = pointInMazeAt(mx, my);
+    if (info.inside) {
+        ratX = mx;
+        ratY = my;
+        drawMaze();
+        updateInfoPanel();
+    }
+});
+
+// ─── Auto Explore ──────────────────────
+let autoExploring = false;
+let autoPath = [];
+let autoIdx = 0;
+
+function generateExplorePath() {
+    const path = [];
+    const arms = getArmEndpoints(currentCondition);
+    
+    // Visit center then each arm
+    const segments = [
+        { x: CX, y: CY }, // center
+    ];
+    
+    for (const arm of arms) {
+        // Walk out the arm
+        const steps = 30;
+        for (let i = 0; i <= steps; i++) {
+            const t = i / steps;
+            segments.push({
+                x: CX + Math.cos(arm.rad) * ARM_LENGTH * t,
+                y: CY + Math.sin(arm.rad) * ARM_LENGTH * t
+            });
+        }
+        // Walk back
+        for (let i = steps; i >= 0; i--) {
+            const t = i / steps;
+            segments.push({
+                x: CX + Math.cos(arm.rad) * ARM_LENGTH * t,
+                y: CY + Math.sin(arm.rad) * ARM_LENGTH * t
+            });
+        }
+    }
+    
+    // Repeat for multiple laps
+    for (let lap = 0; lap < 3; lap++) {
+        path.push(...segments);
+    }
+    
+    return path;
+}
+
+function toggleAutoExplore() {
+    autoExploring = !autoExploring;
+    const btn = document.getElementById('auto-btn');
+    const btnText = document.getElementById('auto-btn-text');
+    
+    if (autoExploring) {
+        btn.classList.remove('bg-emerald-600', 'hover:bg-emerald-700');
+        btn.classList.add('bg-rose-600', 'hover:bg-rose-700');
+        btnText.textContent = 'Stop Exploring';
+        autoPath = generateExplorePath();
+        autoIdx = 0;
+    } else {
+        btn.classList.remove('bg-rose-600', 'hover:bg-rose-700');
+        btn.classList.add('bg-emerald-600', 'hover:bg-emerald-700');
+        btnText.textContent = 'Auto-Explore Maze';
+    }
+}
+
+function autoStep() {
+    if (!autoExploring || autoPath.length === 0) return;
+    
+    const target = autoPath[autoIdx % autoPath.length];
+    // Smooth interpolation
+    ratX += (target.x - ratX) * 0.15;
+    ratY += (target.y - ratY) * 0.15;
+    
+    if (Math.abs(ratX - target.x) < 2 && Math.abs(ratY - target.y) < 2) {
+        autoIdx = (autoIdx + 1) % autoPath.length;
+    }
+}
+
+// ─── Main Loop ──────────────────────────
+function mainLoop() {
+    autoStep();
+    drawMaze();
+    updateSpikes();
+    updateHeatmap();
+    updateArmBars();
+    updateInfoPanel();
+    requestAnimationFrame(mainLoop);
+}
+
+// Initialize
+drawMaze();
+updateInfoPanel();
+mainLoop();
+
+</script>
+</body>
+</html>
