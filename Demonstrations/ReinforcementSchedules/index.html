@@ -1,0 +1,1061 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reinforcement Schedules | FR · FI · VR · VI</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Lora:ital,wght@0,400;0,700;1,400&display=swap');
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc;
+            line-height: 1.7;
+            color: #1e293b;
+        }
+
+        .serif { font-family: 'Lora', serif; }
+
+        input[type="range"] {
+            -webkit-appearance: none;
+            appearance: none;
+            height: 8px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: currentColor;
+            cursor: pointer;
+            border: 2px solid white;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .slider-blue { background: #dbeafe; color: #3b82f6; }
+        .slider-amber { background: #fef3c7; color: #d97706; }
+        .slider-emerald { background: #d1fae5; color: #10b981; }
+        .slider-violet { background: #ede9fe; color: #7c3aed; }
+
+        .param-input {
+            width: 60px;
+            padding: 2px 6px;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-align: right;
+            background: white;
+        }
+
+        .param-input:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+        }
+
+        .panel-fr { border-top: 3px solid #3b82f6; }
+        .panel-fi { border-top: 3px solid #f59e0b; }
+        .panel-vr { border-top: 3px solid #10b981; }
+        .panel-vi { border-top: 3px solid #8b5cf6; }
+
+        .lever-btn { transition: all 0.1s; user-select: none; }
+        .lever-btn:active { transform: scale(0.95); }
+
+        @keyframes flashReinforce {
+            0% { opacity: 1; transform: scale(1); }
+            100% { opacity: 0; transform: scale(1.1); }
+        }
+
+        .reinforce-flash {
+            animation: flashReinforce 0.6s ease-out forwards;
+        }
+
+        .prose h2 {
+            font-weight: 700;
+            font-size: 1.875rem;
+            margin-top: 2.5rem;
+            margin-bottom: 1.25rem;
+            color: #0f172a;
+        }
+
+        .prose p {
+            margin-bottom: 1.5rem;
+            font-size: 1.1rem;
+        }
+    </style>
+</head>
+<body class="min-h-screen p-4 md:p-8">
+    <div class="max-w-7xl mx-auto space-y-8">
+
+        <!-- Header -->
+        <header class="bg-white border-b border-slate-200 pt-12 pb-10 -mx-4 md:-mx-8 -mt-4 md:-mt-8 px-4 md:px-8 mb-4">
+            <div class="max-w-4xl mx-auto text-center">
+                <h1 class="text-3xl md:text-5xl font-extrabold text-slate-900 mb-4 leading-tight">
+                    Reinforcement Schedules:
+                    <br/><span class="text-orange-600">The Four Patterns of Behavior</span>
+                </h1>
+                <p class="text-lg text-slate-500 serif italic max-w-2xl mx-auto">
+                    Does the timing and pattern of reward change how you respond?
+                    Press a lever under four different schedules and watch the classic cumulative records emerge.
+                </p>
+            </div>
+        </header>
+
+        <!-- Main layout -->
+        <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
+
+            <!-- Controls Panel -->
+            <div class="lg:col-span-1 space-y-5 bg-white p-5 rounded-2xl shadow-sm border border-slate-100 h-fit">
+                <div class="flex items-center gap-2 text-lg font-semibold border-b pb-2 mb-4">
+                    <svg class="w-5 h-5 text-slate-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="3"/>
+                        <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06A1.65 1.65 0 0 0 4.6 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06A1.65 1.65 0 0 0 9 4.6a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+                    </svg>
+                    Controls
+                </div>
+
+                <!-- Mode Toggle -->
+                <div>
+                    <label class="text-xs font-semibold text-slate-500 uppercase tracking-wide block mb-2">Mode</label>
+                    <div class="flex rounded-lg overflow-hidden border border-slate-200">
+                        <button id="mode-manual" class="flex-1 py-2 text-xs font-bold bg-orange-500 text-white transition-colors">
+                            🖐️ Manual
+                        </button>
+                        <button id="mode-sim" class="flex-1 py-2 text-xs font-bold bg-slate-100 text-slate-500 transition-colors">
+                            🤖 Simulation
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Ratio Requirement -->
+                <div>
+                    <div class="flex justify-between mb-1">
+                        <label class="text-sm font-medium text-slate-600">Ratio Requirement</label>
+                        <input type="number" id="ratio-val" class="param-input text-blue-600" value="10" min="2" max="50" step="1">
+                    </div>
+                    <input type="range" id="ratio-slider" min="2" max="50" step="1" value="10" class="w-full slider-blue">
+                    <p class="text-[10px] text-slate-400 mt-1 italic">Responses needed for FR; mean for VR</p>
+                </div>
+
+                <!-- Interval Duration -->
+                <div>
+                    <div class="flex justify-between mb-1">
+                        <label class="text-sm font-medium text-slate-600">Interval (seconds)</label>
+                        <input type="number" id="interval-val" class="param-input text-amber-600" value="10" min="2" max="60" step="1">
+                    </div>
+                    <input type="range" id="interval-slider" min="2" max="60" step="1" value="10" class="w-full slider-amber">
+                    <p class="text-[10px] text-slate-400 mt-1 italic">Seconds for FI; mean for VI</p>
+                </div>
+
+                <!-- Speed -->
+                <div>
+                    <label class="text-xs font-semibold text-slate-500 uppercase tracking-wide block mb-2">Speed</label>
+                    <div class="flex gap-2">
+                        <button class="speed-btn flex-1 py-1.5 text-xs font-bold rounded-lg border-2 border-orange-500 bg-orange-500 text-white transition-colors" data-speed="1">1×</button>
+                        <button class="speed-btn flex-1 py-1.5 text-xs font-bold rounded-lg border-2 border-slate-200 text-slate-500 transition-colors" data-speed="2">2×</button>
+                        <button class="speed-btn flex-1 py-1.5 text-xs font-bold rounded-lg border-2 border-slate-200 text-slate-500 transition-colors" data-speed="5">5×</button>
+                    </div>
+                </div>
+
+                <!-- Play / Reset -->
+                <div class="pt-3 border-t space-y-2">
+                    <button id="play-btn" class="w-full flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-orange-600 text-white font-semibold hover:bg-orange-700 transition-colors shadow-lg shadow-orange-200">
+                        <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polygon points="5 3 19 12 5 21 5 3"/>
+                        </svg>
+                        <span id="play-label">Start</span>
+                    </button>
+                    <button id="reset-btn" class="w-full flex items-center justify-center gap-1 px-3 py-2 rounded-lg border border-red-200 text-red-600 font-medium hover:bg-red-50 transition-colors text-sm">
+                        ↻ Reset
+                    </button>
+                </div>
+
+                <!-- Timer -->
+                <div class="bg-slate-50 rounded-xl p-3 text-center">
+                    <div class="text-2xl font-bold text-slate-800 font-mono" id="timer-display">0:00.0</div>
+                    <div class="text-xs text-slate-500 uppercase tracking-wide">Elapsed Time</div>
+                </div>
+
+                <!-- Keyboard shortcuts -->
+                <div class="text-[10px] text-slate-400 space-y-1 pt-2 border-t" id="shortcuts-info">
+                    <div class="font-semibold text-slate-500">Manual Mode Keys:</div>
+                    <div><kbd class="px-1 py-0.5 rounded bg-slate-100 font-mono text-blue-600">1</kbd> FR lever</div>
+                    <div><kbd class="px-1 py-0.5 rounded bg-slate-100 font-mono text-amber-600">2</kbd> FI lever</div>
+                    <div><kbd class="px-1 py-0.5 rounded bg-slate-100 font-mono text-emerald-600">3</kbd> VR lever</div>
+                    <div><kbd class="px-1 py-0.5 rounded bg-slate-100 font-mono text-violet-600">4</kbd> VI lever</div>
+                </div>
+            </div>
+
+            <!-- 2×2 Grid of Schedule Panels -->
+            <div class="lg:col-span-3 grid grid-cols-1 md:grid-cols-2 gap-4">
+
+                <!-- FR Panel -->
+                <div id="panel-FR" class="bg-white rounded-2xl shadow-sm border border-slate-100 panel-fr p-4 flex flex-col">
+                    <div class="flex items-center justify-between mb-0.5">
+                        <h3 class="text-sm font-bold flex items-center gap-2">
+                            <span class="w-3 h-3 rounded-full bg-blue-500"></span>
+                            Fixed Ratio
+                            <span class="text-blue-500 font-mono text-xs" id="fr-label">FR-10</span>
+                        </h3>
+                        <div class="text-xs px-2 py-0.5 rounded-full font-semibold opacity-0" id="fr-feedback">🎉 Reinforced!</div>
+                    </div>
+                    <p class="text-[10px] text-slate-400 italic mb-2">🏭 Like factory piecework — paid per N widgets assembled</p>
+                    <canvas id="fr-canvas" class="w-full rounded-lg flex-1" style="min-height:190px"></canvas>
+                    <div class="flex justify-between text-xs text-slate-500 mt-2 px-1">
+                        <span>Resp: <strong class="text-slate-700" id="fr-resp">0</strong></span>
+                        <span>Reinf: <strong class="text-blue-600" id="fr-reinf">0</strong></span>
+                        <span>Rate: <strong class="text-slate-700" id="fr-rate">0</strong>/min</span>
+                    </div>
+                    <button id="fr-lever" class="lever-btn manual-lever mt-2 w-full py-2 rounded-xl bg-blue-500 text-white font-bold text-sm hover:bg-blue-600 active:bg-blue-700 transition-colors shadow-md">
+                        Press Lever (1)
+                    </button>
+                </div>
+
+                <!-- FI Panel -->
+                <div id="panel-FI" class="bg-white rounded-2xl shadow-sm border border-slate-100 panel-fi p-4 flex flex-col">
+                    <div class="flex items-center justify-between mb-0.5">
+                        <h3 class="text-sm font-bold flex items-center gap-2">
+                            <span class="w-3 h-3 rounded-full bg-amber-500"></span>
+                            Fixed Interval
+                            <span class="text-amber-500 font-mono text-xs" id="fi-label">FI-10s</span>
+                        </h3>
+                        <div class="text-xs px-2 py-0.5 rounded-full font-semibold opacity-0" id="fi-feedback">🎉 Reinforced!</div>
+                    </div>
+                    <p class="text-[10px] text-slate-400 italic mb-2">🍪 Like checking cookies in the oven — first peek after N minutes</p>
+                    <canvas id="fi-canvas" class="w-full rounded-lg flex-1" style="min-height:190px"></canvas>
+                    <div class="flex justify-between text-xs text-slate-500 mt-2 px-1">
+                        <span>Resp: <strong class="text-slate-700" id="fi-resp">0</strong></span>
+                        <span>Reinf: <strong class="text-amber-600" id="fi-reinf">0</strong></span>
+                        <span>Rate: <strong class="text-slate-700" id="fi-rate">0</strong>/min</span>
+                    </div>
+                    <button id="fi-lever" class="lever-btn manual-lever mt-2 w-full py-2 rounded-xl bg-amber-500 text-white font-bold text-sm hover:bg-amber-600 active:bg-amber-700 transition-colors shadow-md">
+                        Press Lever (2)
+                    </button>
+                </div>
+
+                <!-- VR Panel -->
+                <div id="panel-VR" class="bg-white rounded-2xl shadow-sm border border-slate-100 panel-vr p-4 flex flex-col">
+                    <div class="flex items-center justify-between mb-0.5">
+                        <h3 class="text-sm font-bold flex items-center gap-2">
+                            <span class="w-3 h-3 rounded-full bg-emerald-500"></span>
+                            Variable Ratio
+                            <span class="text-emerald-500 font-mono text-xs" id="vr-label">VR-10</span>
+                        </h3>
+                        <div class="text-xs px-2 py-0.5 rounded-full font-semibold opacity-0" id="vr-feedback">🎉 Reinforced!</div>
+                    </div>
+                    <p class="text-[10px] text-slate-400 italic mb-2">🎰 Like a slot machine — you never know which pull will pay</p>
+                    <canvas id="vr-canvas" class="w-full rounded-lg flex-1" style="min-height:190px"></canvas>
+                    <div class="flex justify-between text-xs text-slate-500 mt-2 px-1">
+                        <span>Resp: <strong class="text-slate-700" id="vr-resp">0</strong></span>
+                        <span>Reinf: <strong class="text-emerald-600" id="vr-reinf">0</strong></span>
+                        <span>Rate: <strong class="text-slate-700" id="vr-rate">0</strong>/min</span>
+                    </div>
+                    <button id="vr-lever" class="lever-btn manual-lever mt-2 w-full py-2 rounded-xl bg-emerald-500 text-white font-bold text-sm hover:bg-emerald-600 active:bg-emerald-700 transition-colors shadow-md">
+                        Press Lever (3)
+                    </button>
+                </div>
+
+                <!-- VI Panel -->
+                <div id="panel-VI" class="bg-white rounded-2xl shadow-sm border border-slate-100 panel-vi p-4 flex flex-col">
+                    <div class="flex items-center justify-between mb-0.5">
+                        <h3 class="text-sm font-bold flex items-center gap-2">
+                            <span class="w-3 h-3 rounded-full bg-violet-500"></span>
+                            Variable Interval
+                            <span class="text-violet-500 font-mono text-xs" id="vi-label">VI-10s</span>
+                        </h3>
+                        <div class="text-xs px-2 py-0.5 rounded-full font-semibold opacity-0" id="vi-feedback">🎉 Reinforced!</div>
+                    </div>
+                    <p class="text-[10px] text-slate-400 italic mb-2">📧 Like checking email — a reply could arrive at any moment</p>
+                    <canvas id="vi-canvas" class="w-full rounded-lg flex-1" style="min-height:190px"></canvas>
+                    <div class="flex justify-between text-xs text-slate-500 mt-2 px-1">
+                        <span>Resp: <strong class="text-slate-700" id="vi-resp">0</strong></span>
+                        <span>Reinf: <strong class="text-violet-600" id="vi-reinf">0</strong></span>
+                        <span>Rate: <strong class="text-slate-700" id="vi-rate">0</strong>/min</span>
+                    </div>
+                    <button id="vi-lever" class="lever-btn manual-lever mt-2 w-full py-2 rounded-xl bg-violet-500 text-white font-bold text-sm hover:bg-violet-600 active:bg-violet-700 transition-colors shadow-md">
+                        Press Lever (4)
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Combined Comparison Chart -->
+        <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-100">
+            <h3 class="text-sm font-semibold flex items-center gap-2 text-slate-700 mb-3">
+                <svg class="w-4 h-4 text-orange-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+                </svg>
+                Cumulative Records — All Four Schedules Compared
+            </h3>
+            <canvas id="combined-canvas" class="w-full rounded-lg" style="height:280px"></canvas>
+            <div class="flex justify-center gap-6 mt-3 text-xs font-semibold">
+                <span class="flex items-center gap-1.5"><span class="w-4 h-1 rounded bg-blue-500 inline-block"></span> FR</span>
+                <span class="flex items-center gap-1.5"><span class="w-4 h-1 rounded bg-amber-500 inline-block"></span> FI</span>
+                <span class="flex items-center gap-1.5"><span class="w-4 h-1 rounded bg-emerald-500 inline-block"></span> VR</span>
+                <span class="flex items-center gap-1.5"><span class="w-4 h-1 rounded bg-violet-500 inline-block"></span> VI</span>
+                <span class="flex items-center gap-1.5"><span class="w-4 h-0.5 rounded bg-slate-300 inline-block" style="border-bottom: 2px dashed #94a3b8;"></span> ● Reinforcement</span>
+            </div>
+        </div>
+
+        <!-- Insight Box -->
+        <div class="bg-gradient-to-r from-orange-50 to-violet-50 p-4 rounded-xl border border-orange-100">
+            <div class="flex items-start gap-3">
+                <span class="text-2xl">🧠</span>
+                <div>
+                    <strong class="text-slate-800">What to Watch For</strong>
+                    <p class="text-slate-600 text-sm mt-1 mb-0" id="insight-text">
+                        Start the simulation to see how four different reinforcement schedules produce four distinctly different patterns of behavior — even though the "reward" itself is the same.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Explanation Prose -->
+        <div class="prose max-w-4xl mx-auto bg-white p-8 md:p-12 rounded-2xl shadow-sm border border-slate-100 mt-4">
+            <h2 class="flex items-center gap-3">
+                <svg class="w-8 h-8 text-orange-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"/>
+                    <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3M12 17h.01"/>
+                </svg>
+                How Reward Timing Shapes Behavior
+            </h2>
+
+            <p>
+                B.F. Skinner discovered that the <em>pattern</em> of reinforcement matters as much as the reinforcement itself.
+                Even with the same reward, changing <em>when</em> and <em>how</em> it's delivered produces dramatically different behavioral patterns.
+            </p>
+
+            <h3 class="text-xl font-semibold mt-8 mb-4">The 2 × 2 Classification</h3>
+            <p>Reinforcement schedules are defined along two dimensions:</p>
+            <ul class="space-y-2 my-4">
+                <li><strong>Ratio vs. Interval</strong> — Is reinforcement based on <em>number of responses</em> (ratio) or <em>elapsed time</em> (interval)?</li>
+                <li><strong>Fixed vs. Variable</strong> — Is the requirement <em>constant</em> (fixed) or does it <em>change unpredictably</em> (variable)?</li>
+            </ul>
+
+            <div class="bg-slate-50 rounded-xl my-6 overflow-hidden">
+                <table class="w-full text-sm">
+                    <thead>
+                        <tr class="border-b border-slate-200">
+                            <th class="p-3"></th>
+                            <th class="p-3 font-bold text-center">Fixed</th>
+                            <th class="p-3 font-bold text-center">Variable</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="border-b border-slate-100">
+                            <td class="p-3 font-bold">Ratio<br><span class="text-xs font-normal text-slate-400">response count</span></td>
+                            <td class="p-3 text-center">
+                                <strong class="text-blue-600">FR</strong><br>
+                                <span class="text-xs text-slate-500">Reinforce every <em>N</em>th response</span><br>
+                                <span class="text-[10px] text-slate-400">Break-and-run pattern</span>
+                            </td>
+                            <td class="p-3 text-center">
+                                <strong class="text-emerald-600">VR</strong><br>
+                                <span class="text-xs text-slate-500">Reinforce after ~<em>N</em> responses (varies)</span><br>
+                                <span class="text-[10px] text-slate-400">High, steady rate</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="p-3 font-bold">Interval<br><span class="text-xs font-normal text-slate-400">elapsed time</span></td>
+                            <td class="p-3 text-center">
+                                <strong class="text-amber-600">FI</strong><br>
+                                <span class="text-xs text-slate-500">Reinforce first response after <em>T</em> sec</span><br>
+                                <span class="text-[10px] text-slate-400">Scalloped pattern</span>
+                            </td>
+                            <td class="p-3 text-center">
+                                <strong class="text-violet-600">VI</strong><br>
+                                <span class="text-xs text-slate-500">Reinforce first response after ~<em>T</em> sec (varies)</span><br>
+                                <span class="text-[10px] text-slate-400">Moderate, steady rate</span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h3 class="text-xl font-semibold mt-8 mb-4">The Four Characteristic Patterns</h3>
+
+            <p>
+                <strong class="text-blue-600">Fixed Ratio (FR):</strong>
+                Produces a <em>break-and-run</em> pattern. After each reinforcement, the organism pauses (the "post-reinforcement pause"), then responds in a rapid burst until the next reinforcement.
+                The cumulative record shows flat segments followed by steep ramps. Think of a student powering through homework problems — a break after each set, then a concentrated burst.
+            </p>
+
+            <p>
+                <strong class="text-amber-600">Fixed Interval (FI):</strong>
+                Produces the classic <em>scallop</em>. Responding is very slow right after reinforcement (why respond when it won't pay off yet?) and accelerates as the interval approaches.
+                Like checking cookies in the oven — you don't bother at first, but peek more and more often as the timer approaches zero.
+            </p>
+
+            <p>
+                <strong class="text-emerald-600">Variable Ratio (VR):</strong>
+                Produces the <em>highest, steadiest</em> response rate of all four schedules. Since any response could be the one that pays off, there's no logical time to pause.
+                This is the slot-machine schedule — and it's why gambling is so hard to quit. It's also the most resistant to extinction.
+            </p>
+
+            <p>
+                <strong class="text-violet-600">Variable Interval (VI):</strong>
+                Produces a <em>moderate, steady</em> response rate. Since the interval varies unpredictably, a consistent checking rate is the best strategy — not too fast (wastes effort), not too slow (misses opportunities).
+                Like checking your email for a reply that could come at any point.
+            </p>
+
+            <h3 class="text-xl font-semibold mt-8 mb-4">Reading the Cumulative Record</h3>
+            <p>
+                The cumulative record is Skinner's signature visualization. The x-axis is <em>time</em>, the y-axis is <em>total responses so far</em>.
+                The line can only go up or stay flat — never down.
+            </p>
+            <ul class="space-y-2 my-4">
+                <li><strong>Steep slope</strong> = high response rate (fast pressing)</li>
+                <li><strong>Flat line</strong> = pause in responding</li>
+                <li><strong>● Dots</strong> = reinforcement delivered</li>
+                <li><strong>Consistent slope</strong> = steady response rate (VR, VI)</li>
+                <li><strong>Changing slope</strong> = accelerating or decelerating (FI scallop, FR break-and-run)</li>
+            </ul>
+
+            <div class="bg-amber-50 border border-amber-200 rounded-xl p-6 my-6">
+                <div class="flex items-start gap-3">
+                    <span class="text-2xl">💡</span>
+                    <div>
+                        <strong class="text-amber-800">Try it!</strong>
+                        <p class="text-amber-700 text-sm mt-1 mb-0">
+                            1. Switch to <strong>Simulation</strong> mode and press Start — watch all four patterns develop simultaneously.<br>
+                            2. In <strong>Manual</strong> mode, try pressing the FR lever rapidly. Notice how you get reinforced every N presses.<br>
+                            3. Try the FI lever — can you learn to wait for the interval and respond right when it "opens up"?<br>
+                            4. Increase the ratio to 30 — the post-reinforcement pause in FR gets longer.<br>
+                            5. Compare VR and FR — same average requirement, but VR keeps you pressing without any pause!
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <h3 class="text-xl font-semibold mt-8 mb-4">Why This Matters</h3>
+            <p>
+                Reinforcement schedules explain patterns of behavior we see everywhere:
+                why slot machines are addictive (VR), why students cram before exams (FI scalloping),
+                why piecework pay motivates bursts of productivity (FR), and why we check social media
+                at a steady rate (VI). Understanding these schedules gives us a powerful framework
+                for analyzing — and designing — incentive structures.
+            </p>
+        </div>
+
+        <!-- Footer -->
+        <footer class="text-center py-8 text-sm text-slate-400">
+            <p>Reinforcement Schedules Demonstration</p>
+            <p class="mt-1">FR · FI · VR · VI — The four patterns of operant conditioning</p>
+        </footer>
+    </div>
+
+    <script>
+    // ============ CONFIGURATION ============
+    const COLORS = {
+        FR: '#3b82f6',
+        FI: '#f59e0b',
+        VR: '#10b981',
+        VI: '#8b5cf6'
+    };
+
+    const SCHEDULE_KEYS = ['FR', 'FI', 'VR', 'VI'];
+
+    // ============ STATE ============
+    let schedules = {};
+    let mode = 'manual';    // 'manual' or 'simulation'
+    let running = false;
+    let time = 0;
+    let speed = 1;
+    let lastTimestamp = null;
+    let animFrameId = null;
+
+    function getRatioRequirement() {
+        return parseInt(document.getElementById('ratio-val').value);
+    }
+
+    function getIntervalRequirement() {
+        return parseInt(document.getElementById('interval-val').value);
+    }
+
+    // ============ SCHEDULE INIT ============
+    function sampleVR(mean) {
+        const val = -mean * Math.log(1 - Math.random());
+        return Math.max(1, Math.min(Math.round(val), mean * 3));
+    }
+
+    function sampleVI(mean) {
+        const val = -mean * Math.log(1 - Math.random());
+        return Math.max(0.5, Math.min(val, mean * 3));
+    }
+
+    function createSchedule(type) {
+        const baseRatio = getRatioRequirement();
+        const baseInterval = getIntervalRequirement();
+        const s = {
+            type: type,
+            events: [],
+            totalResponses: 0,
+            totalReinforcements: 0,
+            responsesSinceReinforcement: 0,
+            lastReinforcementTime: 0,
+            currentRequirement: 0,
+        };
+
+        if (type === 'FR') s.currentRequirement = baseRatio;
+        else if (type === 'VR') s.currentRequirement = sampleVR(baseRatio);
+        else if (type === 'FI') s.currentRequirement = baseInterval;
+        else if (type === 'VI') s.currentRequirement = sampleVI(baseInterval);
+
+        return s;
+    }
+
+    function initSchedules() {
+        schedules = {};
+        for (const key of SCHEDULE_KEYS) {
+            schedules[key] = createSchedule(key);
+        }
+    }
+
+    // ============ RESPONSE & REINFORCEMENT ============
+    function recordResponse(key) {
+        const s = schedules[key];
+        s.totalResponses++;
+        s.responsesSinceReinforcement++;
+
+        let reinforced = false;
+        const baseRatio = getRatioRequirement();
+        const baseInterval = getIntervalRequirement();
+
+        if (s.type === 'FR' || s.type === 'VR') {
+            // Ratio schedule: reinforce after N responses
+            if (s.responsesSinceReinforcement >= s.currentRequirement) {
+                reinforced = true;
+            }
+        } else {
+            // Interval schedule: reinforce first response after T seconds
+            const elapsed = time - s.lastReinforcementTime;
+            if (elapsed >= s.currentRequirement) {
+                reinforced = true;
+            }
+        }
+
+        if (reinforced) {
+            s.totalReinforcements++;
+            s.responsesSinceReinforcement = 0;
+            s.lastReinforcementTime = time;
+
+            // Resample requirement for variable schedules
+            if (s.type === 'VR') s.currentRequirement = sampleVR(baseRatio);
+            else if (s.type === 'VI') s.currentRequirement = sampleVI(baseInterval);
+            else if (s.type === 'FR') s.currentRequirement = baseRatio;
+            else if (s.type === 'FI') s.currentRequirement = baseInterval;
+
+            showFeedback(key);
+        }
+
+        s.events.push({
+            time: time,
+            cumResponses: s.totalResponses,
+            reinforced: reinforced
+        });
+    }
+
+    // ============ SIMULATION AGENTS ============
+    function getAgentRate(s) {
+        const timeSinceReinf = time - s.lastReinforcementTime;
+        const baseRatio = getRatioRequirement();
+        const baseInterval = getIntervalRequirement();
+
+        switch (s.type) {
+            case 'FR': {
+                // Post-reinforcement pause proportional to ratio, then high-rate burst
+                const pauseDuration = Math.max(0.4, baseRatio * 0.12);
+                if (timeSinceReinf < pauseDuration) return 0;
+                return 4.0;
+            }
+            case 'VR': {
+                // Steady high rate with minimal pause
+                if (timeSinceReinf < 0.12) return 0.5;
+                return 3.5;
+            }
+            case 'FI': {
+                // Scalloped pattern: rate accelerates as interval approaches
+                const progress = timeSinceReinf / s.currentRequirement;
+                if (progress < 0.15) return 0.05;
+                return 3.5 * Math.pow(Math.min(progress, 1.5), 2.5);
+            }
+            case 'VI': {
+                // Moderate steady rate
+                if (timeSinceReinf < 0.15) return 0.3;
+                return 1.8;
+            }
+        }
+        return 0;
+    }
+
+    function simulateAgents(dt) {
+        for (const key of SCHEDULE_KEYS) {
+            const s = schedules[key];
+            const rate = getAgentRate(s);
+            // Probability of at least one response in dt seconds
+            const prob = 1 - Math.exp(-rate * dt);
+            if (Math.random() < prob) {
+                recordResponse(key);
+            }
+        }
+    }
+
+    // ============ FEEDBACK ============
+    function showFeedback(key) {
+        const el = document.getElementById(key.toLowerCase() + '-feedback');
+        el.style.opacity = '1';
+        el.style.background = key === 'FR' ? '#dbeafe' : key === 'FI' ? '#fef3c7' : key === 'VR' ? '#d1fae5' : '#ede9fe';
+        el.style.color = COLORS[key];
+        el.className = 'text-xs px-2 py-0.5 rounded-full font-semibold reinforce-flash';
+        // Reset after animation
+        setTimeout(() => {
+            el.style.opacity = '0';
+            el.className = 'text-xs px-2 py-0.5 rounded-full font-semibold opacity-0';
+        }, 600);
+    }
+
+    // ============ DISPLAY UPDATES ============
+    function updateTimer() {
+        const mins = Math.floor(time / 60);
+        const secs = time % 60;
+        document.getElementById('timer-display').textContent =
+            `${mins}:${secs < 10 ? '0' : ''}${secs.toFixed(1)}`;
+    }
+
+    function getRecentRate(s) {
+        const windowSec = 10;
+        const cutoff = time - windowSec;
+        let count = 0;
+        for (let i = s.events.length - 1; i >= 0; i--) {
+            if (s.events[i].time < cutoff) break;
+            count++;
+        }
+        const elapsed = Math.min(windowSec, time);
+        return elapsed > 0 ? (count / elapsed * 60) : 0;
+    }
+
+    function updateStats() {
+        for (const key of SCHEDULE_KEYS) {
+            const s = schedules[key];
+            const k = key.toLowerCase();
+            document.getElementById(k + '-resp').textContent = s.totalResponses;
+            document.getElementById(k + '-reinf').textContent = s.totalReinforcements;
+            document.getElementById(k + '-rate').textContent = getRecentRate(s).toFixed(0);
+        }
+    }
+
+    function updateLabels() {
+        const r = getRatioRequirement();
+        const t = getIntervalRequirement();
+        document.getElementById('fr-label').textContent = `FR-${r}`;
+        document.getElementById('fi-label').textContent = `FI-${t}s`;
+        document.getElementById('vr-label').textContent = `VR-${r}`;
+        document.getElementById('vi-label').textContent = `VI-${t}s`;
+    }
+
+    function updateInsight() {
+        const el = document.getElementById('insight-text');
+        if (!running && time === 0) {
+            el.textContent = "Start the simulation to see how four different reinforcement schedules produce four distinctly different patterns of behavior — even though the \"reward\" itself is the same.";
+            return;
+        }
+        if (time < 5) {
+            el.textContent = "Watch closely as the first few seconds unfold. Notice how VR starts responding almost immediately, while FR has a noticeable pause after each reinforcement.";
+            return;
+        }
+        const frRate = getRecentRate(schedules.FR);
+        const fiRate = getRecentRate(schedules.FI);
+        const vrRate = getRecentRate(schedules.VR);
+        const viRate = getRecentRate(schedules.VI);
+
+        if (mode === 'simulation') {
+            if (time > 30) {
+                el.textContent = `The patterns are clear: VR produces the highest rate (${vrRate.toFixed(0)}/min) with no pausing. FR shows bursts (${frRate.toFixed(0)}/min) separated by post-reinforcement pauses. FI shows scalloping — slow start, then acceleration. VI maintains a moderate steady rate (${viRate.toFixed(0)}/min).`;
+            } else {
+                el.textContent = `Look at the slopes. Steeper = faster responding. VR (green) is consistently steep. FR (blue) alternates between flat pauses and steep bursts. FI (amber) curves upward within each interval. VI (purple) maintains a steady moderate slope.`;
+            }
+        } else {
+            el.textContent = `Manual mode: Press keys 1-4 to respond on each schedule. Try pressing FR (1) rapidly in bursts. Try waiting before pressing FI (2). Does your behavior naturally adapt to each schedule?`;
+        }
+    }
+
+    // ============ CANVAS DRAWING ============
+    function setupCanvas(canvas, height) {
+        const dpr = window.devicePixelRatio || 1;
+        const rect = canvas.getBoundingClientRect();
+        canvas.width = rect.width * dpr;
+        canvas.height = height * dpr;
+        const ctx = canvas.getContext('2d');
+        ctx.scale(dpr, dpr);
+        return { ctx, W: rect.width, H: height };
+    }
+
+    function drawCumulativeRecord(canvasId, scheduleKey) {
+        const canvas = document.getElementById(canvasId);
+        const h = canvas.clientHeight || 190;
+        const { ctx, W, H } = setupCanvas(canvas, h);
+        const margin = { top: 10, right: 12, bottom: 22, left: 38 };
+        const plotW = W - margin.left - margin.right;
+        const plotH = H - margin.top - margin.bottom;
+        const color = COLORS[scheduleKey];
+        const s = schedules[scheduleKey];
+        const events = s.events;
+
+        // Background
+        ctx.fillStyle = '#f8fafc';
+        ctx.fillRect(0, 0, W, H);
+        ctx.fillStyle = '#ffffff';
+        ctx.fillRect(margin.left, margin.top, plotW, plotH);
+        ctx.strokeStyle = '#e2e8f0';
+        ctx.lineWidth = 1;
+        ctx.strokeRect(margin.left, margin.top, plotW, plotH);
+
+        if (events.length === 0 && time < 0.5) {
+            ctx.fillStyle = '#94a3b8';
+            ctx.font = '12px Inter, sans-serif';
+            ctx.textAlign = 'center';
+            ctx.fillText('Waiting...', W / 2, H / 2);
+            return;
+        }
+
+        const maxTime = Math.max(time, 5);
+        const maxResp = Math.max(events.length > 0 ? events[events.length - 1].cumResponses : 1, 5);
+
+        function toX(t) { return margin.left + (t / maxTime) * plotW; }
+        function toY(r) { return margin.top + plotH - (r / (maxResp * 1.1)) * plotH; }
+
+        // Grid lines
+        ctx.strokeStyle = '#f1f5f9';
+        ctx.lineWidth = 1;
+        for (let i = 1; i <= 4; i++) {
+            const y = margin.top + (plotH / 5) * i;
+            ctx.beginPath();
+            ctx.moveTo(margin.left, y);
+            ctx.lineTo(margin.left + plotW, y);
+            ctx.stroke();
+        }
+
+        // Draw cumulative record (step function)
+        ctx.strokeStyle = color;
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.moveTo(toX(0), toY(0));
+        let prevCum = 0;
+        for (const ev of events) {
+            ctx.lineTo(toX(ev.time), toY(prevCum));
+            ctx.lineTo(toX(ev.time), toY(ev.cumResponses));
+            prevCum = ev.cumResponses;
+        }
+        ctx.lineTo(toX(time), toY(prevCum));
+        ctx.stroke();
+
+        // Reinforcement markers
+        for (const ev of events) {
+            if (ev.reinforced) {
+                ctx.fillStyle = color;
+                ctx.beginPath();
+                ctx.arc(toX(ev.time), toY(ev.cumResponses), 3.5, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.fillStyle = 'white';
+                ctx.beginPath();
+                ctx.arc(toX(ev.time), toY(ev.cumResponses), 1.5, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+
+        // Y-axis labels
+        ctx.fillStyle = '#64748b';
+        ctx.font = '10px Inter, sans-serif';
+        ctx.textAlign = 'right';
+        ctx.textBaseline = 'middle';
+        const yMax = Math.round(maxResp * 1.1);
+        ctx.fillText(yMax.toString(), margin.left - 4, margin.top + 4);
+        ctx.fillText('0', margin.left - 4, margin.top + plotH - 2);
+
+        // X-axis label
+        ctx.fillStyle = '#94a3b8';
+        ctx.font = '10px Inter, sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillText(`${maxTime.toFixed(0)}s`, margin.left + plotW, H - 3);
+    }
+
+    function drawCombinedChart() {
+        const canvas = document.getElementById('combined-canvas');
+        const h = canvas.clientHeight || 280;
+        const { ctx, W, H } = setupCanvas(canvas, h);
+        const margin = { top: 12, right: 15, bottom: 28, left: 45 };
+        const plotW = W - margin.left - margin.right;
+        const plotH = H - margin.top - margin.bottom;
+
+        // Background
+        ctx.fillStyle = '#f8fafc';
+        ctx.fillRect(0, 0, W, H);
+        ctx.fillStyle = '#ffffff';
+        ctx.fillRect(margin.left, margin.top, plotW, plotH);
+        ctx.strokeStyle = '#e2e8f0';
+        ctx.lineWidth = 1;
+        ctx.strokeRect(margin.left, margin.top, plotW, plotH);
+
+        // Find global maxima
+        let globalMaxResp = 5;
+        for (const key of SCHEDULE_KEYS) {
+            const ev = schedules[key].events;
+            if (ev.length > 0) {
+                globalMaxResp = Math.max(globalMaxResp, ev[ev.length - 1].cumResponses);
+            }
+        }
+        const maxTime = Math.max(time, 5);
+        const maxResp = globalMaxResp * 1.1;
+
+        function toX(t) { return margin.left + (t / maxTime) * plotW; }
+        function toY(r) { return margin.top + plotH - (r / maxResp) * plotH; }
+
+        if (time < 0.5 && schedules.FR.events.length === 0) {
+            ctx.fillStyle = '#94a3b8';
+            ctx.font = '13px Inter, sans-serif';
+            ctx.textAlign = 'center';
+            ctx.fillText('Start the simulation to see all four cumulative records', W / 2, H / 2);
+            return;
+        }
+
+        // Grid lines
+        ctx.strokeStyle = '#f1f5f9';
+        ctx.lineWidth = 1;
+        for (let i = 1; i <= 4; i++) {
+            const y = margin.top + (plotH / 5) * i;
+            ctx.beginPath();
+            ctx.moveTo(margin.left, y);
+            ctx.lineTo(margin.left + plotW, y);
+            ctx.stroke();
+        }
+
+        // Draw each schedule
+        for (const key of SCHEDULE_KEYS) {
+            const s = schedules[key];
+            const events = s.events;
+            const color = COLORS[key];
+
+            // Cumulative record line
+            ctx.strokeStyle = color;
+            ctx.lineWidth = 2.5;
+            ctx.beginPath();
+            ctx.moveTo(toX(0), toY(0));
+            let prevCum = 0;
+            for (const ev of events) {
+                ctx.lineTo(toX(ev.time), toY(prevCum));
+                ctx.lineTo(toX(ev.time), toY(ev.cumResponses));
+                prevCum = ev.cumResponses;
+            }
+            ctx.lineTo(toX(time), toY(prevCum));
+            ctx.stroke();
+
+            // Reinforcement markers
+            for (const ev of events) {
+                if (ev.reinforced) {
+                    ctx.fillStyle = color;
+                    ctx.beginPath();
+                    ctx.arc(toX(ev.time), toY(ev.cumResponses), 3, 0, Math.PI * 2);
+                    ctx.fill();
+                    ctx.fillStyle = 'white';
+                    ctx.beginPath();
+                    ctx.arc(toX(ev.time), toY(ev.cumResponses), 1.2, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+            }
+        }
+
+        // Y-axis
+        ctx.fillStyle = '#64748b';
+        ctx.font = '10px Inter, sans-serif';
+        ctx.textAlign = 'right';
+        ctx.textBaseline = 'middle';
+        ctx.fillText(Math.round(maxResp).toString(), margin.left - 5, margin.top + 6);
+        ctx.fillText(Math.round(maxResp / 2).toString(), margin.left - 5, margin.top + plotH / 2);
+        ctx.fillText('0', margin.left - 5, margin.top + plotH - 2);
+
+        // Y-axis title
+        ctx.save();
+        ctx.translate(12, margin.top + plotH / 2);
+        ctx.rotate(-Math.PI / 2);
+        ctx.fillStyle = '#94a3b8';
+        ctx.font = '11px Inter, sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillText('Cumulative Responses', 0, 0);
+        ctx.restore();
+
+        // X-axis
+        ctx.fillStyle = '#94a3b8';
+        ctx.font = '11px Inter, sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillText('Time (seconds)', margin.left + plotW / 2, H - 4);
+        ctx.textAlign = 'left';
+        ctx.fillText('0', margin.left, H - 4);
+        ctx.textAlign = 'right';
+        ctx.fillText(`${maxTime.toFixed(0)}s`, margin.left + plotW, H - 4);
+    }
+
+    function drawAllCanvases() {
+        drawCumulativeRecord('fr-canvas', 'FR');
+        drawCumulativeRecord('fi-canvas', 'FI');
+        drawCumulativeRecord('vr-canvas', 'VR');
+        drawCumulativeRecord('vi-canvas', 'VI');
+        drawCombinedChart();
+        updateStats();
+    }
+
+    // ============ GAME LOOP ============
+    function gameLoop(timestamp) {
+        if (!running) return;
+        if (!lastTimestamp) lastTimestamp = timestamp;
+        const realDt = (timestamp - lastTimestamp) / 1000;
+        lastTimestamp = timestamp;
+
+        // Cap dt to prevent huge jumps when tab is in background
+        const dt = Math.min(realDt, 0.1) * speed;
+        time += dt;
+
+        if (mode === 'simulation') {
+            simulateAgents(dt);
+        }
+
+        updateTimer();
+        drawAllCanvases();
+        updateInsight();
+        animFrameId = requestAnimationFrame(gameLoop);
+    }
+
+    function startRunning() {
+        running = true;
+        lastTimestamp = null;
+        document.getElementById('play-label').textContent = 'Pause';
+        document.getElementById('play-btn').querySelector('svg').innerHTML =
+            '<rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/>';
+        animFrameId = requestAnimationFrame(gameLoop);
+    }
+
+    function stopRunning() {
+        running = false;
+        if (animFrameId) cancelAnimationFrame(animFrameId);
+        document.getElementById('play-label').textContent = 'Start';
+        document.getElementById('play-btn').querySelector('svg').innerHTML =
+            '<polygon points="5 3 19 12 5 21 5 3"/>';
+    }
+
+    function resetAll() {
+        stopRunning();
+        time = 0;
+        lastTimestamp = null;
+        initSchedules();
+        updateTimer();
+        updateLabels();
+        drawAllCanvases();
+        updateInsight();
+    }
+
+    // ============ LEVER PRESSING (manual) ============
+    function pressLever(key) {
+        if (!running) return;
+        recordResponse(key);
+        // Flash the lever button
+        const btn = document.getElementById(key.toLowerCase() + '-lever');
+        btn.classList.add('ring-4', 'ring-opacity-50');
+        if (key === 'FR') btn.classList.add('ring-blue-300');
+        else if (key === 'FI') btn.classList.add('ring-amber-300');
+        else if (key === 'VR') btn.classList.add('ring-emerald-300');
+        else btn.classList.add('ring-violet-300');
+        setTimeout(() => {
+            btn.classList.remove('ring-4', 'ring-opacity-50', 'ring-blue-300', 'ring-amber-300', 'ring-emerald-300', 'ring-violet-300');
+        }, 100);
+    }
+
+    // ============ UI SETUP ============
+    function syncSliderInput(slider, input) {
+        slider.addEventListener('input', () => { input.value = slider.value; updateLabels(); });
+        input.addEventListener('change', () => {
+            let val = parseFloat(input.value);
+            val = Math.max(parseFloat(slider.min), Math.min(parseFloat(slider.max), val));
+            input.value = val;
+            slider.value = val;
+            updateLabels();
+        });
+    }
+
+    syncSliderInput(document.getElementById('ratio-slider'), document.getElementById('ratio-val'));
+    syncSliderInput(document.getElementById('interval-slider'), document.getElementById('interval-val'));
+
+    // Mode toggle
+    document.getElementById('mode-manual').addEventListener('click', () => {
+        mode = 'manual';
+        document.getElementById('mode-manual').className = 'flex-1 py-2 text-xs font-bold bg-orange-500 text-white transition-colors';
+        document.getElementById('mode-sim').className = 'flex-1 py-2 text-xs font-bold bg-slate-100 text-slate-500 transition-colors';
+        document.querySelectorAll('.manual-lever').forEach(el => el.style.display = 'block');
+        document.getElementById('shortcuts-info').style.display = 'block';
+        updateInsight();
+    });
+
+    document.getElementById('mode-sim').addEventListener('click', () => {
+        mode = 'simulation';
+        document.getElementById('mode-sim').className = 'flex-1 py-2 text-xs font-bold bg-orange-500 text-white transition-colors';
+        document.getElementById('mode-manual').className = 'flex-1 py-2 text-xs font-bold bg-slate-100 text-slate-500 transition-colors';
+        document.querySelectorAll('.manual-lever').forEach(el => el.style.display = 'none');
+        document.getElementById('shortcuts-info').style.display = 'none';
+        updateInsight();
+    });
+
+    // Speed buttons
+    document.querySelectorAll('.speed-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            speed = parseInt(btn.dataset.speed);
+            document.querySelectorAll('.speed-btn').forEach(b => {
+                b.className = 'speed-btn flex-1 py-1.5 text-xs font-bold rounded-lg border-2 transition-colors ' +
+                    (parseInt(b.dataset.speed) === speed
+                        ? 'border-orange-500 bg-orange-500 text-white'
+                        : 'border-slate-200 text-slate-500');
+            });
+        });
+    });
+
+    // Play / Pause
+    document.getElementById('play-btn').addEventListener('click', () => {
+        if (running) stopRunning();
+        else startRunning();
+    });
+
+    // Reset
+    document.getElementById('reset-btn').addEventListener('click', resetAll);
+
+    // Lever buttons
+    document.getElementById('fr-lever').addEventListener('click', () => pressLever('FR'));
+    document.getElementById('fi-lever').addEventListener('click', () => pressLever('FI'));
+    document.getElementById('vr-lever').addEventListener('click', () => pressLever('VR'));
+    document.getElementById('vi-lever').addEventListener('click', () => pressLever('VI'));
+
+    // Keyboard shortcuts
+    document.addEventListener('keydown', (e) => {
+        if (mode !== 'manual' || !running) return;
+        if (e.target.tagName === 'INPUT') return;
+        if (e.key === '1') pressLever('FR');
+        else if (e.key === '2') pressLever('FI');
+        else if (e.key === '3') pressLever('VR');
+        else if (e.key === '4') pressLever('VI');
+    });
+
+    // Resize handling
+    window.addEventListener('resize', () => {
+        drawAllCanvases();
+    });
+
+    // ============ INITIALIZE ============
+    initSchedules();
+    updateLabels();
+    drawAllCanvases();
+    </script>
+</body>
+</html>
