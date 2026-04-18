@@ -1,0 +1,1435 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Module 6 Exam Prep — Habituation, Sensitization & Perceptual Learning</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --primary: #6366f1;
+      --primary-dark: #4f46e5;
+      --secondary: #ec4899;
+      --accent: #06b6d4;
+      --emerald: #10b981;
+      --amber: #f59e0b;
+      --rose: #f43f5e;
+      --dark: #0f172a;
+      --dark-light: #1e293b;
+      --dark-mid: #162032;
+      --gray: #64748b;
+      --gray-light: #94a3b8;
+      --light: #f1f5f9;
+      --white: #ffffff;
+      --border: rgba(255,255,255,0.08);
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--dark);
+      color: var(--white);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* ─── ANIMATED BACKGROUND ─── */
+    .bg-layer {
+      position: fixed; inset: 0; z-index: -1; pointer-events: none;
+      background:
+        radial-gradient(ellipse 80% 60% at 20% 10%, rgba(99,102,241,.12) 0%, transparent 60%),
+        radial-gradient(ellipse 60% 60% at 80% 80%, rgba(236,72,153,.08) 0%, transparent 60%),
+        radial-gradient(ellipse 40% 40% at 50% 50%, rgba(6,182,212,.05) 0%, transparent 60%);
+      animation: bgPulse 20s ease-in-out infinite;
+    }
+    @keyframes bgPulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.7; transform: scale(1.05); }
+    }
+
+    /* ─── TOPBAR ─── */
+    .topbar {
+      position: sticky; top: 0; z-index: 100;
+      padding: .75rem 2rem;
+      background: rgba(15,23,42,.85);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 1rem;
+    }
+    .topbar-left { display: flex; align-items: center; gap: 1rem; }
+    .back-link {
+      display: flex; align-items: center; gap: .5rem;
+      color: var(--gray-light); text-decoration: none; font-size: .85rem;
+      transition: color .2s;
+    }
+    .back-link:hover { color: var(--white); }
+    .back-link svg { flex-shrink: 0; }
+    .breadcrumb { color: var(--gray); font-size: .8rem; }
+    .breadcrumb span { color: var(--primary); }
+
+    .progress-bar-wrap {
+      flex: 1; max-width: 240px;
+      background: rgba(255,255,255,.08); border-radius: 99px; height: 6px; overflow: hidden;
+    }
+    .progress-bar-fill {
+      height: 100%; border-radius: 99px;
+      background: linear-gradient(90deg, var(--primary), var(--secondary));
+      transition: width .5s ease;
+      width: 0%;
+    }
+    .progress-label { font-size: .75rem; color: var(--gray); white-space: nowrap; }
+
+    /* ─── HERO ─── */
+    .hero {
+      padding: 5rem 2rem 3rem;
+      max-width: 900px; margin: 0 auto; text-align: center;
+    }
+    .module-badge {
+      display: inline-flex; align-items: center; gap: .5rem;
+      background: rgba(99,102,241,.15); border: 1px solid rgba(99,102,241,.3);
+      color: #a5b4fc; border-radius: 99px; padding: .35rem 1rem; font-size: .8rem;
+      font-weight: 600; letter-spacing: .05em; text-transform: uppercase; margin-bottom: 1.5rem;
+    }
+    .hero h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      line-height: 1.15; margin-bottom: 1rem;
+      background: linear-gradient(135deg, #fff 40%, #a5b4fc);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    }
+    .hero-subtitle { color: var(--gray-light); font-size: 1.05rem; max-width: 600px; margin: 0 auto 2rem; }
+
+    .tab-nav {
+      display: flex; gap: .5rem; justify-content: center;
+      flex-wrap: wrap; margin-bottom: 1rem;
+    }
+    .tab-btn {
+      padding: .6rem 1.2rem; border-radius: 99px; border: 1px solid var(--border);
+      background: rgba(255,255,255,.04); color: var(--gray-light);
+      font-size: .875rem; font-weight: 500; cursor: pointer; transition: all .2s;
+      font-family: 'Inter', sans-serif;
+    }
+    .tab-btn:hover { background: rgba(99,102,241,.12); color: var(--white); border-color: rgba(99,102,241,.4); }
+    .tab-btn.active {
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      color: var(--white); border-color: transparent;
+    }
+
+    /* ─── MAIN LAYOUT ─── */
+    .main { max-width: 900px; margin: 0 auto; padding: 0 2rem 6rem; }
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; animation: fadeIn .3s ease; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+    /* ─── SECTION CARDS (Study Guide) ─── */
+    .study-section {
+      border: 1px solid var(--border);
+      border-radius: 16px; overflow: hidden;
+      background: rgba(255,255,255,.02);
+      margin-bottom: 1rem;
+      transition: border-color .2s;
+    }
+    .study-section:hover { border-color: rgba(99,102,241,.25); }
+    .study-section-header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1.1rem 1.5rem; cursor: pointer; user-select: none;
+      gap: 1rem;
+    }
+    .study-section-header-left { display: flex; align-items: center; gap: .85rem; }
+    .section-icon {
+      width: 36px; height: 36px; border-radius: 10px; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center; font-size: 1.1rem;
+    }
+    .section-title { font-size: 1rem; font-weight: 600; }
+    .section-num { font-size: .75rem; color: var(--gray); }
+    .chevron { color: var(--gray); transition: transform .25s; flex-shrink: 0; }
+    .study-section.open .chevron { transform: rotate(180deg); }
+    .study-section-body { display: none; padding: 0 1.5rem 1.5rem; }
+    .study-section.open .study-section-body { display: block; }
+
+    /* ─── CONTENT ELEMENTS ─── */
+    .prose { color: var(--gray-light); font-size: .95rem; }
+    .prose p { margin-bottom: .85rem; }
+    .prose p:last-child { margin-bottom: 0; }
+    .prose strong { color: var(--white); font-weight: 600; }
+    .prose em { color: #a5b4fc; font-style: normal; font-weight: 500; }
+
+    .callout {
+      border-radius: 10px; padding: 1rem 1.2rem; margin: 1rem 0;
+      border-left: 3px solid; font-size: .9rem;
+    }
+    .callout-title { font-weight: 600; margin-bottom: .4rem; font-size: .8rem; letter-spacing: .06em; text-transform: uppercase; }
+    .callout.warn { background: rgba(245,158,11,.07); border-color: var(--amber); color: #fcd34d; }
+    .callout.tip { background: rgba(99,102,241,.07); border-color: var(--primary); color: #a5b4fc; }
+    .callout.connect { background: rgba(6,182,212,.07); border-color: var(--accent); color: #67e8f9; }
+    .callout.exam { background: rgba(16,185,129,.07); border-color: var(--emerald); color: #6ee7b7; }
+
+    .prop-table, .contrast-table {
+      width: 100%; border-collapse: collapse; font-size: .875rem; margin: 1rem 0;
+    }
+    .prop-table th, .contrast-table th {
+      background: rgba(99,102,241,.15); color: #a5b4fc;
+      padding: .6rem .9rem; text-align: left; font-weight: 600; font-size: .78rem;
+      letter-spacing: .04em; text-transform: uppercase;
+    }
+    .prop-table td, .contrast-table td {
+      padding: .65rem .9rem; border-bottom: 1px solid rgba(255,255,255,.05);
+      color: var(--gray-light); vertical-align: top;
+    }
+    .prop-table tr:last-child td, .contrast-table tr:last-child td { border-bottom: none; }
+    .prop-table tr:hover td, .contrast-table tr:hover td { background: rgba(255,255,255,.02); }
+    .prop-table td:first-child, .contrast-table td:first-child { color: var(--white); font-weight: 500; }
+
+    .circuit-box {
+      background: rgba(15,23,42,.6); border: 1px solid rgba(6,182,212,.2);
+      border-radius: 10px; padding: 1rem 1.2rem; margin: 1rem 0;
+      font-family: 'JetBrains Mono', monospace; font-size: .825rem; color: #67e8f9;
+    }
+    .circuit-label { color: var(--gray); font-size: .75rem; margin-bottom: .5rem; font-family: 'Inter', sans-serif; }
+
+    .bullet-list { list-style: none; padding: 0; margin: .75rem 0; }
+    .bullet-list li {
+      display: flex; gap: .75rem; padding: .4rem 0; color: var(--gray-light); font-size: .9rem;
+    }
+    .bullet-list li::before {
+      content: '›'; color: var(--primary); font-size: 1.1rem; line-height: 1.4; flex-shrink: 0;
+    }
+    .bullet-list li strong { color: var(--white); }
+
+    /* ─── KEY TERMS / FLASHCARDS ─── */
+    .terms-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: .75rem; }
+    .flashcard {
+      border: 1px solid var(--border); border-radius: 12px; overflow: hidden;
+      cursor: pointer; transition: border-color .2s, transform .15s;
+      background: rgba(255,255,255,.02);
+      perspective: 600px;
+    }
+    .flashcard:hover { border-color: rgba(99,102,241,.3); transform: translateY(-2px); }
+    .flashcard-inner { position: relative; min-height: 100px; transition: transform .45s; transform-style: preserve-3d; }
+    .flashcard.flipped .flashcard-inner { transform: rotateY(180deg); }
+    .flashcard-front, .flashcard-back {
+      padding: 1rem 1.1rem; backface-visibility: hidden;
+    }
+    .flashcard-back { position: absolute; inset: 0; transform: rotateY(180deg); background: rgba(99,102,241,.08); }
+    .flashcard-term { font-weight: 600; font-size: .95rem; margin-bottom: .4rem; }
+    .flashcard-hint { font-size: .73rem; color: var(--gray); }
+    .flashcard-def { font-size: .85rem; color: var(--gray-light); line-height: 1.55; }
+    .flashcard-tag {
+      display: inline-block; font-size: .68rem; padding: .15rem .5rem;
+      border-radius: 99px; margin-bottom: .6rem; font-weight: 600; letter-spacing: .04em;
+    }
+    .tag-neuro { background: rgba(6,182,212,.15); color: #67e8f9; }
+    .tag-behavior { background: rgba(99,102,241,.15); color: #a5b4fc; }
+    .tag-clinical { background: rgba(244,63,94,.15); color: #fda4af; }
+    .tag-theory { background: rgba(245,158,11,.15); color: #fcd34d; }
+    .tag-spatial { background: rgba(16,185,129,.15); color: #6ee7b7; }
+
+    .terms-controls { display: flex; gap: .5rem; margin-bottom: 1.5rem; flex-wrap: wrap; }
+    .filter-btn {
+      padding: .35rem .85rem; border-radius: 99px; font-size: .78rem; font-weight: 500;
+      border: 1px solid var(--border); background: transparent; color: var(--gray-light);
+      cursor: pointer; transition: all .2s; font-family: 'Inter', sans-serif;
+    }
+    .filter-btn:hover { border-color: rgba(99,102,241,.4); color: var(--white); }
+    .filter-btn.active { background: rgba(99,102,241,.15); border-color: rgba(99,102,241,.4); color: var(--white); }
+    .flip-all-btn {
+      margin-left: auto; padding: .35rem .85rem; border-radius: 99px;
+      font-size: .78rem; font-weight: 500; border: 1px solid rgba(99,102,241,.3);
+      background: rgba(99,102,241,.1); color: #a5b4fc; cursor: pointer;
+      transition: all .2s; font-family: 'Inter', sans-serif;
+    }
+    .flip-all-btn:hover { background: rgba(99,102,241,.2); }
+
+    /* ─── QUIZ ─── */
+    .quiz-stats {
+      display: flex; gap: 1.5rem; margin-bottom: 2rem;
+      padding: 1rem 1.5rem; background: rgba(255,255,255,.03);
+      border: 1px solid var(--border); border-radius: 12px; flex-wrap: wrap;
+    }
+    .stat-item { display: flex; flex-direction: column; gap: .2rem; }
+    .stat-val { font-size: 1.5rem; font-weight: 700; }
+    .stat-val.green { color: var(--emerald); }
+    .stat-val.red { color: var(--rose); }
+    .stat-val.blue { color: var(--primary); }
+    .stat-lbl { font-size: .75rem; color: var(--gray); }
+    .quiz-reset-btn {
+      margin-left: auto; padding: .45rem 1rem; border-radius: 8px;
+      background: rgba(255,255,255,.05); border: 1px solid var(--border);
+      color: var(--gray-light); font-size: .8rem; cursor: pointer;
+      transition: all .2s; font-family: 'Inter', sans-serif; align-self: center;
+    }
+    .quiz-reset-btn:hover { background: rgba(255,255,255,.1); color: var(--white); }
+
+    .q-card {
+      border: 1px solid var(--border); border-radius: 14px;
+      background: rgba(255,255,255,.02); margin-bottom: 1rem; overflow: hidden;
+      transition: border-color .2s;
+    }
+    .q-card.correct { border-color: rgba(16,185,129,.4); }
+    .q-card.incorrect { border-color: rgba(244,63,94,.4); }
+    .q-header { padding: 1.2rem 1.5rem; cursor: pointer; }
+    .q-meta { display: flex; gap: .75rem; align-items: center; margin-bottom: .65rem; }
+    .q-num {
+      width: 26px; height: 26px; border-radius: 8px; flex-shrink: 0;
+      background: rgba(99,102,241,.2); color: #a5b4fc;
+      font-size: .75rem; font-weight: 700; display: flex; align-items: center; justify-content: center;
+    }
+    .q-tag {
+      font-size: .7rem; padding: .15rem .6rem; border-radius: 99px; font-weight: 600;
+      background: rgba(99,102,241,.12); color: #a5b4fc;
+    }
+    .q-status { margin-left: auto; font-size: .75rem; }
+    .q-text { font-size: .95rem; color: var(--light); line-height: 1.55; }
+    .q-options { padding: 0 1.5rem 1rem; display: grid; gap: .5rem; }
+    .q-opt {
+      padding: .65rem 1rem; border-radius: 9px;
+      border: 1px solid rgba(255,255,255,.07);
+      background: rgba(255,255,255,.03); font-size: .875rem; color: var(--gray-light);
+      cursor: pointer; transition: all .2s; text-align: left; width: 100%;
+      font-family: 'Inter', sans-serif;
+    }
+    .q-opt:hover:not(:disabled) { background: rgba(99,102,241,.1); border-color: rgba(99,102,241,.3); color: var(--white); }
+    .q-opt.selected-correct { background: rgba(16,185,129,.12); border-color: rgba(16,185,129,.5); color: #6ee7b7; }
+    .q-opt.selected-wrong { background: rgba(244,63,94,.12); border-color: rgba(244,63,94,.5); color: #fda4af; }
+    .q-opt.show-correct { background: rgba(16,185,129,.08); border-color: rgba(16,185,129,.3); color: #6ee7b7; }
+    .q-opt:disabled { cursor: default; }
+    .q-explanation {
+      margin: 0 1.5rem 1.25rem; padding: .9rem 1.1rem;
+      background: rgba(99,102,241,.07); border-radius: 10px;
+      border-left: 3px solid var(--primary); font-size: .875rem; color: var(--gray-light);
+      animation: fadeIn .25s ease;
+    }
+    .q-explanation strong { color: #a5b4fc; }
+    .q-explanation.hidden { display: none; }
+
+    /* ─── SYNTHESIS ─── */
+    .synthesis-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin: 1.5rem 0; }
+    @media (max-width: 600px) { .synthesis-grid { grid-template-columns: 1fr; } }
+    .synth-card {
+      border: 1px solid var(--border); border-radius: 12px; padding: 1.25rem;
+      background: rgba(255,255,255,.02);
+    }
+    .synth-card-title {
+      font-size: .8rem; font-weight: 600; letter-spacing: .05em; text-transform: uppercase;
+      margin-bottom: .75rem; display: flex; align-items: center; gap: .5rem;
+    }
+    .synth-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+    .synth-card ul { list-style: none; padding: 0; }
+    .synth-card li { font-size: .875rem; color: var(--gray-light); padding: .3rem 0; border-bottom: 1px solid rgba(255,255,255,.04); }
+    .synth-card li:last-child { border-bottom: none; }
+    .synth-card li span { color: var(--white); font-weight: 500; }
+
+    .levels-strip {
+      display: flex; gap: 0; border: 1px solid var(--border); border-radius: 12px; overflow: hidden;
+      margin: 1.5rem 0;
+    }
+    .level-col { flex: 1; padding: 1rem; }
+    .level-col + .level-col { border-left: 1px solid var(--border); }
+    .level-label { font-size: .72rem; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; margin-bottom: .6rem; }
+    .level-items { display: flex; flex-direction: column; gap: .5rem; }
+    .level-item { font-size: .8rem; padding: .35rem .6rem; border-radius: 7px; }
+
+    /* ─── RESPONSIVE ─── */
+    @media (max-width: 700px) {
+      .topbar { padding: .65rem 1rem; }
+      .hero { padding: 3rem 1rem 2rem; }
+      .main { padding: 0 1rem 5rem; }
+      .tab-nav { gap: .35rem; }
+      .tab-btn { font-size: .8rem; padding: .5rem .9rem; }
+      .prop-table, .contrast-table { font-size: .8rem; }
+    }
+
+    /* scroll indicator */
+    .scroll-progress {
+      position: fixed; top: 0; left: 0; height: 2px; z-index: 200;
+      background: linear-gradient(90deg, var(--primary), var(--secondary));
+      transition: width .1s; width: 0%;
+    }
+  </style>
+</head>
+<body>
+<div class="bg-layer"></div>
+<div class="scroll-progress" id="scrollProgress"></div>
+
+<!-- TOPBAR -->
+<header class="topbar">
+  <div class="topbar-left">
+    <a href="../../index.html" class="back-link">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+      Back
+    </a>
+    <span class="breadcrumb">Exam Prep › <span>Module 6</span></span>
+  </div>
+  <div style="display:flex;align-items:center;gap:.75rem;">
+    <div class="progress-bar-wrap" title="Quiz progress">
+      <div class="progress-bar-fill" id="quizProgressBar"></div>
+    </div>
+    <span class="progress-label" id="quizProgressLabel">0 / 20</span>
+  </div>
+</header>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="module-badge">
+    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+    PSYCH 505 · Week 6
+  </div>
+  <h1>Habituation, Sensitization<br>& Perceptual Learning</h1>
+  <p class="hero-subtitle">A complete exam preparation package covering the brain's most fundamental learning mechanisms — from Aplysia synapses to London cabbies' hippocampi.</p>
+  <nav class="tab-nav">
+    <button class="tab-btn active" data-tab="guide">Study Guide</button>
+    <button class="tab-btn" data-tab="terms">Key Terms</button>
+    <button class="tab-btn" data-tab="quiz">Practice Quiz</button>
+    <button class="tab-btn" data-tab="synthesis">Big Picture</button>
+  </nav>
+</div>
+
+<!-- MAIN -->
+<main class="main">
+
+  <!-- ════════════════════════════ STUDY GUIDE ════════════════════════════ -->
+  <div class="tab-panel active" id="tab-guide">
+
+    <!-- 1. Course Arc -->
+    <div class="study-section open" data-section="1">
+      <div class="study-section-header" onclick="toggleSection(this)">
+        <div class="study-section-header-left">
+          <div class="section-icon" style="background:rgba(99,102,241,.15);">🧭</div>
+          <div><div class="section-num">Section 1</div><div class="section-title">Course Arc & Why This Week Matters</div></div>
+        </div>
+        <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
+      </div>
+      <div class="study-section-body">
+        <div class="prose">
+          <p>Weeks 2–5 asked <strong>how organisms choose</strong>. Week 6 asks how organisms <strong>learn from experience in the first place</strong>—before they can form the values and predictions that drive decision-making. Habituation, sensitization, and perceptual learning are the brain's most fundamental mechanisms for filtering what deserves attention.</p>
+        </div>
+        <div class="callout connect">
+          <div class="callout-title">⟳ Course Arc Connection — Dopamine & Prediction Error</div>
+          Before organisms can learn values (Weeks 7–8), they must decide <em>what is worth attending to</em>. Habituation is the brain's first attentional filter—deciding what to ignore. Sensitization signals "pay extra attention." These are <strong>prerequisites for associative and reinforcement learning</strong>. The comparator model of habituation is also a prediction-error model: respond when incoming stimuli do <em>not</em> match stored representations.
+        </div>
+      </div>
+    </div>
+
+    <!-- 2. Habituation -->
+    <div class="study-section open" data-section="2">
+      <div class="study-section-header" onclick="toggleSection(this)">
+        <div class="study-section-header-left">
+          <div class="section-icon" style="background:rgba(6,182,212,.12);">📉</div>
+          <div><div class="section-num">Section 2</div><div class="section-title">Habituation</div></div>
+        </div>
+        <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
+      </div>
+      <div class="study-section-body">
+        <div class="prose">
+          <p>Habituation is a <strong>decrease in the strength or occurrence of a behavior</strong> after repeated exposure to the stimulus that produces it. It is the most widespread form of learning—observed in protozoa, sea slugs, and humans alike.</p>
+          <p><strong>Classic paradigms:</strong> acoustic startle reflex in rats (repeated loud noise → declining jump amplitude); orienting response in infants (fixation time decreases with each re-presentation).</p>
+        </div>
+        <p style="font-size:.8rem;color:var(--gray);margin-bottom:.5rem;font-weight:600;letter-spacing:.04em;text-transform:uppercase;">Six Key Properties — Know All of Them</p>
+        <table class="prop-table">
+          <thead><tr><th>Property</th><th>What it means / exam implication</th></tr></thead>
+          <tbody>
+            <tr><td>Stimulus Specificity</td><td>Habituation to stimulus A does not transfer to stimulus B, even in the same sensory modality. <em>Rules out sensory fatigue</em>.</td></tr>
+            <tr><td>Dishabituation</td><td>A novel or arousing stimulus <em>restores</em> the habituated response. Rules out motor exhaustion.</td></tr>
+            <tr><td>Spontaneous Recovery</td><td>Habituated response returns after a stimulus-free rest period. Habituation is not permanent.</td></tr>
+            <tr><td>Massed vs. Spaced</td><td>Massed → faster but less durable. Spaced → slower but longer-lasting. Parallels the spacing effect in explicit memory.</td></tr>
+            <tr><td>Below-Zero Habituation</td><td>Learning continues even after behavioral response reaches zero, revealed by delayed spontaneous recovery. This is <em>latent learning</em>.</td></tr>
+            <tr><td>Rate Depends on Arousal</td><td>Less arousing stimuli habituate more rapidly. Highly arousing stimuli may produce sensitization instead.</td></tr>
+          </tbody>
+        </table>
+        <div class="callout warn">
+          <div class="callout-title">⚠ Common Misconception</div>
+          Habituation is <strong>NOT</strong> motor fatigue, sensory adaptation, or "getting bored." Evidence: <em>stimulus specificity</em> and <em>dishabituation</em>. If exhaustion were the cause, a novel stimulus should produce no orienting response—but it always does.
+        </div>
+      </div>
+    </div>
+
+    <!-- 3. Sensitization -->
+    <div class="study-section" data-section="3">
+      <div class="study-section-header" onclick="toggleSection(this)">
+        <div class="study-section-header-left">
+          <div class="section-icon" style="background:rgba(236,72,153,.12);">📈</div>
+          <div><div class="section-num">Section 3</div><div class="section-title">Sensitization</div></div>
+        </div>
+        <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
+      </div>
+      <div class="study-section-body">
+        <div class="prose">
+          <p>Sensitization is the <strong>opposite of habituation</strong>: experiences with an arousing stimulus lead to <strong>stronger</strong> responses to subsequent stimuli. Unlike habituation, sensitization is <strong>NOT stimulus-specific</strong>—it broadly amplifies reactivity.</p>
+          <p><strong>Classic example:</strong> Rats habituate to a repeated loud tone. If a subset then receives a foot shock, their startle response to the <em>same</em> tone jumps above baseline. The shock sensitized them.</p>
+          <p><strong>Human measure:</strong> Skin conductance response (SCR / electrodermal activity). Underlies stress monitoring and classic lie detector tests.</p>
+        </div>
+        <p style="font-size:.8rem;color:var(--gray);margin:.75rem 0 .5rem;font-weight:600;letter-spacing:.04em;text-transform:uppercase;">Habituation vs. Sensitization: Key Contrast</p>
+        <table class="contrast-table">
+          <thead><tr><th>Feature</th><th>Habituation</th><th>Sensitization</th></tr></thead>
+          <tbody>
+            <tr><td>Response direction</td><td>Decreases</td><td>Increases</td></tr>
+            <tr><td>Stimulus specificity</td><td>YES (specific)</td><td>NO (general)</td></tr>
+            <tr><td>Synaptic mechanism (Aplysia)</td><td>Homosynaptic depression (less glutamate)</td><td>Heterosynaptic facilitation (more glutamate via serotonin)</td></tr>
+            <tr><td>Arousal required?</td><td>No (works for low-arousal stimuli)</td><td>Yes (requires arousing stimulus)</td></tr>
+            <tr><td>Exposures needed?</td><td>Many repetitions</td><td>Sometimes a single intense event</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- 4. Dual Process Theory -->
+    <div class="study-section" data-section="4">
+      <div class="study-section-header" onclick="toggleSection(this)">
+        <div class="study-section-header-left">
+          <div class="section-icon" style="background:rgba(245,158,11,.12);">⚖️</div>
+          <div><div class="section-num">Section 4</div><div class="section-title">Dual Process Theory</div></div>
+        </div>
+        <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
+      </div>
+      <div class="study-section-body">
+        <div class="prose">
+          <p>Proposed by <strong>Groves & Thompson (1970)</strong>. Every stimulus presentation simultaneously activates two independent processes:</p>
+        </div>
+        <ul class="bullet-list">
+          <li><strong>Habituation process:</strong> Weakens the stimulus-response (S-R) connection through repeated activation.</li>
+          <li><strong>Sensitization process:</strong> Activates a "state system" that potentiates global reactivity.</li>
+          <li><strong>Observed behavior = NET result of both.</strong> Boring/non-arousing → habituation dominates. Highly arousing → sensitization dominates.</li>
+        </ul>
+        <div class="callout connect">
+          <div class="callout-title">⟳ Connection to Prediction Errors</div>
+          Dual process theory runs two parallel computations: how much to suppress the S-R connection AND how much to amplify arousal. This <strong>mirrors Rescorla-Wagner and TD frameworks</strong> (Weeks 7–8), where the brain simultaneously estimates expected value and computes prediction error.
+        </div>
+      </div>
+    </div>
+
+    <!-- 5. Aplysia -->
+    <div class="study-section" data-section="5">
+      <div class="study-section-header" onclick="toggleSection(this)">
+        <div class="study-section-header-left">
+          <div class="section-icon" style="background:rgba(6,182,212,.12);">🐌</div>
+          <div><div class="section-num">Section 5</div><div class="section-title">Neural Mechanisms: The Aplysia Model</div></div>
+        </div>
+        <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
+      </div>
+      <div class="study-section-body">
+        <div class="prose">
+          <p><strong>Eric Kandel (Nobel Prize, 2000)</strong> used <em>Aplysia californica</em> (~20,000 neurons; individually identifiable) to find the first cellular mechanisms of habituation and sensitization.</p>
+        </div>
+        <div class="circuit-box">
+          <div class="circuit-label">Gill-Withdrawal Reflex Circuit</div>
+          Siphon touch → Sensory neuron S (GLUTAMATE) → Motor neuron M → Gill muscles contract
+        </div>
+        <table class="contrast-table" style="margin-top:1rem;">
+          <thead><tr><th>Feature</th><th>Habituation</th><th>Sensitization</th></tr></thead>
+          <tbody>
+            <tr><td>Type</td><td><strong>Homosynaptic</strong></td><td><strong>Heterosynaptic</strong></td></tr>
+            <tr><td>Mechanism</td><td>Repeated activation of S → less glutamate released (synaptic depression)</td><td>Tail shock → interneuron IN → serotonin onto S terminals → more glutamate vesicles available</td></tr>
+            <tr><td>Scope</td><td>Only the S–M synapse (activated synapse)</td><td>Multiple synapses (S, U, others NOT activated by the shock)</td></tr>
+            <tr><td>Long-term structural change</td><td>Elimination (pruning) of S–M synapses</td><td>Formation of additional synaptic terminals (growth)</td></tr>
+          </tbody>
+        </table>
+        <div class="callout exam">
+          <div class="callout-title">📝 Exam Tip: Homo vs. Heterosynaptic</div>
+          <strong>Homosynaptic</strong> = habituation = specific to the activated synapse = mirrors stimulus specificity.<br>
+          <strong>Heterosynaptic</strong> = sensitization = affects all synapses via serotonin interneuron = mirrors generality of sensitization.
+        </div>
+      </div>
+    </div>
+
+    <!-- 6. Perceptual Learning -->
+    <div class="study-section" data-section="6">
+      <div class="study-section-header" onclick="toggleSection(this)">
+        <div class="study-section-header-left">
+          <div class="section-icon" style="background:rgba(99,102,241,.15);">👁</div>
+          <div><div class="section-num">Section 6</div><div class="section-title">Perceptual Learning</div></div>
+        </div>
+        <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
+      </div>
+      <div class="study-section-body">
+        <div class="prose">
+          <p>Perceptual learning = <strong>repeated experience with stimuli makes them easier to distinguish</strong>. Unlike sensitization (amplifies responses), it specifically improves discriminability.</p>
+          <p><strong>Real-world examples:</strong> chicken sexers (1 per half-second), dermatologists classifying rashes, wine tasters, musicians distinguishing instrument timbres.</p>
+        </div>
+        <table class="contrast-table" style="margin-top:.75rem;">
+          <thead><tr><th>Route</th><th>Description</th><th>Key Feature</th></tr></thead>
+          <tbody>
+            <tr><td>Mere Exposure Learning</td><td>Passive, incidental exposure improves discrimination <em>without feedback</em>. Gibson & Walk (1956) rat experiment.</td><td>Latent learning — revealed only when tested</td></tr>
+            <tr><td>Discrimination Training</td><td>Active training with feedback. Produces larger and faster perceptual changes and bigger cortical reorganization.</td><td>Largest cortical changes</td></tr>
+          </tbody>
+        </table>
+        <p style="font-size:.8rem;color:var(--gray);margin:.75rem 0 .5rem;font-weight:600;letter-spacing:.04em;text-transform:uppercase;">Three Theoretical Models</p>
+        <ul class="bullet-list">
+          <li><strong>Dual Process (Groves & Thompson):</strong> Shared features habituate more (seen twice as often); distinctive features remain salient.</li>
+          <li><strong>Comparator Model (Sokolov, Wagner):</strong> Brain stores representations and compares incoming stimuli. Orienting response on mismatch. Habituation = better representation = less mismatch.</li>
+          <li><strong>Differentiation Theory (E. Gibson):</strong> Representations start vague and gain detail with repeated exposure.</li>
+        </ul>
+        <div class="callout tip">
+          <div class="callout-title">Note: Learning Specificity</div>
+          A dog-show judge's expertise with cocker spaniels does NOT transfer to judging prize pigs. Training on vertical gratings does not transfer to horizontal ones.
+        </div>
+      </div>
+    </div>
+
+    <!-- 7. Priming & Familiarity -->
+    <div class="study-section" data-section="7">
+      <div class="study-section-header" onclick="toggleSection(this)">
+        <div class="study-section-header-left">
+          <div class="section-icon" style="background:rgba(236,72,153,.12);">💭</div>
+          <div><div class="section-num">Section 7</div><div class="section-title">Priming & Familiarity</div></div>
+        </div>
+        <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
+      </div>
+      <div class="study-section-body">
+        <div class="prose">
+          <p><strong>Priming:</strong> Prior exposure affects later responses <em>without conscious awareness</em>. Classic demo: word-stem completion ("CHI__" → "CHISEL" more likely if CHISEL was previously seen, even without conscious recall). Animal example: blue jays detecting camouflaged moths more accurately after recent exposure.</p>
+          <p><strong>Familiarity:</strong> William James defined it as a "sense of sameness"—the perception of similarity when an event is repeated. Basis of recognition memory. Measured in rats and monkeys via the <strong>novel object recognition task</strong>.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- 8. Spatial Learning -->
+    <div class="study-section" data-section="8">
+      <div class="study-section-header" onclick="toggleSection(this)">
+        <div class="study-section-header-left">
+          <div class="section-icon" style="background:rgba(16,185,129,.12);">🗺</div>
+          <div><div class="section-num">Section 8</div><div class="section-title">Spatial Learning & the Hippocampus</div></div>
+        </div>
+        <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
+      </div>
+      <div class="study-section-body">
+        <div class="prose">
+          <p><strong>Tolman & Honzik (1930):</strong> Rats allowed to freely explore a maze (no food) for 10 days performed as well as reward-trained rats when food was introduced on day 11. They had formed a <em>cognitive map</em>. Key insight: spatial learning is <strong>latent</strong>—occurs without behavioral evidence until a test demands it.</p>
+          <p><strong>Place Cells (John O'Keefe, Nobel Prize):</strong> Hippocampal neurons that fire only when a rat is at a specific location (their <em>place field</em>). Place cells use visual landmarks to define location.</p>
+        </div>
+        <ul class="bullet-list">
+          <li>If maze AND landmark are rotated together → place fields rotate with them.</li>
+          <li>If only the landmark is repositioned → place fields follow the landmark.</li>
+          <li>Place fields <strong>shrink with repeated exploration</strong> — more precise spatial representation.</li>
+          <li>London cab drivers (memorize 25,000 streets for "the Knowledge") have significantly <strong>larger hippocampi</strong>, correlating with years of experience.</li>
+        </ul>
+        <div class="callout connect">
+          <div class="callout-title">⟳ Preview: Reinforcement Learning (Week 8)</div>
+          Place cells encode <strong>STATES</strong> — the "s" in V(s) from value function learning. In model-based RL, knowing "what state am I in?" is crucial. The hippocampus answers this for spatial environments.
+        </div>
+      </div>
+    </div>
+
+    <!-- 9. Cortical Plasticity -->
+    <div class="study-section" data-section="9">
+      <div class="study-section-header" onclick="toggleSection(this)">
+        <div class="study-section-header-left">
+          <div class="section-icon" style="background:rgba(99,102,241,.15);">🧠</div>
+          <div><div class="section-num">Section 9</div><div class="section-title">Cortical Plasticity & Hebbian Learning</div></div>
+        </div>
+        <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
+      </div>
+      <div class="study-section-body">
+        <div class="prose">
+          <p><strong>Receptive fields:</strong> Cortical neurons respond to specific stimulus features. In somatosensory cortex → body location (homunculus). In auditory cortex → sound frequency. Not proportional to body-part size—reflects <em>use and sensitivity</em> (thumbs and lips are over-represented).</p>
+        </div>
+        <ul class="bullet-list">
+          <li>Repeated experience <strong>expands the cortical region</strong> dedicated to the trained stimulus.</li>
+          <li>2 hours of repeated fingertip stimulation → expanded somatosensory cortex representation AND improved two-point discrimination (fMRI + behavioral).</li>
+          <li>Kittens with one eye sewn shut lose cortical representation for that eye permanently (developmental plasticity).</li>
+          <li>Blind individuals show <strong>visual cortex activation during Braille reading</strong>—cross-modal plasticity.</li>
+        </ul>
+        <div class="callout tip" style="margin-top:1rem;">
+          <div class="callout-title">Hebbian Learning — "Neurons that fire together, wire together"</div>
+          <em>"When an axon of cell A is near enough to excite cell B and repeatedly takes part in firing it, A's efficiency in firing B is increased."</em> — Hebb (1949).<br><br>
+          Repeated coactivation → LTP → stable representation → <strong>pattern completion</strong>: a partial version of a familiar stimulus activates the full stored pattern. This explains priming.
+        </div>
+      </div>
+    </div>
+
+    <!-- 10. Clinical Applications -->
+    <div class="study-section" data-section="10">
+      <div class="study-section-header" onclick="toggleSection(this)">
+        <div class="study-section-header-left">
+          <div class="section-icon" style="background:rgba(244,63,94,.12);">🏥</div>
+          <div><div class="section-num">Section 10</div><div class="section-title">Clinical Applications</div></div>
+        </div>
+        <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
+      </div>
+      <div class="study-section-body">
+        <table class="contrast-table">
+          <thead><tr><th>Condition</th><th>Mechanism</th><th>Treatment / Relevance</th></tr></thead>
+          <tbody>
+            <tr>
+              <td>Learned Non-Use (post-stroke)</td>
+              <td>Stroke damages sensory cortex → patient stops using affected limb (habituation to non-functional limb). Motor control is intact.</td>
+              <td><strong>Constraint-Induced Movement Therapy (CIMT)</strong>: bind the good arm → forced use = dishabituation + cortical reorganization in adjacent areas.</td>
+            </tr>
+            <tr>
+              <td>Cochlear Implants</td>
+              <td>Electrical stimulation produces "virtual" speech very different from natural sound. Users must learn to discriminate novel stimuli.</td>
+              <td>Perceptual learning curve: rapid at first, gradual over years. Most effective in young children and recently deafened adults. Mechanism: cortical plasticity in auditory cortex.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div><!-- /tab-guide -->
+
+
+  <!-- ════════════════════════════ KEY TERMS ════════════════════════════ -->
+  <div class="tab-panel" id="tab-terms">
+    <div style="margin-bottom:1.5rem;">
+      <h2 style="font-size:1.3rem;margin-bottom:.4rem;">Key Terms — 25 Flashcards</h2>
+      <p style="color:var(--gray-light);font-size:.9rem;">Click any card to reveal its definition. Use the filters to focus on a category.</p>
+    </div>
+    <div class="terms-controls">
+      <button class="filter-btn active" data-filter="all">All</button>
+      <button class="filter-btn" data-filter="behavior">Behavioral</button>
+      <button class="filter-btn" data-filter="neuro">Neural</button>
+      <button class="filter-btn" data-filter="theory">Theoretical</button>
+      <button class="filter-btn" data-filter="spatial">Spatial</button>
+      <button class="filter-btn" data-filter="clinical">Clinical</button>
+      <button class="flip-all-btn" id="flipAllBtn">Reveal All</button>
+    </div>
+    <div class="terms-grid" id="termsGrid">
+
+      <div class="flashcard" data-category="behavior" onclick="flipCard(this)">
+        <div class="flashcard-inner">
+          <div class="flashcard-front">
+            <span class="flashcard-tag tag-behavior">Behavioral</span>
+            <div class="flashcard-term">Habituation</div>
+            <div class="flashcard-hint">Click to reveal →</div>
+          </div>
+          <div class="flashcard-back">
+            <span class="flashcard-tag tag-behavior">Behavioral</span>
+            <div class="flashcard-def">A <strong>decrease</strong> in the strength or occurrence of a behavior after repeated exposure to the stimulus that produces it. Stimulus-specific and reversible.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flashcard" data-category="behavior" onclick="flipCard(this)">
+        <div class="flashcard-inner">
+          <div class="flashcard-front">
+            <span class="flashcard-tag tag-behavior">Behavioral</span>
+            <div class="flashcard-term">Sensitization</div>
+            <div class="flashcard-hint">Click to reveal →</div>
+          </div>
+          <div class="flashcard-back">
+            <span class="flashcard-tag tag-behavior">Behavioral</span>
+            <div class="flashcard-def">Experiences with an arousing stimulus lead to <strong>stronger</strong> responses to subsequent stimuli. General—NOT stimulus-specific.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flashcard" data-category="behavior" onclick="flipCard(this)">
+        <div class="flashcard-inner">
+          <div class="flashcard-front">
+            <span class="flashcard-tag tag-behavior">Behavioral</span>
+            <div class="flashcard-term">Dishabituation</div>
+            <div class="flashcard-hint">Click to reveal →</div>
+          </div>
+          <div class="flashcard-back">
+            <span class="flashcard-tag tag-behavior">Behavioral</span>
+            <div class="flashcard-def">Recovery of a habituated response following presentation of a <strong>novel or arousing stimulus</strong>. Rules out motor exhaustion.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flashcard" data-category="behavior" onclick="flipCard(this)">
+        <div class="flashcard-inner">
+          <div class="flashcard-front">
+            <span class="flashcard-tag tag-behavior">Behavioral</span>
+            <div class="flashcard-term">Spontaneous Recovery</div>
+            <div class="flashcard-hint">Click to reveal →</div>
+          </div>
+          <div class="flashcard-back">
+            <span class="flashcard-tag tag-behavior">Behavioral</span>
+            <div class="flashcard-def">Reappearance of a habituated response after a <strong>period without stimulus presentation</strong>. Shows habituation is not permanent.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flashcard" data-category="behavior" onclick="flipCard(this)">
+        <div class="flashcard-inner">
+          <div class="flashcard-front">
+            <span class="flashcard-tag tag-behavior">Behavioral</span>
+            <div class="flashcard-term">Latent Learning</div>
+            <div class="flashcard-hint">Click to reveal →</div>
+          </div>
+          <div class="flashcard-back">
+            <span class="flashcard-tag tag-behavior">Behavioral</span>
+            <div class="flashcard-def">Learning that occurs <strong>without immediate behavioral evidence</strong>; revealed only by an appropriate test. See: Tolman's maze rats, below-zero habituation, mere exposure learning.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flashcard" data-category="behavior" onclick="flipCard(this)">
+        <div class="flashcard-inner">
+          <div class="flashcard-front">
+            <span class="flashcard-tag tag-behavior">Behavioral</span>
+            <div class="flashcard-term">Perceptual Learning</div>
+            <div class="flashcard-hint">Click to reveal →</div>
+          </div>
+          <div class="flashcard-back">
+            <span class="flashcard-tag tag-behavior">Behavioral</span>
+            <div class="flashcard-def">Repeated experience with a set of stimuli improves the organism's ability to <strong>distinguish</strong> those stimuli. Can occur passively.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flashcard" data-category="behavior" onclick="flipCard(this)">
+        <div class="flashcard-inner">
+          <div class="flashcard-front">
+            <span class="flashcard-tag tag-behavior">Behavioral</span>
+            <div class="flashcard-term">Mere Exposure Learning</div>
+            <div class="flashcard-hint">Click to reveal →</div>
+          </div>
+          <div class="flashcard-back">
+            <span class="flashcard-tag tag-behavior">Behavioral</span>
+            <div class="flashcard-def">Perceptual learning through <strong>passive exposure</strong> to stimuli, without explicit feedback. A form of latent learning.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flashcard" data-category="behavior" onclick="flipCard(this)">
+        <div class="flashcard-inner">
+          <div class="flashcard-front">
+            <span class="flashcard-tag tag-behavior">Behavioral</span>
+            <div class="flashcard-term">Discrimination Training</div>
+            <div class="flashcard-hint">Click to reveal →</div>
+          </div>
+          <div class="flashcard-back">
+            <span class="flashcard-tag tag-behavior">Behavioral</span>
+            <div class="flashcard-def">Perceptual learning <strong>with feedback</strong> about accuracy; associated with the largest cortical reorganization.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flashcard" data-category="behavior" onclick="flipCard(this)">
+        <div class="flashcard-inner">
+          <div class="flashcard-front">
+            <span class="flashcard-tag tag-behavior">Behavioral</span>
+            <div class="flashcard-term">Priming</div>
+            <div class="flashcard-hint">Click to reveal →</div>
+          </div>
+          <div class="flashcard-back">
+            <span class="flashcard-tag tag-behavior">Behavioral</span>
+            <div class="flashcard-def">Prior exposure to a stimulus (even <strong>without conscious awareness</strong>) facilitates later recognition or processing of that stimulus.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flashcard" data-category="behavior" onclick="flipCard(this)">
+        <div class="flashcard-inner">
+          <div class="flashcard-front">
+            <span class="flashcard-tag tag-behavior">Behavioral</span>
+            <div class="flashcard-term">Familiarity</div>
+            <div class="flashcard-hint">Click to reveal →</div>
+          </div>
+          <div class="flashcard-back">
+            <span class="flashcard-tag tag-behavior">Behavioral</span>
+            <div class="flashcard-def">William James's <strong>"sense of sameness"</strong>—the perception of similarity when an event is repeated. Basis of recognition memory. Measured via novel object recognition task.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flashcard" data-category="neuro" onclick="flipCard(this)">
+        <div class="flashcard-inner">
+          <div class="flashcard-front">
+            <span class="flashcard-tag tag-neuro">Neural</span>
+            <div class="flashcard-term">Homosynaptic Depression</div>
+            <div class="flashcard-hint">Click to reveal →</div>
+          </div>
+          <div class="flashcard-back">
+            <span class="flashcard-tag tag-neuro">Neural</span>
+            <div class="flashcard-def">Reduced neurotransmitter (glutamate) release with <strong>repeated activation of the same synapse</strong>; the cellular mechanism of short-term habituation in Aplysia.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flashcard" data-category="neuro" onclick="flipCard(this)">
+        <div class="flashcard-inner">
+          <div class="flashcard-front">
+            <span class="flashcard-tag tag-neuro">Neural</span>
+            <div class="flashcard-term">Heterosynaptic Facilitation</div>
+            <div class="flashcard-hint">Click to reveal →</div>
+          </div>
+          <div class="flashcard-back">
+            <span class="flashcard-tag tag-neuro">Neural</span>
+            <div class="flashcard-def">Enhancement of <strong>multiple synapses</strong> (including unactivated ones) via interneuron serotonin release. Mechanism of Aplysia sensitization.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flashcard" data-category="neuro" onclick="flipCard(this)">
+        <div class="flashcard-inner">
+          <div class="flashcard-front">
+            <span class="flashcard-tag tag-neuro">Neural</span>
+            <div class="flashcard-term">Cortical Plasticity</div>
+            <div class="flashcard-hint">Click to reveal →</div>
+          </div>
+          <div class="flashcard-back">
+            <span class="flashcard-tag tag-neuro">Neural</span>
+            <div class="flashcard-def">Experience-dependent changes in the receptive fields and <strong>topographic maps</strong> of sensory cortices. More training → more cortical real estate.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flashcard" data-category="neuro" onclick="flipCard(this)">
+        <div class="flashcard-inner">
+          <div class="flashcard-front">
+            <span class="flashcard-tag tag-neuro">Neural</span>
+            <div class="flashcard-term">Hebbian Learning</div>
+            <div class="flashcard-hint">Click to reveal →</div>
+          </div>
+          <div class="flashcard-back">
+            <span class="flashcard-tag tag-neuro">Neural</span>
+            <div class="flashcard-def">"<strong>Neurons that fire together, wire together.</strong>" Coactivity strengthens synaptic connections via LTP. Basis of pattern completion and priming.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flashcard" data-category="neuro" onclick="flipCard(this)">
+        <div class="flashcard-inner">
+          <div class="flashcard-front">
+            <span class="flashcard-tag tag-neuro">Neural</span>
+            <div class="flashcard-term">Receptive Field</div>
+            <div class="flashcard-hint">Click to reveal →</div>
+          </div>
+          <div class="flashcard-back">
+            <span class="flashcard-tag tag-neuro">Neural</span>
+            <div class="flashcard-def">The range of stimuli that causes a particular cortical neuron to fire. Narrows with repeated exposure (perceptual learning).</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flashcard" data-category="neuro" onclick="flipCard(this)">
+        <div class="flashcard-inner">
+          <div class="flashcard-front">
+            <span class="flashcard-tag tag-neuro">Neural</span>
+            <div class="flashcard-term">Topographic Map</div>
+            <div class="flashcard-hint">Click to reveal →</div>
+          </div>
+          <div class="flashcard-back">
+            <span class="flashcard-tag tag-neuro">Neural</span>
+            <div class="flashcard-def">Organization of cortex in which neighboring neurons respond to similar stimuli (e.g., <strong>somatosensory homunculus</strong>). Reflects use, not anatomy.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flashcard" data-category="theory" onclick="flipCard(this)">
+        <div class="flashcard-inner">
+          <div class="flashcard-front">
+            <span class="flashcard-tag tag-theory">Theoretical</span>
+            <div class="flashcard-term">Dual Process Theory</div>
+            <div class="flashcard-hint">Click to reveal →</div>
+          </div>
+          <div class="flashcard-back">
+            <span class="flashcard-tag tag-theory">Theoretical</span>
+            <div class="flashcard-def"><strong>Groves & Thompson (1970)</strong>. Every stimulus activates both a habituation process (weakens S-R) and a sensitization process (potentiates global reactivity). Observed behavior = net result.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flashcard" data-category="theory" onclick="flipCard(this)">
+        <div class="flashcard-inner">
+          <div class="flashcard-front">
+            <span class="flashcard-tag tag-theory">Theoretical</span>
+            <div class="flashcard-term">Comparator Model</div>
+            <div class="flashcard-hint">Click to reveal →</div>
+          </div>
+          <div class="flashcard-back">
+            <span class="flashcard-tag tag-theory">Theoretical</span>
+            <div class="flashcard-def"><strong>Sokolov / Wagner.</strong> Brain compares incoming stimuli to stored representations; an <strong>orienting response</strong> is triggered on mismatch. Habituation = better representation = less mismatch.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flashcard" data-category="theory" onclick="flipCard(this)">
+        <div class="flashcard-inner">
+          <div class="flashcard-front">
+            <span class="flashcard-tag tag-theory">Theoretical</span>
+            <div class="flashcard-term">Differentiation Theory</div>
+            <div class="flashcard-hint">Click to reveal →</div>
+          </div>
+          <div class="flashcard-back">
+            <span class="flashcard-tag tag-theory">Theoretical</span>
+            <div class="flashcard-def"><strong>E. Gibson.</strong> Representations start vague and become <strong>more detailed</strong> with repeated exposure as more features are encoded. Explains why first exposure captures general form only.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flashcard" data-category="spatial" onclick="flipCard(this)">
+        <div class="flashcard-inner">
+          <div class="flashcard-front">
+            <span class="flashcard-tag tag-spatial">Spatial</span>
+            <div class="flashcard-term">Place Cells</div>
+            <div class="flashcard-hint">Click to reveal →</div>
+          </div>
+          <div class="flashcard-back">
+            <span class="flashcard-tag tag-spatial">Spatial</span>
+            <div class="flashcard-def">Hippocampal neurons that fire maximally when an animal is at a specific location (<strong>place field</strong>). Place fields shrink with experience, become more precise.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flashcard" data-category="spatial" onclick="flipCard(this)">
+        <div class="flashcard-inner">
+          <div class="flashcard-front">
+            <span class="flashcard-tag tag-spatial">Spatial</span>
+            <div class="flashcard-term">Cognitive Map</div>
+            <div class="flashcard-hint">Click to reveal →</div>
+          </div>
+          <div class="flashcard-back">
+            <span class="flashcard-tag tag-spatial">Spatial</span>
+            <div class="flashcard-def">Tolman's term for an internal representation of spatial layout formed through exploration. Revealed when a reward is introduced (latent learning).</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flashcard" data-category="spatial" onclick="flipCard(this)">
+        <div class="flashcard-inner">
+          <div class="flashcard-front">
+            <span class="flashcard-tag tag-spatial">Spatial</span>
+            <div class="flashcard-term">Novel Object Recognition</div>
+            <div class="flashcard-hint">Click to reveal →</div>
+          </div>
+          <div class="flashcard-back">
+            <span class="flashcard-tag tag-spatial">Spatial</span>
+            <div class="flashcard-def">Task in which preference for exploring a novel over a familiar object indexes recognition memory. Hippocampal lesions impair performance when <strong>context or position</strong> must be integrated.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flashcard" data-category="clinical" onclick="flipCard(this)">
+        <div class="flashcard-inner">
+          <div class="flashcard-front">
+            <span class="flashcard-tag tag-clinical">Clinical</span>
+            <div class="flashcard-term">Learned Non-Use</div>
+            <div class="flashcard-hint">Click to reveal →</div>
+          </div>
+          <div class="flashcard-back">
+            <span class="flashcard-tag tag-clinical">Clinical</span>
+            <div class="flashcard-def">Habituation to a desensitized limb following stroke; patient stops using it despite intact motor control. Treated with <strong>Constraint-Induced Movement Therapy (CIMT)</strong>.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flashcard" data-category="clinical" onclick="flipCard(this)">
+        <div class="flashcard-inner">
+          <div class="flashcard-front">
+            <span class="flashcard-tag tag-clinical">Clinical</span>
+            <div class="flashcard-term">Cochlear Implant</div>
+            <div class="flashcard-hint">Click to reveal →</div>
+          </div>
+          <div class="flashcard-back">
+            <span class="flashcard-tag tag-clinical">Clinical</span>
+            <div class="flashcard-def">Sensory prosthesis that electrically stimulates auditory nerves. Users must acquire new <strong>perceptual learning</strong> to interpret "virtual" speech sounds via cortical plasticity.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flashcard" data-category="neuro" onclick="flipCard(this)">
+        <div class="flashcard-inner">
+          <div class="flashcard-front">
+            <span class="flashcard-tag tag-neuro">Neural</span>
+            <div class="flashcard-term">Synaptic Depression</div>
+            <div class="flashcard-hint">Click to reveal →</div>
+          </div>
+          <div class="flashcard-back">
+            <span class="flashcard-tag tag-neuro">Neural</span>
+            <div class="flashcard-def">Reduced <strong>glutamate vesicle</strong> release with repeated activation. The cellular mechanism of <em>short-term</em> habituation in Aplysia. Distinct from the synapse pruning of long-term habituation.</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div><!-- /tab-terms -->
+
+
+  <!-- ════════════════════════════ QUIZ ════════════════════════════ -->
+  <div class="tab-panel" id="tab-quiz">
+    <div style="margin-bottom:1.5rem;">
+      <h2 style="font-size:1.3rem;margin-bottom:.4rem;">Practice Multiple Choice — 20 Questions</h2>
+      <p style="color:var(--gray-light);font-size:.9rem;">Click an option to check your answer. Explanations appear automatically.</p>
+    </div>
+
+    <div class="quiz-stats">
+      <div class="stat-item"><div class="stat-val blue" id="statTotal">20</div><div class="stat-lbl">Questions</div></div>
+      <div class="stat-item"><div class="stat-val green" id="statCorrect">0</div><div class="stat-lbl">Correct</div></div>
+      <div class="stat-item"><div class="stat-val red" id="statWrong">0</div><div class="stat-lbl">Incorrect</div></div>
+      <div class="stat-item"><div class="stat-val" id="statPct" style="color:var(--gray-light);">—</div><div class="stat-lbl">Score</div></div>
+      <button class="quiz-reset-btn" onclick="resetQuiz()">Reset Quiz</button>
+    </div>
+
+    <div id="quizContainer"></div>
+  </div><!-- /tab-quiz -->
+
+
+  <!-- ════════════════════════════ SYNTHESIS ════════════════════════════ -->
+  <div class="tab-panel" id="tab-synthesis">
+    <div style="margin-bottom:1.5rem;">
+      <h2 style="font-size:1.3rem;margin-bottom:.4rem;">Big Picture Synthesis</h2>
+      <p style="color:var(--gray-light);font-size:.9rem;">How the week's concepts connect across levels of analysis and to the course arc.</p>
+    </div>
+
+    <div class="callout connect" style="margin-bottom:1.5rem;">
+      <div class="callout-title">The Unifying Principle</div>
+      All phenomena this week share a common architecture: the brain <strong>tracks regularities in the environment</strong> and adjusts its responses accordingly. Adjustments can go <em>down</em> (habituation), <em>up</em> (sensitization), or toward <em>finer discrimination</em> (perceptual learning). Mechanisms span from single synapses to whole-brain reorganization.
+    </div>
+
+    <p style="font-size:.8rem;color:var(--gray);margin-bottom:.75rem;font-weight:600;letter-spacing:.04em;text-transform:uppercase;">Levels of Analysis</p>
+    <div class="levels-strip">
+      <div class="level-col">
+        <div class="level-label" style="color:#a5b4fc;">Behavior</div>
+        <div class="level-items">
+          <div class="level-item" style="background:rgba(99,102,241,.1);color:#c7d2fe;">Response amplitude decreases (habituation)</div>
+          <div class="level-item" style="background:rgba(236,72,153,.1);color:#fbcfe8;">Response amplitude increases (sensitization)</div>
+          <div class="level-item" style="background:rgba(99,102,241,.07);color:#c7d2fe;">Discrimination improves (perceptual learning)</div>
+        </div>
+      </div>
+      <div class="level-col">
+        <div class="level-label" style="color:#67e8f9;">Circuit</div>
+        <div class="level-items">
+          <div class="level-item" style="background:rgba(6,182,212,.1);color:#a5f3fc;">Aplysia gill-withdrawal circuit (S → M)</div>
+          <div class="level-item" style="background:rgba(6,182,212,.08);color:#a5f3fc;">Hippocampal place cells</div>
+          <div class="level-item" style="background:rgba(6,182,212,.06);color:#a5f3fc;">Cortical topographic maps</div>
+        </div>
+      </div>
+      <div class="level-col">
+        <div class="level-label" style="color:#6ee7b7;">Synapse</div>
+        <div class="level-items">
+          <div class="level-item" style="background:rgba(16,185,129,.1);color:#a7f3d0;">Glutamate vesicle depletion (habituation)</div>
+          <div class="level-item" style="background:rgba(16,185,129,.08);color:#a7f3d0;">Serotonin modulation (sensitization)</div>
+          <div class="level-item" style="background:rgba(16,185,129,.06);color:#a7f3d0;">LTP / Hebbian (perceptual learning)</div>
+        </div>
+      </div>
+      <div class="level-col">
+        <div class="level-label" style="color:#fcd34d;">Structure</div>
+        <div class="level-items">
+          <div class="level-item" style="background:rgba(245,158,11,.1);color:#fde68a;">Synapse pruning (long-term habituation)</div>
+          <div class="level-item" style="background:rgba(245,158,11,.08);color:#fde68a;">Synapse growth (long-term sensitization)</div>
+          <div class="level-item" style="background:rgba(245,158,11,.06);color:#fde68a;">Cortical map expansion (perceptual learning)</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="synthesis-grid">
+      <div class="synth-card">
+        <div class="synth-card-title">
+          <div class="synth-dot" style="background:var(--rose);"></div>
+          <span style="color:var(--rose);">Likely Exam Themes</span>
+        </div>
+        <ul>
+          <li>Distinguish habituation, sensitization, dishabituation, and spontaneous recovery from <span>scenario descriptions</span></li>
+          <li>Apply <span>homosynaptic vs. heterosynaptic</span> to Aplysia circuits and link to behavioral specificity</li>
+          <li>Identify the mechanism behind an experimental result (<span>synaptic depression? cortical plasticity? Hebbian?</span>)</li>
+          <li>Distinguish <span>mere exposure vs. discrimination training</span> and which produces larger cortical changes</li>
+          <li>Interpret <span>place cell data</span>—what happens when landmarks move</li>
+          <li>Explain clinical phenomena (<span>learned non-use, cochlear implants</span>) using the week's concepts</li>
+          <li>Connect this week's content back to <span>prediction error and the RL arc</span></li>
+        </ul>
+      </div>
+      <div class="synth-card">
+        <div class="synth-card-title">
+          <div class="synth-dot" style="background:var(--accent);"></div>
+          <span style="color:var(--accent);">Cross-Course Connections</span>
+        </div>
+        <ul>
+          <li><span>Comparator model</span> = prediction error: respond to mismatch between stimulus and stored representation</li>
+          <li><span>Dual process theory</span> mirrors RL: parallel computation of S-R suppression and arousal amplification</li>
+          <li><span>Place cells</span> = state representation for V(s) in model-based RL (Week 8)</li>
+          <li><span>Latent learning</span> = policy-free value learning: knowledge acquired without behavioral expression</li>
+          <li><span>Hebbian LTP</span> is the synaptic substrate for many forms of associative learning (Weeks 7–8)</li>
+          <li><span>Perceptual learning specificity</span> parallels the stimulus generalization problem in RL</li>
+        </ul>
+      </div>
+    </div>
+  </div><!-- /tab-synthesis -->
+
+</main>
+
+<script>
+// ─── TAB NAVIGATION ───
+document.querySelectorAll('.tab-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById('tab-' + btn.dataset.tab).classList.add('active');
+  });
+});
+
+// ─── COLLAPSIBLE SECTIONS ───
+function toggleSection(header) {
+  const section = header.closest('.study-section');
+  section.classList.toggle('open');
+}
+
+// ─── FLASHCARDS ───
+function flipCard(card) {
+  card.classList.toggle('flipped');
+}
+
+let allFlipped = false;
+document.getElementById('flipAllBtn').addEventListener('click', function() {
+  allFlipped = !allFlipped;
+  const visible = Array.from(document.querySelectorAll('.flashcard')).filter(c => c.style.display !== 'none');
+  visible.forEach(c => { if (allFlipped) c.classList.add('flipped'); else c.classList.remove('flipped'); });
+  this.textContent = allFlipped ? 'Hide All' : 'Reveal All';
+});
+
+document.querySelectorAll('.filter-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    const filter = btn.dataset.filter;
+    document.querySelectorAll('.flashcard').forEach(card => {
+      if (filter === 'all' || card.dataset.category === filter) {
+        card.style.display = '';
+      } else {
+        card.style.display = 'none';
+      }
+    });
+    allFlipped = false;
+    document.getElementById('flipAllBtn').textContent = 'Reveal All';
+  });
+});
+
+// ─── QUIZ DATA ───
+const questions = [
+  {
+    text: "A rat is repeatedly exposed to a loud tone, and its acoustic startle response gradually declines. Then a kitten is briefly presented, and the rat's next startle response to the tone returns to its original amplitude. The restoration of the startle response is best described as:",
+    options: ["Sensitization", "Spontaneous recovery", "Dishabituation", "Perceptual learning"],
+    correct: 2,
+    tag: "Habituation",
+    explanation: "<strong>Dishabituation</strong> is the restoration of a habituated response after a novel or arousing stimulus is introduced. Spontaneous recovery occurs after a rest period without any stimulus—not after a novel stimulus."
+  },
+  {
+    text: "Which property of habituation provides the strongest evidence that the response decrement is due to learning rather than sensory fatigue?",
+    options: ["The response decreases more rapidly with massed than spaced repetitions", "Habituation to one stimulus does not transfer to other stimuli in the same sensory modality", "Spontaneous recovery occurs after a rest interval", "Habituation accumulates over multiple sessions"],
+    correct: 1,
+    tag: "Habituation",
+    explanation: "<strong>Stimulus specificity</strong> is the critical evidence against fatigue: if the decline were due to exhaustion, ALL stimuli in that modality should produce smaller responses—but they do not. A novel stimulus still elicits a full orienting response."
+  },
+  {
+    text: "In Aplysia, repeated light touches to the siphon cause the gill-withdrawal reflex to habituate. The cellular mechanism responsible for short-term habituation is:",
+    options: ["Increased serotonin release from modulatory interneurons", "Reduced glutamate release from sensory neurons onto motor neurons", "Elimination of synapses between sensory and motor neurons", "Heterosynaptic depression of the motor neuron"],
+    correct: 1,
+    tag: "Aplysia",
+    explanation: "Short-term habituation in Aplysia involves <strong>synaptic depression</strong>: repeated activation of sensory neuron S causes fewer glutamate vesicles to be released, reducing excitation of motor neuron M. Synapse elimination underlies <em>long-term</em> habituation. Serotonin is the mechanism of sensitization."
+  },
+  {
+    text: "A foot shock applied to the tail of an Aplysia increases the gill-withdrawal response to a subsequent light touch of the siphon AND of the mantle. This broad enhancement is described as:",
+    options: ["Homosynaptic facilitation", "Heterosynaptic facilitation", "Synaptic depression", "Stimulus generalization"],
+    correct: 1,
+    tag: "Aplysia",
+    explanation: "Sensitization in Aplysia is <strong>heterosynaptic</strong> because interneurons release serotonin onto multiple sensory neurons (S, T, U), not just the one activated by the sensitizing stimulus. This is why sensitization is not stimulus-specific."
+  },
+  {
+    text: "According to dual process theory, which condition should produce SENSITIZATION as the dominant behavioral outcome?",
+    options: ["A mild, non-arousing stimulus repeated at long spaced intervals", "A highly arousing stimulus that strongly activates the state system", "A familiar stimulus repeated beyond the point where no behavioral response is observed", "A novel stimulus presented once followed by a rest period"],
+    correct: 1,
+    tag: "Dual Process",
+    explanation: "Dual process theory holds that both processes run in parallel. When a stimulus is <strong>highly arousing</strong>, the state system is strongly activated, and sensitization dominates over the weakening of the S-R connection."
+  },
+  {
+    text: "Participants are shown a target scribble, then asked to identify it across multiple rounds of testing with no feedback. Their accuracy improves over rounds. This is best explained by:",
+    options: ["Discrimination training", "Mere exposure learning", "Sensitization of the visual system", "Priming via the word-stem completion task"],
+    correct: 1,
+    tag: "Perceptual Learning",
+    explanation: "<strong>Mere exposure learning</strong> (latent learning) occurs when passive exposure improves perceptual discrimination without any explicit feedback about accuracy."
+  },
+  {
+    text: "After 2 hours of repeated tactile stimulation of the right index finger, participants show improved two-point discrimination AND expanded left somatosensory cortex activation for that finger (fMRI). This illustrates:",
+    options: ["Sensitization of peripheral sensory receptors", "Cortical plasticity associated with perceptual learning", "Homosynaptic facilitation of the thalamo-cortical pathway", "Place field shrinkage in the hippocampus"],
+    correct: 1,
+    tag: "Cortical Plasticity",
+    explanation: "Expanded cortical representation (more neurons tuned to the stimulated fingertip) accompanies behavioral improvement. This is a direct demonstration that perceptual learning involves <strong>cortical reorganization</strong>. The change is in cortex, not in peripheral receptors."
+  },
+  {
+    text: "John O'Keefe found that when the maze AND a visual landmark card were rotated together, the place field of a hippocampal neuron:",
+    options: ["Remained anchored to the original geographic direction", "Rotated with the maze, following the visual landmark", "Disappeared entirely until the rat re-explored the maze", "Generalized to all arms of the maze equally"],
+    correct: 1,
+    tag: "Place Cells",
+    explanation: "Place cells use <strong>visual landmarks</strong> (not absolute geographic direction) to define spatial locations. When maze and landmark rotate together, place fields rotate with them."
+  },
+  {
+    text: "Massed repetitions produce faster habituation than spaced repetitions, but spaced repetitions produce habituation that lasts longer. This parallel with memory consolidation reflects:",
+    options: ["The comparator model's emphasis on pattern matching", "The spacing effect, one of the most robust findings in learning research", "The Coolidge effect applied to general stimuli", "Below-zero sensitization in the state system"],
+    correct: 1,
+    tag: "Habituation",
+    explanation: "<strong>The spacing effect</strong>: spaced repetitions yield more durable learning than massed repetitions in both habituation and explicit memory tasks. Massed exposure habituates faster but is more susceptible to spontaneous recovery."
+  },
+  {
+    text: "A stroke patient loses sensation in her right arm but retains intact motor control, yet she stops using the arm. The most appropriate behavioral interpretation is:",
+    options: ["Sensitization to sensory loss causes avoidance behavior", "Learned non-use, a form of habituation to the non-functional limb", "Perceptual learning that reduces cortical representation of the arm", "Priming of compensatory left-arm motor programs"],
+    correct: 1,
+    tag: "Clinical",
+    explanation: "<strong>Learned non-use</strong>: repeated failure to receive feedback from a desensitized limb leads to decreased use even when motor control is preserved. Treated with Constraint-Induced Movement Therapy (dishabituation through necessity)."
+  },
+  {
+    text: "In Hebbian learning, connections between neurons strengthen when:",
+    options: ["One neuron fires repeatedly in the absence of the other", "Two neurons fire together repeatedly, so their coactivity is reinforced", "A presynaptic neuron releases serotonin onto a postsynaptic motor neuron", "Synaptic vesicles are depleted through massed stimulation"],
+    correct: 1,
+    tag: "Hebbian",
+    explanation: '"<strong>Neurons that fire together, wire together.</strong>" Hebbian learning proposes that synaptic strength increases when pre- and postsynaptic neurons are coactive, forming the basis for stable cortical representations.'
+  },
+  {
+    text: "The differentiation theory of perceptual learning proposes that:",
+    options: ["Shared features become more salient than distinctive features with repeated exposure", "Representations begin vague but become more detailed as features are encoded over repeated exposures", "Habituation depends on perceptual learning that occurs when stored representations match incoming stimuli", "Only discrimination training can produce lasting perceptual improvement"],
+    correct: 1,
+    tag: "Theory",
+    explanation: "<strong>Differentiation theory (E. Gibson)</strong>: the brain cannot capture all features of a novel stimulus in a single exposure. With repetition, more features are added to the representation, enabling finer-grained discriminations."
+  },
+  {
+    text: "What does long-term habituation in Aplysia involve at the structural level, beyond short-term synaptic depression?",
+    options: ["Increased synthesis of serotonin receptors on postsynaptic motor neurons", "Elimination of synapses between sensory and motor neurons", "Formation of new synaptic terminals via Hebbian potentiation", "Expansion of the place field of sensory neurons in the siphon region"],
+    correct: 1,
+    tag: "Aplysia",
+    explanation: "Long-term habituation in Aplysia involves actual <strong>pruning of presynaptic terminals</strong>, reducing the number of synapses between sensory neuron S and motor neuron M. This structural change outlasts simple vesicle depletion (short-term)."
+  },
+  {
+    text: "Tolman's latent learning experiment with rats in mazes showed that:",
+    options: ["Rats must receive a food reward to form a spatial representation of the maze", "Exploratory exposure to a maze enables rats to learn its layout, revealed only when a reward is introduced", "Rats develop place cells only after reward-based training", "Spatial learning requires cortical rather than hippocampal engagement"],
+    correct: 1,
+    tag: "Spatial Learning",
+    explanation: "Tolman's exploration-first rats performed as well as trained rats when food was introduced on day 11. This demonstrated <strong>latent learning</strong>: the cognitive map was acquired during exploration but became behaviorally evident only when relevant."
+  },
+  {
+    text: "A person who grew up exposed primarily to faces of one racial group is less accurate at distinguishing faces of other racial groups (the other-race effect). This is best understood as:",
+    options: ["Sensitization to familiar face types reducing attention to novel ones", "Stimulus-specific habituation to frequently seen faces", "Perceptual learning: frequent exposure sharpens discrimination within that face type", "Latent spatial learning about the social environment"],
+    correct: 2,
+    tag: "Perceptual Learning",
+    explanation: "<strong>Perceptual learning</strong> is stimulus-specific and experience-dependent. Greater exposure to one group's faces leads to finer-grained perceptual representations for that group. Discrimination training on other-race faces can reduce this effect."
+  },
+  {
+    text: "Which of the following best describes how cochlear implants leverage cortical plasticity?",
+    options: ["They restore pre-existing auditory cortex organization by mimicking normal sound waves", "They produce novel 'virtual' speech signals that users must learn to discriminate through perceptual learning", "They sensitize the auditory cortex to lower sound frequencies via repeated stimulation", "They work by eliminating auditory receptive fields and forming new homosynaptic connections"],
+    correct: 1,
+    tag: "Clinical",
+    explanation: "Cochlear implants produce <strong>novel sensations</strong> that users must learn to interpret through perceptual learning and cortical reorganization, following the same rapid-then-gradual improvement curve seen in other practice-based learning."
+  },
+  {
+    text: "A jazz musician can instantly distinguish a tenor saxophone from an alto saxophone by ear, while a non-musician cannot. This skill is best explained by:",
+    options: ["Sensitization to complex auditory stimuli in the musician's state system", "Perceptual learning through repeated exposure and training, resulting in narrower auditory receptive fields", "Dishabituation of the orienting response to familiar instruments", "Hebbian learning causing place cells to represent instrument locations"],
+    correct: 1,
+    tag: "Perceptual Learning",
+    explanation: "Years of musical experience lead to <strong>cortical reorganization</strong>: auditory receptive fields become more narrowly tuned to specific pitches and timbres. This is perceptual learning via discrimination training."
+  },
+  {
+    text: "In the word-stem completion task, participants are more likely to complete a stem with a previously seen word, even without conscious recall. This demonstrates that:",
+    options: ["Prior exposure changes behavior even in the absence of conscious awareness—a hallmark of latent learning", "Sensitization enhances recall of arousing stimuli in explicit memory tasks", "Dishabituation of the lexical-access system allows faster retrieval", "Discrimination training improves stem-matching accuracy"],
+    correct: 0,
+    tag: "Priming",
+    explanation: "<strong>Priming</strong> demonstrates that experience shapes behavior without requiring conscious recognition. The prior exposure has created an implicit, latent influence on responding — a hallmark of non-declarative, latent learning."
+  },
+  {
+    text: "Why do researchers study habituation and learning in Aplysia californica rather than exclusively in mammals?",
+    options: ["Aplysia show sensitization but not habituation, making them ideal for isolating one process", "Aplysia have identifiable, individually named neurons, allowing researchers to trace the complete circuit of a learnable behavior", "Aplysia cortex has topographic maps similar to the human somatosensory homunculus", "Aplysia place cells provide a simpler model for spatial navigation than rat hippocampal cells"],
+    correct: 1,
+    tag: "Aplysia",
+    explanation: "Aplysia's ~20,000 neurons include some large enough to see with the naked eye, and the pattern is hardwired across individuals. Researchers can identify and record from the <strong>same neuron in every specimen</strong>, enabling complete circuit-level analysis. This work earned Kandel the Nobel Prize."
+  },
+  {
+    text: "A patient whose hippocampus was lesioned is given the novel object recognition task. The expected result is:",
+    options: ["Normal performance: the patient spends more time with the novel object", "Impaired performance: the patient treats the familiar object as if it were novel, spending equal time with both", "Enhanced performance: the patient ignores the novel object due to sensitization to familiar objects", "Normal performance in simple situations but impaired only when object position or context must be integrated"],
+    correct: 3,
+    tag: "Hippocampus",
+    explanation: "Hippocampal lesions do not universally impair novel object recognition. Impairment emerges specifically when the task requires integrating memory for object identity with <strong>memory for context or position</strong>—the hippocampus's specialty."
+  }
+];
+
+let quizState = {};
+
+function buildQuiz() {
+  const container = document.getElementById('quizContainer');
+  container.innerHTML = '';
+  quizState = {};
+
+  questions.forEach((q, i) => {
+    quizState[i] = null;
+    const card = document.createElement('div');
+    card.className = 'q-card';
+    card.id = 'q-' + i;
+
+    const optsHtml = q.options.map((opt, j) =>
+      `<button class="q-opt" data-qi="${i}" data-oi="${j}" onclick="answerQ(${i},${j})">${String.fromCharCode(65+j)}. ${opt}</button>`
+    ).join('');
+
+    card.innerHTML = `
+      <div class="q-header">
+        <div class="q-meta">
+          <span class="q-num">${i+1}</span>
+          <span class="q-tag">${q.tag}</span>
+          <span class="q-status" id="qs-${i}"></span>
+        </div>
+        <div class="q-text">${q.text}</div>
+      </div>
+      <div class="q-options">${optsHtml}</div>
+      <div class="q-explanation hidden" id="qe-${i}">${q.explanation}</div>
+    `;
+    container.appendChild(card);
+  });
+  updateStats();
+}
+
+function answerQ(qi, oi) {
+  if (quizState[qi] !== null) return;
+  quizState[qi] = oi;
+
+  const card = document.getElementById('q-' + qi);
+  const opts = card.querySelectorAll('.q-opt');
+  const isCorrect = oi === questions[qi].correct;
+
+  opts.forEach((btn, j) => {
+    btn.disabled = true;
+    if (j === questions[qi].correct) btn.classList.add('show-correct');
+  });
+  if (!isCorrect) {
+    opts[oi].classList.remove('show-correct');
+    opts[oi].classList.add('selected-wrong');
+  } else {
+    opts[oi].classList.add('selected-correct');
+  }
+
+  card.classList.add(isCorrect ? 'correct' : 'incorrect');
+  document.getElementById('qs-' + qi).textContent = isCorrect ? '✓ Correct' : '✗ Incorrect';
+  document.getElementById('qs-' + qi).style.color = isCorrect ? 'var(--emerald)' : 'var(--rose)';
+  document.getElementById('qe-' + qi).classList.remove('hidden');
+
+  updateStats();
+}
+
+function updateStats() {
+  const answered = Object.values(quizState).filter(v => v !== null).length;
+  const correct = Object.entries(quizState).filter(([i, v]) => v !== null && v === questions[i].correct).length;
+  const wrong = answered - correct;
+  document.getElementById('statCorrect').textContent = correct;
+  document.getElementById('statWrong').textContent = wrong;
+  const pctEl = document.getElementById('statPct');
+  if (answered > 0) {
+    const pct = Math.round((correct / answered) * 100);
+    pctEl.textContent = pct + '%';
+    pctEl.style.color = pct >= 80 ? 'var(--emerald)' : pct >= 60 ? 'var(--amber)' : 'var(--rose)';
+  } else {
+    pctEl.textContent = '—';
+    pctEl.style.color = 'var(--gray-light)';
+  }
+  // update topbar progress (quiz answered out of 20)
+  const pct = (answered / 20) * 100;
+  document.getElementById('quizProgressBar').style.width = pct + '%';
+  document.getElementById('quizProgressLabel').textContent = answered + ' / 20';
+}
+
+function resetQuiz() {
+  buildQuiz();
+}
+
+// ─── SCROLL PROGRESS ───
+window.addEventListener('scroll', () => {
+  const el = document.documentElement;
+  const pct = (el.scrollTop / (el.scrollHeight - el.clientHeight)) * 100;
+  document.getElementById('scrollProgress').style.width = pct + '%';
+});
+
+// ─── INIT ───
+buildQuiz();
+</script>
+</body>
+</html>
