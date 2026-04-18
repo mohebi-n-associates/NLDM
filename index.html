@@ -124,8 +124,25 @@
             gap: 1.5rem;
         }
 
+        /* Full-width card spans both columns */
+        .nav-card.full-width {
+            grid-column: 1 / -1;
+            flex-direction: row;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .nav-card.full-width .card-body {
+            flex: 1;
+        }
+
+        .nav-card.full-width .card-meta {
+            margin-top: 0.5rem;
+        }
+
         @media (max-width: 640px) {
             .nav-grid { grid-template-columns: 1fr; }
+            .nav-card.full-width { flex-direction: column; align-items: flex-start; }
         }
 
         .nav-card {
@@ -240,6 +257,32 @@
 
         <div class="nav-grid">
 
+            <!-- Course Overview — full width -->
+            <a href="overview.html" class="nav-card full-width">
+                <div class="card-icon-wrap" style="background: rgba(34,197,94,0.12); color: #22c55e; flex-shrink: 0;">&#128193;</div>
+                <div class="card-body">
+                    <div class="card-title">Course Overview</div>
+                    <p class="card-desc">Syllabus, lecture schedule, grading, and course policies. Everything you need to know about NLDM.</p>
+                    <div class="card-meta">
+                        <span class="card-count">Coming soon</span>
+                        <svg class="card-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                    </div>
+                </div>
+            </a>
+
+            <!-- Exam Prep — full width -->
+            <a href="review.html" class="nav-card full-width">
+                <div class="card-icon-wrap" style="background: rgba(251,191,36,0.12); color: #fbbf24; flex-shrink: 0;">&#128221;</div>
+                <div class="card-body">
+                    <div class="card-title">Exam Prep</div>
+                    <p class="card-desc">Summaries, key equations, and study guides for each lecture module. Reinforce your understanding before exams.</p>
+                    <div class="card-meta">
+                        <span class="card-count">Coming soon</span>
+                        <svg class="card-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                    </div>
+                </div>
+            </a>
+
             <!-- Demonstrations -->
             <a href="demonstrations.html" class="nav-card">
                 <div class="card-icon-wrap" style="background: rgba(6,182,212,0.12); color: #06b6d4;">&#127891;</div>
@@ -260,28 +303,6 @@
                 <p class="card-desc">Participate in real paradigms &mdash; Random Dot Motion, bandit tasks, classroom polls &mdash; and compare your results to the rest of the class.</p>
                 <div class="card-meta">
                     <span class="card-count">2 live &middot; 3 coming soon</span>
-                    <svg class="card-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-                </div>
-            </a>
-
-            <!-- Review Material -->
-            <a href="review.html" class="nav-card">
-                <div class="card-icon-wrap" style="background: rgba(236,72,153,0.12); color: #ec4899;">&#128218;</div>
-                <div class="card-title">Review Material</div>
-                <p class="card-desc">Summaries, key equations, and study guides for each lecture module. Reinforce your understanding before exams.</p>
-                <div class="card-meta">
-                    <span class="card-count">Coming soon</span>
-                    <svg class="card-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-                </div>
-            </a>
-
-            <!-- Course Overview -->
-            <a href="overview.html" class="nav-card">
-                <div class="card-icon-wrap" style="background: rgba(34,197,94,0.12); color: #22c55e;">&#128193;</div>
-                <div class="card-title">Course Overview</div>
-                <p class="card-desc">Syllabus, lecture schedule, grading, and course policies. Everything you need to know about NLDM.</p>
-                <div class="card-meta">
-                    <span class="card-count">Coming soon</span>
                     <svg class="card-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
                 </div>
             </a>
