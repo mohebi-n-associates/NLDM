@@ -1,0 +1,1581 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Module 7 Exam Prep — Classical Conditioning</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --primary: #6366f1;
+      --primary-dark: #4f46e5;
+      --secondary: #ec4899;
+      --accent: #06b6d4;
+      --emerald: #10b981;
+      --amber: #f59e0b;
+      --rose: #f43f5e;
+      --dark: #0f172a;
+      --dark-light: #1e293b;
+      --dark-mid: #162032;
+      --gray: #64748b;
+      --gray-light: #94a3b8;
+      --light: #f1f5f9;
+      --white: #ffffff;
+      --border: rgba(255,255,255,0.08);
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--dark);
+      color: var(--white);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* ─── ANIMATED BACKGROUND ─── */
+    .bg-layer {
+      position: fixed; inset: 0; z-index: -1; pointer-events: none;
+      background:
+        radial-gradient(ellipse 80% 60% at 20% 10%, rgba(99,102,241,.12) 0%, transparent 60%),
+        radial-gradient(ellipse 60% 60% at 80% 80%, rgba(236,72,153,.08) 0%, transparent 60%),
+        radial-gradient(ellipse 40% 40% at 50% 50%, rgba(6,182,212,.05) 0%, transparent 60%);
+      animation: bgPulse 20s ease-in-out infinite;
+    }
+    @keyframes bgPulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.7; transform: scale(1.05); }
+    }
+
+    /* ─── TOPBAR ─── */
+    .topbar {
+      position: sticky; top: 0; z-index: 100;
+      padding: .75rem 2rem;
+      background: rgba(15,23,42,.85);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 1rem;
+    }
+    .topbar-left { display: flex; align-items: center; gap: 1rem; }
+    .back-link {
+      display: flex; align-items: center; gap: .5rem;
+      color: var(--gray-light); text-decoration: none; font-size: .85rem;
+      transition: color .2s;
+    }
+    .back-link:hover { color: var(--white); }
+    .back-link svg { flex-shrink: 0; }
+    .breadcrumb { color: var(--gray); font-size: .8rem; }
+    .breadcrumb span { color: var(--primary); }
+
+    .progress-bar-wrap {
+      flex: 1; max-width: 240px;
+      background: rgba(255,255,255,.08); border-radius: 99px; height: 6px; overflow: hidden;
+    }
+    .progress-bar-fill {
+      height: 100%; border-radius: 99px;
+      background: linear-gradient(90deg, var(--primary), var(--secondary));
+      transition: width .5s ease;
+      width: 0%;
+    }
+    .progress-label { font-size: .75rem; color: var(--gray); white-space: nowrap; }
+
+    /* ─── HERO ─── */
+    .hero {
+      padding: 5rem 2rem 3rem;
+      max-width: 900px; margin: 0 auto; text-align: center;
+    }
+    .module-badge {
+      display: inline-flex; align-items: center; gap: .5rem;
+      background: rgba(99,102,241,.15); border: 1px solid rgba(99,102,241,.3);
+      color: #a5b4fc; border-radius: 99px; padding: .35rem 1rem; font-size: .8rem;
+      font-weight: 600; letter-spacing: .05em; text-transform: uppercase; margin-bottom: 1.5rem;
+    }
+    .hero h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      line-height: 1.15; margin-bottom: 1rem;
+      background: linear-gradient(135deg, #fff 40%, #a5b4fc);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    }
+    .hero-subtitle { color: var(--gray-light); font-size: 1.05rem; max-width: 600px; margin: 0 auto 2rem; }
+
+    .tab-nav {
+      display: flex; gap: .5rem; justify-content: center;
+      flex-wrap: wrap; margin-bottom: 1rem;
+    }
+    .tab-btn {
+      padding: .6rem 1.2rem; border-radius: 99px; border: 1px solid var(--border);
+      background: rgba(255,255,255,.04); color: var(--gray-light);
+      font-size: .875rem; font-weight: 500; cursor: pointer; transition: all .2s;
+      font-family: 'Inter', sans-serif;
+    }
+    .tab-btn:hover { background: rgba(99,102,241,.12); color: var(--white); border-color: rgba(99,102,241,.4); }
+    .tab-btn.active {
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      color: var(--white); border-color: transparent;
+    }
+
+    /* ─── MAIN LAYOUT ─── */
+    .main { max-width: 900px; margin: 0 auto; padding: 0 2rem 6rem; }
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; animation: fadeIn .3s ease; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+    /* ─── SECTION CARDS (Study Guide) ─── */
+    .study-section {
+      border: 1px solid var(--border);
+      border-radius: 16px; overflow: hidden;
+      background: rgba(255,255,255,.02);
+      margin-bottom: 1rem;
+      transition: border-color .2s;
+    }
+    .study-section:hover { border-color: rgba(99,102,241,.25); }
+    .study-section-header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1.1rem 1.5rem; cursor: pointer; user-select: none;
+      gap: 1rem;
+    }
+    .study-section-header-left { display: flex; align-items: center; gap: .85rem; }
+    .section-icon {
+      width: 36px; height: 36px; border-radius: 10px; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center; font-size: 1.1rem;
+    }
+    .section-title { font-size: 1rem; font-weight: 600; }
+    .section-num { font-size: .75rem; color: var(--gray); }
+    .chevron { color: var(--gray); transition: transform .25s; flex-shrink: 0; }
+    .study-section.open .chevron { transform: rotate(180deg); }
+    .study-section-body { display: none; padding: 0 1.5rem 1.5rem; }
+    .study-section.open .study-section-body { display: block; }
+
+    /* ─── CONTENT ELEMENTS ─── */
+    .prose { color: var(--gray-light); font-size: .95rem; }
+    .prose p { margin-bottom: .85rem; }
+    .prose p:last-child { margin-bottom: 0; }
+    .prose strong { color: var(--white); font-weight: 600; }
+    .prose em { color: #a5b4fc; font-style: normal; font-weight: 500; }
+
+    .callout {
+      border-radius: 10px; padding: 1rem 1.2rem; margin: 1rem 0;
+      border-left: 3px solid; font-size: .9rem;
+    }
+    .callout-title { font-weight: 600; margin-bottom: .4rem; font-size: .8rem; letter-spacing: .06em; text-transform: uppercase; }
+    .callout.warn { background: rgba(245,158,11,.07); border-color: var(--amber); color: #fcd34d; }
+    .callout.tip { background: rgba(99,102,241,.07); border-color: var(--primary); color: #a5b4fc; }
+    .callout.connect { background: rgba(6,182,212,.07); border-color: var(--accent); color: #67e8f9; }
+    .callout.exam { background: rgba(16,185,129,.07); border-color: var(--emerald); color: #6ee7b7; }
+
+    .prop-table, .contrast-table {
+      width: 100%; border-collapse: collapse; font-size: .875rem; margin: 1rem 0;
+    }
+    .prop-table th, .contrast-table th {
+      background: rgba(99,102,241,.15); color: #a5b4fc;
+      padding: .6rem .9rem; text-align: left; font-weight: 600; font-size: .78rem;
+      letter-spacing: .04em; text-transform: uppercase;
+    }
+    .prop-table td, .contrast-table td {
+      padding: .65rem .9rem; border-bottom: 1px solid rgba(255,255,255,.05);
+      color: var(--gray-light); vertical-align: top;
+    }
+    .prop-table tr:last-child td, .contrast-table tr:last-child td { border-bottom: none; }
+    .prop-table tr:hover td, .contrast-table tr:hover td { background: rgba(255,255,255,.02); }
+    .prop-table td:first-child, .contrast-table td:first-child { color: var(--white); font-weight: 500; }
+
+    .circuit-box {
+      background: rgba(15,23,42,.6); border: 1px solid rgba(6,182,212,.2);
+      border-radius: 10px; padding: 1rem 1.2rem; margin: 1rem 0;
+      font-family: 'JetBrains Mono', monospace; font-size: .825rem; color: #67e8f9;
+    }
+    .circuit-label { color: var(--gray); font-size: .75rem; margin-bottom: .5rem; font-family: 'Inter', sans-serif; }
+
+    .bullet-list { list-style: none; padding: 0; margin: .75rem 0; }
+    .bullet-list li {
+      display: flex; gap: .75rem; padding: .4rem 0; color: var(--gray-light); font-size: .9rem;
+    }
+    .bullet-list li::before {
+      content: '›'; color: var(--primary); font-size: 1.1rem; line-height: 1.4; flex-shrink: 0;
+    }
+    .bullet-list li strong { color: var(--white); }
+
+    /* ─── KEY TERMS / FLASHCARDS ─── */
+    .terms-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: .75rem; }
+    .flashcard {
+      border: 1px solid var(--border); border-radius: 12px; overflow: hidden;
+      cursor: pointer; transition: border-color .2s, transform .15s;
+      background: rgba(255,255,255,.02);
+      perspective: 600px;
+    }
+    .flashcard:hover { border-color: rgba(99,102,241,.3); transform: translateY(-2px); }
+    .flashcard-inner { position: relative; min-height: 100px; transition: transform .45s; transform-style: preserve-3d; }
+    .flashcard.flipped .flashcard-inner { transform: rotateY(180deg); }
+    .flashcard-front, .flashcard-back {
+      padding: 1rem 1.1rem; backface-visibility: hidden;
+    }
+    .flashcard-back { position: absolute; inset: 0; transform: rotateY(180deg); background: rgba(99,102,241,.08); }
+    .flashcard-term { font-weight: 600; font-size: .95rem; margin-bottom: .4rem; }
+    .flashcard-hint { font-size: .73rem; color: var(--gray); }
+    .flashcard-def { font-size: .85rem; color: var(--gray-light); line-height: 1.55; }
+    .flashcard-tag {
+      display: inline-block; font-size: .68rem; padding: .15rem .5rem;
+      border-radius: 99px; margin-bottom: .6rem; font-weight: 600; letter-spacing: .04em;
+    }
+    .tag-neuro { background: rgba(6,182,212,.15); color: #67e8f9; }
+    .tag-behavior { background: rgba(99,102,241,.15); color: #a5b4fc; }
+    .tag-clinical { background: rgba(244,63,94,.15); color: #fda4af; }
+    .tag-theory { background: rgba(245,158,11,.15); color: #fcd34d; }
+    .tag-molecular { background: rgba(16,185,129,.15); color: #6ee7b7; }
+
+    .terms-controls { display: flex; gap: .5rem; margin-bottom: 1.5rem; flex-wrap: wrap; }
+    .filter-btn {
+      padding: .35rem .85rem; border-radius: 99px; font-size: .78rem; font-weight: 500;
+      border: 1px solid var(--border); background: transparent; color: var(--gray-light);
+      cursor: pointer; transition: all .2s; font-family: 'Inter', sans-serif;
+    }
+    .filter-btn:hover { border-color: rgba(99,102,241,.4); color: var(--white); }
+    .filter-btn.active { background: rgba(99,102,241,.15); border-color: rgba(99,102,241,.4); color: var(--white); }
+    .flip-all-btn {
+      margin-left: auto; padding: .35rem .85rem; border-radius: 99px;
+      font-size: .78rem; font-weight: 500; border: 1px solid rgba(99,102,241,.3);
+      background: rgba(99,102,241,.1); color: #a5b4fc; cursor: pointer;
+      transition: all .2s; font-family: 'Inter', sans-serif;
+    }
+    .flip-all-btn:hover { background: rgba(99,102,241,.2); }
+
+    /* ─── QUIZ ─── */
+    .quiz-stats {
+      display: flex; gap: 1.5rem; margin-bottom: 2rem;
+      padding: 1rem 1.5rem; background: rgba(255,255,255,.03);
+      border: 1px solid var(--border); border-radius: 12px; flex-wrap: wrap;
+    }
+    .stat-item { display: flex; flex-direction: column; gap: .2rem; }
+    .stat-val { font-size: 1.5rem; font-weight: 700; }
+    .stat-val.green { color: var(--emerald); }
+    .stat-val.red { color: var(--rose); }
+    .stat-val.blue { color: var(--primary); }
+    .stat-lbl { font-size: .75rem; color: var(--gray); }
+    .quiz-reset-btn {
+      margin-left: auto; padding: .45rem 1rem; border-radius: 8px;
+      background: rgba(255,255,255,.05); border: 1px solid var(--border);
+      color: var(--gray-light); font-size: .8rem; cursor: pointer;
+      transition: all .2s; font-family: 'Inter', sans-serif; align-self: center;
+    }
+    .quiz-reset-btn:hover { background: rgba(255,255,255,.1); color: var(--white); }
+
+    .q-card {
+      border: 1px solid var(--border); border-radius: 14px;
+      background: rgba(255,255,255,.02); margin-bottom: 1rem; overflow: hidden;
+      transition: border-color .2s;
+    }
+    .q-card.correct { border-color: rgba(16,185,129,.4); }
+    .q-card.incorrect { border-color: rgba(244,63,94,.4); }
+    .q-header { padding: 1.2rem 1.5rem; cursor: pointer; }
+    .q-meta { display: flex; gap: .75rem; align-items: center; margin-bottom: .65rem; }
+    .q-num {
+      width: 26px; height: 26px; border-radius: 8px; flex-shrink: 0;
+      background: rgba(99,102,241,.2); color: #a5b4fc;
+      font-size: .75rem; font-weight: 700; display: flex; align-items: center; justify-content: center;
+    }
+    .q-tag {
+      font-size: .7rem; padding: .15rem .6rem; border-radius: 99px; font-weight: 600;
+      background: rgba(99,102,241,.12); color: #a5b4fc;
+    }
+    .q-status { margin-left: auto; font-size: .75rem; }
+    .q-text { font-size: .95rem; color: var(--light); line-height: 1.55; }
+    .q-options { padding: 0 1.5rem 1rem; display: grid; gap: .5rem; }
+    .q-opt {
+      padding: .65rem 1rem; border-radius: 9px;
+      border: 1px solid rgba(255,255,255,.07);
+      background: rgba(255,255,255,.03); font-size: .875rem; color: var(--gray-light);
+      cursor: pointer; transition: all .2s; text-align: left; width: 100%;
+      font-family: 'Inter', sans-serif;
+    }
+    .q-opt:hover:not(:disabled) { background: rgba(99,102,241,.1); border-color: rgba(99,102,241,.3); color: var(--white); }
+    .q-opt.selected-correct { background: rgba(16,185,129,.12); border-color: rgba(16,185,129,.5); color: #6ee7b7; }
+    .q-opt.selected-wrong { background: rgba(244,63,94,.12); border-color: rgba(244,63,94,.5); color: #fda4af; }
+    .q-opt.show-correct { background: rgba(16,185,129,.08); border-color: rgba(16,185,129,.3); color: #6ee7b7; }
+    .q-opt:disabled { cursor: default; }
+    .q-explanation {
+      margin: 0 1.5rem 1.25rem; padding: .9rem 1.1rem;
+      background: rgba(99,102,241,.07); border-radius: 10px;
+      border-left: 3px solid var(--primary); font-size: .875rem; color: var(--gray-light);
+      animation: fadeIn .25s ease;
+    }
+    .q-explanation strong { color: #a5b4fc; }
+    .q-explanation.hidden { display: none; }
+
+    /* ─── SYNTHESIS ─── */
+    .synthesis-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin: 1.5rem 0; }
+    @media (max-width: 600px) { .synthesis-grid { grid-template-columns: 1fr; } }
+    .synth-card {
+      border: 1px solid var(--border); border-radius: 12px; padding: 1.25rem;
+      background: rgba(255,255,255,.02);
+    }
+    .synth-card-title {
+      font-size: .8rem; font-weight: 600; letter-spacing: .05em; text-transform: uppercase;
+      margin-bottom: .75rem; display: flex; align-items: center; gap: .5rem;
+    }
+    .synth-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+    .synth-card ul { list-style: none; padding: 0; }
+    .synth-card li { font-size: .875rem; color: var(--gray-light); padding: .3rem 0; border-bottom: 1px solid rgba(255,255,255,.04); }
+    .synth-card li:last-child { border-bottom: none; }
+    .synth-card li span { color: var(--white); font-weight: 500; }
+
+    .levels-strip {
+      display: flex; gap: 0; border: 1px solid var(--border); border-radius: 12px; overflow: hidden;
+      margin: 1.5rem 0;
+    }
+    .level-col { flex: 1; padding: 1rem; }
+    .level-col + .level-col { border-left: 1px solid var(--border); }
+    .level-label { font-size: .72rem; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; margin-bottom: .6rem; }
+    .level-items { display: flex; flex-direction: column; gap: .5rem; }
+    .level-item { font-size: .8rem; padding: .35rem .6rem; border-radius: 7px; }
+
+    /* ─── RESPONSIVE ─── */
+    @media (max-width: 700px) {
+      .topbar { padding: .65rem 1rem; }
+      .hero { padding: 3rem 1rem 2rem; }
+      .main { padding: 0 1rem 5rem; }
+      .tab-nav { gap: .35rem; }
+      .tab-btn { font-size: .8rem; padding: .5rem .9rem; }
+      .prop-table, .contrast-table { font-size: .8rem; }
+    }
+
+    /* scroll indicator */
+    .scroll-progress {
+      position: fixed; top: 0; left: 0; height: 2px; z-index: 200;
+      background: linear-gradient(90deg, var(--primary), var(--secondary));
+      transition: width .1s; width: 0%;
+    }
+  </style>
+</head>
+<body>
+<div class="bg-layer"></div>
+<div class="scroll-progress" id="scrollProgress"></div>
+
+<!-- TOPBAR -->
+<header class="topbar">
+  <div class="topbar-left">
+    <a href="../../index.html" class="back-link">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+      Back
+    </a>
+    <span class="breadcrumb">Exam Prep › <span>Module 7</span></span>
+  </div>
+  <div style="display:flex;align-items:center;gap:.75rem;">
+    <div class="progress-bar-wrap" title="Quiz progress">
+      <div class="progress-bar-fill" id="quizProgressBar"></div>
+    </div>
+    <span class="progress-label" id="quizProgressLabel">0 / 25</span>
+  </div>
+</header>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="module-badge">
+    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+    PSYCH 505 · Week 7
+  </div>
+  <h1>Classical Conditioning</h1>
+  <p class="hero-subtitle">From Pavlov's dogs to cerebellar circuits — the neuroscience of anticipatory learning.</p>
+  <nav class="tab-nav">
+    <button class="tab-btn active" data-tab="guide">Study Guide</button>
+    <button class="tab-btn" data-tab="terms">Key Terms</button>
+    <button class="tab-btn" data-tab="quiz">Practice Quiz</button>
+    <button class="tab-btn" data-tab="synthesis">Big Picture</button>
+  </nav>
+</div>
+
+<!-- MAIN -->
+<main class="main">
+
+  <!-- ════════════════════════════ STUDY GUIDE ════════════════════════════ -->
+  <div class="tab-panel active" id="tab-guide">
+
+    <!-- 1. Basic Concepts -->
+    <div class="study-section open" data-section="1">
+      <div class="study-section-header" onclick="toggleSection(this)">
+        <div class="study-section-header-left">
+          <div class="section-icon" style="background:rgba(99,102,241,.15);">🔔</div>
+          <div><div class="section-num">Section 1</div><div class="section-title">Basic Concepts</div></div>
+        </div>
+        <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
+      </div>
+      <div class="study-section-body">
+        <div class="prose">
+          <p>Classical (Pavlovian) conditioning: a <strong>neutral stimulus</strong> comes to predict a biologically significant event. The fundamental formula is <em>CS + US → CR</em>.</p>
+        </div>
+        <table class="prop-table">
+          <thead><tr><th>Term</th><th>Definition &amp; Example</th></tr></thead>
+          <tbody>
+            <tr><td>US (Unconditioned Stimulus)</td><td>Naturally evokes a response without prior training. Examples: food, airpuff, electric shock.</td></tr>
+            <tr><td>UR (Unconditioned Response)</td><td>Reflexive, automatic response to the US. Occurs without any learning.</td></tr>
+            <tr><td>CS (Conditioned Stimulus)</td><td>Formerly neutral stimulus that, after pairing with the US, predicts the US. Example: bell, tone, light.</td></tr>
+            <tr><td>CR (Conditioned Response)</td><td>Learned anticipatory response to the CS — occurs <em>before</em> the US arrives. Protective and adaptive.</td></tr>
+          </tbody>
+        </table>
+        <ul class="bullet-list">
+          <li><strong>Appetitive conditioning:</strong> US is positive (food, sex) → CR reflects approach behavior.</li>
+          <li><strong>Aversive conditioning:</strong> US is unpleasant (shock, airpuff) → CR reflects defensive preparation.</li>
+          <li><strong>CER (Conditioned Emotional Response):</strong> Estes &amp; Skinner — rats freeze (CR) to a tone (CS) predicting shock (US). Measurable as suppression of lever pressing.</li>
+          <li><strong>Eyeblink conditioning:</strong> tone CS + airpuff US → anticipatory eyeblink CR that peaks just as the US is expected to arrive.</li>
+        </ul>
+        <div class="callout warn">
+          <div class="callout-title">Common Misconception — CR vs. UR</div>
+          Both can be eyeblinks! The key distinction: the <strong>UR</strong> is an automatic reflex triggered by the US itself. The <strong>CR</strong> is a learned anticipatory response to the CS that occurs <em>before</em> the US arrives, providing adaptive protection. Same behavior, different eliciting stimuli and different timing.
+        </div>
+      </div>
+    </div>
+
+    <!-- 2. Extinction & Spontaneous Recovery -->
+    <div class="study-section open" data-section="2">
+      <div class="study-section-header" onclick="toggleSection(this)">
+        <div class="study-section-header-left">
+          <div class="section-icon" style="background:rgba(6,182,212,.12);">🔄</div>
+          <div><div class="section-num">Section 2</div><div class="section-title">Extinction &amp; Spontaneous Recovery</div></div>
+        </div>
+        <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
+      </div>
+      <div class="study-section-body">
+        <div class="prose">
+          <p><strong>Extinction:</strong> CS presented repeatedly without the US → CR diminishes. But extinction does <em>NOT</em> erase the original learning.</p>
+          <p>Extinction creates <strong>new inhibitory learning</strong> — a "do not respond" association that competes with the original excitatory CS-US association. The original excitatory memory remains latent.</p>
+        </div>
+        <ul class="bullet-list">
+          <li><strong>Evidence 1 — Spontaneous recovery:</strong> After a rest period following extinction, the CR returns without any new CS-US pairings.</li>
+          <li><strong>Evidence 2 — Context dependence:</strong> Extinction performed in context A does not eliminate CRs in context B. The CR can return in a different context.</li>
+        </ul>
+        <div class="callout tip">
+          <div class="callout-title">Key Principle — Extinction Is NOT Unlearning</div>
+          The original CS-US association remains latent. Spontaneous recovery after rest, and context-dependent return of the CR, both prove the original memory was never destroyed. This is why recovered addicts remain vulnerable to relapse — conditioned cravings are suppressed by new inhibitory learning, not erased. A change of environment (context) can bring them flooding back.
+        </div>
+      </div>
+    </div>
+
+    <!-- 3. Compound Conditioning -->
+    <div class="study-section" data-section="3">
+      <div class="study-section-header" onclick="toggleSection(this)">
+        <div class="study-section-header-left">
+          <div class="section-icon" style="background:rgba(245,158,11,.12);">⚖️</div>
+          <div><div class="section-num">Section 3</div><div class="section-title">Compound Conditioning: Blocking &amp; Overshadowing</div></div>
+        </div>
+        <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
+      </div>
+      <div class="study-section-body">
+        <div class="prose">
+          <p><strong>Compound conditioning:</strong> two or more cues presented together as a compound CS (e.g., tone + light).</p>
+          <p><strong>Overshadowing:</strong> the more salient cue in the compound captures a disproportionately large associative weight, reducing learning about the weaker cue. Can occur on the very first compound trial — no pre-training required.</p>
+          <p><strong>Blocking (Kamin, 1969):</strong> Pre-training one element of the compound prevents the other element from acquiring associative strength, even when both are paired with the US.</p>
+        </div>
+        <div class="circuit-box">
+          <div class="circuit-label">Kamin Blocking Paradigm</div>
+          Phase 1: Light → Shock &nbsp;&nbsp; W_Light = 100<br>
+          Phase 2: Light + Tone → Shock &nbsp;&nbsp; PE = 0 (Light already predicts fully)<br>
+          Phase 3: Tone alone → no CR &nbsp;&nbsp; (Tone was never informative)
+        </div>
+        <div class="prose">
+          <p><strong>Prediction error (PE):</strong> actual US − expected US.</p>
+        </div>
+        <table class="contrast-table">
+          <thead><tr><th>PE Value</th><th>Interpretation</th><th>Outcome</th></tr></thead>
+          <tbody>
+            <tr><td>Positive (actual &gt; expected)</td><td>US was surprising</td><td>Associative weight increases — learning occurs</td></tr>
+            <tr><td>Zero (actual = expected)</td><td>US fully predicted</td><td>No change — asymptote reached</td></tr>
+            <tr><td>Negative (actual &lt; expected)</td><td>Predicted US absent</td><td>Weight decreases — extinction</td></tr>
+          </tbody>
+        </table>
+        <div class="callout connect">
+          <div class="callout-title">Clinical Application — Rachel's Popsicles</div>
+          A novel cucumber-flavored popsicle given before chemotherapy becomes a strongly conditioned CS for nausea, <strong>blocking</strong> the conditioning of preferred everyday foods to nausea. The novel cue absorbs the associative weight, protecting the patient's normal food preferences.
+        </div>
+      </div>
+    </div>
+
+    <!-- 4. Rescorla-Wagner Model -->
+    <div class="study-section" data-section="4">
+      <div class="study-section-header" onclick="toggleSection(this)">
+        <div class="study-section-header-left">
+          <div class="section-icon" style="background:rgba(99,102,241,.15);">📐</div>
+          <div><div class="section-num">Section 4</div><div class="section-title">The Rescorla-Wagner Model</div></div>
+        </div>
+        <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
+      </div>
+      <div class="study-section-body">
+        <div class="circuit-box">
+          <div class="circuit-label">Rescorla-Wagner Update Rule</div>
+          ΔW(CS) = α × (actual US − expected US)<br>
+          &nbsp;&nbsp;where expected US = Σ W of all CSs present on the trial
+        </div>
+        <table class="prop-table">
+          <thead><tr><th>Parameter</th><th>Meaning</th></tr></thead>
+          <tbody>
+            <tr><td>W</td><td>Associative weight of the CS (scale 0–100); how strongly CS predicts US.</td></tr>
+            <tr><td>α (alpha)</td><td>Learning rate (0–1). Example: α=0.2 means 20% of prediction error is absorbed per trial.</td></tr>
+            <tr><td>Expected US</td><td>Sum of all W values for CSs present on this trial.</td></tr>
+            <tr><td>US Modulation</td><td>Learning is governed by how surprising the US is — the R-W framework.</td></tr>
+          </tbody>
+        </table>
+        <p style="font-size:.8rem;color:var(--gray);margin:.75rem 0 .5rem;font-weight:600;letter-spacing:.04em;text-transform:uppercase;">Three Core Situations</p>
+        <ul class="bullet-list">
+          <li><strong>Novel CS + unexpected US:</strong> PE positive → weight increases → organism learns CS predicts US.</li>
+          <li><strong>Well-trained CS + expected US:</strong> PE = 0 → no change → learning has reached asymptote.</li>
+          <li><strong>CS predicts US but US absent:</strong> PE negative → weight decreases → extinction.</li>
+        </ul>
+        <div class="prose">
+          <p><strong>Extinction calculation example:</strong> W_Tone = 100, α = 0.2. First extinction trial (tone presented, no shock): actual = 0, expected = 100, PE = 0 − 100 = −100. ΔW = 0.2 × (−100) = −20. New W = 80. Learning declines gradually, producing the extinction curve.</p>
+          <p><strong>CS modulation theory (Mackintosh alternative):</strong> Learning rate changes based on attention to the CS, not US surprise. Explains phenomena R-W cannot.</p>
+        </div>
+        <div class="callout warn">
+          <div class="callout-title">R-W Limitation — Latent Inhibition</div>
+          Pre-exposing the CS without the US: actual = 0, expected = 0, PE = 0. R-W predicts <em>nothing is learned</em>. But empirically, pre-exposure significantly retards later conditioning — something meaningful was learned (CS predicts nothing). This requires a CS modulation account where attention to the CS itself changes.
+        </div>
+      </div>
+    </div>
+
+    <!-- 5. Latent Inhibition & CS Modulation -->
+    <div class="study-section" data-section="5">
+      <div class="study-section-header" onclick="toggleSection(this)">
+        <div class="study-section-header-left">
+          <div class="section-icon" style="background:rgba(236,72,153,.12);">🧲</div>
+          <div><div class="section-num">Section 5</div><div class="section-title">Latent Inhibition &amp; CS Modulation</div></div>
+        </div>
+        <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
+      </div>
+      <div class="study-section-body">
+        <div class="prose">
+          <p><strong>Latent inhibition:</strong> prior exposure to the CS without the US impairs later CS-US conditioning. The CS becomes "familiar as irrelevant." Mackintosh argued that organisms learn to <em>ignore</em> stimuli that do not reliably predict important events — attention to the CS decreases.</p>
+        </div>
+        <table class="contrast-table">
+          <thead><tr><th>Theory</th><th>What drives learning?</th><th>Explains blocking?</th><th>Explains latent inhibition?</th></tr></thead>
+          <tbody>
+            <tr><td>R-W (US Modulation)</td><td>How surprising the US is (PE = actual − expected)</td><td>Yes — light fully predicts US, PE = 0 for tone</td><td>No — PE = 0 during pre-exposure, predicts no effect</td></tr>
+            <tr><td>Mackintosh (CS Modulation)</td><td>Attention allocated to the CS</td><td>Yes — tone is redundant so attention shifts away</td><td>Yes — organism learns to ignore the pre-exposed CS</td></tr>
+          </tbody>
+        </table>
+        <div class="callout connect">
+          <div class="callout-title">Current View</div>
+          Both US modulation and CS modulation operate simultaneously, mediated by <strong>distinct neural systems</strong>: the cerebellum implements error-correction (R-W-like); the hippocampus mediates CS modulation and latent inhibition.
+        </div>
+      </div>
+    </div>
+
+    <!-- 6. Brain Substrates -->
+    <div class="study-section" data-section="6">
+      <div class="study-section-header" onclick="toggleSection(this)">
+        <div class="study-section-header-left">
+          <div class="section-icon" style="background:rgba(99,102,241,.15);">🧠</div>
+          <div><div class="section-num">Section 6</div><div class="section-title">Brain Substrates: Cerebellum &amp; Hippocampus</div></div>
+        </div>
+        <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
+      </div>
+      <div class="study-section-body">
+        <div class="prose">
+          <p>Eyeblink conditioning has been mapped to a highly specific cerebellar circuit. The hippocampus plays a separate, modulatory role.</p>
+        </div>
+        <table class="prop-table">
+          <thead><tr><th>Structure</th><th>Role in Eyeblink Conditioning</th></tr></thead>
+          <tbody>
+            <tr><td>Cerebellar Cortex / Purkinje Cells</td><td>CS pathway: mossy fibers → granule cells → parallel fibers → Purkinje cells. Purkinje cells INHIBIT the interpositus nucleus. Their firing <em>decreases</em> as the CR is learned, releasing inhibition of CR output.</td></tr>
+            <tr><td>Interpositus Nucleus</td><td>Sole output pathway for the CR. Lesion permanently <strong>abolishes CRs</strong> while leaving URs intact. Critical bottleneck.</td></tr>
+            <tr><td>Inferior Olive</td><td>Carries the US signal via climbing fibers to cerebellar cortex. Encodes the <strong>prediction error</strong> (actual − expected US). Activity starts high early in training and decreases as CR is acquired — exactly mirroring R-W.</td></tr>
+            <tr><td>Pontine Nuclei</td><td>CS brainstem relay. Different subregions carry different CSs (tone vs. light) to the cerebellum via mossy fibers.</td></tr>
+            <tr><td>Hippocampus</td><td>NOT required for basic CR acquisition. Essential for <strong>CS modulation / latent inhibition</strong>. Hippocampal lesions eliminate latent inhibition in rabbit eyeblink conditioning.</td></tr>
+          </tbody>
+        </table>
+        <div class="prose" style="margin-top:1rem;">
+          <p><strong>Inhibitory feedback loop:</strong> The interpositus nucleus sends an inhibitory signal back to the inferior olive, implementing the R-W prediction error computation. As the CR is acquired, this feedback reduces inferior olive firing — signaling "US is now expected." Disrupting this feedback loop impairs blocking.</p>
+        </div>
+        <div class="callout exam">
+          <div class="callout-title">Exam Tip — Double Dissociation</div>
+          <strong>Interpositus lesion</strong> = no CR (but UR intact) — cerebellar circuit required for CR output.<br>
+          <strong>Hippocampal lesion</strong> = no latent inhibition (but basic CR intact) — hippocampus required for CS modulation.<br>
+          Know both lesion patterns and what each tells us about the neural division of labor.
+        </div>
+      </div>
+    </div>
+
+    <!-- 7. Invertebrate Model: Aplysia -->
+    <div class="study-section" data-section="7">
+      <div class="study-section-header" onclick="toggleSection(this)">
+        <div class="study-section-header-left">
+          <div class="section-icon" style="background:rgba(6,182,212,.12);">🐌</div>
+          <div><div class="section-num">Section 7</div><div class="section-title">Invertebrate Model: Aplysia</div></div>
+        </div>
+        <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
+      </div>
+      <div class="study-section-body">
+        <div class="prose">
+          <p>Classical conditioning in <em>Aplysia</em> requires the CS (siphon touch) to precede the US (tail shock) by approximately <strong>0.5 seconds</strong> — this temporal window reflects the duration of an intracellular priming state.</p>
+          <p><strong>Activity-dependent enhancement:</strong> The CS activates the sensory neuron, transiently priming it. When the US pathway releases serotonin shortly after, the primed neuron produces a <em>larger</em> glutamate release than sensitization alone would cause. The CS must come first; the US pathway finds a primed target.</p>
+        </div>
+        <table class="contrast-table">
+          <thead><tr><th>Feature</th><th>Short-Term Conditioning</th><th>Long-Term Conditioning</th></tr></thead>
+          <tbody>
+            <tr><td>Level of change</td><td>Intracellular; vesicle numbers</td><td>Structural; new synapse growth</td></tr>
+            <tr><td>Gene expression required?</td><td>No</td><td>Yes — requires CREB-1 activation</td></tr>
+            <tr><td>CREB-2 role</td><td>Not relevant</td><td>Opposes CREB-1; must be suppressed</td></tr>
+            <tr><td>Duration</td><td>Minutes to hours</td><td>Days to weeks</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- 8. Clinical Applications -->
+    <div class="study-section" data-section="8">
+      <div class="study-section-header" onclick="toggleSection(this)">
+        <div class="study-section-header-left">
+          <div class="section-icon" style="background:rgba(244,63,94,.12);">🏥</div>
+          <div><div class="section-num">Section 8</div><div class="section-title">Clinical Applications: Drug Tolerance &amp; Addiction</div></div>
+        </div>
+        <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
+      </div>
+      <div class="study-section-body">
+        <div class="prose">
+          <p><strong>Drug tolerance as conditioned compensatory response:</strong> Environmental cues (CS) associated with repeated drug use trigger a homeostatic CR that opposes the drug's physiological effects. The body anticipates the drug and partially counteracts it.</p>
+          <p>When a drug is taken in a <strong>novel context</strong> (CS absent), no compensatory CR fires. The same dose now produces an exaggerated effect. This explains why most heroin overdoses occur in experienced users who are in an unusual setting — the familiar cues that normally trigger tolerance are absent.</p>
+        </div>
+        <p style="font-size:.8rem;color:var(--gray);margin:.75rem 0 .5rem;font-weight:600;letter-spacing:.04em;text-transform:uppercase;">Bouton's Principles for Extinction-Based Therapy</p>
+        <ul class="bullet-list">
+          <li>Conduct cue-exposure therapy across <strong>many different contexts</strong>, not just a clinical office.</li>
+          <li><strong>Spread therapy over time</strong> — a single session of extinction is insufficient for lasting suppression.</li>
+          <li>When possible, use <strong>the same contexts where the habit originally formed</strong>.</li>
+          <li>Consider including <strong>small drug doses</strong> during cue exposure — the drug itself is part of the CS context.</li>
+        </ul>
+        <div class="callout connect">
+          <div class="callout-title">Why Multiple Contexts Matter</div>
+          Extinction is highly context-specific. Extinguishing a CR only in a clinical office does not generalize well to real-world environments where the original habit formed. Conditioning across multiple contexts and time periods creates broader, more robust inhibitory learning.
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /tab-guide -->
+
+
+  <!-- ════════════════════════════ KEY TERMS ════════════════════════════ -->
+  <div class="tab-panel" id="tab-terms">
+    <div style="margin-bottom:1.5rem;">
+      <h2 style="font-size:1.3rem;margin-bottom:.4rem;">Key Terms — 25 Flashcards</h2>
+      <p style="color:var(--gray-light);font-size:.9rem;">Click any card to reveal its definition. Use the filters to focus on a category.</p>
+    </div>
+    <div class="terms-controls">
+      <button class="filter-btn active" data-filter="all">All</button>
+      <button class="filter-btn" data-filter="behavior">Behavioral</button>
+      <button class="filter-btn" data-filter="theory">Theory</button>
+      <button class="filter-btn" data-filter="neuro">Neural</button>
+      <button class="filter-btn" data-filter="clinical">Clinical</button>
+      <button class="filter-btn" data-filter="molecular">Molecular</button>
+      <button class="flip-all-btn" id="flipAllBtn">Reveal All</button>
+    </div>
+    <div class="terms-grid" id="termsGrid">
+
+      <!-- BEHAVIORAL -->
+      <div class="flashcard" data-category="behavior" onclick="flipCard(this)">
+        <div class="flashcard-inner">
+          <div class="flashcard-front">
+            <span class="flashcard-tag tag-behavior">Behavioral</span>
+            <div class="flashcard-term">CS (Conditioned Stimulus)</div>
+            <div class="flashcard-hint">Click to reveal →</div>
+          </div>
+          <div class="flashcard-back">
+            <span class="flashcard-tag tag-behavior">Behavioral</span>
+            <div class="flashcard-def">Formerly neutral stimulus that, after repeated pairing with the US, comes to <strong>predict</strong> the US and elicit a conditioned response.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flashcard" data-category="behavior" onclick="flipCard(this)">
+        <div class="flashcard-inner">
+          <div class="flashcard-front">
+            <span class="flashcard-tag tag-behavior">Behavioral</span>
+            <div class="flashcard-term">US (Unconditioned Stimulus)</div>
+            <div class="flashcard-hint">Click to reveal →</div>
+          </div>
+          <div class="flashcard-back">
+            <span class="flashcard-tag tag-behavior">Behavioral</span>
+            <div class="flashcard-def">Stimulus that <strong>naturally evokes a response</strong> without prior training. Examples: food, airpuff, electric shock, drug.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flashcard" data-category="behavior" onclick="flipCard(this)">
+        <div class="flashcard-inner">
+          <div class="flashcard-front">
+            <span class="flashcard-tag tag-behavior">Behavioral</span>
+            <div class="flashcard-term">CR (Conditioned Response)</div>
+            <div class="flashcard-hint">Click to reveal →</div>
+          </div>
+          <div class="flashcard-back">
+            <span class="flashcard-tag tag-behavior">Behavioral</span>
+            <div class="flashcard-def">Learned <strong>anticipatory</strong> response to the CS that occurs before the US arrives. Protective — prepares the organism for the expected US.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flashcard" data-category="behavior" onclick="flipCard(this)">
+        <div class="flashcard-inner">
+          <div class="flashcard-front">
+            <span class="flashcard-tag tag-behavior">Behavioral</span>
+            <div class="flashcard-term">UR (Unconditioned Response)</div>
+            <div class="flashcard-hint">Click to reveal →</div>
+          </div>
+          <div class="flashcard-back">
+            <span class="flashcard-tag tag-behavior">Behavioral</span>
+            <div class="flashcard-def">Automatic, reflexive response to the US. Requires <strong>no prior learning</strong>. Distinguished from CR by its eliciting stimulus and timing.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flashcard" data-category="behavior" onclick="flipCard(this)">
+        <div class="flashcard-inner">
+          <div class="flashcard-front">
+            <span class="flashcard-tag tag-behavior">Behavioral</span>
+            <div class="flashcard-term">Extinction</div>
+            <div class="flashcard-hint">Click to reveal →</div>
+          </div>
+          <div class="flashcard-back">
+            <span class="flashcard-tag tag-behavior">Behavioral</span>
+            <div class="flashcard-def">CS presented without the US → CR declines. Creates <strong>new inhibitory learning</strong> that competes with the original excitatory memory — does NOT erase it.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flashcard" data-category="behavior" onclick="flipCard(this)">
+        <div class="flashcard-inner">
+          <div class="flashcard-front">
+            <span class="flashcard-tag tag-behavior">Behavioral</span>
+            <div class="flashcard-term">Spontaneous Recovery</div>
+            <div class="flashcard-hint">Click to reveal →</div>
+          </div>
+          <div class="flashcard-back">
+            <span class="flashcard-tag tag-behavior">Behavioral</span>
+            <div class="flashcard-def">Return of the extinguished CR after a <strong>rest period</strong> without additional CS-US pairings. Proves extinction did not destroy the original memory.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flashcard" data-category="behavior" onclick="flipCard(this)">
+        <div class="flashcard-inner">
+          <div class="flashcard-front">
+            <span class="flashcard-tag tag-behavior">Behavioral</span>
+            <div class="flashcard-term">Appetitive Conditioning</div>
+            <div class="flashcard-hint">Click to reveal →</div>
+          </div>
+          <div class="flashcard-back">
+            <span class="flashcard-tag tag-behavior">Behavioral</span>
+            <div class="flashcard-def">Classical conditioning with a <strong>positive US</strong> (food, sex). The CR typically reflects approach behavior toward the CS.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flashcard" data-category="behavior" onclick="flipCard(this)">
+        <div class="flashcard-inner">
+          <div class="flashcard-front">
+            <span class="flashcard-tag tag-behavior">Behavioral</span>
+            <div class="flashcard-term">Aversive Conditioning</div>
+            <div class="flashcard-hint">Click to reveal →</div>
+          </div>
+          <div class="flashcard-back">
+            <span class="flashcard-tag tag-behavior">Behavioral</span>
+            <div class="flashcard-def">Classical conditioning with an <strong>unpleasant US</strong> (shock, airpuff). CR reflects defensive preparation — withdrawal, freezing, eyeblink.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flashcard" data-category="behavior" onclick="flipCard(this)">
+        <div class="flashcard-inner">
+          <div class="flashcard-front">
+            <span class="flashcard-tag tag-behavior">Behavioral</span>
+            <div class="flashcard-term">Conditioned Compensatory Response</div>
+            <div class="flashcard-hint">Click to reveal →</div>
+          </div>
+          <div class="flashcard-back">
+            <span class="flashcard-tag tag-behavior">Behavioral</span>
+            <div class="flashcard-def">Homeostatic CR <strong>opposing</strong> the drug's effects, triggered by environmental CS cues. Underlies tolerance; its absence in novel contexts explains overdose.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flashcard" data-category="behavior" onclick="flipCard(this)">
+        <div class="flashcard-inner">
+          <div class="flashcard-front">
+            <span class="flashcard-tag tag-behavior">Behavioral</span>
+            <div class="flashcard-term">Latent Inhibition</div>
+            <div class="flashcard-hint">Click to reveal →</div>
+          </div>
+          <div class="flashcard-back">
+            <span class="flashcard-tag tag-behavior">Behavioral</span>
+            <div class="flashcard-def">Prior CS-alone exposure <strong>retards</strong> later CS-US conditioning. CS becomes "familiar as irrelevant." Cannot be explained by Rescorla-Wagner.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- THEORY -->
+      <div class="flashcard" data-category="theory" onclick="flipCard(this)">
+        <div class="flashcard-inner">
+          <div class="flashcard-front">
+            <span class="flashcard-tag tag-theory">Theory</span>
+            <div class="flashcard-term">Rescorla-Wagner Model</div>
+            <div class="flashcard-hint">Click to reveal →</div>
+          </div>
+          <div class="flashcard-back">
+            <span class="flashcard-tag tag-theory">Theory</span>
+            <div class="flashcard-def">ΔW(CS) = α × (actual US − expected US). A <strong>US modulation</strong> theory — learning is driven by how surprising the US is (prediction error).</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flashcard" data-category="theory" onclick="flipCard(this)">
+        <div class="flashcard-inner">
+          <div class="flashcard-front">
+            <span class="flashcard-tag tag-theory">Theory</span>
+            <div class="flashcard-term">Prediction Error</div>
+            <div class="flashcard-hint">Click to reveal →</div>
+          </div>
+          <div class="flashcard-back">
+            <span class="flashcard-tag tag-theory">Theory</span>
+            <div class="flashcard-def">actual US − expected US. <strong>Positive</strong> → weight increases. <strong>Zero</strong> → no change. <strong>Negative</strong> → weight decreases (extinction). Core drive of R-W learning.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flashcard" data-category="theory" onclick="flipCard(this)">
+        <div class="flashcard-inner">
+          <div class="flashcard-front">
+            <span class="flashcard-tag tag-theory">Theory</span>
+            <div class="flashcard-term">Blocking / Kamin Effect</div>
+            <div class="flashcard-hint">Click to reveal →</div>
+          </div>
+          <div class="flashcard-back">
+            <span class="flashcard-tag tag-theory">Theory</span>
+            <div class="flashcard-def">A pre-trained CS <strong>blocks</strong> a new CS in a compound from acquiring associative weight, because PE = 0 — the US is already fully predicted.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flashcard" data-category="theory" onclick="flipCard(this)">
+        <div class="flashcard-inner">
+          <div class="flashcard-front">
+            <span class="flashcard-tag tag-theory">Theory</span>
+            <div class="flashcard-term">Overshadowing</div>
+            <div class="flashcard-hint">Click to reveal →</div>
+          </div>
+          <div class="flashcard-back">
+            <span class="flashcard-tag tag-theory">Theory</span>
+            <div class="flashcard-def">In a compound CS, the more <strong>salient</strong> cue captures disproportionately more associative weight. Unlike blocking, no pre-training is required — can occur on the first trial.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flashcard" data-category="theory" onclick="flipCard(this)">
+        <div class="flashcard-inner">
+          <div class="flashcard-front">
+            <span class="flashcard-tag tag-theory">Theory</span>
+            <div class="flashcard-term">CS Modulation Theory / Mackintosh</div>
+            <div class="flashcard-hint">Click to reveal →</div>
+          </div>
+          <div class="flashcard-back">
+            <span class="flashcard-tag tag-theory">Theory</span>
+            <div class="flashcard-def">Learning rate (α) changes based on <strong>attention to the CS</strong>. Explains latent inhibition: organisms learn to ignore irrelevant CSs. Contrasts with R-W's US modulation.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flashcard" data-category="theory" onclick="flipCard(this)">
+        <div class="flashcard-inner">
+          <div class="flashcard-front">
+            <span class="flashcard-tag tag-theory">Theory</span>
+            <div class="flashcard-term">US Modulation Theory</div>
+            <div class="flashcard-hint">Click to reveal →</div>
+          </div>
+          <div class="flashcard-back">
+            <span class="flashcard-tag tag-theory">Theory</span>
+            <div class="flashcard-def">Learning is governed by how <strong>unexpected the US is</strong>. More surprising US = more learning. Implemented by the Rescorla-Wagner model.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- NEURAL -->
+      <div class="flashcard" data-category="neuro" onclick="flipCard(this)">
+        <div class="flashcard-inner">
+          <div class="flashcard-front">
+            <span class="flashcard-tag tag-neuro">Neural</span>
+            <div class="flashcard-term">Interpositus Nucleus</div>
+            <div class="flashcard-hint">Click to reveal →</div>
+          </div>
+          <div class="flashcard-back">
+            <span class="flashcard-tag tag-neuro">Neural</span>
+            <div class="flashcard-def">Deep cerebellar nucleus; the <strong>sole output pathway</strong> for the conditioned eyeblink CR. Lesion permanently abolishes CRs but leaves URs intact.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flashcard" data-category="neuro" onclick="flipCard(this)">
+        <div class="flashcard-inner">
+          <div class="flashcard-front">
+            <span class="flashcard-tag tag-neuro">Neural</span>
+            <div class="flashcard-term">Inferior Olive</div>
+            <div class="flashcard-hint">Click to reveal →</div>
+          </div>
+          <div class="flashcard-back">
+            <span class="flashcard-tag tag-neuro">Neural</span>
+            <div class="flashcard-def">Carries <strong>US information</strong> via climbing fibers to the cerebellar cortex. Encodes the prediction error (actual − expected US). Activity decreases as CR is learned.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flashcard" data-category="neuro" onclick="flipCard(this)">
+        <div class="flashcard-inner">
+          <div class="flashcard-front">
+            <span class="flashcard-tag tag-neuro">Neural</span>
+            <div class="flashcard-term">Purkinje Cells</div>
+            <div class="flashcard-hint">Click to reveal →</div>
+          </div>
+          <div class="flashcard-back">
+            <span class="flashcard-tag tag-neuro">Neural</span>
+            <div class="flashcard-def">Cerebellar cortex output neurons that <strong>inhibit</strong> the interpositus nucleus. Their firing <em>decreases</em> as the CR is acquired, releasing the interpositus to produce the CR.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flashcard" data-category="neuro" onclick="flipCard(this)">
+        <div class="flashcard-inner">
+          <div class="flashcard-front">
+            <span class="flashcard-tag tag-neuro">Neural</span>
+            <div class="flashcard-term">Pontine Nuclei</div>
+            <div class="flashcard-hint">Click to reveal →</div>
+          </div>
+          <div class="flashcard-back">
+            <span class="flashcard-tag tag-neuro">Neural</span>
+            <div class="flashcard-def">Brainstem relay for the <strong>CS pathway</strong> to the cerebellum via mossy fibers. Different subregions carry different CSs (tone vs. light).</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flashcard" data-category="neuro" onclick="flipCard(this)">
+        <div class="flashcard-inner">
+          <div class="flashcard-front">
+            <span class="flashcard-tag tag-neuro">Neural</span>
+            <div class="flashcard-term">Activity-Dependent Enhancement</div>
+            <div class="flashcard-hint">Click to reveal →</div>
+          </div>
+          <div class="flashcard-back">
+            <span class="flashcard-tag tag-neuro">Neural</span>
+            <div class="flashcard-def">Aplysia mechanism: CS primes the sensory neuron so that subsequent <strong>US serotonin</strong> produces larger glutamate release than sensitization alone. Explains why CS must precede US.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- CLINICAL -->
+      <div class="flashcard" data-category="clinical" onclick="flipCard(this)">
+        <div class="flashcard-inner">
+          <div class="flashcard-front">
+            <span class="flashcard-tag tag-clinical">Clinical</span>
+            <div class="flashcard-term">Drug Tolerance</div>
+            <div class="flashcard-hint">Click to reveal →</div>
+          </div>
+          <div class="flashcard-back">
+            <span class="flashcard-tag tag-clinical">Clinical</span>
+            <div class="flashcard-def">Reduced drug effect with repeated use, partly due to a <strong>conditioned compensatory CR</strong> triggered by environmental CS cues. Same dose in novel context (no CSs) = exaggerated effect = overdose risk.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flashcard" data-category="clinical" onclick="flipCard(this)">
+        <div class="flashcard-inner">
+          <div class="flashcard-front">
+            <span class="flashcard-tag tag-clinical">Clinical</span>
+            <div class="flashcard-term">Extinction-Based Therapy / Bouton's Principles</div>
+            <div class="flashcard-hint">Click to reveal →</div>
+          </div>
+          <div class="flashcard-back">
+            <span class="flashcard-tag tag-clinical">Clinical</span>
+            <div class="flashcard-def">Addiction treatment via cue exposure: (1) many different contexts, (2) spaced over time, (3) same contexts as original habit, (4) consider small drug doses as part of the CS context.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- MOLECULAR -->
+      <div class="flashcard" data-category="molecular" onclick="flipCard(this)">
+        <div class="flashcard-inner">
+          <div class="flashcard-front">
+            <span class="flashcard-tag tag-molecular">Molecular</span>
+            <div class="flashcard-term">CREB-1</div>
+            <div class="flashcard-hint">Click to reveal →</div>
+          </div>
+          <div class="flashcard-back">
+            <span class="flashcard-tag tag-molecular">Molecular</span>
+            <div class="flashcard-def">Transcription factor <strong>required for long-term conditioning</strong> in Aplysia. Activates genes driving new synapse growth. CREB-1 inactivation blocks long-term but not short-term memory.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flashcard" data-category="molecular" onclick="flipCard(this)">
+        <div class="flashcard-inner">
+          <div class="flashcard-front">
+            <span class="flashcard-tag tag-molecular">Molecular</span>
+            <div class="flashcard-term">CREB-2</div>
+            <div class="flashcard-hint">Click to reveal →</div>
+          </div>
+          <div class="flashcard-back">
+            <span class="flashcard-tag tag-molecular">Molecular</span>
+            <div class="flashcard-def">Transcription factor that <strong>opposes CREB-1</strong>. Must be suppressed for long-term conditioning to occur. Acts as a gating mechanism for memory consolidation.</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div><!-- /tab-terms -->
+
+
+  <!-- ════════════════════════════ QUIZ ════════════════════════════ -->
+  <div class="tab-panel" id="tab-quiz">
+    <div style="margin-bottom:1.5rem;">
+      <h2 style="font-size:1.3rem;margin-bottom:.4rem;">Practice Multiple Choice — 25 Questions</h2>
+      <p style="color:var(--gray-light);font-size:.9rem;">Click an option to check your answer. Explanations appear automatically.</p>
+    </div>
+
+    <div class="quiz-stats">
+      <div class="stat-item"><div class="stat-val blue" id="statTotal">25</div><div class="stat-lbl">Questions</div></div>
+      <div class="stat-item"><div class="stat-val green" id="statCorrect">0</div><div class="stat-lbl">Correct</div></div>
+      <div class="stat-item"><div class="stat-val red" id="statWrong">0</div><div class="stat-lbl">Incorrect</div></div>
+      <div class="stat-item"><div class="stat-val" id="statPct" style="color:var(--gray-light);">—</div><div class="stat-lbl">Score</div></div>
+      <button class="quiz-reset-btn" onclick="resetQuiz()">Reset Quiz</button>
+    </div>
+
+    <div id="quizContainer"></div>
+  </div><!-- /tab-quiz -->
+
+
+  <!-- ════════════════════════════ SYNTHESIS ════════════════════════════ -->
+  <div class="tab-panel" id="tab-synthesis">
+    <div style="margin-bottom:1.5rem;">
+      <h2 style="font-size:1.3rem;margin-bottom:.4rem;">Big Picture Synthesis</h2>
+      <p style="color:var(--gray-light);font-size:.9rem;">How this week's concepts connect across levels of analysis and to the course arc.</p>
+    </div>
+
+    <div class="callout connect" style="margin-bottom:1.5rem;">
+      <div class="callout-title">The Unifying Principle</div>
+      Classical conditioning is the brain's fundamental mechanism for <strong>predicting biologically significant events</strong>. The organism learns WHEN to prepare (CS), for WHAT (US), enabling adaptive anticipatory responses — from eyeblinks to drug tolerance to emotional fear.
+    </div>
+
+    <p style="font-size:.8rem;color:var(--gray);margin-bottom:.75rem;font-weight:600;letter-spacing:.04em;text-transform:uppercase;">Levels of Analysis</p>
+    <div class="levels-strip">
+      <div class="level-col">
+        <div class="level-label" style="color:#a5b4fc;">Behavior</div>
+        <div class="level-items">
+          <div class="level-item" style="background:rgba(99,102,241,.1);color:#c7d2fe;">CR emerges — acquisition</div>
+          <div class="level-item" style="background:rgba(236,72,153,.1);color:#fbcfe8;">CR declines — extinction</div>
+          <div class="level-item" style="background:rgba(99,102,241,.07);color:#c7d2fe;">CR returns — spontaneous recovery</div>
+        </div>
+      </div>
+      <div class="level-col">
+        <div class="level-label" style="color:#67e8f9;">Circuit</div>
+        <div class="level-items">
+          <div class="level-item" style="background:rgba(6,182,212,.1);color:#a5f3fc;">CS pathway: pontine → cerebellar cortex</div>
+          <div class="level-item" style="background:rgba(6,182,212,.08);color:#a5f3fc;">US pathway: inferior olive → interpositus</div>
+          <div class="level-item" style="background:rgba(6,182,212,.06);color:#a5f3fc;">Hippocampus: CS modulation / LI</div>
+        </div>
+      </div>
+      <div class="level-col">
+        <div class="level-label" style="color:#6ee7b7;">Synapse</div>
+        <div class="level-items">
+          <div class="level-item" style="background:rgba(16,185,129,.1);color:#a7f3d0;">Activity-dependent enhancement (Aplysia)</div>
+          <div class="level-item" style="background:rgba(16,185,129,.08);color:#a7f3d0;">LTP at parallel fiber–Purkinje synapses</div>
+          <div class="level-item" style="background:rgba(16,185,129,.06);color:#a7f3d0;">Inhibitory feedback: interpositus → olive</div>
+        </div>
+      </div>
+      <div class="level-col">
+        <div class="level-label" style="color:#fcd34d;">Structure</div>
+        <div class="level-items">
+          <div class="level-item" style="background:rgba(245,158,11,.1);color:#fde68a;">New synapse growth (long-term Aplysia)</div>
+          <div class="level-item" style="background:rgba(245,158,11,.08);color:#fde68a;">CREB-1 gene expression required</div>
+          <div class="level-item" style="background:rgba(245,158,11,.06);color:#fde68a;">Cerebellar interpositus as CR gate</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="synthesis-grid">
+      <div class="synth-card">
+        <div class="synth-card-title">
+          <div class="synth-dot" style="background:var(--rose);"></div>
+          <span style="color:var(--rose);">Likely Exam Themes</span>
+        </div>
+        <ul>
+          <li><span>CR vs. UR distinction</span> — same behavior, different timing and eliciting stimulus</li>
+          <li><span>Blocking calculation</span> — trace through phases, show PE = 0 in Phase 2</li>
+          <li><span>R-W math</span> — compute ΔW for acquisition and extinction trials</li>
+          <li><span>Latent inhibition as R-W failure</span> — explain why PE = 0 doesn't mean nothing learned</li>
+          <li><span>Interpositus vs. hippocampus</span> — double dissociation lesion predictions</li>
+          <li><span>Short vs. long-term Aplysia memory</span> — vesicles vs. new synapses, CREB-1 role</li>
+          <li><span>Drug overdose scenario</span> — apply conditioned compensatory response logic</li>
+        </ul>
+      </div>
+      <div class="synth-card">
+        <div class="synth-card-title">
+          <div class="synth-dot" style="background:var(--accent);"></div>
+          <span style="color:var(--accent);">Cross-Course Connections</span>
+        </div>
+        <ul>
+          <li><span>R-W prediction error</span> mirrors dopamine RPE signals (Week 8+)</li>
+          <li><span>Inferior olive</span> = first neural PE implementation in the course</li>
+          <li><span>Extinction-based therapy</span> = real-world use of conditioning principles</li>
+          <li><span>Latent inhibition → CS modulation</span> bridges to Week 9 generalization</li>
+          <li><span>Week 6 link</span>: sensitization (heterosynaptic) vs. classical conditioning (activity-dependent enhancement) in Aplysia</li>
+          <li><span>Interpositus inhibitory feedback</span> previews RL error-correction architectures</li>
+        </ul>
+      </div>
+    </div>
+  </div><!-- /tab-synthesis -->
+
+</main>
+
+<script>
+// ─── TAB NAVIGATION ───
+document.querySelectorAll('.tab-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById('tab-' + btn.dataset.tab).classList.add('active');
+  });
+});
+
+// ─── COLLAPSIBLE SECTIONS ───
+function toggleSection(header) {
+  const section = header.closest('.study-section');
+  section.classList.toggle('open');
+}
+
+// ─── FLASHCARDS ───
+function flipCard(card) {
+  card.classList.toggle('flipped');
+}
+
+let allFlipped = false;
+document.getElementById('flipAllBtn').addEventListener('click', function() {
+  allFlipped = !allFlipped;
+  const visible = Array.from(document.querySelectorAll('.flashcard')).filter(c => c.style.display !== 'none');
+  visible.forEach(c => { if (allFlipped) c.classList.add('flipped'); else c.classList.remove('flipped'); });
+  this.textContent = allFlipped ? 'Hide All' : 'Reveal All';
+});
+
+document.querySelectorAll('.filter-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    const filter = btn.dataset.filter;
+    document.querySelectorAll('.flashcard').forEach(card => {
+      if (filter === 'all' || card.dataset.category === filter) {
+        card.style.display = '';
+      } else {
+        card.style.display = 'none';
+      }
+    });
+    allFlipped = false;
+    document.getElementById('flipAllBtn').textContent = 'Reveal All';
+  });
+});
+
+// ─── QUIZ DATA ───
+const questions = [
+  {
+    text: "A dog naturally salivates when presented with food. After many pairings of a bell followed by food, the dog begins to salivate when it hears the bell alone. Salivation to the food is the _____, while salivation to the bell alone is the _____.",
+    options: [
+      "conditioned response; unconditioned response",
+      "unconditioned response; conditioned response",
+      "unconditioned stimulus; conditioned stimulus",
+      "conditioned stimulus; unconditioned stimulus"
+    ],
+    correct: 1,
+    tag: "Basic Concepts",
+    explanation: "<strong>Salivation to food</strong> is reflexive and requires no training (UR). <strong>Salivation to the bell alone</strong> is the learned anticipatory response (CR). The same behavior can serve as both UR and CR depending on the eliciting stimulus."
+  },
+  {
+    text: "Julianne feels naturally nervous before a basketball game. Simply seeing the basketball court on non-game days also makes her nervous. Her nervousness at seeing the court on non-game days is best classified as a:",
+    options: [
+      "unconditioned stimulus",
+      "unconditioned response",
+      "conditioned stimulus",
+      "conditioned response"
+    ],
+    correct: 3,
+    tag: "Basic Concepts",
+    explanation: "The basketball court has become a <strong>CS</strong> through association with actual games. Her nervousness in response to the court (without an actual game) is an anticipatory <strong>CR</strong>."
+  },
+  {
+    text: "The conditioned response can best be understood as:",
+    options: [
+      "an automatic reflex triggered by the unconditioned stimulus",
+      "an anticipatory response that prepares the organism for the expected US",
+      "a response always identical in form to the unconditioned response",
+      "a response that occurs without any prior training"
+    ],
+    correct: 1,
+    tag: "Basic Concepts",
+    explanation: "The CR is <strong>anticipatory</strong> — it prepares the organism for the US before it arrives. In eyeblink conditioning, the CR peaks precisely as the airpuff is expected to arrive."
+  },
+  {
+    text: "When the unconditioned stimulus is a positive event such as food or sex, the conditioning procedure is called:",
+    options: [
+      "aversive conditioning",
+      "trace conditioning",
+      "appetitive conditioning",
+      "delay conditioning"
+    ],
+    correct: 2,
+    tag: "Basic Concepts",
+    explanation: "<strong>Appetitive conditioning</strong> uses a desirable US. <strong>Aversive conditioning</strong> uses an unpleasant US. Trace and delay refer to the temporal relationship between CS and US, not the valence of the US."
+  },
+  {
+    text: "A regular drug user takes their usual dose of heroin in an unfamiliar hotel room and suffers a near-fatal overdose. This best illustrates:",
+    options: [
+      "extinction of the conditioned response",
+      "conditioned compensatory response and tolerance",
+      "spontaneous recovery of the unconditioned response",
+      "latent inhibition of the drug's effects"
+    ],
+    correct: 1,
+    tag: "Clinical",
+    explanation: "Drug tolerance is classically conditioned. Familiar environmental CSs trigger a homeostatic CR that counteracts the drug. In the <strong>novel context</strong>, those CSs are absent, so no compensatory CR fires — the same dose produces a much stronger and potentially fatal effect."
+  },
+  {
+    text: "In eyeblink conditioning, what is the functional significance of the CR (eyeblink) beginning before the US (airpuff) arrives?",
+    options: [
+      "It demonstrates that CR and UR are neurologically identical",
+      "It shows the CS has become a substitute for the US",
+      "It reveals the anticipatory nature of the CR — it protects the eye before the harmful stimulus arrives",
+      "It indicates extinction has occurred"
+    ],
+    correct: 2,
+    tag: "Basic Concepts",
+    explanation: "The CR is timed to arrive in advance of the US, providing adaptive protection. The eyelid is maximally closed at precisely the moment the airpuff is expected — a hallmark of the CR's anticipatory, protective function."
+  },
+  {
+    text: "Which provides the strongest evidence that extinction does NOT simply erase the original CS-US association?",
+    options: [
+      "CR increases in strength during acquisition",
+      "Lesions of the interpositus nucleus permanently prevent acquisition",
+      "The CR spontaneously recovers after a delay following extinction",
+      "Blocking prevents the tone from becoming a CS"
+    ],
+    correct: 2,
+    tag: "Extinction",
+    explanation: "<strong>Spontaneous recovery</strong> — the return of the CR after a rest period following extinction — demonstrates the original memory was not destroyed. If extinction were simple unlearning, no recovery would ever be possible."
+  },
+  {
+    text: "According to Bouton's work, which strategy would be MOST effective for reducing long-term relapse risk in a recovering addict?",
+    options: [
+      "Conducting all cue-exposure therapy in a single neutral clinical environment",
+      "Spreading cue-exposure therapy across multiple contexts and time periods",
+      "Ensuring the addict is never exposed to drug-related cues during treatment",
+      "Waiting until the patient has been abstinent 6 months before beginning therapy"
+    ],
+    correct: 1,
+    tag: "Clinical",
+    explanation: "Extinction is highly context-specific. Extinguishing cravings only in one clinical setting does not generalize well. <strong>Multiple contexts and time periods</strong> produces broader, more robust inhibitory learning that is less likely to fail in real-world environments."
+  },
+  {
+    text: "In Siegel et al.'s heroin study, rats who received a large dose in the SAME environment where they had previously received smaller doses showed:",
+    options: [
+      "the highest mortality rate of all groups tested",
+      "the same mortality rate as the first-time group",
+      "the lowest mortality rate, because conditioned tolerance was present",
+      "complete immunity due to sensitization"
+    ],
+    correct: 2,
+    tag: "Clinical",
+    explanation: "The same-environment group had the <strong>lowest mortality</strong> because familiar environmental cues triggered a conditioned compensatory response that partially counteracted the drug's effects, providing classically conditioned tolerance."
+  },
+  {
+    text: "The conditioned compensatory response occurs in response to the _____, in order to prepare the organism for the _____.",
+    options: [
+      "CS; CR",
+      "US; UR",
+      "CS; UR",
+      "US; CR"
+    ],
+    correct: 2,
+    tag: "Clinical",
+    explanation: "The compensatory CR is triggered by the <strong>CS</strong> (environmental drug cues) in order to counteract the body's expected response to the <strong>US</strong> (the drug itself). The CS provides advance warning."
+  },
+  {
+    text: "A rat is trained that a light predicts shock (Phase 1). In Phase 2, a light-and-tone compound also predicts shock. In Phase 3, the rat is tested with the tone alone. What result is expected?",
+    options: [
+      "Strong CR to tone; demonstrates overshadowing",
+      "No CR to tone; demonstrates blocking",
+      "No CR to tone; demonstrates extinction",
+      "Strong CR to tone; demonstrates latent inhibition"
+    ],
+    correct: 1,
+    tag: "Blocking",
+    explanation: "This is Kamin's (1969) classic <strong>blocking</strong> paradigm. The light already perfectly predicted shock in Phase 1 (PE = 0 in Phase 2), so the tone provided no new predictive information and never acquired associative weight."
+  },
+  {
+    text: "Blocking demonstrates that classical conditioning requires more than simple contiguity. Specifically, it shows a CS must:",
+    options: [
+      "occur at least 3 seconds before the US",
+      "be novel with no prior history of being presented alone",
+      "provide nonredundant, predictive information about the US",
+      "be paired with the US at least 50 times"
+    ],
+    correct: 2,
+    tag: "Blocking",
+    explanation: "Even when the tone and shock were <strong>contiguous</strong> in Phase 2, no association formed because the tone was <em>redundant</em> — the light already fully predicted the shock. The CS must add genuine predictive value."
+  },
+  {
+    text: "When a more salient cue in a compound CS captures a disproportionately large associative weight compared to a less salient cue, this is called:",
+    options: [
+      "blocking",
+      "latent inhibition",
+      "overshadowing",
+      "spontaneous recovery"
+    ],
+    correct: 2,
+    tag: "Compound Conditioning",
+    explanation: "<strong>Overshadowing</strong> occurs within compound conditioning when cues compete for associative strength based on salience. Unlike blocking (requires Phase 1 pre-training), it can occur on the very first compound trial."
+  },
+  {
+    text: "Rachel's oncologist gives her cucumber-flavored popsicles immediately before each chemotherapy session. This intervention is designed to:",
+    options: [
+      "extinguish the nausea response through repeated exposure",
+      "block the conditioning of a taste aversion to other foods Rachel normally eats",
+      "increase effectiveness of chemotherapy by reducing anxiety",
+      "sensitize Rachel's immune system to the chemotherapy agent"
+    ],
+    correct: 1,
+    tag: "Clinical",
+    explanation: "Clinical application of <strong>blocking</strong>. The novel cucumber flavor becomes a strongly conditioned CS for nausea, blocking conditioning to more familiar preferred foods — protecting her everyday food preferences from acquired aversion."
+  },
+  {
+    text: "In the Rescorla-Wagner model, when a well-trained CS accurately predicts the US and the US occurs, the prediction error is:",
+    options: [
+      "positive, causing further weight increase",
+      "negative, causing weight decrease",
+      "zero, resulting in no change",
+      "indeterminate, depending on learning rate"
+    ],
+    correct: 2,
+    tag: "Rescorla-Wagner",
+    explanation: "When the US is fully predicted (expected = actual), actual − expected = 0. No error = no learning. <strong>Learning reaches asymptote.</strong> The learning rate α is irrelevant when PE = 0."
+  },
+  {
+    text: "In the Rescorla-Wagner model, when two cues (A and B) are presented together, the expected US is calculated as:",
+    options: [
+      "the average of W_A and W_B",
+      "the maximum of W_A and W_B",
+      "the product of W_A and W_B",
+      "the sum of W_A and W_B"
+    ],
+    correct: 3,
+    tag: "Rescorla-Wagner",
+    explanation: "R-W <strong>sums all associative weights</strong> for CSs present on a trial. This additive property explains blocking: W_Light = 100 already equals the maximum US value, leaving PE = 0 for the tone."
+  },
+  {
+    text: "A rat has W_Tone = 100. Extinction begins (tone without shock). Learning rate α = 0.2. What is the change in W_Tone on the first extinction trial?",
+    options: [
+      "+20 (increases to 120)",
+      "0 (stays at 100)",
+      "−20 (decreases to 80)",
+      "−100 (immediately drops to 0)"
+    ],
+    correct: 2,
+    tag: "Rescorla-Wagner",
+    explanation: "actual US = 0, expected = 100, PE = 0 − 100 = −100. ΔW = 0.2 × (−100) = <strong>−20</strong>. W drops from 100 to 80. Gradual decrease across trials produces the extinction learning curve."
+  },
+  {
+    text: "The Rescorla-Wagner model is classified as a 'US modulation theory' because:",
+    options: [
+      "it describes how the US modulates overt behavior",
+      "learning is determined by how unexpected the US is — a more surprising US produces more learning",
+      "the US must be presented before the CS for conditioning to occur",
+      "the US directly controls which CSs form associations"
+    ],
+    correct: 1,
+    tag: "Rescorla-Wagner",
+    explanation: "The critical R-W variable is how <strong>surprising the US is</strong> (prediction error = actual − expected). CS properties like salience are not explicitly modeled. This contrasts with CS modulation theories where attention to the CS is key."
+  },
+  {
+    text: "Latent inhibition is problematic for the Rescorla-Wagner model because:",
+    options: [
+      "R-W predicts blocking should occur but latent inhibition should not",
+      "R-W cannot explain why the US is more surprising in the pre-exposed group",
+      "during CS-alone pre-exposure, PE = 0, so R-W predicts nothing learned, but empirically pre-exposure retards conditioning significantly",
+      "R-W predicts pre-exposed animals should learn faster than controls"
+    ],
+    correct: 2,
+    tag: "Latent Inhibition",
+    explanation: "During CS-alone pre-exposure: actual = 0, expected = 0, <strong>PE = 0</strong>. R-W predicts nothing learned. But pre-exposure significantly retards later conditioning — something meaningful was learned (CS predicts nothing). This requires a CS modulation account."
+  },
+  {
+    text: "Removing the interpositus nucleus in a trained rabbit would be expected to:",
+    options: [
+      "abolish UR but leave CR intact",
+      "abolish CR but leave UR intact",
+      "abolish both CR and UR",
+      "impair timing of CR but not its frequency"
+    ],
+    correct: 1,
+    tag: "Cerebellum",
+    explanation: "The interpositus is the <strong>final output pathway</strong> for the CR. Its lesion permanently abolishes CRs without affecting URs, because the UR is a brainstem reflex that does not pass through the cerebellum."
+  },
+  {
+    text: "Inferior olive activity during eyeblink conditioning starts HIGH early in training and DECREASES as CR is acquired. This pattern is best interpreted as:",
+    options: [
+      "habituation of the brainstem to repeated airpuff",
+      "evidence the inferior olive implements the Rescorla-Wagner prediction error signal",
+      "confirmation that the hippocampus is necessary for error-correction learning",
+      "result of Purkinje cell degeneration"
+    ],
+    correct: 1,
+    tag: "Cerebellum",
+    explanation: "In R-W, PE is large early (US is surprising) and approaches 0 as the CS becomes a perfect predictor. <strong>Inferior olive activity mirrors this exactly</strong> — it is the neural substrate of the 'actual − expected US' computation."
+  },
+  {
+    text: "Hippocampal lesions in rabbits are most likely to impair which of the following?",
+    options: [
+      "Acquisition of a basic conditioned eyeblink to a tone",
+      "The unconditioned eyeblink reflex to an airpuff",
+      "Latent inhibition effects in eyeblink conditioning",
+      "The timing of the CR relative to the CS-US interval"
+    ],
+    correct: 2,
+    tag: "Hippocampus",
+    explanation: "The hippocampus is <strong>not necessary</strong> for basic CR acquisition (cerebellar circuits handle that). It is essential for CS modulation effects like <strong>latent inhibition</strong> — lesions eliminate LI in rabbit eyeblink conditioning."
+  },
+  {
+    text: "Lesion studies comparing the cerebellar cortex and interpositus nucleus suggest:",
+    options: [
+      "cerebellar cortex required for CR formation; interpositus modulates timing",
+      "interpositus required for CR formation and execution; cerebellar cortex involved in response timing",
+      "both equally required; neither alone is sufficient",
+      "interpositus governs UR; cerebellar cortex governs CR"
+    ],
+    correct: 1,
+    tag: "Cerebellum",
+    explanation: "<strong>Interpositus</strong> = CR formation and execution (lesion abolishes CRs). <strong>Cerebellar cortex / Purkinje cells</strong> = CR timing (lesion produces small, poorly-timed CRs rather than abolishing them entirely)."
+  },
+  {
+    text: "Classical conditioning in Aplysia requires the CS to precede the US by ~0.5 seconds. This reveals the mechanism depends on:",
+    options: [
+      "the rate at which serotonin is cleared from the synapse",
+      "an activity-dependent priming of the sensory neuron lasting ~half a second",
+      "the time required for CREB-1 to activate gene transcription",
+      "conduction velocity of climbing fibers to Purkinje cells"
+    ],
+    correct: 1,
+    tag: "Aplysia",
+    explanation: "The 0.5-second ISI corresponds to the duration of an <strong>intracellular priming state</strong>. After CS-evoked activity, the sensory neuron is transiently primed so subsequent serotonin (US pathway) produces larger glutamate release. CS must come first."
+  },
+  {
+    text: "Which correctly describes the difference between short-term and long-term classical conditioning memory in Aplysia?",
+    options: [
+      "Short-term involves new synapse growth; long-term involves vesicle number changes",
+      "Short-term involves intracellular changes in neurotransmitter release; long-term involves anatomical growth of new synapses requiring CREB-1",
+      "Both require CREB-1 gene activation",
+      "Long-term depends on increased serotonin release; short-term on decreased glutamate"
+    ],
+    correct: 1,
+    tag: "Aplysia",
+    explanation: "<strong>Short-term</strong>: intracellular/transmission-level changes (vesicle counts). <strong>Long-term</strong>: structural changes (new synapses) requiring serotonin → second messengers → CREB-1 → gene expression → protein synthesis → synapse growth. CREB-1 inactivation blocks long-term but not short-term."
+  }
+];
+
+let quizState = {};
+
+function buildQuiz() {
+  const container = document.getElementById('quizContainer');
+  container.innerHTML = '';
+  quizState = {};
+
+  questions.forEach((q, i) => {
+    quizState[i] = null;
+    const card = document.createElement('div');
+    card.className = 'q-card';
+    card.id = 'q-' + i;
+
+    const optsHtml = q.options.map((opt, j) =>
+      `<button class="q-opt" data-qi="${i}" data-oi="${j}" onclick="answerQ(${i},${j})">${String.fromCharCode(65+j)}. ${opt}</button>`
+    ).join('');
+
+    card.innerHTML = `
+      <div class="q-header">
+        <div class="q-meta">
+          <span class="q-num">${i+1}</span>
+          <span class="q-tag">${q.tag}</span>
+          <span class="q-status" id="qs-${i}"></span>
+        </div>
+        <div class="q-text">${q.text}</div>
+      </div>
+      <div class="q-options">${optsHtml}</div>
+      <div class="q-explanation hidden" id="qe-${i}">${q.explanation}</div>
+    `;
+    container.appendChild(card);
+  });
+  updateStats();
+}
+
+function answerQ(qi, oi) {
+  if (quizState[qi] !== null) return;
+  quizState[qi] = oi;
+
+  const card = document.getElementById('q-' + qi);
+  const opts = card.querySelectorAll('.q-opt');
+  const isCorrect = oi === questions[qi].correct;
+
+  opts.forEach((btn, j) => {
+    btn.disabled = true;
+    if (j === questions[qi].correct) btn.classList.add('show-correct');
+  });
+  if (!isCorrect) {
+    opts[oi].classList.remove('show-correct');
+    opts[oi].classList.add('selected-wrong');
+  } else {
+    opts[oi].classList.add('selected-correct');
+  }
+
+  card.classList.add(isCorrect ? 'correct' : 'incorrect');
+  document.getElementById('qs-' + qi).textContent = isCorrect ? '✓ Correct' : '✗ Incorrect';
+  document.getElementById('qs-' + qi).style.color = isCorrect ? 'var(--emerald)' : 'var(--rose)';
+  document.getElementById('qe-' + qi).classList.remove('hidden');
+
+  updateStats();
+}
+
+function updateStats() {
+  const answered = Object.values(quizState).filter(v => v !== null).length;
+  const correct = Object.entries(quizState).filter(([i, v]) => v !== null && v === questions[i].correct).length;
+  const wrong = answered - correct;
+  document.getElementById('statCorrect').textContent = correct;
+  document.getElementById('statWrong').textContent = wrong;
+  const pctEl = document.getElementById('statPct');
+  if (answered > 0) {
+    const pct = Math.round((correct / answered) * 100);
+    pctEl.textContent = pct + '%';
+    pctEl.style.color = pct >= 80 ? 'var(--emerald)' : pct >= 60 ? 'var(--amber)' : 'var(--rose)';
+  } else {
+    pctEl.textContent = '—';
+    pctEl.style.color = 'var(--gray-light)';
+  }
+  const pct = (answered / 25) * 100;
+  document.getElementById('quizProgressBar').style.width = pct + '%';
+  document.getElementById('quizProgressLabel').textContent = answered + ' / 25';
+}
+
+function resetQuiz() {
+  buildQuiz();
+}
+
+// ─── SCROLL PROGRESS ───
+window.addEventListener('scroll', () => {
+  const el = document.documentElement;
+  const pct = (el.scrollTop / (el.scrollHeight - el.clientHeight)) * 100;
+  document.getElementById('scrollProgress').style.width = pct + '%';
+});
+
+// ─── INIT ───
+buildQuiz();
+</script>
+</body>
+</html>

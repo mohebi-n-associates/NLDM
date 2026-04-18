@@ -1,0 +1,1670 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Module 8 Exam Prep — Operant Conditioning</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --primary: #6366f1;
+      --primary-dark: #4f46e5;
+      --secondary: #ec4899;
+      --accent: #06b6d4;
+      --emerald: #10b981;
+      --amber: #f59e0b;
+      --rose: #f43f5e;
+      --dark: #0f172a;
+      --dark-light: #1e293b;
+      --dark-mid: #162032;
+      --gray: #64748b;
+      --gray-light: #94a3b8;
+      --light: #f1f5f9;
+      --white: #ffffff;
+      --border: rgba(255,255,255,0.08);
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--dark);
+      color: var(--white);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* ─── ANIMATED BACKGROUND ─── */
+    .bg-layer {
+      position: fixed; inset: 0; z-index: -1; pointer-events: none;
+      background:
+        radial-gradient(ellipse 80% 60% at 20% 10%, rgba(99,102,241,.12) 0%, transparent 60%),
+        radial-gradient(ellipse 60% 60% at 80% 80%, rgba(236,72,153,.08) 0%, transparent 60%),
+        radial-gradient(ellipse 40% 40% at 50% 50%, rgba(6,182,212,.05) 0%, transparent 60%);
+      animation: bgPulse 20s ease-in-out infinite;
+    }
+    @keyframes bgPulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.7; transform: scale(1.05); }
+    }
+
+    /* ─── TOPBAR ─── */
+    .topbar {
+      position: sticky; top: 0; z-index: 100;
+      padding: .75rem 2rem;
+      background: rgba(15,23,42,.85);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 1rem;
+    }
+    .topbar-left { display: flex; align-items: center; gap: 1rem; }
+    .back-link {
+      display: flex; align-items: center; gap: .5rem;
+      color: var(--gray-light); text-decoration: none; font-size: .85rem;
+      transition: color .2s;
+    }
+    .back-link:hover { color: var(--white); }
+    .back-link svg { flex-shrink: 0; }
+    .breadcrumb { color: var(--gray); font-size: .8rem; }
+    .breadcrumb span { color: var(--primary); }
+
+    .progress-bar-wrap {
+      flex: 1; max-width: 240px;
+      background: rgba(255,255,255,.08); border-radius: 99px; height: 6px; overflow: hidden;
+    }
+    .progress-bar-fill {
+      height: 100%; border-radius: 99px;
+      background: linear-gradient(90deg, var(--primary), var(--secondary));
+      transition: width .5s ease;
+      width: 0%;
+    }
+    .progress-label { font-size: .75rem; color: var(--gray); white-space: nowrap; }
+
+    /* ─── HERO ─── */
+    .hero {
+      padding: 5rem 2rem 3rem;
+      max-width: 900px; margin: 0 auto; text-align: center;
+    }
+    .module-badge {
+      display: inline-flex; align-items: center; gap: .5rem;
+      background: rgba(99,102,241,.15); border: 1px solid rgba(99,102,241,.3);
+      color: #a5b4fc; border-radius: 99px; padding: .35rem 1rem; font-size: .8rem;
+      font-weight: 600; letter-spacing: .05em; text-transform: uppercase; margin-bottom: 1.5rem;
+    }
+    .hero h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      line-height: 1.15; margin-bottom: 1rem;
+      background: linear-gradient(135deg, #fff 40%, #a5b4fc);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    }
+    .hero-subtitle { color: var(--gray-light); font-size: 1.05rem; max-width: 600px; margin: 0 auto 2rem; }
+
+    .tab-nav {
+      display: flex; gap: .5rem; justify-content: center;
+      flex-wrap: wrap; margin-bottom: 1rem;
+    }
+    .tab-btn {
+      padding: .6rem 1.2rem; border-radius: 99px; border: 1px solid var(--border);
+      background: rgba(255,255,255,.04); color: var(--gray-light);
+      font-size: .875rem; font-weight: 500; cursor: pointer; transition: all .2s;
+      font-family: 'Inter', sans-serif;
+    }
+    .tab-btn:hover { background: rgba(99,102,241,.12); color: var(--white); border-color: rgba(99,102,241,.4); }
+    .tab-btn.active {
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      color: var(--white); border-color: transparent;
+    }
+
+    /* ─── MAIN LAYOUT ─── */
+    .main { max-width: 900px; margin: 0 auto; padding: 0 2rem 6rem; }
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; animation: fadeIn .3s ease; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+    /* ─── SECTION CARDS (Study Guide) ─── */
+    .study-section {
+      border: 1px solid var(--border);
+      border-radius: 16px; overflow: hidden;
+      background: rgba(255,255,255,.02);
+      margin-bottom: 1rem;
+      transition: border-color .2s;
+    }
+    .study-section:hover { border-color: rgba(99,102,241,.25); }
+    .study-section-header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1.1rem 1.5rem; cursor: pointer; user-select: none;
+      gap: 1rem;
+    }
+    .study-section-header-left { display: flex; align-items: center; gap: .85rem; }
+    .section-icon {
+      width: 36px; height: 36px; border-radius: 10px; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center; font-size: 1.1rem;
+    }
+    .section-title { font-size: 1rem; font-weight: 600; }
+    .section-num { font-size: .75rem; color: var(--gray); }
+    .chevron { color: var(--gray); transition: transform .25s; flex-shrink: 0; }
+    .study-section.open .chevron { transform: rotate(180deg); }
+    .study-section-body { display: none; padding: 0 1.5rem 1.5rem; }
+    .study-section.open .study-section-body { display: block; }
+
+    /* ─── CONTENT ELEMENTS ─── */
+    .prose { color: var(--gray-light); font-size: .95rem; }
+    .prose p { margin-bottom: .85rem; }
+    .prose p:last-child { margin-bottom: 0; }
+    .prose strong { color: var(--white); font-weight: 600; }
+    .prose em { color: #a5b4fc; font-style: normal; font-weight: 500; }
+
+    .callout {
+      border-radius: 10px; padding: 1rem 1.2rem; margin: 1rem 0;
+      border-left: 3px solid; font-size: .9rem;
+    }
+    .callout-title { font-weight: 600; margin-bottom: .4rem; font-size: .8rem; letter-spacing: .06em; text-transform: uppercase; }
+    .callout.warn { background: rgba(245,158,11,.07); border-color: var(--amber); color: #fcd34d; }
+    .callout.tip { background: rgba(99,102,241,.07); border-color: var(--primary); color: #a5b4fc; }
+    .callout.connect { background: rgba(6,182,212,.07); border-color: var(--accent); color: #67e8f9; }
+    .callout.exam { background: rgba(16,185,129,.07); border-color: var(--emerald); color: #6ee7b7; }
+
+    .prop-table, .contrast-table {
+      width: 100%; border-collapse: collapse; font-size: .875rem; margin: 1rem 0;
+    }
+    .prop-table th, .contrast-table th {
+      background: rgba(99,102,241,.15); color: #a5b4fc;
+      padding: .6rem .9rem; text-align: left; font-weight: 600; font-size: .78rem;
+      letter-spacing: .04em; text-transform: uppercase;
+    }
+    .prop-table td, .contrast-table td {
+      padding: .65rem .9rem; border-bottom: 1px solid rgba(255,255,255,.05);
+      color: var(--gray-light); vertical-align: top;
+    }
+    .prop-table tr:last-child td, .contrast-table tr:last-child td { border-bottom: none; }
+    .prop-table tr:hover td, .contrast-table tr:hover td { background: rgba(255,255,255,.02); }
+    .prop-table td:first-child, .contrast-table td:first-child { color: var(--white); font-weight: 500; }
+
+    .circuit-box {
+      background: rgba(15,23,42,.6); border: 1px solid rgba(6,182,212,.2);
+      border-radius: 10px; padding: 1rem 1.2rem; margin: 1rem 0;
+      font-family: 'JetBrains Mono', monospace; font-size: .825rem; color: #67e8f9;
+    }
+    .circuit-label { color: var(--gray); font-size: .75rem; margin-bottom: .5rem; font-family: 'Inter', sans-serif; }
+
+    .bullet-list { list-style: none; padding: 0; margin: .75rem 0; }
+    .bullet-list li {
+      display: flex; gap: .75rem; padding: .4rem 0; color: var(--gray-light); font-size: .9rem;
+    }
+    .bullet-list li::before {
+      content: '›'; color: var(--primary); font-size: 1.1rem; line-height: 1.4; flex-shrink: 0;
+    }
+    .bullet-list li strong { color: var(--white); }
+
+    /* ─── KEY TERMS / FLASHCARDS ─── */
+    .terms-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: .75rem; }
+    .flashcard {
+      border: 1px solid var(--border); border-radius: 12px; overflow: hidden;
+      cursor: pointer; transition: border-color .2s, transform .15s;
+      background: rgba(255,255,255,.02);
+      perspective: 600px;
+    }
+    .flashcard:hover { border-color: rgba(99,102,241,.3); transform: translateY(-2px); }
+    .flashcard-inner { position: relative; min-height: 100px; transition: transform .45s; transform-style: preserve-3d; }
+    .flashcard.flipped .flashcard-inner { transform: rotateY(180deg); }
+    .flashcard-front, .flashcard-back {
+      padding: 1rem 1.1rem; backface-visibility: hidden;
+    }
+    .flashcard-back { position: absolute; inset: 0; transform: rotateY(180deg); background: rgba(99,102,241,.08); }
+    .flashcard-term { font-weight: 600; font-size: .95rem; margin-bottom: .4rem; }
+    .flashcard-hint { font-size: .73rem; color: var(--gray); }
+    .flashcard-def { font-size: .85rem; color: var(--gray-light); line-height: 1.55; }
+    .flashcard-tag {
+      display: inline-block; font-size: .68rem; padding: .15rem .5rem;
+      border-radius: 99px; margin-bottom: .6rem; font-weight: 600; letter-spacing: .04em;
+    }
+    .tag-neuro { background: rgba(6,182,212,.15); color: #67e8f9; }
+    .tag-behavior { background: rgba(99,102,241,.15); color: #a5b4fc; }
+    .tag-clinical { background: rgba(244,63,94,.15); color: #fda4af; }
+    .tag-theory { background: rgba(245,158,11,.15); color: #fcd34d; }
+
+    .terms-controls { display: flex; gap: .5rem; margin-bottom: 1.5rem; flex-wrap: wrap; }
+    .filter-btn {
+      padding: .35rem .85rem; border-radius: 99px; font-size: .78rem; font-weight: 500;
+      border: 1px solid var(--border); background: transparent; color: var(--gray-light);
+      cursor: pointer; transition: all .2s; font-family: 'Inter', sans-serif;
+    }
+    .filter-btn:hover { border-color: rgba(99,102,241,.4); color: var(--white); }
+    .filter-btn.active { background: rgba(99,102,241,.15); border-color: rgba(99,102,241,.4); color: var(--white); }
+    .flip-all-btn {
+      margin-left: auto; padding: .35rem .85rem; border-radius: 99px;
+      font-size: .78rem; font-weight: 500; border: 1px solid rgba(99,102,241,.3);
+      background: rgba(99,102,241,.1); color: #a5b4fc; cursor: pointer;
+      transition: all .2s; font-family: 'Inter', sans-serif;
+    }
+    .flip-all-btn:hover { background: rgba(99,102,241,.2); }
+
+    /* ─── QUIZ ─── */
+    .quiz-stats {
+      display: flex; gap: 1.5rem; margin-bottom: 2rem;
+      padding: 1rem 1.5rem; background: rgba(255,255,255,.03);
+      border: 1px solid var(--border); border-radius: 12px; flex-wrap: wrap;
+    }
+    .stat-item { display: flex; flex-direction: column; gap: .2rem; }
+    .stat-val { font-size: 1.5rem; font-weight: 700; }
+    .stat-val.green { color: var(--emerald); }
+    .stat-val.red { color: var(--rose); }
+    .stat-val.blue { color: var(--primary); }
+    .stat-lbl { font-size: .75rem; color: var(--gray); }
+    .quiz-reset-btn {
+      margin-left: auto; padding: .45rem 1rem; border-radius: 8px;
+      background: rgba(255,255,255,.05); border: 1px solid var(--border);
+      color: var(--gray-light); font-size: .8rem; cursor: pointer;
+      transition: all .2s; font-family: 'Inter', sans-serif; align-self: center;
+    }
+    .quiz-reset-btn:hover { background: rgba(255,255,255,.1); color: var(--white); }
+
+    .q-card {
+      border: 1px solid var(--border); border-radius: 14px;
+      background: rgba(255,255,255,.02); margin-bottom: 1rem; overflow: hidden;
+      transition: border-color .2s;
+    }
+    .q-card.correct { border-color: rgba(16,185,129,.4); }
+    .q-card.incorrect { border-color: rgba(244,63,94,.4); }
+    .q-header { padding: 1.2rem 1.5rem; cursor: pointer; }
+    .q-meta { display: flex; gap: .75rem; align-items: center; margin-bottom: .65rem; }
+    .q-num {
+      width: 26px; height: 26px; border-radius: 8px; flex-shrink: 0;
+      background: rgba(99,102,241,.2); color: #a5b4fc;
+      font-size: .75rem; font-weight: 700; display: flex; align-items: center; justify-content: center;
+    }
+    .q-tag {
+      font-size: .7rem; padding: .15rem .6rem; border-radius: 99px; font-weight: 600;
+      background: rgba(99,102,241,.12); color: #a5b4fc;
+    }
+    .q-status { margin-left: auto; font-size: .75rem; }
+    .q-text { font-size: .95rem; color: var(--light); line-height: 1.55; }
+    .q-options { padding: 0 1.5rem 1rem; display: grid; gap: .5rem; }
+    .q-opt {
+      padding: .65rem 1rem; border-radius: 9px;
+      border: 1px solid rgba(255,255,255,.07);
+      background: rgba(255,255,255,.03); font-size: .875rem; color: var(--gray-light);
+      cursor: pointer; transition: all .2s; text-align: left; width: 100%;
+      font-family: 'Inter', sans-serif;
+    }
+    .q-opt:hover:not(:disabled) { background: rgba(99,102,241,.1); border-color: rgba(99,102,241,.3); color: var(--white); }
+    .q-opt.selected-correct { background: rgba(16,185,129,.12); border-color: rgba(16,185,129,.5); color: #6ee7b7; }
+    .q-opt.selected-wrong { background: rgba(244,63,94,.12); border-color: rgba(244,63,94,.5); color: #fda4af; }
+    .q-opt.show-correct { background: rgba(16,185,129,.08); border-color: rgba(16,185,129,.3); color: #6ee7b7; }
+    .q-opt:disabled { cursor: default; }
+    .q-explanation {
+      margin: 0 1.5rem 1.25rem; padding: .9rem 1.1rem;
+      background: rgba(99,102,241,.07); border-radius: 10px;
+      border-left: 3px solid var(--primary); font-size: .875rem; color: var(--gray-light);
+      animation: fadeIn .25s ease;
+    }
+    .q-explanation strong { color: #a5b4fc; }
+    .q-explanation.hidden { display: none; }
+
+    /* ─── SYNTHESIS ─── */
+    .synthesis-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin: 1.5rem 0; }
+    @media (max-width: 600px) { .synthesis-grid { grid-template-columns: 1fr; } }
+    .synth-card {
+      border: 1px solid var(--border); border-radius: 12px; padding: 1.25rem;
+      background: rgba(255,255,255,.02);
+    }
+    .synth-card-title {
+      font-size: .8rem; font-weight: 600; letter-spacing: .05em; text-transform: uppercase;
+      margin-bottom: .75rem; display: flex; align-items: center; gap: .5rem;
+    }
+    .synth-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+    .synth-card ul { list-style: none; padding: 0; }
+    .synth-card li { font-size: .875rem; color: var(--gray-light); padding: .3rem 0; border-bottom: 1px solid rgba(255,255,255,.04); }
+    .synth-card li:last-child { border-bottom: none; }
+    .synth-card li span { color: var(--white); font-weight: 500; }
+
+    .levels-strip {
+      display: flex; gap: 0; border: 1px solid var(--border); border-radius: 12px; overflow: hidden;
+      margin: 1.5rem 0;
+    }
+    .level-col { flex: 1; padding: 1rem; }
+    .level-col + .level-col { border-left: 1px solid var(--border); }
+    .level-label { font-size: .72rem; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; margin-bottom: .6rem; }
+    .level-items { display: flex; flex-direction: column; gap: .5rem; }
+    .level-item { font-size: .8rem; padding: .35rem .6rem; border-radius: 7px; }
+
+    /* ─── RESPONSIVE ─── */
+    @media (max-width: 700px) {
+      .topbar { padding: .65rem 1rem; }
+      .hero { padding: 3rem 1rem 2rem; }
+      .main { padding: 0 1rem 5rem; }
+      .tab-nav { gap: .35rem; }
+      .tab-btn { font-size: .8rem; padding: .5rem .9rem; }
+      .prop-table, .contrast-table { font-size: .8rem; }
+    }
+
+    /* scroll indicator */
+    .scroll-progress {
+      position: fixed; top: 0; left: 0; height: 2px; z-index: 200;
+      background: linear-gradient(90deg, var(--primary), var(--secondary));
+      transition: width .1s; width: 0%;
+    }
+  </style>
+</head>
+<body>
+<div class="bg-layer"></div>
+<div class="scroll-progress" id="scrollProgress"></div>
+
+<!-- TOPBAR -->
+<header class="topbar">
+  <div class="topbar-left">
+    <a href="../../index.html" class="back-link">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+      Back
+    </a>
+    <span class="breadcrumb">Exam Prep › <span>Module 8</span></span>
+  </div>
+  <div style="display:flex;align-items:center;gap:.75rem;">
+    <div class="progress-bar-wrap" title="Quiz progress">
+      <div class="progress-bar-fill" id="quizProgressBar"></div>
+    </div>
+    <span class="progress-label" id="quizProgressLabel">0 / 20</span>
+  </div>
+</header>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="module-badge">
+    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+    PSYCH 505 · Week 8
+  </div>
+  <h1>Operant Conditioning</h1>
+  <p class="hero-subtitle">From Thorndike's puzzle box to the basal ganglia — the neuroscience of action learning and motivation.</p>
+  <nav class="tab-nav">
+    <button class="tab-btn active" data-tab="guide">Study Guide</button>
+    <button class="tab-btn" data-tab="terms">Key Terms</button>
+    <button class="tab-btn" data-tab="quiz">Practice Quiz</button>
+    <button class="tab-btn" data-tab="synthesis">Big Picture</button>
+  </nav>
+</div>
+
+<!-- MAIN -->
+<main class="main">
+
+  <!-- ════════════════════════════ STUDY GUIDE ════════════════════════════ -->
+  <div class="tab-panel active" id="tab-guide">
+
+    <!-- 1. What is Operant Conditioning? -->
+    <div class="study-section open" data-section="1">
+      <div class="study-section-header" onclick="toggleSection(this)">
+        <div class="study-section-header-left">
+          <div class="section-icon" style="background:rgba(99,102,241,.15);">📦</div>
+          <div><div class="section-num">Section 1</div><div class="section-title">What is Operant Conditioning?</div></div>
+        </div>
+        <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
+      </div>
+      <div class="study-section-body">
+        <div class="prose">
+          <p>Operant conditioning is learning to <strong>make or withhold responses</strong> in order to obtain reinforcers or avoid punishers. The organism's behavior <em>operates on the environment</em> to produce consequences.</p>
+          <p><strong>S-R-O Framework:</strong> S (discriminative stimulus — signals whether R will be reinforced) → R (response — the action performed) → O (outcome — the reinforcer or punisher that follows).</p>
+          <p><strong>CRITICAL DISTINCTION from classical conditioning:</strong> In classical conditioning, the outcome follows the S regardless of what the organism does. In operant conditioning, the outcome <em>only follows if R is made</em> — response contingency is the defining feature.</p>
+        </div>
+        <div class="callout warn">
+          <div class="callout-title">⚠ Key Distinction</div>
+          <strong>Classical:</strong> O follows S regardless of R. &nbsp;|&nbsp; <strong>Operant:</strong> O follows ONLY if R occurs. Confusing these on an exam is a critical error.
+        </div>
+        <p style="font-size:.8rem;color:var(--gray);margin:.75rem 0 .5rem;font-weight:600;letter-spacing:.04em;text-transform:uppercase;">Thorndike's Law of Effect</p>
+        <ul class="bullet-list">
+          <li>A response followed by a <strong>satisfying outcome</strong> increases in frequency (strengthens the S-R association).</li>
+          <li>A response followed by an <strong>unsatisfying outcome</strong> decreases in frequency (weakens the S-R association).</li>
+          <li>Directly parallels the <strong>Rescorla-Wagner update rule</strong>: satisfying = positive prediction error; unsatisfying = negative prediction error.</li>
+        </ul>
+        <p style="font-size:.8rem;color:var(--gray);margin:.75rem 0 .5rem;font-weight:600;letter-spacing:.04em;text-transform:uppercase;">Thorndike's Puzzle Box</p>
+        <div class="circuit-box">
+          <div class="circuit-label">S-R-O Mapping</div>
+          S = puzzle box (context/discriminative stimulus)<br>
+          R = lever/rope sequence to open door<br>
+          O = escape from box + access to food
+        </div>
+        <table class="contrast-table" style="margin-top:1rem;">
+          <thead><tr><th>Paradigm</th><th>Who Controls Rate</th><th>Key Feature</th></tr></thead>
+          <tbody>
+            <tr><td>Thorndike (discrete trial)</td><td>Experimenter</td><td>Animal placed in box at start of each trial; one trial at a time</td></tr>
+            <tr><td>Skinner (free-operant)</td><td>Animal</td><td>Animal can press lever at any time; cumulative recorder tracks rate (slope = response rate)</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- 2. Shaping, Chaining & Reinforcers -->
+    <div class="study-section open" data-section="2">
+      <div class="study-section-header" onclick="toggleSection(this)">
+        <div class="study-section-header-left">
+          <div class="section-icon" style="background:rgba(16,185,129,.12);">🎯</div>
+          <div><div class="section-num">Section 2</div><div class="section-title">Shaping, Chaining &amp; Reinforcers</div></div>
+        </div>
+        <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
+      </div>
+      <div class="study-section-body">
+        <div class="prose">
+          <p><strong>Shaping:</strong> Reinforcing <em>successive approximations</em> to the target behavior, guiding the organism incrementally when it is unlikely to spontaneously produce the desired response. The full target behavior is never required at the outset.</p>
+          <p><strong>Chaining:</strong> Training complex behavioral sequences one link at a time. <strong>Backward chaining</strong> trains the last step first, so each earlier step becomes a conditioned reinforcer for the step that follows. Used in vocational training, music instruction, and speech therapy.</p>
+        </div>
+        <p style="font-size:.8rem;color:var(--gray);margin:.75rem 0 .5rem;font-weight:600;letter-spacing:.04em;text-transform:uppercase;">The 2 × 2 Reinforcement/Punishment Table</p>
+        <table class="prop-table">
+          <thead><tr><th>Consequence</th><th>Add something (+)</th><th>Remove something (−)</th></tr></thead>
+          <tbody>
+            <tr><td>Behavior increases</td><td><strong>Positive Reinforcement</strong> — add a desirable stimulus → response increases</td><td><strong>Negative Reinforcement</strong> — remove an aversive stimulus → response increases</td></tr>
+            <tr><td>Behavior decreases</td><td><strong>Positive Punishment</strong> — add an aversive stimulus → response decreases</td><td><strong>Negative Punishment</strong> — remove a desirable stimulus → response decreases</td></tr>
+          </tbody>
+        </table>
+        <div class="callout warn">
+          <div class="callout-title">⚠ Most Common Error on This Topic</div>
+          <strong>Negative reinforcement is NOT punishment.</strong> Reinforcement ALWAYS increases behavior. The word "negative" refers only to removing something — not to a bad outcome. Escaping from pain (removing aversive) = negative reinforcement = behavior increases.
+        </div>
+        <p style="font-size:.8rem;color:var(--gray);margin:.75rem 0 .5rem;font-weight:600;letter-spacing:.04em;text-transform:uppercase;">Primary vs. Secondary Reinforcers</p>
+        <table class="contrast-table">
+          <thead><tr><th>Type</th><th>Definition</th><th>Properties</th><th>Examples</th></tr></thead>
+          <tbody>
+            <tr><td>Primary</td><td>Biologically significant; reinforcing without prior learning</td><td>State-dependent (sated rat won't work for food)</td><td>Food, water, sex</td></tr>
+            <tr><td>Secondary (conditioned)</td><td>Acquires value via association with primary reinforcer</td><td>Deliverable instantly; not state-dependent</td><td>Money, grades, clicker, tokens</td></tr>
+          </tbody>
+        </table>
+        <div class="callout tip">
+          <div class="callout-title">Token Economies</div>
+          Secondary reinforcement applied at scale: tokens earned for target behaviors, exchanged later for primary reinforcers. Widely used in psychiatric hospitals and ASD classrooms.
+        </div>
+      </div>
+    </div>
+
+    <!-- 3. Reinforcement Schedules -->
+    <div class="study-section" data-section="3">
+      <div class="study-section-header" onclick="toggleSection(this)">
+        <div class="study-section-header-left">
+          <div class="section-icon" style="background:rgba(245,158,11,.12);">⏱️</div>
+          <div><div class="section-num">Section 3</div><div class="section-title">Reinforcement Schedules</div></div>
+        </div>
+        <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
+      </div>
+      <div class="study-section-body">
+        <table class="prop-table">
+          <thead><tr><th>Schedule</th><th>Rule</th><th>Response Pattern</th><th>Real-world Example</th></tr></thead>
+          <tbody>
+            <tr><td>FR (Fixed-Ratio)</td><td>Reinforcement after every N responses</td><td>Steady high rate + <strong>post-reinforcement pause</strong></td><td>Piecework pay (paid per unit produced)</td></tr>
+            <tr><td>VR (Variable-Ratio)</td><td>Reinforcement after N responses on average (N varies)</td><td>HIGHEST, most persistent rates; <strong>minimal pause</strong></td><td>Slot machines, social media "likes"</td></tr>
+            <tr><td>FI (Fixed-Interval)</td><td>Reinforcement for first response after fixed time period</td><td><strong>Scalloped curve</strong> — slow start, accelerating as interval end approaches</td><td>Checking the oven at a set timer</td></tr>
+            <tr><td>VI (Variable-Interval)</td><td>Reinforcement for first response after variable time period</td><td>Steady moderate rates; <strong>no post-reinforcement pause</strong></td><td>Checking a friend's social post (unpredictable timing)</td></tr>
+          </tbody>
+        </table>
+        <div class="callout exam">
+          <div class="callout-title">Key Principle — Why Variable Schedules Are So Compelling</div>
+          Variable schedules (VR and VI) eliminate the post-reinforcement pause because reinforcement could arrive at any moment. This produces the <strong>most persistent behavior</strong> and the <strong>hardest-to-extinguish</strong> responding. Slot machines use VR — this is why gambling is so addictive. Extinction after VR is far slower than after FR.
+        </div>
+        <div class="callout tip">
+          <div class="callout-title">Scalloped FI Curve — Know This</div>
+          On FI schedules, animals learn to time the interval. They show little responding right after reinforcement (the animal "knows" it's too early), then <strong>accelerate as the interval end approaches</strong>. The cumulative record forms a characteristic scalloped shape.
+        </div>
+      </div>
+    </div>
+
+    <!-- 4. Matching Law & Behavioral Economics -->
+    <div class="study-section" data-section="4">
+      <div class="study-section-header" onclick="toggleSection(this)">
+        <div class="study-section-header-left">
+          <div class="section-icon" style="background:rgba(6,182,212,.12);">📊</div>
+          <div><div class="section-num">Section 4</div><div class="section-title">Matching Law &amp; Behavioral Economics</div></div>
+        </div>
+        <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
+      </div>
+      <div class="study-section-body">
+        <div class="prose">
+          <p><strong>Matching Law (Herrnstein, 1961):</strong> On concurrent VI schedules (two response options simultaneously available), the relative rate of responding to each option approximately equals the relative rate of reinforcement from each option.</p>
+        </div>
+        <div class="circuit-box">
+          <div class="circuit-label">Herrnstein's Matching Equation</div>
+          Rate(A) / Rate(B) = Reinforcement(A) / Reinforcement(B)
+        </div>
+        <ul class="bullet-list">
+          <li><strong>Bliss point:</strong> The allocation of time/effort that maximizes the individual's subjective value — where indifference curves peak.</li>
+          <li><strong>Delay discounting:</strong> Future rewards are valued less than immediate rewards. Rate of discounting varies across individuals; 12-year-olds discount more steeply than adults.</li>
+          <li><strong>Pre-commitment:</strong> Deliberately making it harder to access the immediate reward to improve adherence to long-term goals. Examples: gym membership, study groups, blocking distracting websites.</li>
+        </ul>
+        <div class="callout connect">
+          <div class="callout-title">Connection to Behavioral Economics</div>
+          Delay discounting is the behavioral mechanism behind impulsivity and self-control failures. Interventions that impose a delay between craving and consumption weaken the R-O association and reduce relapse.
+        </div>
+      </div>
+    </div>
+
+    <!-- 5. Basal Ganglia: Direct & Indirect Pathways -->
+    <div class="study-section" data-section="5">
+      <div class="study-section-header" onclick="toggleSection(this)">
+        <div class="study-section-header-left">
+          <div class="section-icon" style="background:rgba(236,72,153,.12);">🔄</div>
+          <div><div class="section-num">Section 5</div><div class="section-title">Basal Ganglia: Direct &amp; Indirect Pathways</div></div>
+        </div>
+        <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
+      </div>
+      <div class="study-section-body">
+        <div class="prose">
+          <p><strong>Key structures:</strong> Striatum (input nucleus; dorsal striatum = caudate + putamen). GPi/SNr (output; tonically inhibitory — hold thalamus suppressed at rest). SNc/VTA (dopamine sources — SNc projects to dorsal striatum; VTA to ventral striatum/NAc).</p>
+        </div>
+        <div class="circuit-box">
+          <div class="circuit-label">Direct Pathway ("Go" — D1 receptors)</div>
+          Cortex → D1-Striatum (EXCITED by dopamine) → GPi inhibited (GABA) → Thalamus disinhibited ↑ → Cortex activated<br>
+          Net effect: FACILITATES selected action
+        </div>
+        <div class="circuit-box" style="border-color:rgba(244,63,94,.2);color:#fda4af;">
+          <div class="circuit-label">Indirect Pathway ("No-Go" — D2 receptors)</div>
+          Cortex → D2-Striatum (INHIBITED by dopamine) → GPe inhibited → STN disinhibited → GPi excited (glutamate) → Thalamus suppressed ↓<br>
+          Net effect: SUPPRESSES competing actions
+        </div>
+        <div class="circuit-box" style="border-color:rgba(245,158,11,.2);color:#fcd34d;">
+          <div class="circuit-label">Hyper-direct Pathway ("Pause")</div>
+          Cortex → STN → GPi directly<br>
+          Net effect: Rapid broad suppression — halts action commitment before full deliberation
+        </div>
+        <table class="contrast-table" style="margin-top:1rem;">
+          <thead><tr><th>Dopamine's Action</th><th>Receptor</th><th>Pathway</th><th>Net Behavioral Effect</th></tr></thead>
+          <tbody>
+            <tr><td>Excites D1 neurons</td><td>D1 (direct)</td><td>Go</td><td>Promotes execution of selected action</td></tr>
+            <tr><td>Inhibits D2 neurons</td><td>D2 (indirect)</td><td>No-Go</td><td>Suppresses competing actions</td></tr>
+          </tbody>
+        </table>
+        <div class="callout exam">
+          <div class="callout-title">Exam Tip — Dopamine's Dual Role</div>
+          Dopamine's power comes from acting on <strong>both pathways simultaneously</strong>: it promotes Go AND suppresses No-Go. Together this tips the balance decisively toward the rewarded action. Parkinson's disease (dopamine depletion) impairs movement initiation (Go) AND increases suppression of competing actions (No-Go stuck "on").
+        </div>
+      </div>
+    </div>
+
+    <!-- 6. Dorsal Striatum vs. OFC -->
+    <div class="study-section" data-section="6">
+      <div class="study-section-header" onclick="toggleSection(this)">
+        <div class="study-section-header-left">
+          <div class="section-icon" style="background:rgba(99,102,241,.15);">🧠</div>
+          <div><div class="section-num">Section 6</div><div class="section-title">Dorsal Striatum vs. Orbitofrontal Cortex</div></div>
+        </div>
+        <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
+      </div>
+      <div class="study-section-body">
+        <table class="contrast-table">
+          <thead><tr><th>Structure</th><th>Learning Type</th><th>What It Encodes</th><th>Lesion Effect</th></tr></thead>
+          <tbody>
+            <tr>
+              <td>Dorsal Striatum</td>
+              <td>S-R learning (habitual, cue-guided)</td>
+              <td>Associates discriminative stimuli with appropriate responses; forms automatic habits</td>
+              <td>Impairs responding when discriminative cue must guide response; simple R-O survives</td>
+            </tr>
+            <tr>
+              <td>Orbitofrontal Cortex (OFC)</td>
+              <td>R-O learning (goal-directed, outcome identity)</td>
+              <td>Links responses to expected <em>identity</em> of the outcome (what reward, not just whether reward)</td>
+              <td>Impairs reversal learning (perseverate on previously rewarded option); steepens delay discounting</td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="prose" style="margin-top:.75rem;">
+          <p><strong>Schoenbaum et al.:</strong> OFC neurons fire during the <em>delay between response and outcome</em>, coding specifically for expected outcome identity (sucrose vs. quinine). "Error trial" cells fire strongly when an aversive quinine outcome is predicted — they represent anticipated hedonic identity, not just valence.</p>
+          <p><strong>Tremblay &amp; Schultz monkeys:</strong> OFC neurons respond selectively to pictures predicting grape juice but NOT orange juice — even though both are positive rewards. This confirms OFC encodes <em>which</em> reward, not merely reward vs. no reward.</p>
+        </div>
+        <div class="callout exam">
+          <div class="callout-title">KEY CONTRAST — Striatum vs. OFC</div>
+          <strong>Dorsal striatum = S-R</strong> (habitual, cue-guided). Damage → can't use discriminative stimulus to guide response.<br>
+          <strong>OFC = R-O</strong> (goal-directed, outcome identity). Damage → respond to old rules even after reversal; steeper delay discounting.<br>
+          Both are needed for full operant behavior.
+        </div>
+      </div>
+    </div>
+
+    <!-- 7. Wanting vs. Liking -->
+    <div class="study-section" data-section="7">
+      <div class="study-section-header" onclick="toggleSection(this)">
+        <div class="study-section-header-left">
+          <div class="section-icon" style="background:rgba(245,158,11,.12);">💡</div>
+          <div><div class="section-num">Section 7</div><div class="section-title">Wanting vs. Liking: Berridge's Dissociation</div></div>
+        </div>
+        <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
+      </div>
+      <div class="study-section-body">
+        <div class="prose">
+          <p><strong>Intracranial self-stimulation (Olds, 1955):</strong> Rats press a lever thousands of times per hour for stimulation of VTA/lateral hypothalamus. They prefer it to food. Established dopamine neurons as powerful drivers of behavior.</p>
+        </div>
+        <table class="contrast-table">
+          <thead><tr><th>Component</th><th>Label</th><th>Neurotransmitter System</th><th>Experimental Evidence</th></tr></thead>
+          <tbody>
+            <tr>
+              <td>WANTING</td>
+              <td>Incentive salience — motivation to seek and work for reward</td>
+              <td><strong>Dopamine</strong></td>
+              <td>Pimozide (dopamine blocker) → rats stop lever-pressing (wanting abolished) even though food still delivered</td>
+            </tr>
+            <tr>
+              <td>LIKING</td>
+              <td>Hedonic value — pleasure from consuming reward</td>
+              <td><strong>Endogenous opioids</strong> (enkephalins, endorphins)</td>
+              <td>Dopamine-depleted rats show intact hedonic facial reactions (tongue protrusion to sweet, gapes to bitter)</td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="callout warn">
+          <div class="callout-title">⚠ Critical Concept — Extinction Mimicry</div>
+          Pimozide-treated rats stopped lever-pressing (looked like extinction) even though food was still delivered. Critical test: food placed directly in mouth → normal hedonic "yum" reactions (tongue protrusion). Conclusion: dopamine drives the <strong>motivation to work</strong> (wanting), NOT the pleasure of consumption (liking). Blocking dopamine abolished wanting while leaving liking intact.
+        </div>
+        <ul class="bullet-list">
+          <li>Sucrose vs. chow: dopamine-antagonized rats settle for free chow but won't press a lever for sucrose. If both placed freely in front of the rat, it still <strong>prefers sucrose</strong> (liking intact) — it just won't work for it.</li>
+          <li>Hedonic 'yum' facial reactions (tongue protrusion = sweet; gapes = bitter) are <strong>phylogenetically conserved</strong> and preserved in dopamine-depleted animals.</li>
+          <li>Morphine → makes sweet food taste sweeter (opioid ↑ liking). Naloxone → reduces sweet preference (opioid blockade ↓ liking).</li>
+        </ul>
+        <div class="callout warn">
+          <div class="callout-title">⚠ Misconception — "Dopamine is the pleasure molecule"</div>
+          This is WRONG. <strong>Dopamine = WANTING (motivation/incentive salience).</strong> <strong>Opioids = LIKING (hedonic pleasure).</strong> Blocking dopamine leaves hedonic reactions completely intact. These are separable systems — you can want without liking and like without wanting.
+        </div>
+      </div>
+    </div>
+
+    <!-- 8. PIT -->
+    <div class="study-section" data-section="8">
+      <div class="study-section-header" onclick="toggleSection(this)">
+        <div class="study-section-header-left">
+          <div class="section-icon" style="background:rgba(6,182,212,.12);">🔗</div>
+          <div><div class="section-num">Section 8</div><div class="section-title">Pavlovian-to-Instrumental Transfer (PIT)</div></div>
+        </div>
+        <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
+      </div>
+      <div class="study-section-body">
+        <div class="prose">
+          <p><strong>PIT definition:</strong> A Pavlovian CS modulates the vigor or rate of an ongoing instrumental response <em>without</em> the CS being contingent on that response. PIT bridges classical and instrumental conditioning.</p>
+        </div>
+        <p style="font-size:.8rem;color:var(--gray);margin:.75rem 0 .5rem;font-weight:600;letter-spacing:.04em;text-transform:uppercase;">Three-Phase Procedure</p>
+        <ul class="bullet-list">
+          <li><strong>Phase 1 — Pavlovian training:</strong> CS+ → Outcome (no response required from the animal).</li>
+          <li><strong>Phase 2 — Instrumental training:</strong> Lever → Same or different Outcome (no CS present).</li>
+          <li><strong>Transfer test:</strong> Lever available + CS+ played, but no outcomes delivered. Does CS+ increase lever-pressing rate? (Yes = PIT demonstrated.)</li>
+        </ul>
+        <table class="contrast-table" style="margin-top:.5rem;">
+          <thead><tr><th>PIT Type</th><th>Effect</th><th>Neural Substrate</th></tr></thead>
+          <tbody>
+            <tr><td>Specific PIT</td><td>CS modulates ONLY the response linked to the same outcome — outcome-specific potentiation</td><td>Basolateral amygdala (BLA) → Nucleus accumbens shell</td></tr>
+            <tr><td>General PIT</td><td>CS increases ALL responses non-selectively — general motivational boost</td><td>Central amygdala (CeA) → Nucleus accumbens core via VTA</td></tr>
+          </tbody>
+        </table>
+        <div class="callout connect">
+          <div class="callout-title">Clinical Example — Cue-Induced Craving &amp; Relapse</div>
+          An ex-smoker walks into a bar where they used to smoke. The bar is a <strong>Pavlovian CS</strong> associated with the nicotine high. Via PIT, it potentiates the <strong>instrumental response</strong> (reaching for a pocket) even though quitting has removed any cigarettes. This is PIT driving cue-induced craving and relapse.
+        </div>
+        <div class="callout warn">
+          <div class="callout-title">⚠ PIT vs. Discriminative Stimulus Control</div>
+          These are NOT the same. A discriminative stimulus is part of the instrumental contingency — it signals that R will be reinforced. A PIT CS is trained in a separate Pavlovian phase with no response required. They work through different neural circuits.
+        </div>
+      </div>
+    </div>
+
+    <!-- 9. Addiction & Clinical Perspectives -->
+    <div class="study-section" data-section="9">
+      <div class="study-section-header" onclick="toggleSection(this)">
+        <div class="study-section-header-left">
+          <div class="section-icon" style="background:rgba(244,63,94,.12);">🏥</div>
+          <div><div class="section-num">Section 9</div><div class="section-title">Addiction &amp; Clinical Perspectives</div></div>
+        </div>
+        <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
+      </div>
+      <div class="study-section-body">
+        <div class="prose">
+          <p>Pathological addiction is defined by <strong>compulsive drug-seeking maintained despite known harmful consequences</strong>. It is maintained by both positive reinforcement (the high) and negative reinforcement (relief from withdrawal).</p>
+          <p><strong>Long-term use dissociation:</strong> Chronic users often report <em>diminished liking</em> (no longer get the same high — opioid system down-regulated) but <em>intensified wanting</em> (craving is stronger — dopamine wanting system sensitized). This is the incentive salience model of addiction.</p>
+        </div>
+        <table class="contrast-table">
+          <thead><tr><th>Drug</th><th>Mechanism</th><th>Effect on Dopamine</th></tr></thead>
+          <tbody>
+            <tr><td>Cocaine</td><td>DAT blocker — prevents dopamine reuptake</td><td>Dopamine lingers longer in synapse</td></tr>
+            <tr><td>Amphetamine</td><td>Triggers dopamine release from vesicles</td><td>More dopamine released into synapse</td></tr>
+          </tbody>
+        </table>
+        <p style="font-size:.8rem;color:var(--gray);margin:.75rem 0 .5rem;font-weight:600;letter-spacing:.04em;text-transform:uppercase;">Conditioning-Based Treatments</p>
+        <ul class="bullet-list">
+          <li><strong>Distancing (stimulus control):</strong> Avoid discriminative stimuli that trigger drug-seeking. Reduce Pavlovian CS exposure to prevent PIT-driven relapse.</li>
+          <li><strong>Contingency management:</strong> Reinforce incompatible behaviors — money vouchers for heroin-free urine samples.</li>
+          <li><strong>Imposed delay:</strong> Insert a delay between craving and drug access, weakening the R-O association over time.</li>
+          <li><strong>Naltrexone:</strong> Opioid receptor antagonist — reduces hedonic "liking" component, making consumption less pleasurable.</li>
+          <li><strong>Behavioral addictions (gambling, gaming):</strong> Same dopaminergic circuits as drug addiction. Gambling = VR schedule — most persistent and hardest to extinguish.</li>
+        </ul>
+      </div>
+    </div>
+
+  </div><!-- /tab-guide -->
+
+
+  <!-- ════════════════════════════ KEY TERMS ════════════════════════════ -->
+  <div class="tab-panel" id="tab-terms">
+    <div style="margin-bottom:1.5rem;">
+      <h2 style="font-size:1.3rem;margin-bottom:.4rem;">Key Terms — 28 Flashcards</h2>
+      <p style="color:var(--gray-light);font-size:.9rem;">Click any card to reveal its definition. Use the filters to focus on a category.</p>
+    </div>
+    <div class="terms-controls">
+      <button class="filter-btn active" data-filter="all">All</button>
+      <button class="filter-btn" data-filter="behavior">Behavioral</button>
+      <button class="filter-btn" data-filter="neuro">Neural</button>
+      <button class="filter-btn" data-filter="clinical">Clinical</button>
+      <button class="flip-all-btn" id="flipAllBtn">Reveal All</button>
+    </div>
+    <div class="terms-grid" id="termsGrid">
+
+      <!-- BEHAVIORAL TERMS -->
+      <div class="flashcard" data-category="behavior" onclick="flipCard(this)">
+        <div class="flashcard-inner">
+          <div class="flashcard-front">
+            <span class="flashcard-tag tag-behavior">Behavioral</span>
+            <div class="flashcard-term">Operant Conditioning</div>
+            <div class="flashcard-hint">Click to reveal →</div>
+          </div>
+          <div class="flashcard-back">
+            <span class="flashcard-tag tag-behavior">Behavioral</span>
+            <div class="flashcard-def">Learning to <strong>make or withhold responses</strong> to obtain reinforcers or avoid punishers. The outcome only follows if the organism performs the response (response contingency).</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flashcard" data-category="behavior" onclick="flipCard(this)">
+        <div class="flashcard-inner">
+          <div class="flashcard-front">
+            <span class="flashcard-tag tag-behavior">Behavioral</span>
+            <div class="flashcard-term">Law of Effect (Thorndike)</div>
+            <div class="flashcard-hint">Click to reveal →</div>
+          </div>
+          <div class="flashcard-back">
+            <span class="flashcard-tag tag-behavior">Behavioral</span>
+            <div class="flashcard-def">Response followed by a <strong>satisfying outcome</strong> increases in frequency (strengthens S-R). Response followed by an unsatisfying outcome decreases. Foundation of operant learning; parallels R-W update rule.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flashcard" data-category="behavior" onclick="flipCard(this)">
+        <div class="flashcard-inner">
+          <div class="flashcard-front">
+            <span class="flashcard-tag tag-behavior">Behavioral</span>
+            <div class="flashcard-term">Shaping</div>
+            <div class="flashcard-hint">Click to reveal →</div>
+          </div>
+          <div class="flashcard-back">
+            <span class="flashcard-tag tag-behavior">Behavioral</span>
+            <div class="flashcard-def">Reinforcing <strong>successive approximations</strong> to a target behavior. Used when organism unlikely to spontaneously emit the desired response — guides it incrementally.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flashcard" data-category="behavior" onclick="flipCard(this)">
+        <div class="flashcard-inner">
+          <div class="flashcard-front">
+            <span class="flashcard-tag tag-behavior">Behavioral</span>
+            <div class="flashcard-term">Chaining</div>
+            <div class="flashcard-hint">Click to reveal →</div>
+          </div>
+          <div class="flashcard-back">
+            <span class="flashcard-tag tag-behavior">Behavioral</span>
+            <div class="flashcard-def">Training complex behavioral sequences one link at a time. <strong>Backward chaining</strong> trains the last step first so earlier steps become conditioned reinforcers. Used in vocational training, music, speech therapy.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flashcard" data-category="behavior" onclick="flipCard(this)">
+        <div class="flashcard-inner">
+          <div class="flashcard-front">
+            <span class="flashcard-tag tag-behavior">Behavioral</span>
+            <div class="flashcard-term">Positive Reinforcement</div>
+            <div class="flashcard-hint">Click to reveal →</div>
+          </div>
+          <div class="flashcard-back">
+            <span class="flashcard-tag tag-behavior">Behavioral</span>
+            <div class="flashcard-def"><strong>Add</strong> a desirable stimulus following a response → <strong>response increases</strong>. "Positive" = something is added; "reinforcement" = behavior goes up. Example: food pellet for lever press.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flashcard" data-category="behavior" onclick="flipCard(this)">
+        <div class="flashcard-inner">
+          <div class="flashcard-front">
+            <span class="flashcard-tag tag-behavior">Behavioral</span>
+            <div class="flashcard-term">Negative Reinforcement</div>
+            <div class="flashcard-hint">Click to reveal →</div>
+          </div>
+          <div class="flashcard-back">
+            <span class="flashcard-tag tag-behavior">Behavioral</span>
+            <div class="flashcard-def"><strong>Remove</strong> an aversive stimulus following a response → <strong>response increases</strong>. NOT punishment. "Negative" = something is removed; behavior still goes UP. Example: pressing lever to stop shock.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flashcard" data-category="behavior" onclick="flipCard(this)">
+        <div class="flashcard-inner">
+          <div class="flashcard-front">
+            <span class="flashcard-tag tag-behavior">Behavioral</span>
+            <div class="flashcard-term">Positive Punishment</div>
+            <div class="flashcard-hint">Click to reveal →</div>
+          </div>
+          <div class="flashcard-back">
+            <span class="flashcard-tag tag-behavior">Behavioral</span>
+            <div class="flashcard-def"><strong>Add</strong> an aversive stimulus following a response → <strong>response decreases</strong>. "Positive" = something is added. Example: electric shock for entering wrong arm of maze.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flashcard" data-category="behavior" onclick="flipCard(this)">
+        <div class="flashcard-inner">
+          <div class="flashcard-front">
+            <span class="flashcard-tag tag-behavior">Behavioral</span>
+            <div class="flashcard-term">Negative Punishment</div>
+            <div class="flashcard-hint">Click to reveal →</div>
+          </div>
+          <div class="flashcard-back">
+            <span class="flashcard-tag tag-behavior">Behavioral</span>
+            <div class="flashcard-def"><strong>Remove</strong> a desirable stimulus following a response → <strong>response decreases</strong>. Example: taking away TV time after misbehavior (response cost).</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flashcard" data-category="behavior" onclick="flipCard(this)">
+        <div class="flashcard-inner">
+          <div class="flashcard-front">
+            <span class="flashcard-tag tag-behavior">Behavioral</span>
+            <div class="flashcard-term">Primary Reinforcer</div>
+            <div class="flashcard-hint">Click to reveal →</div>
+          </div>
+          <div class="flashcard-back">
+            <span class="flashcard-tag tag-behavior">Behavioral</span>
+            <div class="flashcard-def">Biologically significant reinforcer; reinforcing without prior learning. <strong>State-dependent</strong>: a sated rat won't work for food. Examples: food, water, sex.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flashcard" data-category="behavior" onclick="flipCard(this)">
+        <div class="flashcard-inner">
+          <div class="flashcard-front">
+            <span class="flashcard-tag tag-behavior">Behavioral</span>
+            <div class="flashcard-term">Secondary Reinforcer</div>
+            <div class="flashcard-hint">Click to reveal →</div>
+          </div>
+          <div class="flashcard-back">
+            <span class="flashcard-tag tag-behavior">Behavioral</span>
+            <div class="flashcard-def">Acquires reinforcing value via <strong>association with a primary reinforcer</strong>. Deliverable instantly; not state-dependent. Examples: money, grades, clicker, tokens in a token economy.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flashcard" data-category="behavior" onclick="flipCard(this)">
+        <div class="flashcard-inner">
+          <div class="flashcard-front">
+            <span class="flashcard-tag tag-behavior">Behavioral</span>
+            <div class="flashcard-term">FR Schedule</div>
+            <div class="flashcard-hint">Click to reveal →</div>
+          </div>
+          <div class="flashcard-back">
+            <span class="flashcard-tag tag-behavior">Behavioral</span>
+            <div class="flashcard-def"><strong>Fixed-Ratio:</strong> Reinforcement after every N responses. Produces steady high rates + characteristic <strong>post-reinforcement pause</strong>. Example: piecework pay. Cumulative record: staircase pattern.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flashcard" data-category="behavior" onclick="flipCard(this)">
+        <div class="flashcard-inner">
+          <div class="flashcard-front">
+            <span class="flashcard-tag tag-behavior">Behavioral</span>
+            <div class="flashcard-term">VR Schedule</div>
+            <div class="flashcard-hint">Click to reveal →</div>
+          </div>
+          <div class="flashcard-back">
+            <span class="flashcard-tag tag-behavior">Behavioral</span>
+            <div class="flashcard-def"><strong>Variable-Ratio:</strong> Reinforcement after N responses on average. Produces <strong>highest, most persistent rates</strong> with minimal post-reinforcement pause. Hardest to extinguish. Example: slot machines.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flashcard" data-category="behavior" onclick="flipCard(this)">
+        <div class="flashcard-inner">
+          <div class="flashcard-front">
+            <span class="flashcard-tag tag-behavior">Behavioral</span>
+            <div class="flashcard-term">FI Schedule (Scalloped Curve)</div>
+            <div class="flashcard-hint">Click to reveal →</div>
+          </div>
+          <div class="flashcard-back">
+            <span class="flashcard-tag tag-behavior">Behavioral</span>
+            <div class="flashcard-def"><strong>Fixed-Interval:</strong> Reinforcement for first response after fixed time. Produces <strong>scalloped cumulative curve</strong> — slow start, accelerating toward interval end as animal times the gap. Example: checking a set-timer oven.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flashcard" data-category="behavior" onclick="flipCard(this)">
+        <div class="flashcard-inner">
+          <div class="flashcard-front">
+            <span class="flashcard-tag tag-behavior">Behavioral</span>
+            <div class="flashcard-term">VI Schedule</div>
+            <div class="flashcard-hint">Click to reveal →</div>
+          </div>
+          <div class="flashcard-back">
+            <span class="flashcard-tag tag-behavior">Behavioral</span>
+            <div class="flashcard-def"><strong>Variable-Interval:</strong> Reinforcement for first response after variable time. Produces <strong>steady moderate rates</strong> with no post-reinforcement pause. Example: checking a friend's unpredictably updated social post.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flashcard" data-category="behavior" onclick="flipCard(this)">
+        <div class="flashcard-inner">
+          <div class="flashcard-front">
+            <span class="flashcard-tag tag-behavior">Behavioral</span>
+            <div class="flashcard-term">Matching Law</div>
+            <div class="flashcard-hint">Click to reveal →</div>
+          </div>
+          <div class="flashcard-back">
+            <span class="flashcard-tag tag-behavior">Behavioral</span>
+            <div class="flashcard-def"><strong>Herrnstein (1961):</strong> On concurrent VI schedules, relative response rate approximately equals relative reinforcement rate. Rate(A)/Rate(B) = Reinforcement(A)/Reinforcement(B).</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flashcard" data-category="behavior" onclick="flipCard(this)">
+        <div class="flashcard-inner">
+          <div class="flashcard-front">
+            <span class="flashcard-tag tag-behavior">Behavioral</span>
+            <div class="flashcard-term">Delay Discounting</div>
+            <div class="flashcard-hint">Click to reveal →</div>
+          </div>
+          <div class="flashcard-back">
+            <span class="flashcard-tag tag-behavior">Behavioral</span>
+            <div class="flashcard-def">Future rewards are subjectively valued <strong>less than immediate rewards</strong>. Rate of discounting varies; adolescents discount more steeply than adults. Underlies impulsivity and self-control failures.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flashcard" data-category="behavior" onclick="flipCard(this)">
+        <div class="flashcard-inner">
+          <div class="flashcard-front">
+            <span class="flashcard-tag tag-behavior">Behavioral</span>
+            <div class="flashcard-term">Pre-commitment</div>
+            <div class="flashcard-hint">Click to reveal →</div>
+          </div>
+          <div class="flashcard-back">
+            <span class="flashcard-tag tag-behavior">Behavioral</span>
+            <div class="flashcard-def">Deliberately making the immediate reward <strong>harder to access</strong> to support long-term goals. Examples: gym membership, study group, removing junk food from home.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flashcard" data-category="behavior" onclick="flipCard(this)">
+        <div class="flashcard-inner">
+          <div class="flashcard-front">
+            <span class="flashcard-tag tag-behavior">Behavioral</span>
+            <div class="flashcard-term">Bliss Point</div>
+            <div class="flashcard-hint">Click to reveal →</div>
+          </div>
+          <div class="flashcard-back">
+            <span class="flashcard-tag tag-behavior">Behavioral</span>
+            <div class="flashcard-def">The behavioral allocation that <strong>maximizes the individual's subjective value</strong>. In behavioral economics: the unconstrained preferred consumption point — where indifference curves peak.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- NEURAL TERMS -->
+      <div class="flashcard" data-category="neuro" onclick="flipCard(this)">
+        <div class="flashcard-inner">
+          <div class="flashcard-front">
+            <span class="flashcard-tag tag-neuro">Neural</span>
+            <div class="flashcard-term">Dorsal Striatum (S-R learning, habits)</div>
+            <div class="flashcard-hint">Click to reveal →</div>
+          </div>
+          <div class="flashcard-back">
+            <span class="flashcard-tag tag-neuro">Neural</span>
+            <div class="flashcard-def">Caudate + putamen. Associates <strong>discriminative stimuli with responses</strong>. Lesion: impairs cue-guided responding; habitual S-R associations. Critical for Parkinson's (Go pathway) and Huntington's disease.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flashcard" data-category="neuro" onclick="flipCard(this)">
+        <div class="flashcard-inner">
+          <div class="flashcard-front">
+            <span class="flashcard-tag tag-neuro">Neural</span>
+            <div class="flashcard-term">Orbitofrontal Cortex (R-O learning)</div>
+            <div class="flashcard-hint">Click to reveal →</div>
+          </div>
+          <div class="flashcard-back">
+            <span class="flashcard-tag tag-neuro">Neural</span>
+            <div class="flashcard-def">Links responses to <strong>expected outcome identity</strong>. Receives multimodal + visceral signals. Lesion: impairs reversal learning; steepens delay discounting. OFC neurons fire during anticipatory delay coding which reward to expect.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flashcard" data-category="neuro" onclick="flipCard(this)">
+        <div class="flashcard-inner">
+          <div class="flashcard-front">
+            <span class="flashcard-tag tag-neuro">Neural</span>
+            <div class="flashcard-term">Go/No-Go Pathways (Direct D1; Indirect D2)</div>
+            <div class="flashcard-hint">Click to reveal →</div>
+          </div>
+          <div class="flashcard-back">
+            <span class="flashcard-tag tag-neuro">Neural</span>
+            <div class="flashcard-def"><strong>Go (direct, D1):</strong> Dopamine excites D1 striatum → inhibits GPi → disinhibits thalamus → facilitates action.<br><strong>No-Go (indirect, D2):</strong> Dopamine inhibits D2 striatum → GPe → STN → GPi → suppresses competing actions.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flashcard" data-category="neuro" onclick="flipCard(this)">
+        <div class="flashcard-inner">
+          <div class="flashcard-front">
+            <span class="flashcard-tag tag-neuro">Neural</span>
+            <div class="flashcard-term">Incentive Salience (Wanting / Dopamine)</div>
+            <div class="flashcard-hint">Click to reveal →</div>
+          </div>
+          <div class="flashcard-back">
+            <span class="flashcard-tag tag-neuro">Neural</span>
+            <div class="flashcard-def">Berridge's term for the <strong>motivation to seek and work for reward</strong>, mediated by dopamine. Distinct from hedonic liking. Sensitized in addiction → escalating craving despite declining pleasure.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flashcard" data-category="neuro" onclick="flipCard(this)">
+        <div class="flashcard-inner">
+          <div class="flashcard-front">
+            <span class="flashcard-tag tag-neuro">Neural</span>
+            <div class="flashcard-term">Endogenous Opioids (Liking)</div>
+            <div class="flashcard-hint">Click to reveal →</div>
+          </div>
+          <div class="flashcard-back">
+            <span class="flashcard-tag tag-neuro">Neural</span>
+            <div class="flashcard-def">Enkephalins and endorphins mediate <strong>hedonic pleasure from consumption</strong>. Morphine increases sweet preference; naloxone reduces it. Preserved in dopamine-depleted animals confirming dissociation from wanting.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flashcard" data-category="neuro" onclick="flipCard(this)">
+        <div class="flashcard-inner">
+          <div class="flashcard-front">
+            <span class="flashcard-tag tag-neuro">Neural</span>
+            <div class="flashcard-term">Extinction Mimicry (Pimozide)</div>
+            <div class="flashcard-hint">Click to reveal →</div>
+          </div>
+          <div class="flashcard-back">
+            <span class="flashcard-tag tag-neuro">Neural</span>
+            <div class="flashcard-def">Pimozide (dopamine blocker) stops lever-pressing even though food is still delivered per press. Looked like extinction — but hedonic facial reactions to food remained intact. Confirms <strong>dopamine drives wanting, not liking</strong>.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flashcard" data-category="neuro" onclick="flipCard(this)">
+        <div class="flashcard-inner">
+          <div class="flashcard-front">
+            <span class="flashcard-tag tag-neuro">Neural</span>
+            <div class="flashcard-term">PIT (Pavlovian-to-Instrumental Transfer)</div>
+            <div class="flashcard-hint">Click to reveal →</div>
+          </div>
+          <div class="flashcard-back">
+            <span class="flashcard-tag tag-neuro">Neural</span>
+            <div class="flashcard-def">A Pavlovian CS (trained separately, no response required) <strong>modulates vigor of an ongoing instrumental response</strong>. Specific PIT (BLA → NAc shell) vs. General PIT (CeA → NAc core via VTA).</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flashcard" data-category="neuro" onclick="flipCard(this)">
+        <div class="flashcard-inner">
+          <div class="flashcard-front">
+            <span class="flashcard-tag tag-neuro">Neural</span>
+            <div class="flashcard-term">Intracranial Self-Stimulation</div>
+            <div class="flashcard-hint">Click to reveal →</div>
+          </div>
+          <div class="flashcard-back">
+            <span class="flashcard-tag tag-neuro">Neural</span>
+            <div class="flashcard-def">Olds (1955): rats press a lever thousands of times/hour for <strong>VTA/lateral hypothalamus stimulation</strong>, preferring it to food. Established dopamine neurons as powerful reinforcers of behavior.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- CLINICAL TERMS -->
+      <div class="flashcard" data-category="clinical" onclick="flipCard(this)">
+        <div class="flashcard-inner">
+          <div class="flashcard-front">
+            <span class="flashcard-tag tag-clinical">Clinical</span>
+            <div class="flashcard-term">Pathological Addiction</div>
+            <div class="flashcard-hint">Click to reveal →</div>
+          </div>
+          <div class="flashcard-back">
+            <span class="flashcard-tag tag-clinical">Clinical</span>
+            <div class="flashcard-def">Compulsive drug-seeking <strong>maintained despite known harmful consequences</strong>. Driven by positive reinforcement (the high) + negative reinforcement (withdrawal avoidance). Reflects sensitized wanting + down-regulated liking over time.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flashcard" data-category="clinical" onclick="flipCard(this)">
+        <div class="flashcard-inner">
+          <div class="flashcard-front">
+            <span class="flashcard-tag tag-clinical">Clinical</span>
+            <div class="flashcard-term">Wanting/Liking Dissociation (Berridge)</div>
+            <div class="flashcard-hint">Click to reveal →</div>
+          </div>
+          <div class="flashcard-back">
+            <span class="flashcard-tag tag-clinical">Clinical</span>
+            <div class="flashcard-def">You can <strong>want without liking</strong> (dopamine-antagonized rats stop working but still prefer sucrose) and <strong>like without wanting</strong>. Separable neural systems: dopamine (wanting) vs. opioids (liking). Clinical implication: addicts crave intensely but no longer enjoy the drug.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flashcard" data-category="clinical" onclick="flipCard(this)">
+        <div class="flashcard-inner">
+          <div class="flashcard-front">
+            <span class="flashcard-tag tag-clinical">Clinical</span>
+            <div class="flashcard-term">Specific PIT (BLA → NAc shell)</div>
+            <div class="flashcard-hint">Click to reveal →</div>
+          </div>
+          <div class="flashcard-back">
+            <span class="flashcard-tag tag-clinical">Clinical</span>
+            <div class="flashcard-def">CS modulates <strong>only the response linked to the same outcome</strong> (outcome-specific). Mediated by basolateral amygdala (BLA) projecting to nucleus accumbens shell. Relevant to specific cue-triggered relapse.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flashcard" data-category="clinical" onclick="flipCard(this)">
+        <div class="flashcard-inner">
+          <div class="flashcard-front">
+            <span class="flashcard-tag tag-clinical">Clinical</span>
+            <div class="flashcard-term">General PIT (CeA → NAc core via VTA)</div>
+            <div class="flashcard-hint">Click to reveal →</div>
+          </div>
+          <div class="flashcard-back">
+            <span class="flashcard-tag tag-clinical">Clinical</span>
+            <div class="flashcard-def">CS increases <strong>all instrumental responses non-selectively</strong> (general motivational boost). Mediated by central amygdala (CeA) projecting to nucleus accumbens core via VTA. Relevant to general stress/arousal-induced relapse.</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div><!-- /tab-terms -->
+
+
+  <!-- ════════════════════════════ QUIZ ════════════════════════════ -->
+  <div class="tab-panel" id="tab-quiz">
+    <div style="margin-bottom:1.5rem;">
+      <h2 style="font-size:1.3rem;margin-bottom:.4rem;">Practice Multiple Choice — 20 Questions</h2>
+      <p style="color:var(--gray-light);font-size:.9rem;">Click an option to check your answer. Explanations appear automatically.</p>
+    </div>
+
+    <div class="quiz-stats">
+      <div class="stat-item"><div class="stat-val blue" id="statTotal">20</div><div class="stat-lbl">Questions</div></div>
+      <div class="stat-item"><div class="stat-val green" id="statCorrect">0</div><div class="stat-lbl">Correct</div></div>
+      <div class="stat-item"><div class="stat-val red" id="statWrong">0</div><div class="stat-lbl">Incorrect</div></div>
+      <div class="stat-item"><div class="stat-val" id="statPct" style="color:var(--gray-light);">—</div><div class="stat-lbl">Score</div></div>
+      <button class="quiz-reset-btn" onclick="resetQuiz()">Reset Quiz</button>
+    </div>
+
+    <div id="quizContainer"></div>
+  </div><!-- /tab-quiz -->
+
+
+  <!-- ════════════════════════════ SYNTHESIS ════════════════════════════ -->
+  <div class="tab-panel" id="tab-synthesis">
+    <div style="margin-bottom:1.5rem;">
+      <h2 style="font-size:1.3rem;margin-bottom:.4rem;">Big Picture Synthesis</h2>
+      <p style="color:var(--gray-light);font-size:.9rem;">How the week's concepts connect across levels of analysis and to the course arc.</p>
+    </div>
+
+    <div class="callout connect" style="margin-bottom:1.5rem;">
+      <div class="callout-title">The Unifying Principle</div>
+      Operant conditioning reveals how organisms learn <strong>which actions to repeat</strong>. Dopamine drives the motivation to seek rewards (wanting); opioids deliver the pleasure of having them (liking). The basal ganglia implement this at the circuit level — Go/D1 selects actions, No-Go/D2 suppresses competitors, and the OFC represents what outcome is expected.
+    </div>
+
+    <p style="font-size:.8rem;color:var(--gray);margin-bottom:.75rem;font-weight:600;letter-spacing:.04em;text-transform:uppercase;">Levels of Analysis</p>
+    <div class="levels-strip">
+      <div class="level-col">
+        <div class="level-label" style="color:#a5b4fc;">Behavior</div>
+        <div class="level-items">
+          <div class="level-item" style="background:rgba(99,102,241,.1);color:#c7d2fe;">S-R-O framework; reinforcement schedules</div>
+          <div class="level-item" style="background:rgba(99,102,241,.08);color:#c7d2fe;">Matching law; delay discounting</div>
+          <div class="level-item" style="background:rgba(99,102,241,.06);color:#c7d2fe;">Pavlovian-to-Instrumental Transfer</div>
+        </div>
+      </div>
+      <div class="level-col">
+        <div class="level-label" style="color:#67e8f9;">Circuit</div>
+        <div class="level-items">
+          <div class="level-item" style="background:rgba(6,182,212,.1);color:#a5f3fc;">Direct (Go/D1) &amp; Indirect (No-Go/D2) pathways</div>
+          <div class="level-item" style="background:rgba(6,182,212,.08);color:#a5f3fc;">Dorsal striatum (S-R); OFC (R-O)</div>
+          <div class="level-item" style="background:rgba(6,182,212,.06);color:#a5f3fc;">BLA/CeA (Specific/General PIT)</div>
+        </div>
+      </div>
+      <div class="level-col">
+        <div class="level-label" style="color:#6ee7b7;">Synapse</div>
+        <div class="level-items">
+          <div class="level-item" style="background:rgba(16,185,129,.1);color:#a7f3d0;">Dopamine: D1 excites, D2 inhibits</div>
+          <div class="level-item" style="background:rgba(16,185,129,.08);color:#a7f3d0;">Opioids: hedonic pleasure</div>
+          <div class="level-item" style="background:rgba(16,185,129,.06);color:#a7f3d0;">DAT blockade (cocaine); DA release (amphetamine)</div>
+        </div>
+      </div>
+      <div class="level-col">
+        <div class="level-label" style="color:#fcd34d;">Structure</div>
+        <div class="level-items">
+          <div class="level-item" style="background:rgba(245,158,11,.1);color:#fde68a;">Corticostriatal loops (parallel channels)</div>
+          <div class="level-item" style="background:rgba(245,158,11,.08);color:#fde68a;">GPi/SNr: tonic inhibition of thalamus</div>
+          <div class="level-item" style="background:rgba(245,158,11,.06);color:#fde68a;">SNc/VTA: dopamine source</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="synthesis-grid">
+      <div class="synth-card">
+        <div class="synth-card-title">
+          <div class="synth-dot" style="background:var(--rose);"></div>
+          <span style="color:var(--rose);">Likely Exam Themes</span>
+        </div>
+        <ul>
+          <li>Identify the reinforcement schedule from a scenario; predict <span>response pattern and persistence</span></li>
+          <li>Distinguish <span>negative reinforcement from punishment</span> — most common error on this topic</li>
+          <li>Apply <span>wanting/liking dissociation</span>: which neurotransmitter, which experimental evidence</li>
+          <li>Trace the <span>Go/No-Go basal ganglia pathways</span> with receptor types and output nuclei</li>
+          <li>Contrast <span>dorsal striatum (S-R) vs. OFC (R-O)</span> and predict lesion effects</li>
+          <li>Describe the <span>three-phase PIT procedure</span> and distinguish specific vs. general PIT neural substrates</li>
+          <li>Explain addiction as a <span>wanting/liking dissociation</span> with cocaine/amphetamine mechanisms</li>
+        </ul>
+      </div>
+      <div class="synth-card">
+        <div class="synth-card-title">
+          <div class="synth-dot" style="background:var(--accent);"></div>
+          <span style="color:var(--accent);">Cross-Course Connections</span>
+        </div>
+        <ul>
+          <li><span>Dopamine PE signal</span> (Weeks 5–7) becomes the motivational wanting signal here</li>
+          <li>Basal ganglia direct/indirect → <span>Module 10</span> (skill memory, actor-critic framework)</li>
+          <li><span>PIT bridges classical (Weeks 6–7)</span> and instrumental conditioning</li>
+          <li>Delay discounting connects to <span>economic decision-making</span> frameworks</li>
+          <li><span>Matching law</span> = behavioral-level implementation of value-based choice</li>
+          <li>OFC outcome representation → <span>model-based RL</span>: knowing expected outcomes enables flexible planning</li>
+        </ul>
+      </div>
+    </div>
+  </div><!-- /tab-synthesis -->
+
+</main>
+
+<script>
+// ─── TAB NAVIGATION ───
+document.querySelectorAll('.tab-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById('tab-' + btn.dataset.tab).classList.add('active');
+  });
+});
+
+// ─── COLLAPSIBLE SECTIONS ───
+function toggleSection(header) {
+  const section = header.closest('.study-section');
+  section.classList.toggle('open');
+}
+
+// ─── FLASHCARDS ───
+function flipCard(card) {
+  card.classList.toggle('flipped');
+}
+
+let allFlipped = false;
+document.getElementById('flipAllBtn').addEventListener('click', function() {
+  allFlipped = !allFlipped;
+  const visible = Array.from(document.querySelectorAll('.flashcard')).filter(c => c.style.display !== 'none');
+  visible.forEach(c => { if (allFlipped) c.classList.add('flipped'); else c.classList.remove('flipped'); });
+  this.textContent = allFlipped ? 'Hide All' : 'Reveal All';
+});
+
+document.querySelectorAll('.filter-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    const filter = btn.dataset.filter;
+    document.querySelectorAll('.flashcard').forEach(card => {
+      if (filter === 'all' || card.dataset.category === filter) {
+        card.style.display = '';
+      } else {
+        card.style.display = 'none';
+      }
+    });
+    allFlipped = false;
+    document.getElementById('flipAllBtn').textContent = 'Reveal All';
+  });
+});
+
+// ─── QUIZ DATA ───
+const questions = [
+  {
+    text: "Thorndike's law of effect states that a response followed by a satisfying outcome will:",
+    options: [
+      "Decrease in frequency due to habituation to the reward",
+      "Increase in frequency, strengthening the stimulus-response association",
+      "Become independent of any discriminative stimulus",
+      "Transfer automatically to new stimuli through generalization"
+    ],
+    correct: 1,
+    tag: "Law of Effect",
+    explanation: "<strong>Satisfying outcomes increase response frequency</strong> and strengthen the S-R association. This is the foundation of operant learning, directly paralleling the Rescorla-Wagner update rule: a positive outcome is like a positive prediction error."
+  },
+  {
+    text: "The key difference between classical and operant conditioning is:",
+    options: [
+      "In classical conditioning, the animal performs an action to get a reward",
+      "In operant conditioning, the outcome only arrives if the animal makes a response; in classical, it arrives regardless",
+      "Classical conditioning is studied in mammals only",
+      "Operant conditioning involves only aversive stimuli"
+    ],
+    correct: 1,
+    tag: "Classical vs. Operant",
+    explanation: "<strong>Response contingency</strong> is the defining feature of operant conditioning. In classical conditioning, the US follows the CS whether or not any response occurs. In operant, the outcome is contingent on the response."
+  },
+  {
+    text: "In Thorndike's puzzle-box experiment, which correctly maps onto the S-R-O framework?",
+    options: [
+      "S=food reward, R=entering box, O=cat's hunger state",
+      "S=puzzle box environment, R=sequence of movements to open door, O=escape and access to food",
+      "S=Thorndike's observation, R=cat's meowing, O=experimenter opening door",
+      "S=door latch, R=trial duration, O=cat's decrease in anxiety"
+    ],
+    correct: 1,
+    tag: "S-R-O Framework",
+    explanation: "<strong>S=box (context), R=movement sequence, O=escape+food</strong>. Standard S-R-O mapping for Thorndike's procedure. The box is the discriminative stimulus, the lever/rope sequence is the response, and escape plus food is the outcome."
+  },
+  {
+    text: "Shaping relies on which core principle?",
+    options: [
+      "Delivering reinforcement only when the animal produces the exact target behavior",
+      "Reinforcing successive approximations to the target behavior, guiding the animal incrementally",
+      "Pairing a neutral stimulus with a primary reinforcer",
+      "Allowing free access to the reinforcer to reduce motivational state before training"
+    ],
+    correct: 1,
+    tag: "Shaping",
+    explanation: "<strong>Shaping = reinforcing successive approximations.</strong> The full target behavior is never required at the outset — the organism is guided gradually toward the desired response. This is why shaping works for behaviors organisms are unlikely to spontaneously emit."
+  },
+  {
+    text: "In a fixed-ratio (FR-5) reinforcement schedule, an animal will typically show:",
+    options: [
+      "Steady uniform response rate with no pause after reinforcement",
+      "Scalloped cumulative curve reflecting uncertainty about timing",
+      "Consistent responding followed by a brief post-reinforcement pause before resuming",
+      "Rapid extinction because predictability reduces incentive value"
+    ],
+    correct: 2,
+    tag: "FR Schedule",
+    explanation: "<strong>FR schedules produce steady responding + a post-reinforcement pause.</strong> The animal knows reinforcement won't arrive immediately after earning it, so it pauses briefly before starting the next ratio run. The scalloped curve is the FI pattern, not FR."
+  },
+  {
+    text: "Slot machines are best classified as which reinforcement schedule?",
+    options: [
+      "Fixed-interval (FI) — payoffs at regular time intervals",
+      "Variable-ratio (VR) — payoffs after variable number of plays",
+      "Fixed-ratio (FR) — machine always pays after exactly 10 plays",
+      "Variable-interval (VI) — timing of payoffs varies"
+    ],
+    correct: 1,
+    tag: "VR Schedule",
+    explanation: "<strong>Slot machines = VR</strong>: the player never knows which pull will pay off. This unpredictability maximizes persistent responding and produces minimal post-reinforcement pause, making it the schedule that produces the most compelling and hardest-to-extinguish behavior."
+  },
+  {
+    text: "The matching law predicts that on two concurrently available VI schedules, relative response rate will:",
+    options: [
+      "Always favor the option with most recent reinforcement",
+      "Match the relative rate of reinforcement from each option",
+      "Equalize over time regardless of reinforcement rates",
+      "Follow a winner-take-all pattern"
+    ],
+    correct: 1,
+    tag: "Matching Law",
+    explanation: "<strong>Herrnstein (1961):</strong> response proportion approximates reinforcement proportion on concurrent VI schedules. Rate(A)/Rate(B) = Reinforcement(A)/Reinforcement(B). This is one of the most robust quantitative laws in behavioral science."
+  },
+  {
+    text: "During the basal ganglia lecture, the direct and indirect pathways were labeled functionally as:",
+    options: [
+      "Reward and punishment pathways",
+      "Go and No-Go pathways",
+      "Pavlovian and instrumental pathways",
+      "Wanting and liking pathways"
+    ],
+    correct: 1,
+    tag: "Basal Ganglia",
+    explanation: "<strong>Go (direct, D1, facilitates action) and No-Go (indirect, D2, suppresses competing actions)</strong> are the standard functional labels. The Go pathway releases a selected action from tonic inhibition; the No-Go pathway suppresses competing motor programs."
+  },
+  {
+    text: "D1 dopamine receptors on direct pathway neurons are EXCITED by dopamine; D2 on indirect pathway neurons are INHIBITED by dopamine. The net functional consequence of dopamine release is:",
+    options: [
+      "Dopamine suppresses both pathways, reducing all motor output",
+      "Dopamine promotes selected actions via direct pathway AND suppresses competing actions via indirect pathway",
+      "Dopamine has opposite effects on cognition vs motor control",
+      "Dopamine only modulates the indirect pathway"
+    ],
+    correct: 1,
+    tag: "Dopamine D1/D2",
+    explanation: "<strong>Via D1: promotes Go. Via D2: suppresses No-Go.</strong> Together, dopamine tips the balance toward executing the rewarded action — a dual mechanism of selection and suppression. This is why dopamine depletion in Parkinson's impairs both movement initiation and action selection."
+  },
+  {
+    text: "The dorsal striatum is particularly important for which component of the S-R-O framework?",
+    options: [
+      "Associating response with expected outcome (R-O learning)",
+      "Associating discriminative stimulus with appropriate response (S-R learning)",
+      "Computing the prediction error that updates expected rewards",
+      "Encoding hedonic value of primary reinforcer after consumption"
+    ],
+    correct: 1,
+    tag: "Dorsal Striatum",
+    explanation: "<strong>Dorsal striatum = S-R learning.</strong> OFC = R-O learning. Confirmed by lesion dissociations: striatum lesions impair discriminative cue-guided responding; simple R-O association survives. The striatum is where habitual, cue-driven responses are stored."
+  },
+  {
+    text: "The OFC is most critical for:",
+    options: [
+      "Storing S-R associations that become automatic habits",
+      "Representing predicted outcomes and linking responses to expected reward identity",
+      "Computing timing of post-reinforcement pauses in FR schedules",
+      "Driving the Go signal releasing motor inhibition from GPi"
+    ],
+    correct: 1,
+    tag: "Orbitofrontal Cortex",
+    explanation: "<strong>OFC receives multimodal sensory + visceral signals and represents predicted outcomes.</strong> Critical for linking responses to expected reward identity — not just whether reward will occur, but which specific reward. OFC lesions impair reversal learning and steepen delay discounting."
+  },
+  {
+    text: "In the Schoenbaum et al. odor task, certain OFC neurons fired strongly during error trials (nose-poke after the odor predicting quinine). This indicates:",
+    options: [
+      "OFC neurons encode discriminative stimulus identity, not upcoming outcome",
+      "OFC neurons signal a reward prediction error after outcome is delivered",
+      "OFC neurons represent expected outcomes during the anticipatory delay, coding specifically for aversive quinine",
+      "OFC activity reflects a motor command to withdraw from the odor port"
+    ],
+    correct: 2,
+    tag: "OFC — Schoenbaum",
+    explanation: "<strong>OFC neurons fire during the anticipatory delay specifically predicting the aversive quinine outcome.</strong> They are tuned to outcome identity — which specific reward will arrive — not just valence (good vs. bad) or the motor response. This demonstrates OFC's role in R-O learning."
+  },
+  {
+    text: "Kent Berridge's work dissociates two types of value. Which statement correctly characterizes his distinction?",
+    options: [
+      "Hedonic value reflects motivation to work; motivational value reflects how pleasant the reward is",
+      "Hedonic value reflects pleasure of consuming; motivational value reflects drive to seek and work for reward",
+      "Hedonic value is encoded by dopamine; motivational value by opioids",
+      "Wanting and liking always activate together and cannot be experimentally separated"
+    ],
+    correct: 1,
+    tag: "Wanting vs. Liking",
+    explanation: "<strong>Berridge's distinction: LIKING = hedonic pleasure from consumption (opioids). WANTING = incentive salience / motivation to seek (dopamine).</strong> Both necessary but separable neural systems. They can dissociate — addicts often want intensely but no longer like the drug."
+  },
+  {
+    text: "In the extinction mimicry experiment, pimozide-treated rats stopped lever-pressing even though food was still delivered for each press. The most parsimonious interpretation:",
+    options: [
+      "Pimozide reduced physical ability to press lever (motor deficit)",
+      "Blocking dopamine reduced hedonic value of food so rats no longer enjoyed eating",
+      "Blocking dopamine reduced 'wanting' (incentive salience) so rats were unmotivated to work, though hedonic 'liking' remained intact",
+      "Pimozide eliminated rats' memory of lever-food association"
+    ],
+    correct: 2,
+    tag: "Extinction Mimicry",
+    explanation: "<strong>Pimozide blocked wanting (lever-pressing stopped) but not liking</strong> — food placed in mouth → normal hedonic 'yum' facial reactions. This confirms dopamine drives motivation to work, not pleasure of consumption. The behavior looked like extinction but the mechanism was different."
+  },
+  {
+    text: "Which evidence most directly supports that endogenous opioids (not dopamine) mediate hedonic 'liking'?",
+    options: [
+      "Rats given naloxone press lever less frequently for sugar pellets",
+      "Rats with destroyed dopamine neurons show reduced 'yum' facial reactions",
+      "Rats with destroyed dopamine neurons show intact hedonic facial reactions (tongue protrusion to sweet, gapes to bitter)",
+      "Parkinson's patients report reduced pleasure from sweet tastes"
+    ],
+    correct: 2,
+    tag: "Hedonic Liking / Opioids",
+    explanation: "<strong>Dopamine-depleted rats show normal tongue protrusion (yum) to sweet and normal gapes (yuck) to bitter.</strong> These phylogenetically conserved facial reactions are intact, confirming opioids carry the hedonic signal — not dopamine. Dopamine is required for working to obtain rewards, not for enjoying them."
+  },
+  {
+    text: "Cocaine and amphetamine both increase synaptic dopamine, but through different mechanisms:",
+    options: [
+      "Cocaine causes dopamine neurons to synthesize more dopamine; amphetamine blocks reuptake",
+      "Cocaine blocks dopamine reuptake (DAT blocker) so dopamine lingers; amphetamine triggers release of larger quantities",
+      "Both block D2 receptors on postsynaptic neurons",
+      "Cocaine acts on opioid receptors; amphetamine on dopamine receptors"
+    ],
+    correct: 1,
+    tag: "Cocaine vs. Amphetamine",
+    explanation: "<strong>Cocaine = DAT blocker</strong> (dopamine lingers longer in synapse because reuptake is blocked). <strong>Amphetamine = triggers release</strong> of more dopamine from vesicles. Both increase synaptic dopamine via different mechanisms, producing the wanting/craving that drives addiction."
+  },
+  {
+    text: "PIT (Pavlovian-to-Instrumental Transfer) is formally defined as:",
+    options: [
+      "A discriminative stimulus trained in instrumental context acquires Pavlovian properties",
+      "A Pavlovian CS modulates the vigor or rate of an ongoing instrumental response WITHOUT the CS being contingent on that response",
+      "An animal transfers its Pavlovian CR to a new instrumental context by observing another animal",
+      "Instrumental response rates decrease in presence of a CS associated with punishment"
+    ],
+    correct: 1,
+    tag: "PIT Definition",
+    explanation: "<strong>PIT formal definition:</strong> a Pavlovian CS (trained separately, no response required during Pavlovian phase) modulates ongoing instrumental responding without being part of the instrumental contingency. This bridges classical and instrumental conditioning."
+  },
+  {
+    text: "Specific PIT is attributed to which neural substrate?",
+    options: [
+      "Central amygdala, encoding general motivational arousal",
+      "Basolateral amygdala (BLA), encoding outcome-specific values projecting to nucleus accumbens shell",
+      "Orbitofrontal cortex, storing discriminative stimulus-response associations",
+      "Dorsal striatum, releasing habitual S-R behavior in presence of familiar cues"
+    ],
+    correct: 1,
+    tag: "PIT Neural Substrates",
+    explanation: "<strong>Specific PIT: BLA encodes outcome-specific values, projects to NAc shell.</strong> General PIT: CeA projects to NAc core via VTA for non-specific motivational arousal. Knowing this double dissociation is a common exam target."
+  },
+  {
+    text: "A person who quit smoking still reaches into their pocket upon walking into a bar where they used to smoke. This illustrates:",
+    options: [
+      "Extinction of instrumental response due to context change",
+      "Negative reinforcement of avoidance behavior",
+      "PIT: a Pavlovian cue (bar = CS associated with nicotine high) potentiates instrumental response (reaching) even though response no longer produces outcome",
+      "FI responding: bar acts as a timer for the next cigarette break"
+    ],
+    correct: 2,
+    tag: "PIT — Clinical",
+    explanation: "<strong>The bar is a Pavlovian CS</strong> associated with the nicotine high. Via PIT, it potentiates the reaching instrumental response even when quitting has removed the cigarette. This is the mechanism of cue-induced craving and relapse — a key clinical application of PIT."
+  },
+  {
+    text: "Which clinical observation most directly supports that long-term addiction involves a WANTING/LIKING dissociation?",
+    options: [
+      "Long-term cocaine users often report no longer experiencing a strong high ('liking') but continue to crave intensely ('wanting')",
+      "Addicts consistently report that hedonic pleasure increases with each use",
+      "Withdrawal from opioids is driven entirely by insular pain circuits",
+      "Behavioral addictions do not activate the dopaminergic system"
+    ],
+    correct: 0,
+    tag: "Addiction — Wanting/Liking",
+    explanation: "<strong>Long-term users report diminished liking (no longer get same high) but escalated wanting (intense craving).</strong> This is the incentive salience dissociation applied to addiction: dopamine wanting system sensitized over time; opioid liking system down-regulated. This explains why addicts keep seeking despite no longer enjoying the drug."
+  }
+];
+
+let quizState = {};
+
+function buildQuiz() {
+  const container = document.getElementById('quizContainer');
+  container.innerHTML = '';
+  quizState = {};
+
+  questions.forEach((q, i) => {
+    quizState[i] = null;
+    const card = document.createElement('div');
+    card.className = 'q-card';
+    card.id = 'q-' + i;
+
+    const optsHtml = q.options.map((opt, j) =>
+      `<button class="q-opt" data-qi="${i}" data-oi="${j}" onclick="answerQ(${i},${j})">${String.fromCharCode(65+j)}. ${opt}</button>`
+    ).join('');
+
+    card.innerHTML = `
+      <div class="q-header">
+        <div class="q-meta">
+          <span class="q-num">${i+1}</span>
+          <span class="q-tag">${q.tag}</span>
+          <span class="q-status" id="qs-${i}"></span>
+        </div>
+        <div class="q-text">${q.text}</div>
+      </div>
+      <div class="q-options">${optsHtml}</div>
+      <div class="q-explanation hidden" id="qe-${i}">${q.explanation}</div>
+    `;
+    container.appendChild(card);
+  });
+  updateStats();
+}
+
+function answerQ(qi, oi) {
+  if (quizState[qi] !== null) return;
+  quizState[qi] = oi;
+
+  const card = document.getElementById('q-' + qi);
+  const opts = card.querySelectorAll('.q-opt');
+  const isCorrect = oi === questions[qi].correct;
+
+  opts.forEach((btn, j) => {
+    btn.disabled = true;
+    if (j === questions[qi].correct) btn.classList.add('show-correct');
+  });
+  if (!isCorrect) {
+    opts[oi].classList.remove('show-correct');
+    opts[oi].classList.add('selected-wrong');
+  } else {
+    opts[oi].classList.add('selected-correct');
+  }
+
+  card.classList.add(isCorrect ? 'correct' : 'incorrect');
+  document.getElementById('qs-' + qi).textContent = isCorrect ? '✓ Correct' : '✗ Incorrect';
+  document.getElementById('qs-' + qi).style.color = isCorrect ? 'var(--emerald)' : 'var(--rose)';
+  document.getElementById('qe-' + qi).classList.remove('hidden');
+
+  updateStats();
+}
+
+function updateStats() {
+  const answered = Object.values(quizState).filter(v => v !== null).length;
+  const correct = Object.entries(quizState).filter(([i, v]) => v !== null && v === questions[i].correct).length;
+  const wrong = answered - correct;
+  document.getElementById('statCorrect').textContent = correct;
+  document.getElementById('statWrong').textContent = wrong;
+  const pctEl = document.getElementById('statPct');
+  if (answered > 0) {
+    const pct = Math.round((correct / answered) * 100);
+    pctEl.textContent = pct + '%';
+    pctEl.style.color = pct >= 80 ? 'var(--emerald)' : pct >= 60 ? 'var(--amber)' : 'var(--rose)';
+  } else {
+    pctEl.textContent = '—';
+    pctEl.style.color = 'var(--gray-light)';
+  }
+  // update topbar progress
+  const pct = (answered / 20) * 100;
+  document.getElementById('quizProgressBar').style.width = pct + '%';
+  document.getElementById('quizProgressLabel').textContent = answered + ' / 20';
+}
+
+function resetQuiz() {
+  buildQuiz();
+}
+
+// ─── SCROLL PROGRESS ───
+window.addEventListener('scroll', () => {
+  const el = document.documentElement;
+  const pct = (el.scrollTop / (el.scrollHeight - el.clientHeight)) * 100;
+  document.getElementById('scrollProgress').style.width = pct + '%';
+});
+
+// ─── INIT ───
+buildQuiz();
+</script>
+</body>
+</html>
