@@ -1,0 +1,1479 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Module 10 Exam Prep — Skill Memory & Brain-Machine Interfaces</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --primary: #6366f1;
+      --primary-dark: #4f46e5;
+      --secondary: #ec4899;
+      --accent: #06b6d4;
+      --emerald: #10b981;
+      --amber: #f59e0b;
+      --rose: #f43f5e;
+      --dark: #0f172a;
+      --dark-light: #1e293b;
+      --dark-mid: #162032;
+      --gray: #64748b;
+      --gray-light: #94a3b8;
+      --light: #f1f5f9;
+      --white: #ffffff;
+      --border: rgba(255,255,255,0.08);
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--dark);
+      color: var(--white);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* ─── ANIMATED BACKGROUND ─── */
+    .bg-layer {
+      position: fixed; inset: 0; z-index: -1; pointer-events: none;
+      background:
+        radial-gradient(ellipse 80% 60% at 20% 10%, rgba(99,102,241,.12) 0%, transparent 60%),
+        radial-gradient(ellipse 60% 60% at 80% 80%, rgba(236,72,153,.08) 0%, transparent 60%),
+        radial-gradient(ellipse 40% 40% at 50% 50%, rgba(6,182,212,.05) 0%, transparent 60%);
+      animation: bgPulse 20s ease-in-out infinite;
+    }
+    @keyframes bgPulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.7; transform: scale(1.05); }
+    }
+
+    /* ─── TOPBAR ─── */
+    .topbar {
+      position: sticky; top: 0; z-index: 100;
+      padding: .75rem 2rem;
+      background: rgba(15,23,42,.85);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 1rem;
+    }
+    .topbar-left { display: flex; align-items: center; gap: 1rem; }
+    .back-link {
+      display: flex; align-items: center; gap: .5rem;
+      color: var(--gray-light); text-decoration: none; font-size: .85rem;
+      transition: color .2s;
+    }
+    .back-link:hover { color: var(--white); }
+    .back-link svg { flex-shrink: 0; }
+    .breadcrumb { color: var(--gray); font-size: .8rem; }
+    .breadcrumb span { color: var(--primary); }
+
+    .progress-bar-wrap {
+      flex: 1; max-width: 240px;
+      background: rgba(255,255,255,.08); border-radius: 99px; height: 6px; overflow: hidden;
+    }
+    .progress-bar-fill {
+      height: 100%; border-radius: 99px;
+      background: linear-gradient(90deg, var(--primary), var(--secondary));
+      transition: width .5s ease;
+      width: 0%;
+    }
+    .progress-label { font-size: .75rem; color: var(--gray); white-space: nowrap; }
+
+    /* ─── HERO ─── */
+    .hero {
+      padding: 5rem 2rem 3rem;
+      max-width: 900px; margin: 0 auto; text-align: center;
+    }
+    .module-badge {
+      display: inline-flex; align-items: center; gap: .5rem;
+      background: rgba(99,102,241,.15); border: 1px solid rgba(99,102,241,.3);
+      color: #a5b4fc; border-radius: 99px; padding: .35rem 1rem; font-size: .8rem;
+      font-weight: 600; letter-spacing: .05em; text-transform: uppercase; margin-bottom: 1.5rem;
+    }
+    .hero h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      line-height: 1.15; margin-bottom: 1rem;
+      background: linear-gradient(135deg, #fff 40%, #a5b4fc);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    }
+    .hero-subtitle { color: var(--gray-light); font-size: 1.05rem; max-width: 600px; margin: 0 auto 2rem; }
+
+    .tab-nav {
+      display: flex; gap: .5rem; justify-content: center;
+      flex-wrap: wrap; margin-bottom: 1rem;
+    }
+    .tab-btn {
+      padding: .6rem 1.2rem; border-radius: 99px; border: 1px solid var(--border);
+      background: rgba(255,255,255,.04); color: var(--gray-light);
+      font-size: .875rem; font-weight: 500; cursor: pointer; transition: all .2s;
+      font-family: 'Inter', sans-serif;
+    }
+    .tab-btn:hover { background: rgba(99,102,241,.12); color: var(--white); border-color: rgba(99,102,241,.4); }
+    .tab-btn.active {
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      color: var(--white); border-color: transparent;
+    }
+
+    /* ─── MAIN LAYOUT ─── */
+    .main { max-width: 900px; margin: 0 auto; padding: 0 2rem 6rem; }
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; animation: fadeIn .3s ease; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+    /* ─── SECTION CARDS (Study Guide) ─── */
+    .study-section {
+      border: 1px solid var(--border);
+      border-radius: 16px; overflow: hidden;
+      background: rgba(255,255,255,.02);
+      margin-bottom: 1rem;
+      transition: border-color .2s;
+    }
+    .study-section:hover { border-color: rgba(99,102,241,.25); }
+    .study-section-header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1.1rem 1.5rem; cursor: pointer; user-select: none;
+      gap: 1rem;
+    }
+    .study-section-header-left { display: flex; align-items: center; gap: .85rem; }
+    .section-icon {
+      width: 36px; height: 36px; border-radius: 10px; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center; font-size: 1.1rem;
+    }
+    .section-title { font-size: 1rem; font-weight: 600; }
+    .section-num { font-size: .75rem; color: var(--gray); }
+    .chevron { color: var(--gray); transition: transform .25s; flex-shrink: 0; }
+    .study-section.open .chevron { transform: rotate(180deg); }
+    .study-section-body { display: none; padding: 0 1.5rem 1.5rem; }
+    .study-section.open .study-section-body { display: block; }
+
+    /* ─── CONTENT ELEMENTS ─── */
+    .prose { color: var(--gray-light); font-size: .95rem; }
+    .prose p { margin-bottom: .85rem; }
+    .prose p:last-child { margin-bottom: 0; }
+    .prose strong { color: var(--white); font-weight: 600; }
+    .prose em { color: #a5b4fc; font-style: normal; font-weight: 500; }
+
+    .callout {
+      border-radius: 10px; padding: 1rem 1.2rem; margin: 1rem 0;
+      border-left: 3px solid; font-size: .9rem;
+    }
+    .callout-title { font-weight: 600; margin-bottom: .4rem; font-size: .8rem; letter-spacing: .06em; text-transform: uppercase; }
+    .callout.warn { background: rgba(245,158,11,.07); border-color: var(--amber); color: #fcd34d; }
+    .callout.tip { background: rgba(99,102,241,.07); border-color: var(--primary); color: #a5b4fc; }
+    .callout.connect { background: rgba(6,182,212,.07); border-color: var(--accent); color: #67e8f9; }
+    .callout.exam { background: rgba(16,185,129,.07); border-color: var(--emerald); color: #6ee7b7; }
+
+    .prop-table, .contrast-table {
+      width: 100%; border-collapse: collapse; font-size: .875rem; margin: 1rem 0;
+    }
+    .prop-table th, .contrast-table th {
+      background: rgba(99,102,241,.15); color: #a5b4fc;
+      padding: .6rem .9rem; text-align: left; font-weight: 600; font-size: .78rem;
+      letter-spacing: .04em; text-transform: uppercase;
+    }
+    .prop-table td, .contrast-table td {
+      padding: .65rem .9rem; border-bottom: 1px solid rgba(255,255,255,.05);
+      color: var(--gray-light); vertical-align: top;
+    }
+    .prop-table tr:last-child td, .contrast-table tr:last-child td { border-bottom: none; }
+    .prop-table tr:hover td, .contrast-table tr:hover td { background: rgba(255,255,255,.02); }
+    .prop-table td:first-child, .contrast-table td:first-child { color: var(--white); font-weight: 500; }
+
+    .circuit-box {
+      background: rgba(15,23,42,.6); border: 1px solid rgba(6,182,212,.2);
+      border-radius: 10px; padding: 1rem 1.2rem; margin: 1rem 0;
+      font-family: 'JetBrains Mono', monospace; font-size: .825rem; color: #67e8f9;
+    }
+    .circuit-label { color: var(--gray); font-size: .75rem; margin-bottom: .5rem; font-family: 'Inter', sans-serif; }
+
+    .bullet-list { list-style: none; padding: 0; margin: .75rem 0; }
+    .bullet-list li {
+      display: flex; gap: .75rem; padding: .4rem 0; color: var(--gray-light); font-size: .9rem;
+    }
+    .bullet-list li::before {
+      content: '›'; color: var(--primary); font-size: 1.1rem; line-height: 1.4; flex-shrink: 0;
+    }
+    .bullet-list li strong { color: var(--white); }
+
+    /* ─── KEY TERMS / FLASHCARDS ─── */
+    .terms-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: .75rem; }
+    .flashcard {
+      border: 1px solid var(--border); border-radius: 12px; overflow: hidden;
+      cursor: pointer; transition: border-color .2s, transform .15s;
+      background: rgba(255,255,255,.02);
+      perspective: 600px;
+    }
+    .flashcard:hover { border-color: rgba(99,102,241,.3); transform: translateY(-2px); }
+    .flashcard-inner { position: relative; min-height: 100px; transition: transform .45s; transform-style: preserve-3d; }
+    .flashcard.flipped .flashcard-inner { transform: rotateY(180deg); }
+    .flashcard-front, .flashcard-back {
+      padding: 1rem 1.1rem; backface-visibility: hidden;
+    }
+    .flashcard-back { position: absolute; inset: 0; transform: rotateY(180deg); background: rgba(99,102,241,.08); }
+    .flashcard-term { font-weight: 600; font-size: .95rem; margin-bottom: .4rem; }
+    .flashcard-hint { font-size: .73rem; color: var(--gray); }
+    .flashcard-def { font-size: .85rem; color: var(--gray-light); line-height: 1.55; }
+    .flashcard-tag {
+      display: inline-block; font-size: .68rem; padding: .15rem .5rem;
+      border-radius: 99px; margin-bottom: .6rem; font-weight: 600; letter-spacing: .04em;
+    }
+    .tag-neuro { background: rgba(6,182,212,.15); color: #67e8f9; }
+    .tag-behavior { background: rgba(99,102,241,.15); color: #a5b4fc; }
+    .tag-clinical { background: rgba(244,63,94,.15); color: #fda4af; }
+    .tag-theory { background: rgba(245,158,11,.15); color: #fcd34d; }
+    .tag-bmi { background: rgba(16,185,129,.15); color: #6ee7b7; }
+
+    .terms-controls { display: flex; gap: .5rem; margin-bottom: 1.5rem; flex-wrap: wrap; }
+    .filter-btn {
+      padding: .35rem .85rem; border-radius: 99px; font-size: .78rem; font-weight: 500;
+      border: 1px solid var(--border); background: transparent; color: var(--gray-light);
+      cursor: pointer; transition: all .2s; font-family: 'Inter', sans-serif;
+    }
+    .filter-btn:hover { border-color: rgba(99,102,241,.4); color: var(--white); }
+    .filter-btn.active { background: rgba(99,102,241,.15); border-color: rgba(99,102,241,.4); color: var(--white); }
+    .flip-all-btn {
+      margin-left: auto; padding: .35rem .85rem; border-radius: 99px;
+      font-size: .78rem; font-weight: 500; border: 1px solid rgba(99,102,241,.3);
+      background: rgba(99,102,241,.1); color: #a5b4fc; cursor: pointer;
+      transition: all .2s; font-family: 'Inter', sans-serif;
+    }
+    .flip-all-btn:hover { background: rgba(99,102,241,.2); }
+
+    /* ─── QUIZ ─── */
+    .quiz-stats {
+      display: flex; gap: 1.5rem; margin-bottom: 2rem;
+      padding: 1rem 1.5rem; background: rgba(255,255,255,.03);
+      border: 1px solid var(--border); border-radius: 12px; flex-wrap: wrap;
+    }
+    .stat-item { display: flex; flex-direction: column; gap: .2rem; }
+    .stat-val { font-size: 1.5rem; font-weight: 700; }
+    .stat-val.green { color: var(--emerald); }
+    .stat-val.red { color: var(--rose); }
+    .stat-val.blue { color: var(--primary); }
+    .stat-lbl { font-size: .75rem; color: var(--gray); }
+    .quiz-reset-btn {
+      margin-left: auto; padding: .45rem 1rem; border-radius: 8px;
+      background: rgba(255,255,255,.05); border: 1px solid var(--border);
+      color: var(--gray-light); font-size: .8rem; cursor: pointer;
+      transition: all .2s; font-family: 'Inter', sans-serif; align-self: center;
+    }
+    .quiz-reset-btn:hover { background: rgba(255,255,255,.1); color: var(--white); }
+
+    .q-card {
+      border: 1px solid var(--border); border-radius: 14px;
+      background: rgba(255,255,255,.02); margin-bottom: 1rem; overflow: hidden;
+      transition: border-color .2s;
+    }
+    .q-card.correct { border-color: rgba(16,185,129,.4); }
+    .q-card.incorrect { border-color: rgba(244,63,94,.4); }
+    .q-header { padding: 1.2rem 1.5rem; cursor: pointer; }
+    .q-meta { display: flex; gap: .75rem; align-items: center; margin-bottom: .65rem; }
+    .q-num {
+      width: 26px; height: 26px; border-radius: 8px; flex-shrink: 0;
+      background: rgba(99,102,241,.2); color: #a5b4fc;
+      font-size: .75rem; font-weight: 700; display: flex; align-items: center; justify-content: center;
+    }
+    .q-tag {
+      font-size: .7rem; padding: .15rem .6rem; border-radius: 99px; font-weight: 600;
+      background: rgba(99,102,241,.12); color: #a5b4fc;
+    }
+    .q-status { margin-left: auto; font-size: .75rem; }
+    .q-text { font-size: .95rem; color: var(--light); line-height: 1.55; }
+    .q-options { padding: 0 1.5rem 1rem; display: grid; gap: .5rem; }
+    .q-opt {
+      padding: .65rem 1rem; border-radius: 9px;
+      border: 1px solid rgba(255,255,255,.07);
+      background: rgba(255,255,255,.03); font-size: .875rem; color: var(--gray-light);
+      cursor: pointer; transition: all .2s; text-align: left; width: 100%;
+      font-family: 'Inter', sans-serif;
+    }
+    .q-opt:hover:not(:disabled) { background: rgba(99,102,241,.1); border-color: rgba(99,102,241,.3); color: var(--white); }
+    .q-opt.selected-correct { background: rgba(16,185,129,.12); border-color: rgba(16,185,129,.5); color: #6ee7b7; }
+    .q-opt.selected-wrong { background: rgba(244,63,94,.12); border-color: rgba(244,63,94,.5); color: #fda4af; }
+    .q-opt.show-correct { background: rgba(16,185,129,.08); border-color: rgba(16,185,129,.3); color: #6ee7b7; }
+    .q-opt:disabled { cursor: default; }
+    .q-explanation {
+      margin: 0 1.5rem 1.25rem; padding: .9rem 1.1rem;
+      background: rgba(99,102,241,.07); border-radius: 10px;
+      border-left: 3px solid var(--primary); font-size: .875rem; color: var(--gray-light);
+      animation: fadeIn .25s ease;
+    }
+    .q-explanation strong { color: #a5b4fc; }
+    .q-explanation.hidden { display: none; }
+
+    /* ─── SYNTHESIS ─── */
+    .synthesis-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin: 1.5rem 0; }
+    @media (max-width: 600px) { .synthesis-grid { grid-template-columns: 1fr; } }
+    .synth-card {
+      border: 1px solid var(--border); border-radius: 12px; padding: 1.25rem;
+      background: rgba(255,255,255,.02);
+    }
+    .synth-card-title {
+      font-size: .8rem; font-weight: 600; letter-spacing: .05em; text-transform: uppercase;
+      margin-bottom: .75rem; display: flex; align-items: center; gap: .5rem;
+    }
+    .synth-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+    .synth-card ul { list-style: none; padding: 0; }
+    .synth-card li { font-size: .875rem; color: var(--gray-light); padding: .3rem 0; border-bottom: 1px solid rgba(255,255,255,.04); }
+    .synth-card li:last-child { border-bottom: none; }
+    .synth-card li span { color: var(--white); font-weight: 500; }
+
+    .levels-strip {
+      display: flex; gap: 0; border: 1px solid var(--border); border-radius: 12px; overflow: hidden;
+      margin: 1.5rem 0;
+    }
+    .level-col { flex: 1; padding: 1rem; }
+    .level-col + .level-col { border-left: 1px solid var(--border); }
+    .level-label { font-size: .72rem; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; margin-bottom: .6rem; }
+    .level-items { display: flex; flex-direction: column; gap: .5rem; }
+    .level-item { font-size: .8rem; padding: .35rem .6rem; border-radius: 7px; }
+
+    /* ─── RESPONSIVE ─── */
+    @media (max-width: 700px) {
+      .topbar { padding: .65rem 1rem; }
+      .hero { padding: 3rem 1rem 2rem; }
+      .main { padding: 0 1rem 5rem; }
+      .tab-nav { gap: .35rem; }
+      .tab-btn { font-size: .8rem; padding: .5rem .9rem; }
+      .prop-table, .contrast-table { font-size: .8rem; }
+    }
+
+    /* scroll indicator */
+    .scroll-progress {
+      position: fixed; top: 0; left: 0; height: 2px; z-index: 200;
+      background: linear-gradient(90deg, var(--primary), var(--secondary));
+      transition: width .1s; width: 0%;
+    }
+  </style>
+</head>
+<body>
+<div class="bg-layer"></div>
+<div class="scroll-progress" id="scrollProgress"></div>
+
+<!-- TOPBAR -->
+<header class="topbar">
+  <div class="topbar-left">
+    <a href="../../index.html" class="back-link">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+      Back
+    </a>
+    <span class="breadcrumb">Exam Prep › <span>Module 10</span></span>
+  </div>
+  <div style="display:flex;align-items:center;gap:.75rem;">
+    <div class="progress-bar-wrap" title="Quiz progress">
+      <div class="progress-bar-fill" id="quizProgressBar"></div>
+    </div>
+    <span class="progress-label" id="quizProgressLabel">0 / 20</span>
+  </div>
+</header>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="module-badge">
+    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+    PSYCH 505 · Week 10
+  </div>
+  <h1>Skill Memory &amp;<br>Brain-Machine Interfaces</h1>
+  <p class="hero-subtitle">How the brain automates expertise — from Fitts's three stages to Neuralink's promise. BMI content is lecture-only and high-priority on the exam.</p>
+  <nav class="tab-nav">
+    <button class="tab-btn active" data-tab="guide">Study Guide</button>
+    <button class="tab-btn" data-tab="terms">Key Terms</button>
+    <button class="tab-btn" data-tab="quiz">Practice Quiz</button>
+    <button class="tab-btn" data-tab="synthesis">Big Picture</button>
+  </nav>
+</div>
+
+<!-- MAIN -->
+<main class="main">
+
+  <!-- ════════════════════════════ STUDY GUIDE ════════════════════════════ -->
+  <div class="tab-panel active" id="tab-guide">
+
+    <div class="callout warn" style="margin-bottom:1.25rem;">
+      <div class="callout-title">Exam Priority Notice</div>
+      BMI content (Section 7) was covered <strong>exclusively in lecture</strong> and is NOT in the textbook. The instructor flagged BMI questions as <strong>high-priority</strong> on the exam. Pay special attention to Fetz (1969), cosine tuning, population coding, BMI types, neural drift, and ethics.
+    </div>
+
+    <!-- 1. What Is Skill Memory? -->
+    <div class="study-section open" data-section="1">
+      <div class="study-section-header" onclick="toggleSection(this)">
+        <div class="study-section-header-left">
+          <div class="section-icon" style="background:rgba(99,102,241,.15);">🎿</div>
+          <div><div class="section-num">Section 1</div><div class="section-title">What Is Skill Memory?</div></div>
+        </div>
+        <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
+      </div>
+      <div class="study-section-body">
+        <div class="prose">
+          <p>A skill is an ability that <strong>improves over time through practice</strong>. Skill memories are <em>procedural memories</em> — implicit memory for how to do something. They differ from declarative memories in three key ways:</p>
+        </div>
+        <table class="contrast-table">
+          <thead><tr><th>Dimension</th><th>Skill Memory (Procedural)</th><th>Declarative Memory</th></tr></thead>
+          <tbody>
+            <tr><td>Communication</td><td>Hard to verbalize — you demonstrate rather than explain</td><td>Flexible verbal communication in many formats</td></tr>
+            <tr><td>Awareness</td><td>Often acquired and retrieved <strong>without conscious awareness</strong> (implicit)</td><td>Requires conscious access</td></tr>
+            <tr><td>Acquisition Speed</td><td>Requires <strong>repeated practice and feedback</strong></td><td>Can form from a <strong>single exposure</strong> (episodic)</td></tr>
+            <tr><td>Brain Systems</td><td>Basal ganglia, cerebellum, motor cortex</td><td>Hippocampus and medial temporal lobe</td></tr>
+          </tbody>
+        </table>
+        <div class="callout tip">
+          <div class="callout-title">The Bicycle Paradox</div>
+          You can RIDE a bicycle without being able to SAY what muscles keep you balanced. You DO it without being able to SAY it. This is the core paradox of skill memory and captures the implicit/explicit dissociation.
+        </div>
+      </div>
+    </div>
+
+    <!-- 2. Types of Skills -->
+    <div class="study-section open" data-section="2">
+      <div class="study-section-header" onclick="toggleSection(this)">
+        <div class="study-section-header-left">
+          <div class="section-icon" style="background:rgba(236,72,153,.12);">🏃</div>
+          <div><div class="section-num">Section 2</div><div class="section-title">Types of Skills</div></div>
+        </div>
+        <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
+      </div>
+      <div class="study-section-body">
+        <table class="contrast-table">
+          <thead><tr><th>Dimension</th><th>Type A</th><th>Type B</th></tr></thead>
+          <tbody>
+            <tr><td>Content</td><td><strong>Perceptual-Motor</strong> — dancing, tennis, driving</td><td><strong>Cognitive</strong> — chess, poker, mental arithmetic</td></tr>
+            <tr><td>Environment</td><td><strong>Closed</strong> — predefined sequences, stable environment (choreographed ballet, dart at fixed target)</td><td><strong>Open</strong> — adapted in real time to changing environment (basketball defense, catching a frisbee)</td></tr>
+          </tbody>
+        </table>
+        <p style="font-size:.8rem;color:var(--gray);margin:.75rem 0 .5rem;font-weight:600;letter-spacing:.04em;text-transform:uppercase;">Lecture Examples — Know These</p>
+        <ul class="bullet-list">
+          <li><strong>Piano etude</strong> = closed motor. <strong>Jazz improvisation</strong> = open motor.</li>
+          <li><strong>Routine surgery</strong> = closed motor (for an expert). <strong>Poker</strong> = open cognitive.</li>
+          <li><strong>Chess grandmaster</strong> = approaches closed perceptual-motor — pattern recognition triggers near-automatic responses.</li>
+        </ul>
+        <div class="callout exam">
+          <div class="callout-title">Key Insight: Cognitive Skills Become Motor Programs</div>
+          With enough practice, even cognitive skills become motor programs. A grandmaster "sees" the right move before consciously "thinking" it. This is the transition to the autonomous stage (Fitts). The boundary between cognitive and motor dissolves at expertise.
+        </div>
+      </div>
+    </div>
+
+    <!-- 3. The Science of Practice -->
+    <div class="study-section" data-section="3">
+      <div class="study-section-header" onclick="toggleSection(this)">
+        <div class="study-section-header-left">
+          <div class="section-icon" style="background:rgba(245,158,11,.12);">📊</div>
+          <div><div class="section-num">Section 3</div><div class="section-title">The Science of Practice</div></div>
+        </div>
+        <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
+      </div>
+      <div class="study-section-body">
+        <p style="font-size:.8rem;color:var(--gray);margin-bottom:.5rem;font-weight:600;letter-spacing:.04em;text-transform:uppercase;">3a. Feedback (Knowledge of Results)</p>
+        <div class="prose">
+          <p><strong>Thorndike's blindfolded line-drawing experiment:</strong> Both groups drew equal numbers of lines, but only the group receiving feedback about accuracy improved. <strong>Repetition alone is NOT enough — feedback is essential.</strong></p>
+          <p>Maps onto reinforcement learning: without a prediction error signal (TD error), the policy does not update.</p>
+        </div>
+
+        <p style="font-size:.8rem;color:var(--gray);margin:.75rem 0 .5rem;font-weight:600;letter-spacing:.04em;text-transform:uppercase;">3b. Power Law of Learning</p>
+        <div class="prose">
+          <p><strong>Universal finding:</strong> early practice yields large improvements; additional practice yields progressively smaller gains. Rate decreases as a power function. Applies across species and across both motor and cognitive skills.</p>
+          <p>Example: typing improves from 10 → 40 WPM in the first month, but only 40 → 42 WPM after a year of additional daily practice.</p>
+        </div>
+
+        <p style="font-size:.8rem;color:var(--gray);margin:.75rem 0 .5rem;font-weight:600;letter-spacing:.04em;text-transform:uppercase;">3c. Massed vs. Spaced Practice (Baddeley &amp; Longman, 1978 — Post Office Keyboard Study)</p>
+        <div class="prose">
+          <p>Workers practicing <strong>1 hour/day (60 days)</strong> needed <strong>fewer total hours</strong> to reach proficiency than 4-hour/day workers (20 days). Spaced practice is more efficient per hour, likely due to memory consolidation during sleep.</p>
+        </div>
+        <div class="callout warn">
+          <div class="callout-title">Counterintuitive Finding</div>
+          The most efficient (spaced) group was <strong>least satisfied</strong> with their training — progress felt imperceptibly slow. Subjective satisfaction is a <strong>poor measure of actual learning</strong>. This matters for designing training programs.
+        </div>
+
+        <p style="font-size:.8rem;color:var(--gray);margin:.75rem 0 .5rem;font-weight:600;letter-spacing:.04em;text-transform:uppercase;">3d. Constant vs. Variable Practice</p>
+        <div class="prose">
+          <p><strong>Constant:</strong> same setting — strong performance in that specific context. <strong>Variable:</strong> varied contexts — better transfer and generalization. The relative advantage is context-dependent and an active research area.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- 4. Implicit Learning & SRT -->
+    <div class="study-section" data-section="4">
+      <div class="study-section-header" onclick="toggleSection(this)">
+        <div class="study-section-header-left">
+          <div class="section-icon" style="background:rgba(6,182,212,.12);">🔍</div>
+          <div><div class="section-num">Section 4</div><div class="section-title">Implicit Learning &amp; the SRT Task</div></div>
+        </div>
+        <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
+      </div>
+      <div class="study-section-body">
+        <div class="prose">
+          <p><strong>Implicit learning</strong> = learning without awareness of what is being learned.</p>
+          <p><strong>H.M. (amnesic patient):</strong> improved at mirror-tracing session by session, yet had NO MEMORY of ever having done the task. This classic dissociation separates declarative memory (hippocampus, damaged) from skill memory (basal ganglia + cerebellum, intact).</p>
+        </div>
+        <div class="circuit-box">
+          <div class="circuit-label">Serial Reaction Time (SRT) Task Logic</div>
+          Sequential block (repeating 12-item pattern) → faster RTs than random block<br>
+          BUT: participants CANNOT verbally report the repeating pattern<br>
+          = Learning without awareness = Implicit learning
+        </div>
+        <div class="callout exam">
+          <div class="callout-title">Why SRT Is "Golden" — Know This for the Exam</div>
+          The SRT task's simplicity allows it to be used across <strong>humans, monkeys, and rodents</strong>. This cross-species compatibility enables combining behavioral results with invasive recordings and genetic tools in non-human animals — giving researchers mechanistic access unavailable in purely human studies.
+        </div>
+      </div>
+    </div>
+
+    <!-- 5. Fitts's Three-Stage Model -->
+    <div class="study-section" data-section="5">
+      <div class="study-section-header" onclick="toggleSection(this)">
+        <div class="study-section-header-left">
+          <div class="section-icon" style="background:rgba(99,102,241,.15);">🔼</div>
+          <div><div class="section-num">Section 5</div><div class="section-title">Fitts's Three-Stage Model</div></div>
+        </div>
+        <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
+      </div>
+      <div class="study-section-body">
+        <table class="prop-table">
+          <thead><tr><th>Stage</th><th>Characteristics</th><th>Example</th></tr></thead>
+          <tbody>
+            <tr>
+              <td>1 — Cognitive</td>
+              <td>Verbalizable rules, active thinking, frequent errors, declarative memory dominant</td>
+              <td>Learning to drive: consciously remembering each gear change, mirror check, speed limit</td>
+            </tr>
+            <tr>
+              <td>2 — Associative</td>
+              <td>Actions becoming stereotyped, less reliance on explicit rules, errors decrease</td>
+              <td>Driving without thinking about every gear change</td>
+            </tr>
+            <tr>
+              <td>3 — Autonomous</td>
+              <td>Movements become motor programs, can multitask, <strong>cannot easily verbalize</strong></td>
+              <td>Typing while talking; surgeon doing routine procedure while listening to music</td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="callout connect">
+          <div class="callout-title">RL Connection: Model-Based → Model-Free</div>
+          Cognitive stage = <strong>model-based control</strong> (deliberate planning, prefrontal + hippocampus). Autonomous stage = <strong>model-free control</strong> (cached S-R, automatic, basal ganglia direct pathway). Associative stage = the transition. Maps to Week 11 (Habits vs. Goals) and the actor-critic architecture.
+        </div>
+        <div class="callout warn">
+          <div class="callout-title">Choking Under Pressure</div>
+          An autonomous-stage skill can <strong>revert to cognitive control</strong> when the performer focuses consciously on their technique (e.g., a golfer suddenly thinking about each step of their swing). Conscious attention interferes with the automatic motor program. The stages can flow in <strong>both directions</strong>.
+        </div>
+      </div>
+    </div>
+
+    <!-- 6. Brain Substrates -->
+    <div class="study-section" data-section="6">
+      <div class="study-section-header" onclick="toggleSection(this)">
+        <div class="study-section-header-left">
+          <div class="section-icon" style="background:rgba(16,185,129,.12);">🧠</div>
+          <div><div class="section-num">Section 6</div><div class="section-title">Brain Substrates of Skill Memory</div></div>
+        </div>
+        <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
+      </div>
+      <div class="study-section-body">
+        <table class="prop-table">
+          <thead><tr><th>Region</th><th>Role</th><th>Key Evidence</th></tr></thead>
+          <tbody>
+            <tr>
+              <td>Basal Ganglia (dorsal striatum)</td>
+              <td>Links sensory cues to motor responses (S-R); controls movement parameters (velocity, direction, amplitude); <strong>chunking</strong></td>
+              <td>Radial arm maze double dissociation: BG lesions impair cue-guided (lit arm) task but NOT memory-based task. T-maze recordings shift from decision-point → start/END firing with training = chunking</td>
+            </tr>
+            <tr>
+              <td>Cerebral Cortex (motor + somatosensory)</td>
+              <td>Controls complex action sequences; cortical maps <strong>expand with practice</strong> (structural plasticity)</td>
+              <td>Violinists' enlarged somatosensory representation for left hand. Juggler study: 3% visual cortex expansion after 3 months. London taxi drivers' hippocampal expansion</td>
+            </tr>
+            <tr>
+              <td>Cerebellum</td>
+              <td><strong>Timing</strong> of movement sequences; especially critical for precisely timed skills (dance, music)</td>
+              <td>Cerebellar patients take twice as long on mirror-tracing and transfer less. Early cerebellar activity spike when humans begin learning sequential finger movements</td>
+            </tr>
+          </tbody>
+        </table>
+        <p style="font-size:.8rem;color:var(--gray);margin:.75rem 0 .5rem;font-weight:600;letter-spacing:.04em;text-transform:uppercase;">Two Types of Plasticity</p>
+        <ul class="bullet-list">
+          <li><strong>Structural plasticity:</strong> cortical area literally expands — more synaptic connections are recruited (not new neurons).</li>
+          <li><strong>Functional plasticity:</strong> increased blood flow / fMRI signal in skill-related areas during performance.</li>
+        </ul>
+        <div class="callout tip">
+          <div class="callout-title">Where Is Skill Memory Stored?</div>
+          Current predominant view: in <strong>synaptic connections between cortex and striatum/basal ganglia</strong> — not inside neurons themselves. Consistent with LTP/LTD mechanisms from earlier weeks.
+        </div>
+      </div>
+    </div>
+
+    <!-- 7. BMI -->
+    <div class="study-section" data-section="7">
+      <div class="study-section-header" onclick="toggleSection(this)">
+        <div class="study-section-header-left">
+          <div class="section-icon" style="background:rgba(16,185,129,.12);">🤖</div>
+          <div><div class="section-num">Section 7</div><div class="section-title">Brain-Machine Interfaces (BMI) — Lecture Only!</div></div>
+        </div>
+        <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
+      </div>
+      <div class="study-section-body">
+        <div class="callout exam">
+          <div class="callout-title">Exam Note: Lecture-Only Content</div>
+          This entire section comes from lecture — it is NOT in the textbook. The instructor identified BMI as a high-priority exam topic. Know Fetz (1969), cosine tuning, population coding, all four BMI types, neural drift, BMI as skill learning, and the ethics issues.
+        </div>
+
+        <p style="font-size:.8rem;color:var(--gray);margin:.75rem 0 .5rem;font-weight:600;letter-spacing:.04em;text-transform:uppercase;">7a. Fetz (1969) — Origin of BMI</p>
+        <div class="prose">
+          <p>Working alone with one monkey at U Washington, Eberhard Fetz rewarded the animal with food whenever a recorded cortical neuron <strong>elevated its firing rate</strong>. The monkey learned to <strong>volitionally control that single cell's activity</strong> via operant conditioning — the first demonstration of intentional modulation of individual neuron activity.</p>
+          <p>RL connection: auditory click = conditioned reinforcer; food pellet = primary reward; neural firing rate = the conditioned behavior. Extension: connect that neuron's output to an external device → animal controls device with thought alone.</p>
+        </div>
+
+        <p style="font-size:.8rem;color:var(--gray);margin:.75rem 0 .5rem;font-weight:600;letter-spacing:.04em;text-transform:uppercase;">7b. Georgopoulos &amp; Population Coding</p>
+        <div class="prose">
+          <p><strong>Center-out reach task:</strong> monkeys reached to 8 targets while motor cortex neurons were recorded. Each neuron is <em>cosine-tuned</em> — it has a preferred direction, and its firing rate follows the cosine of the angle between the actual movement and the preferred direction.</p>
+          <p><strong>Population coding:</strong> summing activity across many neurons with different preferred directions gives a precise vector estimate of intended movement direction. Recording from more neurons yields more accurate decoding.</p>
+        </div>
+
+        <p style="font-size:.8rem;color:var(--gray);margin:.75rem 0 .5rem;font-weight:600;letter-spacing:.04em;text-transform:uppercase;">7c. Types of BMI</p>
+        <table class="contrast-table">
+          <thead><tr><th>Type</th><th>Direction</th><th>Example</th></tr></thead>
+          <tbody>
+            <tr><td>Read-only</td><td>Records neural signals → translates to machine command</td><td>Motor prosthetics (Schwartz monkey/robotic arm; BrainGate clinical trials)</td></tr>
+            <tr><td>Write-only (stimulation)</td><td>Records external signals → writes electrical patterns to nervous system</td><td><strong>Cochlear implant</strong> — most successful clinical BMI; records sound, stimulates auditory nerve</td></tr>
+            <tr><td>Closed-loop (read + write)</td><td>Reads from one site, stimulates another</td><td>DBS for Parkinson's; future sensorimotor prosthetics</td></tr>
+            <tr><td>Computational bypass</td><td>Reads from one region, stimulates downstream to bypass damaged pathway</td><td>Berger's MIMO hippocampal memory chip (CA3 → CA1)</td></tr>
+          </tbody>
+        </table>
+
+        <p style="font-size:.8rem;color:var(--gray);margin:.75rem 0 .5rem;font-weight:600;letter-spacing:.04em;text-transform:uppercase;">7d. Key Engineering Challenges</p>
+        <ul class="bullet-list">
+          <li><strong>Invasiveness vs. signal quality:</strong> EEG (scalp) = non-invasive, low resolution. Intracortical arrays (Utah array, Neuralink) = invasive, single-neuron resolution.</li>
+          <li><strong>Neural drift:</strong> neurons change preferred directions over days/weeks, requiring <strong>daily recalibration</strong>. Early patients found this burdensome; one dropped out.</li>
+          <li><strong>Recording too few neurons:</strong> need more simultaneously recorded cells for richer, stable decoding.</li>
+          <li><strong>Longevity:</strong> chronic implants must survive years in a dynamic fluid environment without causing inflammation.</li>
+          <li><strong>Neural plasticity (opportunity):</strong> Ganguly's lab (UCSF) — when one neuron is linked to BMI output, surrounding neurons remap to support it. The brain treats BMI as a new effector.</li>
+        </ul>
+
+        <p style="font-size:.8rem;color:var(--gray);margin:.75rem 0 .5rem;font-weight:600;letter-spacing:.04em;text-transform:uppercase;">7e. BMI as Skill Learning</p>
+        <div class="prose">
+          <p>Early patients described training as <em>"like being a football player — 6–8 hours/day."</em> BMI performance follows the <strong>power law</strong> (early rapid gains, then plateau). Best strategy: early phase — machine adapts to brain (supervised adaptive decoder); later — freeze machine, let brain adapt to it. Long-term goal: stable representation requiring only annual (vs. daily) recalibration.</p>
+        </div>
+
+        <p style="font-size:.8rem;color:var(--gray);margin:.75rem 0 .5rem;font-weight:600;letter-spacing:.04em;text-transform:uppercase;">7f. Ethics</p>
+        <ul class="bullet-list">
+          <li><strong>Agency / legal responsibility:</strong> if a BMI-controlled arm injures someone, who is legally responsible?</li>
+          <li><strong>Identity:</strong> does DBS-induced personality change mean the person is now "different"?</li>
+          <li><strong>Data ownership:</strong> who owns decoded neural data flowing to a corporate server?</li>
+          <li><strong>Access / justice:</strong> if cognitive enhancements are available, who gets them and at what cost?</li>
+          <li><strong>Augmentation vs. restoration:</strong> therapeutic BMIs vs. enhancement raises new ethical frameworks.</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- 8. Clinical Perspectives -->
+    <div class="study-section" data-section="8">
+      <div class="study-section-header" onclick="toggleSection(this)">
+        <div class="study-section-header-left">
+          <div class="section-icon" style="background:rgba(244,63,94,.12);">🏥</div>
+          <div><div class="section-num">Section 8</div><div class="section-title">Clinical Perspectives</div></div>
+        </div>
+        <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
+      </div>
+      <div class="study-section-body">
+        <table class="prop-table">
+          <thead><tr><th>Condition</th><th>Mechanism</th><th>Key Finding / Relevance</th></tr></thead>
+          <tbody>
+            <tr>
+              <td>Parkinson's Disease</td>
+              <td>Loss of dopaminergic neurons in SNc → reduced dopamine in basal ganglia → disrupted BG-cortical loop. Motor rigidity, tremors, impaired skill initiation.</td>
+              <td>Persian sitar maestro (~93, Parkinson's): needs help walking onto stage but plays with remarkable skill. Deeply ingrained motor programs robustly stored even when general initiation is severely impaired. DBS partially restores function.</td>
+            </tr>
+            <tr>
+              <td>Huntington's Disease</td>
+              <td>Gradual neuronal loss in basal ganglia AND cortex.</td>
+              <td>Motor symptoms + severe deficits in procedural skill learning: weather prediction task, SRT, rotary pursuit. Abnormal LTP/LTD in mice.</td>
+            </tr>
+            <tr>
+              <td>Apraxia</td>
+              <td>Damage to parietal cortex (especially left hemisphere). Can perform individual steps but cannot sequence them.</td>
+              <td>Disrupts access to stored motor action memories. Difficulty coordinating purposeful skilled movements despite intact individual motor components.</td>
+            </tr>
+            <tr>
+              <td>Twin Study (rotary pursuit)</td>
+              <td>Genetic influence on skill learning amplified by extended practice.</td>
+              <td>With extended training, identical twins became <strong>more</strong> similar; fraternal twins became <strong>more</strong> dissimilar. Practice <strong>amplifies genetic influences</strong>, moving performance toward the genetic ceiling or floor.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div><!-- /tab-guide -->
+
+
+  <!-- ════════════════════════════ KEY TERMS ════════════════════════════ -->
+  <div class="tab-panel" id="tab-terms">
+    <div style="margin-bottom:1.5rem;">
+      <h2 style="font-size:1.3rem;margin-bottom:.4rem;">Key Terms — 18 Flashcards</h2>
+      <p style="color:var(--gray-light);font-size:.9rem;">Click any card to reveal its definition. Use the filters to focus on a category.</p>
+    </div>
+    <div class="terms-controls">
+      <button class="filter-btn active" data-filter="all">All</button>
+      <button class="filter-btn" data-filter="behavior">Behavioral</button>
+      <button class="filter-btn" data-filter="neuro">Neural</button>
+      <button class="filter-btn" data-filter="clinical">Clinical/BMI</button>
+      <button class="flip-all-btn" id="flipAllBtn">Reveal All</button>
+    </div>
+    <div class="terms-grid" id="termsGrid">
+
+      <!-- BEHAVIORAL -->
+      <div class="flashcard" data-category="behavior" onclick="flipCard(this)">
+        <div class="flashcard-inner">
+          <div class="flashcard-front">
+            <span class="flashcard-tag tag-behavior">Behavioral</span>
+            <div class="flashcard-term">Skill Memory / Procedural Memory</div>
+            <div class="flashcard-hint">Click to reveal →</div>
+          </div>
+          <div class="flashcard-back">
+            <span class="flashcard-tag tag-behavior">Behavioral</span>
+            <div class="flashcard-def">Implicit memory for <strong>how to do something</strong>; hard to verbalize; improves with practice; relies on BG, cerebellum, and motor cortex rather than hippocampus.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flashcard" data-category="behavior" onclick="flipCard(this)">
+        <div class="flashcard-inner">
+          <div class="flashcard-front">
+            <span class="flashcard-tag tag-behavior">Behavioral</span>
+            <div class="flashcard-term">Closed Skill</div>
+            <div class="flashcard-hint">Click to reveal →</div>
+          </div>
+          <div class="flashcard-back">
+            <span class="flashcard-tag tag-behavior">Behavioral</span>
+            <div class="flashcard-def">A skill involving a <strong>predefined sequence</strong> executed in a stable, predictable environment. Example: choreographed ballet, dart throw at fixed target.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flashcard" data-category="behavior" onclick="flipCard(this)">
+        <div class="flashcard-inner">
+          <div class="flashcard-front">
+            <span class="flashcard-tag tag-behavior">Behavioral</span>
+            <div class="flashcard-term">Open Skill</div>
+            <div class="flashcard-hint">Click to reveal →</div>
+          </div>
+          <div class="flashcard-back">
+            <span class="flashcard-tag tag-behavior">Behavioral</span>
+            <div class="flashcard-def">A skill that must be <strong>adapted in real time</strong> to an unpredictable, changing environment. Example: basketball defense, catching a frisbee.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flashcard" data-category="behavior" onclick="flipCard(this)">
+        <div class="flashcard-inner">
+          <div class="flashcard-front">
+            <span class="flashcard-tag tag-behavior">Behavioral</span>
+            <div class="flashcard-term">Power Law of Learning</div>
+            <div class="flashcard-hint">Click to reveal →</div>
+          </div>
+          <div class="flashcard-back">
+            <span class="flashcard-tag tag-behavior">Behavioral</span>
+            <div class="flashcard-def">Early practice yields <strong>large improvements</strong>; additional practice yields progressively smaller gains. Rate of improvement decreases as a power function. Universal across species and skill types.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flashcard" data-category="behavior" onclick="flipCard(this)">
+        <div class="flashcard-inner">
+          <div class="flashcard-front">
+            <span class="flashcard-tag tag-behavior">Behavioral</span>
+            <div class="flashcard-term">Massed vs. Spaced Practice</div>
+            <div class="flashcard-hint">Click to reveal →</div>
+          </div>
+          <div class="flashcard-back">
+            <span class="flashcard-tag tag-behavior">Behavioral</span>
+            <div class="flashcard-def"><strong>Massed:</strong> concentrated sessions — faster but less durable. <strong>Spaced:</strong> distributed sessions — more efficient per total hour, likely due to sleep consolidation. Baddeley &amp; Longman post office study.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flashcard" data-category="behavior" onclick="flipCard(this)">
+        <div class="flashcard-inner">
+          <div class="flashcard-front">
+            <span class="flashcard-tag tag-behavior">Behavioral</span>
+            <div class="flashcard-term">Implicit Learning</div>
+            <div class="flashcard-hint">Click to reveal →</div>
+          </div>
+          <div class="flashcard-back">
+            <span class="flashcard-tag tag-behavior">Behavioral</span>
+            <div class="flashcard-def">Learning that occurs <strong>without awareness</strong> of what is being learned. Preserved in amnesia (H.M.). Demonstrated by SRT task: faster RTs for sequential blocks despite inability to verbalize the pattern.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flashcard" data-category="behavior" onclick="flipCard(this)">
+        <div class="flashcard-inner">
+          <div class="flashcard-front">
+            <span class="flashcard-tag tag-behavior">Behavioral</span>
+            <div class="flashcard-term">Serial Reaction Time (SRT) Task</div>
+            <div class="flashcard-hint">Click to reveal →</div>
+          </div>
+          <div class="flashcard-back">
+            <span class="flashcard-tag tag-behavior">Behavioral</span>
+            <div class="flashcard-def">Participants press keys responding to cues. Sequential blocks (repeating 12-item pattern) yield <strong>faster RTs than random blocks</strong>, yet participants cannot verbally report the pattern. Gold standard measure of implicit sequence learning.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flashcard" data-category="behavior" onclick="flipCard(this)">
+        <div class="flashcard-inner">
+          <div class="flashcard-front">
+            <span class="flashcard-tag tag-behavior">Behavioral</span>
+            <div class="flashcard-term">Fitts's Three Stages</div>
+            <div class="flashcard-hint">Click to reveal →</div>
+          </div>
+          <div class="flashcard-back">
+            <span class="flashcard-tag tag-behavior">Behavioral</span>
+            <div class="flashcard-def"><strong>Cognitive</strong> (rules, errors, effortful) → <strong>Associative</strong> (stereotyped, fewer errors) → <strong>Autonomous</strong> (motor program, multitask, can't verbalize). Parallels model-based → model-free control. Stages flow in both directions (choking).</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- NEURAL -->
+      <div class="flashcard" data-category="neuro" onclick="flipCard(this)">
+        <div class="flashcard-inner">
+          <div class="flashcard-front">
+            <span class="flashcard-tag tag-neuro">Neural</span>
+            <div class="flashcard-term">Basal Ganglia / Dorsal Striatum</div>
+            <div class="flashcard-hint">Click to reveal →</div>
+          </div>
+          <div class="flashcard-back">
+            <span class="flashcard-tag tag-neuro">Neural</span>
+            <div class="flashcard-def">Links sensory cues to motor responses (S-R learning). Evidence: radial arm maze double dissociation. T-maze: firing shifts from decision-point → start/END with training = <strong>chunking</strong> — whole action sequence becomes a motor program.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flashcard" data-category="neuro" onclick="flipCard(this)">
+        <div class="flashcard-inner">
+          <div class="flashcard-front">
+            <span class="flashcard-tag tag-neuro">Neural</span>
+            <div class="flashcard-term">Cerebellum</div>
+            <div class="flashcard-hint">Click to reveal →</div>
+          </div>
+          <div class="flashcard-back">
+            <span class="flashcard-tag tag-neuro">Neural</span>
+            <div class="flashcard-def">Critical for <strong>timing of movement sequences</strong>. Especially important for precisely timed skills (dance, music). Cerebellar patients take twice as long at mirror-tracing and transfer less.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flashcard" data-category="neuro" onclick="flipCard(this)">
+        <div class="flashcard-inner">
+          <div class="flashcard-front">
+            <span class="flashcard-tag tag-neuro">Neural</span>
+            <div class="flashcard-term">Structural Plasticity</div>
+            <div class="flashcard-hint">Click to reveal →</div>
+          </div>
+          <div class="flashcard-back">
+            <span class="flashcard-tag tag-neuro">Neural</span>
+            <div class="flashcard-def">The cortical area dedicated to a trained skill <strong>literally expands</strong> — more synaptic connections are recruited (not new neurons). Violinists' enlarged left-hand somatosensory area; juggler visual cortex expansion.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flashcard" data-category="neuro" onclick="flipCard(this)">
+        <div class="flashcard-inner">
+          <div class="flashcard-front">
+            <span class="flashcard-tag tag-neuro">Neural</span>
+            <div class="flashcard-term">Functional Plasticity</div>
+            <div class="flashcard-hint">Click to reveal →</div>
+          </div>
+          <div class="flashcard-back">
+            <span class="flashcard-tag tag-neuro">Neural</span>
+            <div class="flashcard-def">Increased blood flow / fMRI signal in skill-related areas during performance. Distinct from structural plasticity (which involves physical synaptic growth). Both types occur with practice.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flashcard" data-category="neuro" onclick="flipCard(this)">
+        <div class="flashcard-inner">
+          <div class="flashcard-front">
+            <span class="flashcard-tag tag-neuro">Neural</span>
+            <div class="flashcard-term">Cosine Tuning</div>
+            <div class="flashcard-hint">Click to reveal →</div>
+          </div>
+          <div class="flashcard-back">
+            <span class="flashcard-tag tag-neuro">Neural</span>
+            <div class="flashcard-def">Motor cortex neurons fire maximally for their <strong>preferred direction</strong>; firing rate varies as the cosine of the angle between actual movement and the preferred direction. Georgopoulos center-out reach task. Foundation of population decoding.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flashcard" data-category="neuro" onclick="flipCard(this)">
+        <div class="flashcard-inner">
+          <div class="flashcard-front">
+            <span class="flashcard-tag tag-neuro">Neural</span>
+            <div class="flashcard-term">Population Coding</div>
+            <div class="flashcard-hint">Click to reveal →</div>
+          </div>
+          <div class="flashcard-back">
+            <span class="flashcard-tag tag-neuro">Neural</span>
+            <div class="flashcard-def">Decoding movement direction (or other variables) from the <strong>summed activity of many neurons</strong> with different preferred directions. More neurons recorded = more accurate decoding. The basis of BMI motor prosthetics.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- CLINICAL / BMI -->
+      <div class="flashcard" data-category="clinical" onclick="flipCard(this)">
+        <div class="flashcard-inner">
+          <div class="flashcard-front">
+            <span class="flashcard-tag tag-clinical">Clinical/BMI</span>
+            <div class="flashcard-term">BMI / Brain-Machine Interface</div>
+            <div class="flashcard-hint">Click to reveal →</div>
+          </div>
+          <div class="flashcard-back">
+            <span class="flashcard-tag tag-clinical">Clinical/BMI</span>
+            <div class="flashcard-def">A system that reads from the brain, writes to the brain, or does both. Types: read-only (motor prosthetics), write-only (cochlear implant), closed-loop (DBS), computational bypass (hippocampal chip). Restores or augments function.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flashcard" data-category="clinical" onclick="flipCard(this)">
+        <div class="flashcard-inner">
+          <div class="flashcard-front">
+            <span class="flashcard-tag tag-clinical">Clinical/BMI</span>
+            <div class="flashcard-term">Cochlear Implant</div>
+            <div class="flashcard-hint">Click to reveal →</div>
+          </div>
+          <div class="flashcard-back">
+            <span class="flashcard-tag tag-clinical">Clinical/BMI</span>
+            <div class="flashcard-def"><strong>Write-only BMI</strong> — the most clinically successful. Records sound via microphone, converts to electrical signals, stimulates the auditory nerve. Does NOT read from the brain; it writes to it, bypassing damaged hair cells.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flashcard" data-category="clinical" onclick="flipCard(this)">
+        <div class="flashcard-inner">
+          <div class="flashcard-front">
+            <span class="flashcard-tag tag-clinical">Clinical/BMI</span>
+            <div class="flashcard-term">Neural Drift</div>
+            <div class="flashcard-hint">Click to reveal →</div>
+          </div>
+          <div class="flashcard-back">
+            <span class="flashcard-tag tag-clinical">Clinical/BMI</span>
+            <div class="flashcard-def">Neurons' preferred response properties <strong>change over days/weeks</strong>, making the BMI decoder (trained on one day's patterns) inaccurate the next day. Required daily recalibration in early clinical trials — a major engineering and clinical challenge.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flashcard" data-category="clinical" onclick="flipCard(this)">
+        <div class="flashcard-inner">
+          <div class="flashcard-front">
+            <span class="flashcard-tag tag-clinical">Clinical/BMI</span>
+            <div class="flashcard-term">Deep Brain Stimulation (DBS)</div>
+            <div class="flashcard-hint">Click to reveal →</div>
+          </div>
+          <div class="flashcard-back">
+            <span class="flashcard-tag tag-clinical">Clinical/BMI</span>
+            <div class="flashcard-def">Disrupts pathological oscillations in basal ganglia circuits. Treats Parkinson's disease by partially restoring the BG-cortical loop. A <strong>closed-loop BMI</strong>: reads pathological activity and stimulates to correct it. Raises identity ethics questions.</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div><!-- /tab-terms -->
+
+
+  <!-- ════════════════════════════ QUIZ ════════════════════════════ -->
+  <div class="tab-panel" id="tab-quiz">
+    <div style="margin-bottom:1.5rem;">
+      <h2 style="font-size:1.3rem;margin-bottom:.4rem;">Practice Multiple Choice — 20 Questions</h2>
+      <p style="color:var(--gray-light);font-size:.9rem;">Click an option to check your answer. Explanations appear automatically.</p>
+    </div>
+
+    <div class="quiz-stats">
+      <div class="stat-item"><div class="stat-val blue" id="statTotal">20</div><div class="stat-lbl">Questions</div></div>
+      <div class="stat-item"><div class="stat-val green" id="statCorrect">0</div><div class="stat-lbl">Correct</div></div>
+      <div class="stat-item"><div class="stat-val red" id="statWrong">0</div><div class="stat-lbl">Incorrect</div></div>
+      <div class="stat-item"><div class="stat-val" id="statPct" style="color:var(--gray-light);">—</div><div class="stat-lbl">Score</div></div>
+      <button class="quiz-reset-btn" onclick="resetQuiz()">Reset Quiz</button>
+    </div>
+
+    <div id="quizContainer"></div>
+  </div><!-- /tab-quiz -->
+
+
+  <!-- ════════════════════════════ SYNTHESIS ════════════════════════════ -->
+  <div class="tab-panel" id="tab-synthesis">
+    <div style="margin-bottom:1.5rem;">
+      <h2 style="font-size:1.3rem;margin-bottom:.4rem;">Big Picture Synthesis</h2>
+      <p style="color:var(--gray-light);font-size:.9rem;">How the week's concepts connect across levels of analysis and to the course arc.</p>
+    </div>
+
+    <div class="callout connect" style="margin-bottom:1.5rem;">
+      <div class="callout-title">The Unifying Principle</div>
+      Skill learning is the brain gradually transferring control from <strong>deliberate (model-based, cognitive)</strong> to <strong>automatic (model-free, motor program)</strong> processing. The same basal ganglia system that computes prediction errors (Weeks 5–8) now builds cached S-R action sequences. BMI is the ultimate extension: the brain applies its skill-learning machinery to operate entirely novel external tools.
+    </div>
+
+    <p style="font-size:.8rem;color:var(--gray);margin-bottom:.75rem;font-weight:600;letter-spacing:.04em;text-transform:uppercase;">Levels of Analysis</p>
+    <div class="levels-strip">
+      <div class="level-col">
+        <div class="level-label" style="color:#a5b4fc;">Behavior</div>
+        <div class="level-items">
+          <div class="level-item" style="background:rgba(99,102,241,.1);color:#c7d2fe;">Power law: large early gains, plateau</div>
+          <div class="level-item" style="background:rgba(99,102,241,.08);color:#c7d2fe;">3 stages: cognitive → associative → autonomous</div>
+          <div class="level-item" style="background:rgba(99,102,241,.06);color:#c7d2fe;">Implicit vs. explicit learning (SRT task)</div>
+        </div>
+      </div>
+      <div class="level-col">
+        <div class="level-label" style="color:#67e8f9;">Circuit</div>
+        <div class="level-items">
+          <div class="level-item" style="background:rgba(6,182,212,.1);color:#a5f3fc;">Dorsal striatum: S-R, chunking</div>
+          <div class="level-item" style="background:rgba(6,182,212,.08);color:#a5f3fc;">Cerebellum: timing</div>
+          <div class="level-item" style="background:rgba(6,182,212,.06);color:#a5f3fc;">Motor cortex: cosine tuning, population coding</div>
+        </div>
+      </div>
+      <div class="level-col">
+        <div class="level-label" style="color:#6ee7b7;">Synapse</div>
+        <div class="level-items">
+          <div class="level-item" style="background:rgba(16,185,129,.1);color:#a7f3d0;">LTP/LTD at corticostriatal synapses</div>
+          <div class="level-item" style="background:rgba(16,185,129,.08);color:#a7f3d0;">Skill memory in connections, not neurons</div>
+          <div class="level-item" style="background:rgba(16,185,129,.06);color:#a7f3d0;">Fetz: operant conditioning of single-neuron firing</div>
+        </div>
+      </div>
+      <div class="level-col">
+        <div class="level-label" style="color:#fcd34d;">Structure</div>
+        <div class="level-items">
+          <div class="level-item" style="background:rgba(245,158,11,.1);color:#fde68a;">Cortical map expansion (violinists, jugglers)</div>
+          <div class="level-item" style="background:rgba(245,158,11,.08);color:#fde68a;">Motor cortex population vector decoding</div>
+          <div class="level-item" style="background:rgba(245,158,11,.06);color:#fde68a;">Neural drift over time → recalibration</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="synthesis-grid">
+      <div class="synth-card">
+        <div class="synth-card-title">
+          <div class="synth-dot" style="background:var(--rose);"></div>
+          <span style="color:var(--rose);">Likely Exam Themes</span>
+        </div>
+        <ul>
+          <li>Fitts's three stages and their <span>RL analogs</span> (model-based → model-free)</li>
+          <li><span>BG vs. hippocampus dissociation</span> — cue-guided vs. memory task (radial arm maze)</li>
+          <li><span>SRT task</span> as proof of implicit learning: faster RTs, no verbal report</li>
+          <li><span>Fetz (1969)</span> — operant conditioning of single cortical neuron = origin of BMI</li>
+          <li><span>Cosine tuning and population coding</span> — Georgopoulos center-out task</li>
+          <li><span>Cochlear implant = write-only BMI</span> — most successful clinical BMI</li>
+          <li><span>Neural drift</span> → daily recalibration problem in early BMI patients</li>
+          <li>Ethics: <span>agency, identity, data ownership</span></li>
+          <li><span>Twin study</span> — practice amplifies genetic influences</li>
+        </ul>
+      </div>
+      <div class="synth-card">
+        <div class="synth-card-title">
+          <div class="synth-dot" style="background:var(--accent);"></div>
+          <span style="color:var(--accent);">Cross-Course Connections</span>
+        </div>
+        <ul>
+          <li><span>Autonomous stage</span> = model-free policy (BG direct pathway from Week 8)</li>
+          <li><span>Cognitive stage</span> = model-based planning (prefrontal + hippocampus, earlier weeks)</li>
+          <li><span>Fetz experiment</span> = operant conditioning (Week 8) applied at single-neuron level</li>
+          <li><span>BMI power law</span> matches spacing effect and power law from Week 6</li>
+          <li><span>Thorndike feedback</span> = knowledge of results = TD error signal needed for policy update</li>
+          <li><span>Chunking in BG</span> = caching whole action sequence as one S-R unit = actor in actor-critic</li>
+          <li><span>Neural drift</span> — same plasticity that enables learning can undermine stability of existing representations</li>
+        </ul>
+      </div>
+    </div>
+  </div><!-- /tab-synthesis -->
+
+</main>
+
+<script>
+// ─── TAB NAVIGATION ───
+document.querySelectorAll('.tab-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById('tab-' + btn.dataset.tab).classList.add('active');
+  });
+});
+
+// ─── COLLAPSIBLE SECTIONS ───
+function toggleSection(header) {
+  const section = header.closest('.study-section');
+  section.classList.toggle('open');
+}
+
+// ─── FLASHCARDS ───
+function flipCard(card) {
+  card.classList.toggle('flipped');
+}
+
+let allFlipped = false;
+document.getElementById('flipAllBtn').addEventListener('click', function() {
+  allFlipped = !allFlipped;
+  const visible = Array.from(document.querySelectorAll('.flashcard')).filter(c => c.style.display !== 'none');
+  visible.forEach(c => { if (allFlipped) c.classList.add('flipped'); else c.classList.remove('flipped'); });
+  this.textContent = allFlipped ? 'Hide All' : 'Reveal All';
+});
+
+document.querySelectorAll('.filter-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    const filter = btn.dataset.filter;
+    document.querySelectorAll('.flashcard').forEach(card => {
+      if (filter === 'all' || card.dataset.category === filter) {
+        card.style.display = '';
+      } else {
+        card.style.display = 'none';
+      }
+    });
+    allFlipped = false;
+    document.getElementById('flipAllBtn').textContent = 'Reveal All';
+  });
+});
+
+// ─── QUIZ DATA ───
+const questions = [
+  {
+    text: "In lecture, the three ways skill memory differs from declarative memory were: Communication, Awareness, and Acquisition Speed. Which correctly pairs a feature with its description?",
+    options: [
+      "Communication: skills can be communicated flexibly in different formats",
+      "Awareness: skill memories often acquired and retrieved without conscious awareness",
+      "Acquisition speed: skill memories can form after a single exposure",
+      "Brain systems: skill memories depend primarily on hippocampus"
+    ],
+    correct: 1,
+    tag: "Skill Memory",
+    explanation: "Skills are often acquired and retrieved <strong>WITHOUT conscious awareness</strong> (implicit). They are hard to verbalize (not flexible communication), require repeated practice (not single exposure), and depend on BG/cerebellum (not hippocampus)."
+  },
+  {
+    text: "A student learning to drive for two weeks consciously thinks about each gear change, mirrors, and speed limits. According to Fitts's three-stage model, this student is in the:",
+    options: [
+      "Autonomous stage — movements becoming motor programs",
+      "Associative stage — actions becoming stereotyped",
+      "Cognitive stage — performance based on verbalizable rules and active thinking",
+      "Implicit stage — learning occurring without awareness"
+    ],
+    correct: 2,
+    tag: "Fitts's Stages",
+    explanation: "The <strong>cognitive stage</strong> is characterized by heavy reliance on verbalizable rules, active thinking, and effortful control. This student consciously remembers each step — squarely in Stage 1."
+  },
+  {
+    text: "A ballet dancer performing a choreographed sequence is the BEST example of:",
+    options: [
+      "Open perceptual-motor skill",
+      "Open cognitive skill",
+      "Closed perceptual-motor skill",
+      "Closed cognitive skill"
+    ],
+    correct: 2,
+    tag: "Types of Skills",
+    explanation: "<strong>Closed skills</strong> involve predefined movement sequences in stable, predictable environments. Choreographed ballet is performed the same way each time with no adaptation needed to changing demands."
+  },
+  {
+    text: "In chess grandmasters playing simultaneous games, the instructor suggested their skill type is:",
+    options: [
+      "Open cognitive — each game is unique and demands strategic planning",
+      "Closed perceptual-motor — board patterns trigger rapid, nearly automatic responses",
+      "Open perceptual-motor — hand movements must adapt to changing boards",
+      "Closed cognitive — explicit rules decide each move"
+    ],
+    correct: 1,
+    tag: "Types of Skills",
+    explanation: "Grandmasters' pattern recognition has become nearly automatic — they 'see' the right move before consciously deliberating. With massive practice, cognitive skills approach the <strong>autonomous stage</strong>, resembling closed perceptual-motor."
+  },
+  {
+    text: "Thorndike's blindfolded line-drawing experiment demonstrated that:",
+    options: [
+      "Spaced practice is always superior to massed practice",
+      "Repetition alone is sufficient for skill improvement",
+      "Feedback about performance (knowledge of results) is necessary for improvement",
+      "Variable practice leads to better long-term retention"
+    ],
+    correct: 2,
+    tag: "Practice Science",
+    explanation: "Both groups drew the same lines, but only the feedback group improved. <strong>Repetition without feedback does not produce learning</strong> — knowledge of results is essential. Maps onto RL: no TD error = no policy update."
+  },
+  {
+    text: "The power law of learning predicts that:",
+    options: [
+      "Improvement is linear: each additional hour produces equal gains",
+      "Early practice yields the largest gains; additional practice produces progressively smaller improvements",
+      "Massed practice produces faster learning than spaced practice",
+      "Skill memory is immune to forgetting once autonomous stage is reached"
+    ],
+    correct: 1,
+    tag: "Power Law",
+    explanation: "<strong>Large early gains followed by diminishing returns</strong> — the defining pattern. Applies broadly across motor and cognitive skills and across species. Same pattern appears in BMI training."
+  },
+  {
+    text: "The post office keyboard study (Baddeley & Longman) showed 1-hour/day workers outperformed 4-hour/day workers. The instructor speculated one key reason spaced practice may be superior is:",
+    options: [
+      "Spaced practice allows more feedback per session",
+      "Memory consolidation may occur during sleep between sessions",
+      "Shorter sessions reduce muscle fatigue",
+      "Massed practice creates interference between sequentially learned skills"
+    ],
+    correct: 1,
+    tag: "Practice Science",
+    explanation: "The instructor mentioned <strong>sleep and memory consolidation</strong> (replay of daytime experiences) as a plausible explanation. Spaced group spent more days, meaning more nights of potential consolidation per unit of practice."
+  },
+  {
+    text: "The KEY evidence that SRT task learning has occurred IMPLICITLY rather than explicitly is:",
+    options: [
+      "Participants' reaction times are slower in sequential blocks than random blocks",
+      "Reaction times are faster in sequential blocks, yet participants cannot verbally report the repeating pattern",
+      "Participants who receive feedback improve more than those without",
+      "Participants consciously notice the pattern and use it to predict upcoming cues"
+    ],
+    correct: 1,
+    tag: "Implicit Learning",
+    explanation: "The hallmark of implicit SRT learning: <strong>behavioral improvement</strong> (faster RTs for sequential blocks) <strong>without verbal knowledge</strong> of what was learned. Dissociation between performance and awareness."
+  },
+  {
+    text: "Patient H.M. improved at mirror-tracing across multiple sessions yet had no memory of ever doing the task. This supports:",
+    options: [
+      "H.M. performed worse each session because hippocampal damage prevented consolidation",
+      "H.M. showed improvement despite no conscious memory — dissociating declarative memory from procedural/skill memory",
+      "H.M. could verbally describe how to perform the task after training",
+      "H.M.'s improvement was exclusively due to intact cerebellar circuits, not BG"
+    ],
+    correct: 1,
+    tag: "Implicit Learning",
+    explanation: "H.M.'s mirror-tracing improved session by session, yet each time he was brought in he had no recollection. Classic <strong>double dissociation</strong>: declarative (hippocampus, destroyed) vs. procedural/skill (BG, cerebellum, intact)."
+  },
+  {
+    text: "In the T-maze recording experiment, neurons in the basal ganglia shifted from firing mostly during the turn (decision point) to firing mostly at START and END of the maze run. This reflects:",
+    options: [
+      "Neurodegeneration — cells active at the decision point died with training",
+      "Chunking of the task — the entire action sequence becomes a motor program initiated and closed by the BG",
+      "Transfer of learning from BG to hippocampus as the task becomes more memory-based",
+      "Cerebellum taking over timing functions from basal ganglia"
+    ],
+    correct: 1,
+    tag: "Brain Substrates",
+    explanation: "<strong>Chunking</strong>: early in training the rat cognitively deliberates at the turn. With practice the whole run becomes automated — BG brackets the motor program, firing at start and end of the now-cached action sequence."
+  },
+  {
+    text: "The radial arm maze double dissociation showed:",
+    options: [
+      "BG lesions impaired memory-based version; hippocampal lesions impaired cue-guided version",
+      "BG lesions impaired cue-guided perceptual-motor version (lit arms); hippocampal lesions impaired memory-based version (visit every arm)",
+      "Both lesions equally impaired both versions",
+      "BG lesions had no effect; only hippocampal lesions produced deficits"
+    ],
+    correct: 1,
+    tag: "Brain Substrates",
+    explanation: "Key double dissociation: <strong>BG lesions</strong> selectively impaired stimulus-response (cue-guided, lit arms) — a perceptual-motor skill. <strong>Hippocampal lesions</strong> selectively impaired the memory-based version requiring episodic tracking."
+  },
+  {
+    text: "The cerebellum is especially critical for which aspect of skill learning?",
+    options: [
+      "Linking sensory cues to motor responses (S-R associations)",
+      "Learning and performing movement sequences that require precise timing",
+      "Encoding declarative knowledge about skill rules in the cognitive stage",
+      "Controlling vigor and amplitude of voluntary movements"
+    ],
+    correct: 1,
+    tag: "Brain Substrates",
+    explanation: "<strong>Cerebellum = timing.</strong> Basal ganglia = linking sensory events to responses. Motor cortex = complex action sequences. Cerebellum's role in conditioned timing (eyeblink conditioning) extends to skill timing."
+  },
+  {
+    text: "Where is skill memory most likely stored, according to lecture?",
+    options: [
+      "Cerebral ventricles, where CSF facilitates communication",
+      "Synaptic connections between cortical neurons and striatal/basal ganglia neurons",
+      "Size of individual motor cortex pyramidal cells",
+      "Myelination patterns of cerebellar Purkinje cells"
+    ],
+    correct: 1,
+    tag: "Brain Substrates",
+    explanation: "The instructor explicitly stated that skill memories are stored in the <strong>connections (synapses) between cortex and striatum/basal ganglia</strong> — consistent with LTP/LTD mechanisms. Not inside neurons themselves."
+  },
+  {
+    text: "Eberhard Fetz's 1969 Science paper was groundbreaking because it demonstrated for the first time:",
+    options: [
+      "Motor cortex neurons encode movement direction as cosine-tuned responses",
+      "A monkey could volitionally increase the firing rate of a single cortical neuron through operant conditioning",
+      "Spinal cord stimulation could restore voluntary arm movements in paralyzed monkeys",
+      "Population coding requires recording from at least 100 neurons simultaneously"
+    ],
+    correct: 1,
+    tag: "BMI — Fetz",
+    explanation: "Fetz showed that by rewarding the animal with food whenever a recorded neuron's firing rate exceeded baseline, the animal learned to <strong>volitionally elevate that cell's activity</strong> — operant conditioning of single-neuron firing. Conceptual foundation of BMI."
+  },
+  {
+    text: "Georgopoulos's center-out reach task revealed that individual motor cortex neurons:",
+    options: [
+      "Fire maximally for all movement directions equally",
+      "Are tuned to a preferred movement direction, with firing rates following a cosine function",
+      "Only fire after movement completion, providing error correction",
+      "Encode movement speed but not direction"
+    ],
+    correct: 1,
+    tag: "BMI — Population Coding",
+    explanation: "Each recorded neuron has a <strong>preferred direction</strong>; firing rate varies as the cosine of the angle between actual movement and preferred direction. 'Cosine tuning' was the foundation for population decoding of movement intent."
+  },
+  {
+    text: "In early BMI clinical trials, patients often needed daily recalibration. What caused this?",
+    options: [
+      "The prosthetic permanently maps to new neural code without recalibration needed",
+      "Neural representations shifted over days — the decoder trained on one day's patterns no longer worked the next",
+      "Neurons that changed preferred direction were automatically replaced by neurogenesis",
+      "Patients had to stop using the device for weeks to allow brain restabilization"
+    ],
+    correct: 1,
+    tag: "BMI — Neural Drift",
+    explanation: "<strong>Neural drift</strong>: in early BMI clinical trials, patients returned daily for neurologists to retune the decoder because neural representations shifted. One patient even dropped out because it was too burdensome."
+  },
+  {
+    text: "The cochlear implant is categorized as which type of BMI?",
+    options: [
+      "Read-only BMI — records neural activity and translates to machine command",
+      "Write-only (stimulation) BMI — records external signals (sound) and writes electrical patterns to auditory nerves",
+      "Closed-loop BMI — simultaneously reads from auditory cortex and stimulates cochlear neurons",
+      "Computational bypass BMI — replaces a damaged hippocampal pathway"
+    ],
+    correct: 1,
+    tag: "BMI — Types",
+    explanation: "<strong>Cochlear implant = write-only</strong>: records sound from a microphone, converts to electrical signals, stimulates auditory nerve — bypassing damaged hair cells. It does not read from the brain; it writes to it."
+  },
+  {
+    text: "The BMI lecture identified a major engineering challenge: brain representations of movement direction can change over time. This problem is directly analogous to which concept from skill learning?",
+    options: [
+      "Skill decay — representations weaken with non-use",
+      "Transfer specificity — skills learned in one context don't transfer",
+      "The plasticity that enables learning can also undermine the stability of existing representations",
+      "The power law — improvements plateau after initial rapid learning"
+    ],
+    correct: 2,
+    tag: "BMI — Neural Drift",
+    explanation: "The same <strong>neural plasticity</strong> enabling skill learning (remapping, synaptic change) also means representations can drift — creating instability for BMI decoders. The brain's malleability is both its greatest asset and a practical challenge."
+  },
+  {
+    text: "An early BMI patient described training as 'like being a football player — 6-8 hours/day.' According to the lecture's framework, this is because:",
+    options: [
+      "The robotic arm's algorithm requires constant human calibration",
+      "Controlling a BMI is a skill — the brain must undergo genuine plastic reorganization to operate the new 'effector,' which takes time and practice",
+      "The patient must learn engineering specifications explicitly",
+      "BMI training stays in cognitive stage forever because automatization is impossible without proprioceptive feedback"
+    ],
+    correct: 1,
+    tag: "BMI — Skill Learning",
+    explanation: "The instructor framed BMI control as <strong>skill learning</strong>: the brain treats the device as a new tool/effector and must go through the same stages as any motor skill. Massive daily practice is required for the plasticity (remapping) needed for smooth, flexible control."
+  },
+  {
+    text: "Which ethics concern about BMIs was specifically raised in the lecture?",
+    options: [
+      "Whether BMIs could implant false memories",
+      "Questions of agency, identity, and data ownership — including who bears legal responsibility if a BMI-controlled arm injures someone",
+      "Whether animal research on BMIs constitutes unacceptable harm",
+      "Whether universities should patent BMI technology or release it as open source"
+    ],
+    correct: 1,
+    tag: "BMI — Ethics",
+    explanation: "The instructor explicitly raised <strong>agency</strong> (if BMI-arm hits someone, who is responsible?), <strong>identity</strong> (is DBS-altered person still 'you'?), and <strong>data ownership</strong> (who owns decoded neural data?). Animal research and patent questions were not discussed."
+  }
+];
+
+let quizState = {};
+
+function buildQuiz() {
+  const container = document.getElementById('quizContainer');
+  container.innerHTML = '';
+  quizState = {};
+
+  questions.forEach((q, i) => {
+    quizState[i] = null;
+    const card = document.createElement('div');
+    card.className = 'q-card';
+    card.id = 'q-' + i;
+
+    const optsHtml = q.options.map((opt, j) =>
+      `<button class="q-opt" data-qi="${i}" data-oi="${j}" onclick="answerQ(${i},${j})">${String.fromCharCode(65+j)}. ${opt}</button>`
+    ).join('');
+
+    card.innerHTML = `
+      <div class="q-header">
+        <div class="q-meta">
+          <span class="q-num">${i+1}</span>
+          <span class="q-tag">${q.tag}</span>
+          <span class="q-status" id="qs-${i}"></span>
+        </div>
+        <div class="q-text">${q.text}</div>
+      </div>
+      <div class="q-options">${optsHtml}</div>
+      <div class="q-explanation hidden" id="qe-${i}">${q.explanation}</div>
+    `;
+    container.appendChild(card);
+  });
+  updateStats();
+}
+
+function answerQ(qi, oi) {
+  if (quizState[qi] !== null) return;
+  quizState[qi] = oi;
+
+  const card = document.getElementById('q-' + qi);
+  const opts = card.querySelectorAll('.q-opt');
+  const isCorrect = oi === questions[qi].correct;
+
+  opts.forEach((btn, j) => {
+    btn.disabled = true;
+    if (j === questions[qi].correct) btn.classList.add('show-correct');
+  });
+  if (!isCorrect) {
+    opts[oi].classList.remove('show-correct');
+    opts[oi].classList.add('selected-wrong');
+  } else {
+    opts[oi].classList.add('selected-correct');
+  }
+
+  card.classList.add(isCorrect ? 'correct' : 'incorrect');
+  document.getElementById('qs-' + qi).textContent = isCorrect ? '✓ Correct' : '✗ Incorrect';
+  document.getElementById('qs-' + qi).style.color = isCorrect ? 'var(--emerald)' : 'var(--rose)';
+  document.getElementById('qe-' + qi).classList.remove('hidden');
+
+  updateStats();
+}
+
+function updateStats() {
+  const answered = Object.values(quizState).filter(v => v !== null).length;
+  const correct = Object.entries(quizState).filter(([i, v]) => v !== null && v === questions[i].correct).length;
+  const wrong = answered - correct;
+  document.getElementById('statCorrect').textContent = correct;
+  document.getElementById('statWrong').textContent = wrong;
+  const pctEl = document.getElementById('statPct');
+  if (answered > 0) {
+    const pct = Math.round((correct / answered) * 100);
+    pctEl.textContent = pct + '%';
+    pctEl.style.color = pct >= 80 ? 'var(--emerald)' : pct >= 60 ? 'var(--amber)' : 'var(--rose)';
+  } else {
+    pctEl.textContent = '—';
+    pctEl.style.color = 'var(--gray-light)';
+  }
+  const pct = (answered / 20) * 100;
+  document.getElementById('quizProgressBar').style.width = pct + '%';
+  document.getElementById('quizProgressLabel').textContent = answered + ' / 20';
+}
+
+function resetQuiz() {
+  buildQuiz();
+}
+
+// ─── SCROLL PROGRESS ───
+window.addEventListener('scroll', () => {
+  const el = document.documentElement;
+  const pct = (el.scrollTop / (el.scrollHeight - el.clientHeight)) * 100;
+  document.getElementById('scrollProgress').style.width = pct + '%';
+});
+
+// ─── INIT ───
+buildQuiz();
+</script>
+</body>
+</html>

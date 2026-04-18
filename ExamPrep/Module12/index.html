@@ -1,0 +1,1600 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Module 12 Exam Prep — Emotions, Memory &amp; Social Learning</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --primary: #6366f1;
+      --primary-dark: #4f46e5;
+      --secondary: #ec4899;
+      --accent: #06b6d4;
+      --emerald: #10b981;
+      --amber: #f59e0b;
+      --rose: #f43f5e;
+      --dark: #0f172a;
+      --dark-light: #1e293b;
+      --dark-mid: #162032;
+      --gray: #64748b;
+      --gray-light: #94a3b8;
+      --light: #f1f5f9;
+      --white: #ffffff;
+      --border: rgba(255,255,255,0.08);
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--dark);
+      color: var(--white);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* ─── ANIMATED BACKGROUND ─── */
+    .bg-layer {
+      position: fixed; inset: 0; z-index: -1; pointer-events: none;
+      background:
+        radial-gradient(ellipse 80% 60% at 20% 10%, rgba(99,102,241,.12) 0%, transparent 60%),
+        radial-gradient(ellipse 60% 60% at 80% 80%, rgba(236,72,153,.08) 0%, transparent 60%),
+        radial-gradient(ellipse 40% 40% at 50% 50%, rgba(6,182,212,.05) 0%, transparent 60%);
+      animation: bgPulse 20s ease-in-out infinite;
+    }
+    @keyframes bgPulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.7; transform: scale(1.05); }
+    }
+
+    /* ─── TOPBAR ─── */
+    .topbar {
+      position: sticky; top: 0; z-index: 100;
+      padding: .75rem 2rem;
+      background: rgba(15,23,42,.85);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 1rem;
+    }
+    .topbar-left { display: flex; align-items: center; gap: 1rem; }
+    .back-link {
+      display: flex; align-items: center; gap: .5rem;
+      color: var(--gray-light); text-decoration: none; font-size: .85rem;
+      transition: color .2s;
+    }
+    .back-link:hover { color: var(--white); }
+    .back-link svg { flex-shrink: 0; }
+    .breadcrumb { color: var(--gray); font-size: .8rem; }
+    .breadcrumb span { color: var(--primary); }
+
+    .progress-bar-wrap {
+      flex: 1; max-width: 240px;
+      background: rgba(255,255,255,.08); border-radius: 99px; height: 6px; overflow: hidden;
+    }
+    .progress-bar-fill {
+      height: 100%; border-radius: 99px;
+      background: linear-gradient(90deg, var(--primary), var(--secondary));
+      transition: width .5s ease;
+      width: 0%;
+    }
+    .progress-label { font-size: .75rem; color: var(--gray); white-space: nowrap; }
+
+    /* ─── HERO ─── */
+    .hero {
+      padding: 5rem 2rem 3rem;
+      max-width: 900px; margin: 0 auto; text-align: center;
+    }
+    .module-badge {
+      display: inline-flex; align-items: center; gap: .5rem;
+      background: rgba(99,102,241,.15); border: 1px solid rgba(99,102,241,.3);
+      color: #a5b4fc; border-radius: 99px; padding: .35rem 1rem; font-size: .8rem;
+      font-weight: 600; letter-spacing: .05em; text-transform: uppercase; margin-bottom: 1.5rem;
+    }
+    .hero h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      line-height: 1.15; margin-bottom: 1rem;
+      background: linear-gradient(135deg, #fff 40%, #a5b4fc);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    }
+    .hero-subtitle { color: var(--gray-light); font-size: 1.05rem; max-width: 600px; margin: 0 auto 2rem; }
+
+    .tab-nav {
+      display: flex; gap: .5rem; justify-content: center;
+      flex-wrap: wrap; margin-bottom: 1rem;
+    }
+    .tab-btn {
+      padding: .6rem 1.2rem; border-radius: 99px; border: 1px solid var(--border);
+      background: rgba(255,255,255,.04); color: var(--gray-light);
+      font-size: .875rem; font-weight: 500; cursor: pointer; transition: all .2s;
+      font-family: 'Inter', sans-serif;
+    }
+    .tab-btn:hover { background: rgba(99,102,241,.12); color: var(--white); border-color: rgba(99,102,241,.4); }
+    .tab-btn.active {
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      color: var(--white); border-color: transparent;
+    }
+
+    /* ─── MAIN LAYOUT ─── */
+    .main { max-width: 900px; margin: 0 auto; padding: 0 2rem 6rem; }
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; animation: fadeIn .3s ease; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+    /* ─── SECTION CARDS (Study Guide) ─── */
+    .study-section {
+      border: 1px solid var(--border);
+      border-radius: 16px; overflow: hidden;
+      background: rgba(255,255,255,.02);
+      margin-bottom: 1rem;
+      transition: border-color .2s;
+    }
+    .study-section:hover { border-color: rgba(99,102,241,.25); }
+    .study-section-header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1.1rem 1.5rem; cursor: pointer; user-select: none;
+      gap: 1rem;
+    }
+    .study-section-header-left { display: flex; align-items: center; gap: .85rem; }
+    .section-icon {
+      width: 36px; height: 36px; border-radius: 10px; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center; font-size: 1.1rem;
+    }
+    .section-title { font-size: 1rem; font-weight: 600; }
+    .section-num { font-size: .75rem; color: var(--gray); }
+    .chevron { color: var(--gray); transition: transform .25s; flex-shrink: 0; }
+    .study-section.open .chevron { transform: rotate(180deg); }
+    .study-section-body { display: none; padding: 0 1.5rem 1.5rem; }
+    .study-section.open .study-section-body { display: block; }
+
+    /* ─── CONTENT ELEMENTS ─── */
+    .prose { color: var(--gray-light); font-size: .95rem; }
+    .prose p { margin-bottom: .85rem; }
+    .prose p:last-child { margin-bottom: 0; }
+    .prose strong { color: var(--white); font-weight: 600; }
+    .prose em { color: #a5b4fc; font-style: normal; font-weight: 500; }
+
+    .callout {
+      border-radius: 10px; padding: 1rem 1.2rem; margin: 1rem 0;
+      border-left: 3px solid; font-size: .9rem;
+    }
+    .callout-title { font-weight: 600; margin-bottom: .4rem; font-size: .8rem; letter-spacing: .06em; text-transform: uppercase; }
+    .callout.warn { background: rgba(245,158,11,.07); border-color: var(--amber); color: #fcd34d; }
+    .callout.tip { background: rgba(99,102,241,.07); border-color: var(--primary); color: #a5b4fc; }
+    .callout.connect { background: rgba(6,182,212,.07); border-color: var(--accent); color: #67e8f9; }
+    .callout.exam { background: rgba(16,185,129,.07); border-color: var(--emerald); color: #6ee7b7; }
+
+    .prop-table, .contrast-table {
+      width: 100%; border-collapse: collapse; font-size: .875rem; margin: 1rem 0;
+    }
+    .prop-table th, .contrast-table th {
+      background: rgba(99,102,241,.15); color: #a5b4fc;
+      padding: .6rem .9rem; text-align: left; font-weight: 600; font-size: .78rem;
+      letter-spacing: .04em; text-transform: uppercase;
+    }
+    .prop-table td, .contrast-table td {
+      padding: .65rem .9rem; border-bottom: 1px solid rgba(255,255,255,.05);
+      color: var(--gray-light); vertical-align: top;
+    }
+    .prop-table tr:last-child td, .contrast-table tr:last-child td { border-bottom: none; }
+    .prop-table tr:hover td, .contrast-table tr:hover td { background: rgba(255,255,255,.02); }
+    .prop-table td:first-child, .contrast-table td:first-child { color: var(--white); font-weight: 500; }
+
+    .circuit-box {
+      background: rgba(15,23,42,.6); border: 1px solid rgba(6,182,212,.2);
+      border-radius: 10px; padding: 1rem 1.2rem; margin: 1rem 0;
+      font-family: 'JetBrains Mono', monospace; font-size: .825rem; color: #67e8f9;
+    }
+    .circuit-label { color: var(--gray); font-size: .75rem; margin-bottom: .5rem; font-family: 'Inter', sans-serif; }
+
+    .bullet-list { list-style: none; padding: 0; margin: .75rem 0; }
+    .bullet-list li {
+      display: flex; gap: .75rem; padding: .4rem 0; color: var(--gray-light); font-size: .9rem;
+    }
+    .bullet-list li::before {
+      content: '›'; color: var(--primary); font-size: 1.1rem; line-height: 1.4; flex-shrink: 0;
+    }
+    .bullet-list li strong { color: var(--white); }
+
+    /* ─── KEY TERMS / FLASHCARDS ─── */
+    .terms-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: .75rem; }
+    .flashcard {
+      border: 1px solid var(--border); border-radius: 12px; overflow: hidden;
+      cursor: pointer; transition: border-color .2s, transform .15s;
+      background: rgba(255,255,255,.02);
+      perspective: 600px;
+    }
+    .flashcard:hover { border-color: rgba(99,102,241,.3); transform: translateY(-2px); }
+    .flashcard-inner { position: relative; min-height: 100px; transition: transform .45s; transform-style: preserve-3d; }
+    .flashcard.flipped .flashcard-inner { transform: rotateY(180deg); }
+    .flashcard-front, .flashcard-back {
+      padding: 1rem 1.1rem; backface-visibility: hidden;
+    }
+    .flashcard-back { position: absolute; inset: 0; transform: rotateY(180deg); background: rgba(99,102,241,.08); }
+    .flashcard-term { font-weight: 600; font-size: .95rem; margin-bottom: .4rem; }
+    .flashcard-hint { font-size: .73rem; color: var(--gray); }
+    .flashcard-def { font-size: .85rem; color: var(--gray-light); line-height: 1.55; }
+    .flashcard-tag {
+      display: inline-block; font-size: .68rem; padding: .15rem .5rem;
+      border-radius: 99px; margin-bottom: .6rem; font-weight: 600; letter-spacing: .04em;
+    }
+    .tag-neuro { background: rgba(6,182,212,.15); color: #67e8f9; }
+    .tag-behavior { background: rgba(99,102,241,.15); color: #a5b4fc; }
+    .tag-clinical { background: rgba(244,63,94,.15); color: #fda4af; }
+    .tag-theory { background: rgba(245,158,11,.15); color: #fcd34d; }
+    .tag-bmi { background: rgba(16,185,129,.15); color: #6ee7b7; }
+
+    .terms-controls { display: flex; gap: .5rem; margin-bottom: 1.5rem; flex-wrap: wrap; }
+    .filter-btn {
+      padding: .35rem .85rem; border-radius: 99px; font-size: .78rem; font-weight: 500;
+      border: 1px solid var(--border); background: transparent; color: var(--gray-light);
+      cursor: pointer; transition: all .2s; font-family: 'Inter', sans-serif;
+    }
+    .filter-btn:hover { border-color: rgba(99,102,241,.4); color: var(--white); }
+    .filter-btn.active { background: rgba(99,102,241,.15); border-color: rgba(99,102,241,.4); color: var(--white); }
+    .flip-all-btn {
+      margin-left: auto; padding: .35rem .85rem; border-radius: 99px;
+      font-size: .78rem; font-weight: 500; border: 1px solid rgba(99,102,241,.3);
+      background: rgba(99,102,241,.1); color: #a5b4fc; cursor: pointer;
+      transition: all .2s; font-family: 'Inter', sans-serif;
+    }
+    .flip-all-btn:hover { background: rgba(99,102,241,.2); }
+
+    /* ─── QUIZ ─── */
+    .quiz-stats {
+      display: flex; gap: 1.5rem; margin-bottom: 2rem;
+      padding: 1rem 1.5rem; background: rgba(255,255,255,.03);
+      border: 1px solid var(--border); border-radius: 12px; flex-wrap: wrap;
+    }
+    .stat-item { display: flex; flex-direction: column; gap: .2rem; }
+    .stat-val { font-size: 1.5rem; font-weight: 700; }
+    .stat-val.green { color: var(--emerald); }
+    .stat-val.red { color: var(--rose); }
+    .stat-val.blue { color: var(--primary); }
+    .stat-lbl { font-size: .75rem; color: var(--gray); }
+    .quiz-reset-btn {
+      margin-left: auto; padding: .45rem 1rem; border-radius: 8px;
+      background: rgba(255,255,255,.05); border: 1px solid var(--border);
+      color: var(--gray-light); font-size: .8rem; cursor: pointer;
+      transition: all .2s; font-family: 'Inter', sans-serif; align-self: center;
+    }
+    .quiz-reset-btn:hover { background: rgba(255,255,255,.1); color: var(--white); }
+
+    .q-card {
+      border: 1px solid var(--border); border-radius: 14px;
+      background: rgba(255,255,255,.02); margin-bottom: 1rem; overflow: hidden;
+      transition: border-color .2s;
+    }
+    .q-card.correct { border-color: rgba(16,185,129,.4); }
+    .q-card.incorrect { border-color: rgba(244,63,94,.4); }
+    .q-header { padding: 1.2rem 1.5rem; cursor: pointer; }
+    .q-meta { display: flex; gap: .75rem; align-items: center; margin-bottom: .65rem; }
+    .q-num {
+      width: 26px; height: 26px; border-radius: 8px; flex-shrink: 0;
+      background: rgba(99,102,241,.2); color: #a5b4fc;
+      font-size: .75rem; font-weight: 700; display: flex; align-items: center; justify-content: center;
+    }
+    .q-tag {
+      font-size: .7rem; padding: .15rem .6rem; border-radius: 99px; font-weight: 600;
+      background: rgba(99,102,241,.12); color: #a5b4fc;
+    }
+    .q-status { margin-left: auto; font-size: .75rem; }
+    .q-text { font-size: .95rem; color: var(--light); line-height: 1.55; }
+    .q-options { padding: 0 1.5rem 1rem; display: grid; gap: .5rem; }
+    .q-opt {
+      padding: .65rem 1rem; border-radius: 9px;
+      border: 1px solid rgba(255,255,255,.07);
+      background: rgba(255,255,255,.03); font-size: .875rem; color: var(--gray-light);
+      cursor: pointer; transition: all .2s; text-align: left; width: 100%;
+      font-family: 'Inter', sans-serif;
+    }
+    .q-opt:hover:not(:disabled) { background: rgba(99,102,241,.1); border-color: rgba(99,102,241,.3); color: var(--white); }
+    .q-opt.selected-correct { background: rgba(16,185,129,.12); border-color: rgba(16,185,129,.5); color: #6ee7b7; }
+    .q-opt.selected-wrong { background: rgba(244,63,94,.12); border-color: rgba(244,63,94,.5); color: #fda4af; }
+    .q-opt.show-correct { background: rgba(16,185,129,.08); border-color: rgba(16,185,129,.3); color: #6ee7b7; }
+    .q-opt:disabled { cursor: default; }
+    .q-explanation {
+      margin: 0 1.5rem 1.25rem; padding: .9rem 1.1rem;
+      background: rgba(99,102,241,.07); border-radius: 10px;
+      border-left: 3px solid var(--primary); font-size: .875rem; color: var(--gray-light);
+      animation: fadeIn .25s ease;
+    }
+    .q-explanation strong { color: #a5b4fc; }
+    .q-explanation.hidden { display: none; }
+
+    /* ─── SYNTHESIS ─── */
+    .synthesis-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin: 1.5rem 0; }
+    @media (max-width: 600px) { .synthesis-grid { grid-template-columns: 1fr; } }
+    .synth-card {
+      border: 1px solid var(--border); border-radius: 12px; padding: 1.25rem;
+      background: rgba(255,255,255,.02);
+    }
+    .synth-card-title {
+      font-size: .8rem; font-weight: 600; letter-spacing: .05em; text-transform: uppercase;
+      margin-bottom: .75rem; display: flex; align-items: center; gap: .5rem;
+    }
+    .synth-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+    .synth-card ul { list-style: none; padding: 0; }
+    .synth-card li { font-size: .875rem; color: var(--gray-light); padding: .3rem 0; border-bottom: 1px solid rgba(255,255,255,.04); }
+    .synth-card li:last-child { border-bottom: none; }
+    .synth-card li span { color: var(--white); font-weight: 500; }
+
+    .levels-strip {
+      display: flex; gap: 0; border: 1px solid var(--border); border-radius: 12px; overflow: hidden;
+      margin: 1.5rem 0;
+    }
+    .level-col { flex: 1; padding: 1rem; }
+    .level-col + .level-col { border-left: 1px solid var(--border); }
+    .level-label { font-size: .72rem; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; margin-bottom: .6rem; }
+    .level-items { display: flex; flex-direction: column; gap: .5rem; }
+    .level-item { font-size: .8rem; padding: .35rem .6rem; border-radius: 7px; }
+
+    /* ─── RESPONSIVE ─── */
+    @media (max-width: 700px) {
+      .topbar { padding: .65rem 1rem; }
+      .hero { padding: 3rem 1rem 2rem; }
+      .main { padding: 0 1rem 5rem; }
+      .tab-nav { gap: .35rem; }
+      .tab-btn { font-size: .8rem; padding: .5rem .9rem; }
+      .prop-table, .contrast-table { font-size: .8rem; }
+    }
+
+    /* scroll indicator */
+    .scroll-progress {
+      position: fixed; top: 0; left: 0; height: 2px; z-index: 200;
+      background: linear-gradient(90deg, var(--primary), var(--secondary));
+      transition: width .1s; width: 0%;
+    }
+  </style>
+</head>
+<body>
+<div class="bg-layer"></div>
+<div class="scroll-progress" id="scrollProgress"></div>
+
+<!-- TOPBAR -->
+<header class="topbar">
+  <div class="topbar-left">
+    <a href="../../index.html" class="back-link">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+      Back
+    </a>
+    <span class="breadcrumb">Exam Prep › <span>Module 12</span></span>
+  </div>
+  <div style="display:flex;align-items:center;gap:.75rem;">
+    <div class="progress-bar-wrap" title="Quiz progress">
+      <div class="progress-bar-fill" id="quizProgressBar"></div>
+    </div>
+    <span class="progress-label" id="quizProgressLabel">0 / 20</span>
+  </div>
+</header>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="module-badge">
+    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+    PSYCH 505 · Weeks 12–13
+  </div>
+  <h1>Emotions, Memory &amp;<br>Social Learning</h1>
+  <p class="hero-subtitle">How the amygdala decides what gets remembered, and how mirror neurons let us inherit the compressed experience of others. Chapters 10 &amp; 11 — film tributes: <em>Inside Out</em> / <em>The Social Network</em>.</p>
+  <nav class="tab-nav">
+    <button class="tab-btn active" data-tab="guide">Study Guide</button>
+    <button class="tab-btn" data-tab="terms">Key Terms</button>
+    <button class="tab-btn" data-tab="quiz">Practice Quiz</button>
+    <button class="tab-btn" data-tab="synthesis">Big Picture</button>
+  </nav>
+</div>
+
+<!-- MAIN -->
+<main class="main">
+
+  <!-- ════════════════════════════ STUDY GUIDE ════════════════════════════ -->
+  <div class="tab-panel active" id="tab-guide">
+
+    <div class="callout warn" style="margin-bottom:1.25rem;">
+      <div class="callout-title">Two-Week Module — Know Both Halves</div>
+      Week 12 (Chapter 10) covers emotion theories, CERs, learned helplessness, emotional memory, and amygdala circuits. Week 13 (Chapter 11) covers social learning mechanisms, mirror neurons, birdsong, and ASD. Both chapters appear on the exam and connect through shared circuits (dopamine, basal ganglia, PFC).
+    </div>
+
+    <!-- 1. Course Arc -->
+    <div class="study-section open" data-section="1">
+      <div class="study-section-header" onclick="toggleSection(this)">
+        <div class="study-section-header-left">
+          <div class="section-icon" style="background:rgba(99,102,241,.15);">🗺️</div>
+          <div><div class="section-num">Section 1</div><div class="section-title">Course Arc: Where Module 12 Fits</div></div>
+        </div>
+        <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
+      </div>
+      <div class="study-section-body">
+        <div class="prose">
+          <p><strong>Emotion (amygdala)</strong> = the urgency signal that decides which events get cemented into long-term memory. Without emotional tagging, most experiences are forgotten within days.</p>
+          <p><strong>Social learning</strong> = the highest-bandwidth information channel available to an intelligent agent: rather than accumulating errors across thousands of personal experiences, you inherit others' compressed outcomes in minutes.</p>
+          <p>Both chapters revisit <em>familiar circuits</em> — basal ganglia, hippocampus, PFC — in new emotional and social roles. The key conceptual move: these are not new systems, they are old systems operating under new modulatory conditions.</p>
+        </div>
+        <div class="callout connect">
+          <div class="callout-title">Connect Backward</div>
+          Dopamine updates predictions (Weeks 5–8); amygdala gates which predictions are worth updating by ensuring survival-relevant events are remembered after one trial. Social learning is model-based RL where the model includes representations of other agents' value functions — you inherit their Q-values instead of learning from scratch.
+        </div>
+        <ul class="bullet-list">
+          <li><strong>Week 12 → Chapter 10:</strong> Emotion theories, conditioned fear, learned helplessness, amygdala substrates.</li>
+          <li><strong>Week 13 → Chapter 11:</strong> Social learning taxonomy, mirror neurons, birdsong circuits, clinical applications.</li>
+          <li><strong>Film bridge:</strong> <em>Inside Out</em> — emotions as characters competing to control behavior (three-component model made visible); <em>The Social Network</em> — social learning as the engine of cultural accumulation.</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- 2. Three-Component Model -->
+    <div class="study-section open" data-section="2">
+      <div class="study-section-header" onclick="toggleSection(this)">
+        <div class="study-section-header-left">
+          <div class="section-icon" style="background:rgba(236,72,153,.12);">❤️</div>
+          <div><div class="section-num">Section 2</div><div class="section-title">What Is Emotion? Three-Component Model</div></div>
+        </div>
+        <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
+      </div>
+      <div class="study-section-body">
+        <table class="contrast-table">
+          <thead><tr><th>Component</th><th>Description</th><th>Examples</th></tr></thead>
+          <tbody>
+            <tr><td>Physiological Response</td><td>ANS-mediated; automatic arousal of body systems</td><td>Heart rate increase, perspiration, epinephrine release, cortisol, piloerection</td></tr>
+            <tr><td>Overt Behavior</td><td>Externally observable motor output of emotional state</td><td>Freezing, fleeing, facial expressions, approach, piloerection (fur/hair standing)</td></tr>
+            <tr><td>Conscious Feeling</td><td>Subjective experience; depends on PFC and cognitive appraisal</td><td>Feeling afraid, feeling joyful — the "what it is like" component</td></tr>
+          </tbody>
+        </table>
+        <div class="prose">
+          <p><strong>Universal emotions (Ekman):</strong> Happiness, Sadness, Anger, Fear, Disgust, Surprise — recognized cross-culturally with consistent facial expressions. <em>Display rules</em> (social norms about when to show emotion) vary across cultures, but the underlying physiological and behavioral states are universal.</p>
+          <p><strong>Fight-or-flight vs. tend-and-befriend:</strong> Classic stress response mobilizes for conflict or escape; tend-and-befriend (more common in females) mobilizes social affiliation and caregiving as stress coping.</p>
+          <p><strong>Critical fact:</strong> Epinephrine (adrenaline) <em>cannot cross the blood-brain barrier</em>. The brain analogue is <strong>norepinephrine</strong>, which is released centrally from the locus coeruleus and plays the key role in emotional memory modulation.</p>
+        </div>
+        <div class="callout exam">
+          <div class="callout-title">Lecture Demo — Know This</div>
+          Suppressed smile leading to laughter: demonstrates the James-Lange direction (body state feeds back to produce/amplify feeling). PFC acts as a top-down brake on emotional expression — damage releases inhibition, flooding behavior.
+        </div>
+      </div>
+    </div>
+
+    <!-- 3. Theories of Emotion -->
+    <div class="study-section" data-section="3">
+      <div class="study-section-header" onclick="toggleSection(this)">
+        <div class="study-section-header-left">
+          <div class="section-icon" style="background:rgba(245,158,11,.12);">💡</div>
+          <div><div class="section-num">Section 3</div><div class="section-title">Theories of Emotion</div></div>
+        </div>
+        <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
+      </div>
+      <div class="study-section-body">
+        <table class="prop-table">
+          <thead><tr><th>Theory</th><th>Causal Sequence</th><th>Key Evidence</th></tr></thead>
+          <tbody>
+            <tr>
+              <td>James-Lange</td>
+              <td>Stimulus → bodily response → conscious feeling follows (body causes feeling)</td>
+              <td>Facial feedback hypothesis: manipulating facial expression changes reported emotion; suppressed smile → laughter in lecture demo</td>
+            </tr>
+            <tr>
+              <td>Cannon-Bard</td>
+              <td>Emotional stimulus → SIMULTANEOUS bodily response AND conscious feeling (parallel, not sequential)</td>
+              <td>Criticizes James-Lange: visceral responses are slow and similar across emotions; proposed thalamus routes signal to both body and cortex at once</td>
+            </tr>
+            <tr>
+              <td>Two-Factor (Schachter &amp; Singer)</td>
+              <td>Physiological arousal + cognitive appraisal → emotion label and experience</td>
+              <td>Capilano Bridge study: physical arousal from swaying bridge misattributed as attraction to interviewer; epinephrine injection + social context manipulates reported emotion</td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="callout tip">
+          <div class="callout-title">Two-Factor Theory — The Key Insight</div>
+          Arousal is undifferentiated (it's just activation). The LABEL applied to that arousal depends on the cognitive context available. Same arousal + different context = different emotion. This is why physical exertion can feel like attraction (misattribution of arousal) and why context is so important in emotional experience.
+        </div>
+      </div>
+    </div>
+
+    <!-- 4. CERs, Escape & Avoidance -->
+    <div class="study-section" data-section="4">
+      <div class="study-section-header" onclick="toggleSection(this)">
+        <div class="study-section-header-left">
+          <div class="section-icon" style="background:rgba(6,182,212,.12);">⚡</div>
+          <div><div class="section-num">Section 4</div><div class="section-title">Conditioned Emotional Responses, Escape &amp; Avoidance</div></div>
+        </div>
+        <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
+      </div>
+      <div class="study-section-body">
+        <div class="prose">
+          <p><strong>Conditioned Emotional Responses (CERs):</strong> A single CS-US pairing can produce robust fear. CERs are highly resistant to extinction and readily generalize to related stimuli. This reflects the adaptive value of rapid, broad, sticky fear learning.</p>
+        </div>
+        <table class="contrast-table">
+          <thead><tr><th>Type</th><th>Mechanism</th><th>Why It Persists</th></tr></thead>
+          <tbody>
+            <tr><td>Conditioned Escape</td><td>Operant — response terminates an <em>ongoing</em> aversive stimulus (negative reinforcement)</td><td>US actually present; each escape confirms relief</td></tr>
+            <tr><td>Conditioned Avoidance</td><td>Mowrer two-factor: (1) classical: CS acquires fear; (2) operant: response to CS reduces CS-fear (US prevented)</td><td>US never arrives → CS-US association never extinguished → fear persists → avoidance persists indefinitely</td></tr>
+          </tbody>
+        </table>
+        <div class="callout warn">
+          <div class="callout-title">The Avoidance Paradox — High-Yield Exam Topic</div>
+          The lever press/jump is reinforced by <strong>reduction of conditioned fear to the CS</strong> — not by US termination. Since the US never occurs, the CS-US association is never updated by extinction. The organism can never "learn" the US is gone because it never waits long enough for that information. This is why conditioned avoidance is essentially self-perpetuating and why PTSD avoidance behaviors are so intractable.
+        </div>
+        <div class="callout connect">
+          <div class="callout-title">Clinical Bridge: PTSD</div>
+          PTSD avoidance = conditioned avoidance. Trauma-related CS-like stimuli are avoided; the US (trauma) never re-occurs; extinction is therefore impossible as long as avoidance is maintained. Treatment (exposure therapy) must break the avoidance cycle to allow extinction of the CS-fear.
+        </div>
+        <div class="circuit-box">
+          <div class="circuit-label">Lecture Demo: Fear Conditioning Time Course</div>
+          Tone (CS) + shock (US) → blood pressure spikes within seconds<br>
+          Conditioned response (BP to tone alone) observable after 2–3 pairings<br>
+          = single session, highly rapid acquisition
+        </div>
+      </div>
+    </div>
+
+    <!-- 5. Learned Helplessness -->
+    <div class="study-section" data-section="5">
+      <div class="study-section-header" onclick="toggleSection(this)">
+        <div class="study-section-header-left">
+          <div class="section-icon" style="background:rgba(99,102,241,.15);">🔒</div>
+          <div><div class="section-num">Section 5</div><div class="section-title">Learned Helplessness</div></div>
+        </div>
+        <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
+      </div>
+      <div class="study-section-body">
+        <div class="prose">
+          <p><strong>Seligman &amp; Maier (1967):</strong> Dogs pre-exposed to inescapable shock lay down in the shuttle box later and did not try to escape — even when escape was easy. They had learned that responses are ineffectual.</p>
+          <p><strong>Definition:</strong> Learned helplessness = an expectancy that responses are ineffectual, leading to reduced motivation to attempt new avoidance or escape behaviors in novel contexts. It is a <em>cognitive/motivational</em> phenomenon, not a motor failure.</p>
+        </div>
+        <ul class="bullet-list">
+          <li><strong>Immunization:</strong> Prior experience with <em>escapable</em> shock confers resilience — animals pre-exposed to controllable aversives do not become helpless after subsequent inescapable shock.</li>
+          <li><strong>Depression link:</strong> Antidepressants that work in humans also reverse helplessness in rats. Anhedonia and motivational withdrawal in helpless animals mirror clinical depression phenotype.</li>
+          <li><strong>Key insight:</strong> Physically carrying the helpless dog over the barrier did not help — the animal had to be carried repeatedly before it re-learned that its own actions could succeed. The expectancy must be updated by controllability experience.</li>
+        </ul>
+        <div class="callout exam">
+          <div class="callout-title">Lecture: Morris Water Maze Analog</div>
+          When the hidden platform is removed, mice stop searching in the target quadrant — a form of acquired futility. Changing the environment (novel room, new cues) re-engages motivation by resetting the expectancy in a new context. This shows the context-specificity of helplessness and its reversibility.
+        </div>
+      </div>
+    </div>
+
+    <!-- 6. Emotion and Memory -->
+    <div class="study-section" data-section="6">
+      <div class="study-section-header" onclick="toggleSection(this)">
+        <div class="study-section-header-left">
+          <div class="section-icon" style="background:rgba(16,185,129,.12);">🧠</div>
+          <div><div class="section-num">Section 6</div><div class="section-title">Emotion and Memory</div></div>
+        </div>
+        <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
+      </div>
+      <div class="study-section-body">
+        <div class="prose">
+          <p><strong>Cahill et al. (1995):</strong> Emotional arousal selectively enhances encoding of emotionally significant material but NOT surrounding neutral content. Epinephrine injection after training improves memory (modulation window closes at ~120 min). <strong>Propranolol</strong> (norepinephrine blocker) eliminates the memory enhancement for emotional material.</p>
+          <p><strong>Mood congruency:</strong> Current emotional state functions as a retrieval cue — positive mood retrieves positive memories, negative mood retrieves negative memories. This can create self-reinforcing cycles (depression).</p>
+        </div>
+        <table class="prop-table">
+          <thead><tr><th>Phenomenon</th><th>Finding</th><th>Mechanism</th></tr></thead>
+          <tbody>
+            <tr><td>Flashbulb memories</td><td>Vivid, high-confidence memories for emotional events; but NOT necessarily accurate (Talarico &amp; Rubin 2003 — 9/11 memories degraded while confidence stayed high)</td><td>Amygdala tags memory as important, producing subjective sense of permanence; but hippocampal content still undergoes normal decay and reconsolidation errors</td></tr>
+            <tr><td>Reconsolidation</td><td>Reactivating a memory opens a labile window where the trace can be modified before restabilizing</td><td>Therapeutic implication: propranolol during reconsolidation window can reduce emotional charge without erasing factual content</td></tr>
+            <tr><td>Cortisol inverted-U</td><td>Low-moderate cortisol facilitates LTP and memory consolidation; high/chronic cortisol impairs hippocampal function</td><td>Prolonged stress causes dendritic atrophy in hippocampus; consistent with hippocampal volume reduction in chronic PTSD</td></tr>
+          </tbody>
+        </table>
+        <div class="callout tip">
+          <div class="callout-title">Propranolol Therapeutic Window</div>
+          Propranolol blocks beta-adrenergic receptors (norepinephrine). Given before an emotional story, it eliminates the memory advantage for emotional portions (Cahill et al. 1994). Given at reconsolidation (when a PTSD memory is reactivated), it can dampen the BLA-mediated emotional component while leaving the factual hippocampal record intact. This is the basis of a proposed PTSD treatment.
+        </div>
+      </div>
+    </div>
+
+    <!-- 7. Brain Substrates of Emotional Learning -->
+    <div class="study-section" data-section="7">
+      <div class="study-section-header" onclick="toggleSection(this)">
+        <div class="study-section-header-left">
+          <div class="section-icon" style="background:rgba(244,63,94,.12);">🔬</div>
+          <div><div class="section-num">Section 7</div><div class="section-title">Brain Substrates of Emotional Learning</div></div>
+        </div>
+        <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
+      </div>
+      <div class="study-section-body">
+        <table class="prop-table">
+          <thead><tr><th>Structure</th><th>Role</th><th>Key Evidence</th></tr></thead>
+          <tbody>
+            <tr><td>Lateral nucleus (amygdala)</td><td>Primary input gate; site of Hebbian LTP for CS-US association formation</td><td>LTP required at lateral nucleus synapses during CS-US pairing; lateral nucleus lesions prevent fear acquisition</td></tr>
+            <tr><td>Central nucleus (amygdala)</td><td>Output hub — drives ANS responses and motor fear expression (freezing, startle, BP changes)</td><td>Central nucleus lesions abolish conditioned freezing and SCR despite intact lateral nucleus</td></tr>
+            <tr><td>Basolateral amygdala (BLA)</td><td>Modulates memory consolidation in hippocampus and cortex via norepinephrine projections</td><td>BLA lesions eliminate epinephrine's memory-enhancing effect; propranolol in BLA mimics BLA lesion</td></tr>
+            <tr><td>Hippocampus</td><td>Encodes contextual information (WHERE fear was learned); contextual fear conditioning requires hippocampus</td><td>Hippocampal lesions abolish contextual fear but spare cued (tone) fear</td></tr>
+            <tr><td>Medial PFC (mPFC)</td><td>Inhibits amygdala top-down; required for extinction; damage → disinhibited emotional expression OR blunting</td><td>Extinction requires intact mPFC; vmPFC activity inversely correlates with amygdala during extinction recall</td></tr>
+          </tbody>
+        </table>
+        <div class="circuit-box">
+          <div class="circuit-label">LeDoux's Two Pathways to Amygdala</div>
+          FAST path: Thalamus → Lateral amygdala (~12 ms) — coarse, rough, rapid response before full identification<br>
+          SLOW path: Thalamus → Sensory cortex → Lateral amygdala (~19 ms) — detailed, allows cancellation if stimulus is safe<br>
+          Both paths converge on lateral nucleus → CS-US association stored there
+        </div>
+        <div class="callout exam">
+          <div class="callout-title">Bechara Double Dissociation (1995) — High-Yield</div>
+          <strong>Amygdala damage:</strong> impairs conditioned SCR (skin conductance response) but preserves declarative knowledge ("CS was paired with shock"). <strong>Hippocampal damage:</strong> impairs declarative knowledge but preserves conditioned SCR. Emotional learning and episodic memory of emotional events use different systems. This is the strongest direct evidence for the dual-system model.
+        </div>
+      </div>
+    </div>
+
+    <!-- 8. Clinical: Phobias and PTSD -->
+    <div class="study-section" data-section="8">
+      <div class="study-section-header" onclick="toggleSection(this)">
+        <div class="study-section-header-left">
+          <div class="section-icon" style="background:rgba(245,158,11,.12);">🏥</div>
+          <div><div class="section-num">Section 8</div><div class="section-title">Clinical: Phobias and PTSD</div></div>
+        </div>
+        <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
+      </div>
+      <div class="study-section-body">
+        <table class="contrast-table">
+          <thead><tr><th></th><th>Phobia</th><th>PTSD</th></tr></thead>
+          <tbody>
+            <tr><td>Core mechanism</td><td>Excessive CER that has generalized to broad range of CS-like stimuli</td><td>Failure of extinction after trauma; CER remains strong months/years later</td></tr>
+            <tr><td>Acquisition</td><td>Can be directly conditioned OR acquired observationally (watching another's fear response)</td><td>Single traumatic CS-US pairing; CRs acquired faster, extinguished more slowly in PTSD patients</td></tr>
+            <tr><td>Predisposing factor</td><td>Prior sensitization, genetic vulnerability</td><td>Smaller hippocampal volume (Gilbertson 2002 twin study — non-deployed co-twins also had smaller hippocampi → predisposition, not consequence)</td></tr>
+            <tr><td>Treatment</td><td>Systematic desensitization — graded non-reinforced CS exposure</td><td>Exposure therapy; propranolol at reconsolidation; VR therapy</td></tr>
+          </tbody>
+        </table>
+        <div class="callout warn">
+          <div class="callout-title">Fear Extinction ≠ Erasure</div>
+          Fear extinction is <strong>new learning</strong> (inhibitory CS-noUS association), not erasure of the original CS-US memory. The original memory persists and can be reinstated from the original training context. This is why PTSD patients relapse when returning to the trauma environment — the extinction memory is context-specific but the original fear memory is not.
+        </div>
+        <div class="callout connect">
+          <div class="callout-title">Gilbertson (2002) Twin Study — Causal Interpretation</div>
+          Vietnam veterans WITH PTSD and their non-deployed identical twins BOTH had smaller hippocampal volumes. Since the non-deployed twins never experienced combat, smaller hippocampal volume must be a <strong>predisposing vulnerability</strong>, not a trauma consequence. This reframes PTSD risk as partly a biological predisposition.
+        </div>
+      </div>
+    </div>
+
+    <!-- 9. Social Learning: Behavioral Mechanisms -->
+    <div class="study-section" data-section="9">
+      <div class="study-section-header" onclick="toggleSection(this)">
+        <div class="study-section-header-left">
+          <div class="section-icon" style="background:rgba(99,102,241,.15);">👥</div>
+          <div><div class="section-num">Section 9</div><div class="section-title">Social Learning: Behavioral Mechanisms</div></div>
+        </div>
+        <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
+      </div>
+      <div class="study-section-body">
+        <div class="prose">
+          <p><strong>Social learning:</strong> Learning by actively monitoring events involving other individuals. <em>No direct reinforcement of the learner is required.</em> This is the key distinction from standard operant conditioning.</p>
+        </div>
+        <table class="prop-table">
+          <thead><tr><th>Type</th><th>Definition</th><th>Example / Evidence</th></tr></thead>
+          <tbody>
+            <tr><td>True imitation</td><td>Copies the SPECIFIC MOTOR ACT of the model (not just the outcome)</td><td>Children in Whiten (1996) artificial fruit task copied poking motion; counterintuitively, children outperform chimps at true imitation</td></tr>
+            <tr><td>Emulation</td><td>Copies the GOAL/OUTCOME; method is flexible (observer uses own means)</td><td>Chimps used palms rather than index finger despite watching the model poke — they achieved the outcome without copying the movement</td></tr>
+            <tr><td>Contagion</td><td>Innate, reflexive, automatic response to same response in conspecifics; NOT social learning; no episodic memory storage</td><td>Yawning, laughing — no learning occurs; cannot be suppressed voluntarily in the way imitation can</td></tr>
+            <tr><td>Observational conditioning</td><td>Classical conditioning applied to OBSERVED events — acquires emotional/fear response by watching another organism's CR or UR</td><td>Mineka &amp; Cook (1988): lab-reared monkeys learned snake fear by watching wild conspecifics react; single observation sufficient</td></tr>
+            <tr><td>Stimulus enhancement</td><td>Another organism's action directs the observer's attention to a stimulus; observer may then learn about that stimulus on their own</td><td>Watching someone use a tool directs attention to the tool; observer independently learns its properties — NOT motor copying</td></tr>
+          </tbody>
+        </table>
+        <div class="callout tip">
+          <div class="callout-title">Bandura's Four Conditions — Know All Four</div>
+          1. <strong>Attention</strong> — observer must attend to the model. 2. <strong>Retention</strong> — observed behavior must be encoded in memory. 3. <strong>Reproduction capacity</strong> — observer must be physically able to perform the action. 4. <strong>Motivation</strong> — some reason to perform (can be vicarious reinforcement). <em>Direct reinforcement of the learner is NOT required</em> — this is Bandura's key departure from Skinnerian behaviorism.
+        </div>
+        <div class="circuit-box">
+          <div class="circuit-label">Template Model of Birdsong (Three Phases)</div>
+          Phase 1: MEMORIZE — juvenile listens to adult tutor, encodes auditory template<br>
+          Phase 2: SENSORIMOTOR PRACTICE — sings alone, compares output to template; TD learning drives convergence<br>
+          Phase 3: SOCIAL USE — performs for female; dopamine prediction error gated OFF during performance (female's response = new teaching signal)
+        </div>
+        <div class="prose">
+          <p><strong>Goldberg lab (zebra finch):</strong> Dopamine performance prediction error in Area X present during solo singing (Phase 2 rehearsal) but disappears when a female is present. Context gates two modes: rehearsal uses internal template comparison; performance uses social feedback as the learning signal. These modes are mutually exclusive and context-dependent.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- 10. Neural Substrates & Clinical: Social Learning -->
+    <div class="study-section" data-section="10">
+      <div class="study-section-header" onclick="toggleSection(this)">
+        <div class="study-section-header-left">
+          <div class="section-icon" style="background:rgba(16,185,129,.12);">🪞</div>
+          <div><div class="section-num">Section 10</div><div class="section-title">Neural Substrates &amp; Clinical Perspectives in Social Learning</div></div>
+        </div>
+        <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
+      </div>
+      <div class="study-section-body">
+        <div class="prose">
+          <p><strong>Mirror neurons (Rizzolatti, macaque area F5):</strong> Fire both when the monkey performs an action AND when it observes the same action performed by another. Some neurons are <em>action-selective</em> (fire for one specific movement); others are <em>goal-selective</em> (fire for any action achieving a particular outcome).</p>
+          <p><strong>Direct-matching hypothesis:</strong> Stored motor action representations automatically map observed actions onto the observer's own motor system — providing a neural substrate for understanding others' actions by simulating them internally.</p>
+        </div>
+        <table class="prop-table">
+          <thead><tr><th>Region / Finding</th><th>Function</th></tr></thead>
+          <tbody>
+            <tr><td>Area F5 / inferior frontal gyrus</td><td>Primary mirror neuron locus in macaques; human homologue (IFG) shows overlapping activation for action execution and observation</td></tr>
+            <tr><td>Goal-selective mirror neurons</td><td>Fire for ANY action achieving the outcome — provides neural basis for emulation (copying goal, not specific act)</td></tr>
+            <tr><td>Human evidence</td><td>Mu rhythm suppression (EEG during observation), TMS motor-evoked potentials elevated during action observation, fMRI IFG overlap</td></tr>
+            <tr><td>Frontal lobe (voluntary control)</td><td>Controls WHEN to engage copying; frontal damage → increased automatic imitation + impaired voluntary imitation</td></tr>
+          </tbody>
+        </table>
+        <div class="circuit-box">
+          <div class="circuit-label">Birdsong Circuits — Mammalian Analogs</div>
+          HVC (timing) ≅ motor cortex<br>
+          RA (fine features; mirror-neuron-like) ≅ primary motor output<br>
+          Area X (dopamine learning, basal ganglia analogue) ≅ dorsal striatum<br>
+          LMAN (adds variability/exploration) ≅ prefrontal/frontal cortex
+        </div>
+        <div class="prose">
+          <p><strong>Rat food preference (Galef &amp; Wigmore, 1983):</strong> A single 15-min social interaction (demonstrator rat with food on breath) produced months-long food preference in observer rats. Hippocampal lesions disrupted this with a retrograde gradient (lesions immediately after interaction = worst impairment) — confirming hippocampal-dependent episodic encoding of social information.</p>
+        </div>
+        <div class="callout warn">
+          <div class="callout-title">ASD and Frontal Stroke — The Unifying Insight</div>
+          Both ASD and frontal stroke show <strong>increased automatic imitation</strong> (echolalia in ASD; automatic mirroring in frontal patients) combined with <strong>impaired voluntary imitation</strong>. This paradox is explained by the dual-circuit model: automatic imitation = mirror neuron activation (intact); voluntary imitation = mirror neurons + frontal gate deciding WHEN to copy (impaired). The "broken mirrors" hypothesis for ASD is now considered overstated — mirror neurons may be intact but the frontal control circuit is disrupted.
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /tab-guide -->
+
+
+  <!-- ════════════════════════════ KEY TERMS ════════════════════════════ -->
+  <div class="tab-panel" id="tab-terms">
+    <div style="margin-bottom:1.5rem;">
+      <h2 style="font-size:1.3rem;margin-bottom:.4rem;">Key Terms — 25 Flashcards</h2>
+      <p style="color:var(--gray-light);font-size:.9rem;">Click any card to reveal its definition. Use the filters to focus on a category.</p>
+    </div>
+    <div class="terms-controls">
+      <button class="filter-btn active" data-filter="all">All</button>
+      <button class="filter-btn" data-filter="behavior">Behavioral</button>
+      <button class="filter-btn" data-filter="neuro">Neural</button>
+      <button class="filter-btn" data-filter="theory">Theory</button>
+      <button class="filter-btn" data-filter="clinical">Clinical</button>
+      <button class="flip-all-btn" id="flipAllBtn">Reveal All</button>
+    </div>
+    <div class="terms-grid" id="termsGrid">
+
+      <!-- THEORY -->
+      <div class="flashcard" data-category="theory" onclick="flipCard(this)">
+        <div class="flashcard-inner">
+          <div class="flashcard-front">
+            <span class="flashcard-tag tag-theory">Theory</span>
+            <div class="flashcard-term">Three-component model of emotion</div>
+            <div class="flashcard-hint">Click to reveal →</div>
+          </div>
+          <div class="flashcard-back">
+            <span class="flashcard-tag tag-theory">Theory</span>
+            <div class="flashcard-def">Emotion = cluster of <strong>physiological responses</strong> (heart rate, hormones) + <strong>overt behaviors</strong> (freezing, facial expressions) + <strong>conscious feelings</strong> (subjective experience). All three components occur together.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flashcard" data-category="theory" onclick="flipCard(this)">
+        <div class="flashcard-inner">
+          <div class="flashcard-front">
+            <span class="flashcard-tag tag-theory">Theory</span>
+            <div class="flashcard-term">James-Lange theory</div>
+            <div class="flashcard-hint">Click to reveal →</div>
+          </div>
+          <div class="flashcard-back">
+            <span class="flashcard-tag tag-theory">Theory</span>
+            <div class="flashcard-def">Emotional stimulus → bodily response first → conscious feeling follows from perception of that body state. "We feel afraid <strong>because</strong> we tremble." Evidence: facial feedback — forcing a smile produces reported positive emotion.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flashcard" data-category="theory" onclick="flipCard(this)">
+        <div class="flashcard-inner">
+          <div class="flashcard-front">
+            <span class="flashcard-tag tag-theory">Theory</span>
+            <div class="flashcard-term">Cannon-Bard theory</div>
+            <div class="flashcard-hint">Click to reveal →</div>
+          </div>
+          <div class="flashcard-back">
+            <span class="flashcard-tag tag-theory">Theory</span>
+            <div class="flashcard-def">Emotional stimulus evokes <strong>simultaneous</strong> physiological response AND conscious feeling — parallel, not sequential. Thalamus routes signal to both body and cortex at the same time. Critiques James-Lange's sequential model.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flashcard" data-category="theory" onclick="flipCard(this)">
+        <div class="flashcard-inner">
+          <div class="flashcard-front">
+            <span class="flashcard-tag tag-theory">Theory</span>
+            <div class="flashcard-term">Two-factor theory (Schachter &amp; Singer)</div>
+            <div class="flashcard-hint">Click to reveal →</div>
+          </div>
+          <div class="flashcard-back">
+            <span class="flashcard-tag tag-theory">Theory</span>
+            <div class="flashcard-def">Emotion = <strong>physiological arousal + cognitive appraisal</strong>. Arousal is undifferentiated; the cognitive context supplies the label. Capilano Bridge: bridge-induced arousal misattributed as attraction when interviewer is present.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flashcard" data-category="theory" onclick="flipCard(this)">
+        <div class="flashcard-inner">
+          <div class="flashcard-front">
+            <span class="flashcard-tag tag-theory">Theory</span>
+            <div class="flashcard-term">Direct-matching hypothesis</div>
+            <div class="flashcard-hint">Click to reveal →</div>
+          </div>
+          <div class="flashcard-back">
+            <span class="flashcard-tag tag-theory">Theory</span>
+            <div class="flashcard-def">Motor action memories are stored in circuits that <strong>simultaneously encode visual and motor representations</strong>. Observing an action automatically activates the same motor representation used to perform it — the neural basis of imitation and action understanding.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- BEHAVIORAL -->
+      <div class="flashcard" data-category="behavior" onclick="flipCard(this)">
+        <div class="flashcard-inner">
+          <div class="flashcard-front">
+            <span class="flashcard-tag tag-behavior">Behavioral</span>
+            <div class="flashcard-term">Conditioned emotional response (CER)</div>
+            <div class="flashcard-hint">Click to reveal →</div>
+          </div>
+          <div class="flashcard-back">
+            <span class="flashcard-tag tag-behavior">Behavioral</span>
+            <div class="flashcard-def">Classically conditioned fear response to a CS. Key properties: <strong>fast acquisition</strong> (single pairing possible), <strong>broad generalization</strong>, <strong>highly extinction-resistant</strong>. Reflects the adaptive value of rapid fear learning for survival.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flashcard" data-category="behavior" onclick="flipCard(this)">
+        <div class="flashcard-inner">
+          <div class="flashcard-front">
+            <span class="flashcard-tag tag-behavior">Behavioral</span>
+            <div class="flashcard-term">Conditioned escape</div>
+            <div class="flashcard-hint">Click to reveal →</div>
+          </div>
+          <div class="flashcard-back">
+            <span class="flashcard-tag tag-behavior">Behavioral</span>
+            <div class="flashcard-def">Operant response that <strong>terminates an ongoing aversive stimulus</strong>. Reinforced by negative reinforcement (relief from present US). US actually occurs; each escape confirms effectiveness of the response.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flashcard" data-category="behavior" onclick="flipCard(this)">
+        <div class="flashcard-inner">
+          <div class="flashcard-front">
+            <span class="flashcard-tag tag-behavior">Behavioral</span>
+            <div class="flashcard-term">Conditioned avoidance</div>
+            <div class="flashcard-hint">Click to reveal →</div>
+          </div>
+          <div class="flashcard-back">
+            <span class="flashcard-tag tag-behavior">Behavioral</span>
+            <div class="flashcard-def">Operant response to a warning CS that <strong>prevents US occurrence</strong>. Extremely persistent: reinforced by CS-fear reduction; since US never comes, CS-fear never extinguishes; therefore avoidance never extinguishes. Mowrer two-factor mechanism.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flashcard" data-category="behavior" onclick="flipCard(this)">
+        <div class="flashcard-inner">
+          <div class="flashcard-front">
+            <span class="flashcard-tag tag-behavior">Behavioral</span>
+            <div class="flashcard-term">Learned helplessness</div>
+            <div class="flashcard-hint">Click to reveal →</div>
+          </div>
+          <div class="flashcard-back">
+            <span class="flashcard-tag tag-behavior">Behavioral</span>
+            <div class="flashcard-def">Expectancy that responses are ineffectual, leading to <strong>reduced motivation</strong> for new avoidance/escape attempts. Induced by inescapable aversives; reversed by controllability experience; parallels depression's anhedonia and motivational withdrawal.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flashcard" data-category="behavior" onclick="flipCard(this)">
+        <div class="flashcard-inner">
+          <div class="flashcard-front">
+            <span class="flashcard-tag tag-behavior">Behavioral</span>
+            <div class="flashcard-term">Flashbulb memory</div>
+            <div class="flashcard-hint">Click to reveal →</div>
+          </div>
+          <div class="flashcard-back">
+            <span class="flashcard-tag tag-behavior">Behavioral</span>
+            <div class="flashcard-def">Vivid episodic memory for an emotionally significant event; accompanied by high confidence. But <strong>NOT necessarily accurate</strong> — Talarico &amp; Rubin (2003) showed 9/11 memory details degraded over months while confidence remained high. Vividness ≠ accuracy.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flashcard" data-category="behavior" onclick="flipCard(this)">
+        <div class="flashcard-inner">
+          <div class="flashcard-front">
+            <span class="flashcard-tag tag-behavior">Behavioral</span>
+            <div class="flashcard-term">Mood congruency</div>
+            <div class="flashcard-hint">Click to reveal →</div>
+          </div>
+          <div class="flashcard-back">
+            <span class="flashcard-tag tag-behavior">Behavioral</span>
+            <div class="flashcard-def">Current emotional state biases <strong>memory retrieval toward memories of the same valence</strong>. Positive mood retrieves positive memories; negative mood retrieves negative memories. Can create self-reinforcing cycles in depression.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flashcard" data-category="behavior" onclick="flipCard(this)">
+        <div class="flashcard-inner">
+          <div class="flashcard-front">
+            <span class="flashcard-tag tag-behavior">Behavioral</span>
+            <div class="flashcard-term">Social learning</div>
+            <div class="flashcard-hint">Click to reveal →</div>
+          </div>
+          <div class="flashcard-back">
+            <span class="flashcard-tag tag-behavior">Behavioral</span>
+            <div class="flashcard-def">Learning by monitoring other individuals' actions and outcomes. <strong>No direct reinforcement of the learner required</strong>. Allows inheriting compressed outcomes of others' experiences — the highest-bandwidth information channel for intelligent agents.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flashcard" data-category="behavior" onclick="flipCard(this)">
+        <div class="flashcard-inner">
+          <div class="flashcard-front">
+            <span class="flashcard-tag tag-behavior">Behavioral</span>
+            <div class="flashcard-term">True imitation</div>
+            <div class="flashcard-hint">Click to reveal →</div>
+          </div>
+          <div class="flashcard-back">
+            <span class="flashcard-tag tag-behavior">Behavioral</span>
+            <div class="flashcard-def">Copying the <strong>specific motor acts</strong> of a model, not just the goal. Demonstrated by children in Whiten's artificial fruit task (copied poking motion). Counterintuitively, human children are better true imitators than chimps.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flashcard" data-category="behavior" onclick="flipCard(this)">
+        <div class="flashcard-inner">
+          <div class="flashcard-front">
+            <span class="flashcard-tag tag-behavior">Behavioral</span>
+            <div class="flashcard-term">Emulation</div>
+            <div class="flashcard-hint">Click to reveal →</div>
+          </div>
+          <div class="flashcard-back">
+            <span class="flashcard-tag tag-behavior">Behavioral</span>
+            <div class="flashcard-def">Copying the <strong>goal/outcome</strong> without replicating the specific motor acts. Chimps in Whiten task used palms rather than index fingers — achieving the result their own way. Goal-selective mirror neurons provide the neural basis.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flashcard" data-category="behavior" onclick="flipCard(this)">
+        <div class="flashcard-inner">
+          <div class="flashcard-front">
+            <span class="flashcard-tag tag-behavior">Behavioral</span>
+            <div class="flashcard-term">Contagion</div>
+            <div class="flashcard-hint">Click to reveal →</div>
+          </div>
+          <div class="flashcard-back">
+            <span class="flashcard-tag tag-behavior">Behavioral</span>
+            <div class="flashcard-def">Innate, <strong>reflexive, automatic</strong> response to observing the same response in conspecifics (yawning, laughing). NOT social learning — no episodic memory storage, no intentional copying. Cannot be voluntarily suppressed in the way imitation can.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flashcard" data-category="behavior" onclick="flipCard(this)">
+        <div class="flashcard-inner">
+          <div class="flashcard-front">
+            <span class="flashcard-tag tag-behavior">Behavioral</span>
+            <div class="flashcard-term">Observational conditioning</div>
+            <div class="flashcard-hint">Click to reveal →</div>
+          </div>
+          <div class="flashcard-back">
+            <span class="flashcard-tag tag-behavior">Behavioral</span>
+            <div class="flashcard-def">Acquiring an emotional/fear response by <strong>watching another organism's CR or UR</strong>. Classical conditioning applied to observed events. Mineka &amp; Cook (1988): lab monkeys acquired snake fear after watching wild conspecifics react. Single observation sufficient.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- NEURAL -->
+      <div class="flashcard" data-category="neuro" onclick="flipCard(this)">
+        <div class="flashcard-inner">
+          <div class="flashcard-front">
+            <span class="flashcard-tag tag-neuro">Neural</span>
+            <div class="flashcard-term">Reconsolidation</div>
+            <div class="flashcard-hint">Click to reveal →</div>
+          </div>
+          <div class="flashcard-back">
+            <span class="flashcard-tag tag-neuro">Neural</span>
+            <div class="flashcard-def">Reactivating a stored memory renders it <strong>transiently labile</strong> — it can be modified before restabilizing. The reconsolidation window is the therapeutic target: propranolol given during reactivation can reduce the emotional charge (BLA-mediated) while leaving factual content (hippocampal) intact.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flashcard" data-category="neuro" onclick="flipCard(this)">
+        <div class="flashcard-inner">
+          <div class="flashcard-front">
+            <span class="flashcard-tag tag-neuro">Neural</span>
+            <div class="flashcard-term">Lateral nucleus (amygdala)</div>
+            <div class="flashcard-hint">Click to reveal →</div>
+          </div>
+          <div class="flashcard-back">
+            <span class="flashcard-tag tag-neuro">Neural</span>
+            <div class="flashcard-def">Primary <strong>input gate</strong> of the amygdala; site of Hebbian LTP for CS-US association formation. Receives both the fast thalamic path and the slow cortical path. Lesions prevent fear acquisition without affecting fear expression driven by the central nucleus.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flashcard" data-category="neuro" onclick="flipCard(this)">
+        <div class="flashcard-inner">
+          <div class="flashcard-front">
+            <span class="flashcard-tag tag-neuro">Neural</span>
+            <div class="flashcard-term">Central nucleus (amygdala)</div>
+            <div class="flashcard-hint">Click to reveal →</div>
+          </div>
+          <div class="flashcard-back">
+            <span class="flashcard-tag tag-neuro">Neural</span>
+            <div class="flashcard-def"><strong>Output hub</strong> of the amygdala: drives ANS (heart rate, blood pressure) and motor fear expression (freezing, startle, piloerection). Lesions abolish conditioned SCR and freezing even when the lateral nucleus CS-US association is intact.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flashcard" data-category="neuro" onclick="flipCard(this)">
+        <div class="flashcard-inner">
+          <div class="flashcard-front">
+            <span class="flashcard-tag tag-neuro">Neural</span>
+            <div class="flashcard-term">Basolateral amygdala (BLA)</div>
+            <div class="flashcard-hint">Click to reveal →</div>
+          </div>
+          <div class="flashcard-back">
+            <span class="flashcard-tag tag-neuro">Neural</span>
+            <div class="flashcard-def">Modulates <strong>memory consolidation in hippocampus and cortex</strong> via norepinephrine projections. BLA activation during emotional events is the mechanism by which arousal selectively enhances memory for emotionally significant content. Propranolol in BLA eliminates this enhancement.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flashcard" data-category="neuro" onclick="flipCard(this)">
+        <div class="flashcard-inner">
+          <div class="flashcard-front">
+            <span class="flashcard-tag tag-neuro">Neural</span>
+            <div class="flashcard-term">LeDoux two pathways</div>
+            <div class="flashcard-hint">Click to reveal →</div>
+          </div>
+          <div class="flashcard-back">
+            <span class="flashcard-tag tag-neuro">Neural</span>
+            <div class="flashcard-def"><strong>Fast (~12ms):</strong> thalamus → lateral amygdala directly — coarse but rapid; enables response before cortical identification is complete. <strong>Slow (~19ms):</strong> thalamus → sensory cortex → lateral amygdala — detailed; allows cancellation if stimulus is safe. Speed-accuracy tradeoff at the neural level.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flashcard" data-category="neuro" onclick="flipCard(this)">
+        <div class="flashcard-inner">
+          <div class="flashcard-front">
+            <span class="flashcard-tag tag-neuro">Neural</span>
+            <div class="flashcard-term">Mirror neurons</div>
+            <div class="flashcard-hint">Click to reveal →</div>
+          </div>
+          <div class="flashcard-back">
+            <span class="flashcard-tag tag-neuro">Neural</span>
+            <div class="flashcard-def">Neurons that fire both when the animal <strong>performs an action</strong> AND when it <strong>observes the same action</strong> in another. Found in macaque premotor area F5 (Rizzolatti). Goal-selective mirror neurons fire for any action achieving an outcome — basis for emulation. Human evidence: mu rhythm suppression, TMS MEPs, fMRI IFG overlap.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flashcard" data-category="neuro" onclick="flipCard(this)">
+        <div class="flashcard-inner">
+          <div class="flashcard-front">
+            <span class="flashcard-tag tag-neuro">Neural</span>
+            <div class="flashcard-term">Template model (birdsong)</div>
+            <div class="flashcard-hint">Click to reveal →</div>
+          </div>
+          <div class="flashcard-back">
+            <span class="flashcard-tag tag-neuro">Neural</span>
+            <div class="flashcard-def"><strong>Phase 1:</strong> Juvenile memorizes auditory template from tutor. <strong>Phase 2:</strong> Sensorimotor practice — sings alone, compares output to template; TD learning (dopamine in Area X) drives convergence. <strong>Phase 3:</strong> Social use — performs for female; dopamine prediction error gated off; female's response is the new teaching signal.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- CLINICAL -->
+      <div class="flashcard" data-category="clinical" onclick="flipCard(this)">
+        <div class="flashcard-inner">
+          <div class="flashcard-front">
+            <span class="flashcard-tag tag-clinical">Clinical</span>
+            <div class="flashcard-term">Systematic desensitization</div>
+            <div class="flashcard-hint">Click to reveal →</div>
+          </div>
+          <div class="flashcard-back">
+            <span class="flashcard-tag tag-clinical">Clinical</span>
+            <div class="flashcard-def">Phobia treatment: <strong>graded, non-reinforced CS exposure</strong> to extinguish the CER. Patient is exposed to progressively fear-inducing stimuli while US never occurs, allowing extinction. Extinction = new learning (CS-noUS), not erasure; original CS-US memory persists but is inhibited by extinction memory.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flashcard" data-category="clinical" onclick="flipCard(this)">
+        <div class="flashcard-inner">
+          <div class="flashcard-front">
+            <span class="flashcard-tag tag-clinical">Clinical</span>
+            <div class="flashcard-term">PTSD</div>
+            <div class="flashcard-hint">Click to reveal →</div>
+          </div>
+          <div class="flashcard-back">
+            <span class="flashcard-tag tag-clinical">Clinical</span>
+            <div class="flashcard-def"><strong>Failure of extinction</strong> after trauma. PTSD patients acquire fear CRs faster and extinguish more slowly. Symptoms: hyperarousal, flashbacks, avoidance persist months/years. Predisposing factor: smaller hippocampal volume (Gilbertson 2002 twin study — vulnerability, not consequence). Treatment: exposure therapy, propranolol at reconsolidation.</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div><!-- /tab-terms -->
+
+
+  <!-- ════════════════════════════ QUIZ ════════════════════════════ -->
+  <div class="tab-panel" id="tab-quiz">
+    <div style="margin-bottom:1.5rem;">
+      <h2 style="font-size:1.3rem;margin-bottom:.4rem;">Practice Multiple Choice — 20 Questions</h2>
+      <p style="color:var(--gray-light);font-size:.9rem;">Click an option to check your answer. Explanations appear automatically.</p>
+    </div>
+
+    <div class="quiz-stats">
+      <div class="stat-item"><div class="stat-val blue" id="statTotal">20</div><div class="stat-lbl">Questions</div></div>
+      <div class="stat-item"><div class="stat-val green" id="statCorrect">0</div><div class="stat-lbl">Correct</div></div>
+      <div class="stat-item"><div class="stat-val red" id="statWrong">0</div><div class="stat-lbl">Incorrect</div></div>
+      <div class="stat-item"><div class="stat-val" id="statPct" style="color:var(--gray-light);">—</div><div class="stat-lbl">Score</div></div>
+      <button class="quiz-reset-btn" onclick="resetQuiz()">Reset Quiz</button>
+    </div>
+
+    <div id="quizContainer"></div>
+  </div><!-- /tab-quiz -->
+
+
+  <!-- ════════════════════════════ SYNTHESIS ════════════════════════════ -->
+  <div class="tab-panel" id="tab-synthesis">
+    <div style="margin-bottom:1.5rem;">
+      <h2 style="font-size:1.3rem;margin-bottom:.4rem;">Big Picture Synthesis</h2>
+      <p style="color:var(--gray-light);font-size:.9rem;">How the week's concepts connect across levels of analysis and to the course arc.</p>
+    </div>
+
+    <div class="callout connect" style="margin-bottom:1.5rem;">
+      <div class="callout-title">The Unifying Principle</div>
+      The amygdala is the salience detector that decides which events dopamine should prioritize for encoding. Social learning is model-based RL where the model includes other agents' value functions — you inherit their compressed Q-values in minutes instead of learning from trial and error across years. Both mechanisms exploit the same underlying circuits (BG, hippocampus, PFC) but under new modulatory conditions.
+    </div>
+
+    <p style="font-size:.8rem;color:var(--gray);margin-bottom:.75rem;font-weight:600;letter-spacing:.04em;text-transform:uppercase;">Levels of Analysis</p>
+    <div class="levels-strip">
+      <div class="level-col">
+        <div class="level-label" style="color:#a5b4fc;">Behavior</div>
+        <div class="level-items">
+          <div class="level-item" style="background:rgba(99,102,241,.1);color:#c7d2fe;">3-component model: physio + behavioral + conscious</div>
+          <div class="level-item" style="background:rgba(99,102,241,.08);color:#c7d2fe;">CERs: fast, broad, sticky fear learning</div>
+          <div class="level-item" style="background:rgba(99,102,241,.06);color:#c7d2fe;">Social learning ≠ conditioning; no direct RL needed</div>
+        </div>
+      </div>
+      <div class="level-col">
+        <div class="level-label" style="color:#67e8f9;">Circuit</div>
+        <div class="level-items">
+          <div class="level-item" style="background:rgba(6,182,212,.1);color:#a5f3fc;">Amygdala: lateral (learn), central (express), BLA (modulate)</div>
+          <div class="level-item" style="background:rgba(6,182,212,.08);color:#a5f3fc;">Hippocampus: context encoding, one-shot social memory</div>
+          <div class="level-item" style="background:rgba(6,182,212,.06);color:#a5f3fc;">Mirror neurons + frontal gate = social copying control</div>
+        </div>
+      </div>
+      <div class="level-col">
+        <div class="level-label" style="color:#6ee7b7;">Synapse</div>
+        <div class="level-items">
+          <div class="level-item" style="background:rgba(16,185,129,.1);color:#a7f3d0;">LTP at lateral amygdala for CS-US association</div>
+          <div class="level-item" style="background:rgba(16,185,129,.08);color:#a7f3d0;">NE from BLA → hippocampal LTP enhancement</div>
+          <div class="level-item" style="background:rgba(16,185,129,.06);color:#a7f3d0;">Dopamine in Area X: TD error during birdsong rehearsal</div>
+        </div>
+      </div>
+      <div class="level-col">
+        <div class="level-label" style="color:#fcd34d;">Clinical</div>
+        <div class="level-items">
+          <div class="level-item" style="background:rgba(245,158,11,.1);color:#fde68a;">PTSD = extinction failure; avoidance perpetuates</div>
+          <div class="level-item" style="background:rgba(245,158,11,.08);color:#fde68a;">Propranolol at reconsolidation window = PTSD treatment</div>
+          <div class="level-item" style="background:rgba(245,158,11,.06);color:#fde68a;">ASD/frontal stroke: auto imitation up, voluntary down</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="synthesis-grid">
+      <div class="synth-card">
+        <div class="synth-card-title">
+          <div class="synth-dot" style="background:var(--rose);"></div>
+          <span style="color:var(--rose);">Likely Exam Themes</span>
+        </div>
+        <ul>
+          <li><span>Three-component model</span> vs. universal emotions (Ekman)</li>
+          <li><span>James-Lange vs. Two-factor theory</span> — Capilano Bridge</li>
+          <li><span>Avoidance paradox</span> — why it persists despite no US; PTSD link</li>
+          <li><span>Learned helplessness</span> — expectancy mechanism; immunization; depression</li>
+          <li><span>Bechara double dissociation</span> — amygdala SCR vs. hippocampus declarative</li>
+          <li><span>LeDoux dual pathway</span> — fast vs. slow to lateral amygdala</li>
+          <li><span>Gilbertson twin study</span> — hippocampal volume as predisposition</li>
+          <li><span>True imitation vs. emulation</span> — Whiten task; chimps vs. children</li>
+          <li><span>Bandura's four conditions</span> — no direct reinforcement required</li>
+          <li><span>Mirror neurons + frontal gate</span> — ASD and frontal stroke paradox</li>
+        </ul>
+      </div>
+      <div class="synth-card">
+        <div class="synth-card-title">
+          <div class="synth-dot" style="background:var(--accent);"></div>
+          <span style="color:var(--accent);">Cross-Course Connections</span>
+        </div>
+        <ul>
+          <li>Amygdala = <span>salience detector</span> determining what dopamine should prioritize (Weeks 5–8)</li>
+          <li>BLA → NE → hippocampal LTP = <span>same LTP mechanism</span> from Week 3 applied to emotional encoding</li>
+          <li>Avoidance paradox = <span>extinction failure</span> from Week 6 applied to clinical context</li>
+          <li>Birdsong Area X ≅ <span>basal ganglia TD learning</span> from Week 8 — same architecture</li>
+          <li>Dopamine gated off during social performance = <span>context-switching</span> in prediction error signals</li>
+          <li>Social learning = <span>model-based RL</span> (Week 11 habits vs. goals) with other agents as the model</li>
+          <li>Same dopamine prediction error from Weeks 5–8 now shown as the <span>WM stability modulator</span> (Week 11) and birdsong learning signal (Week 13)</li>
+        </ul>
+      </div>
+    </div>
+  </div><!-- /tab-synthesis -->
+
+</main>
+
+<script>
+// ─── TAB NAVIGATION ───
+document.querySelectorAll('.tab-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById('tab-' + btn.dataset.tab).classList.add('active');
+  });
+});
+
+// ─── COLLAPSIBLE SECTIONS ───
+function toggleSection(header) {
+  const section = header.closest('.study-section');
+  section.classList.toggle('open');
+}
+
+// ─── FLASHCARDS ───
+function flipCard(card) {
+  card.classList.toggle('flipped');
+}
+
+let allFlipped = false;
+document.getElementById('flipAllBtn').addEventListener('click', function() {
+  allFlipped = !allFlipped;
+  const visible = Array.from(document.querySelectorAll('.flashcard')).filter(c => c.style.display !== 'none');
+  visible.forEach(c => { if (allFlipped) c.classList.add('flipped'); else c.classList.remove('flipped'); });
+  this.textContent = allFlipped ? 'Hide All' : 'Reveal All';
+});
+
+document.querySelectorAll('.filter-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    const filter = btn.dataset.filter;
+    document.querySelectorAll('.flashcard').forEach(card => {
+      if (filter === 'all' || card.dataset.category === filter) {
+        card.style.display = '';
+      } else {
+        card.style.display = 'none';
+      }
+    });
+    allFlipped = false;
+    document.getElementById('flipAllBtn').textContent = 'Reveal All';
+  });
+});
+
+// ─── QUIZ DATA ───
+const questions = [
+  {
+    text: "Which of the following correctly pairs ALL THREE components of the three-component model of emotion?",
+    options: [
+      "Attention, Memory, Motivation",
+      "Physiological response, Overt behavior, Conscious feeling",
+      "Arousal, Valence, Dominance",
+      "Fight, Flight, Freeze"
+    ],
+    correct: 1,
+    tag: "Emotion Model",
+    explanation: "The three-component model: <strong>physiological</strong> (heart rate, hormones, ANS activation), <strong>behavioral</strong> (freezing, fleeing, facial expressions), and <strong>conscious feeling</strong> (subjective experience). All three occur together as a cluster during emotional episodes."
+  },
+  {
+    text: "The Capilano Bridge study is a textbook example of the two-factor theory because:",
+    options: [
+      "It showed that fear always causes misidentification of emotional stimuli",
+      "Men's physical arousal from the swaying bridge was cognitively misattributed to attraction when an attractive interviewer was present",
+      "The study confirmed that bodily responses cause feelings before cognitive appraisal (James-Lange)",
+      "It demonstrated that amygdala activation triggers attraction-related dopamine release"
+    ],
+    correct: 1,
+    tag: "Two-Factor Theory",
+    explanation: "Two-factor theory: arousal + cognitive appraisal = emotion. The bridge's physical arousal was mislabeled as attraction because the cognitive context (attractive interviewer) was available. <strong>Same arousal + different context = different emotion.</strong> This is misattribution of arousal."
+  },
+  {
+    text: "What is the key property of conditioned emotional responses (CERs) that distinguishes them from other forms of classical conditioning?",
+    options: [
+      "They require many more repetitions to acquire than eyeblink conditioning",
+      "They can only be formed in the first few years of life",
+      "They can be acquired after a single CS-US pairing, generalize broadly, and are highly resistant to extinction",
+      "They are exclusively controlled by the hippocampus, not the amygdala"
+    ],
+    correct: 2,
+    tag: "CERs",
+    explanation: "CERs are <strong>fast</strong> (single pairing possible), <strong>broad</strong> (generalization), and <strong>sticky</strong> (extinction-resistant). This reflects the survival importance of rapid fear learning — better to generalize broadly and occasionally be wrong than to fail to detect a real threat."
+  },
+  {
+    text: "According to Mowrer's two-factor theory of avoidance, why does conditioned avoidance persist even though the aversive US is never presented once avoidance is learned?",
+    options: [
+      "The organism cannot distinguish the warning CS from the original context",
+      "The lever press/jump is reinforced by reduction of the conditioned FEAR to the warning CS — since the US never arrives, the fear never extinguishes, and neither does the avoidance",
+      "Avoidance persists because of habituation to the warning signal",
+      "The hippocampus permanently stores the US-context association, blocking extinction"
+    ],
+    correct: 1,
+    tag: "Avoidance Paradox",
+    explanation: "The avoidance response is maintained by <strong>CS-fear reduction</strong> (not US termination). Since the US never comes, the CS-US association is never updated by extinction trials. The organism can never 'learn' the US is gone because it never waits long enough. This is why PTSD avoidance is so intractable."
+  },
+  {
+    text: "Seligman's learned helplessness experiments showed that dogs pre-exposed to inescapable shock failed to escape in a shuttle box. The best explanation is:",
+    options: [
+      "The prior shocks caused physical damage to the dogs' muscles",
+      "Prior uncontrollability created an expectancy that responses are ineffectual, reducing motivation to attempt new escape behaviors",
+      "The conditioned fear response to the shuttle box prevented all movement",
+      "The dogs learned the specific response to crouch from the inescapable context"
+    ],
+    correct: 1,
+    tag: "Learned Helplessness",
+    explanation: "Learned helplessness is a <strong>motivational/cognitive phenomenon</strong>. Animals learned that nothing they do matters. Key evidence: physically carrying the dog over the barrier did not help — the expectancy of ineffectiveness persisted; they had to be carried <em>repeatedly</em> before re-learning that their own actions could succeed."
+  },
+  {
+    text: "Cahill et al.'s (1995) slide show study showed memory enhancement specifically for the emotional middle section of the story. What neural mechanism explains this selective enhancement?",
+    options: [
+      "Emotional arousal reduces hippocampal activity, allowing the amygdala to store the emotional content exclusively",
+      "Amygdala activation during the emotional material modulates consolidation in hippocampus and cortex via norepinephrine from the BLA, strengthening the memory trace specifically for the arousing content",
+      "Epinephrine crosses the blood-brain barrier and directly potentiates hippocampal LTP",
+      "Emotional material activates the PFC, which encodes it into long-term memory independently of the hippocampus"
+    ],
+    correct: 1,
+    tag: "Emotional Memory",
+    explanation: "The <strong>BLA → norepinephrine → hippocampus/cortex LTP</strong> pathway is the mechanism. Amygdala damage eliminates the enhancement; propranolol (NE blocker) eliminates it. The effect is specific to arousing content because the BLA is only strongly activated by emotionally significant material. Critical fact: epinephrine cannot cross the blood-brain barrier — norepinephrine is the central messenger."
+  },
+  {
+    text: "Talarico and Rubin's (2003) study of 9/11 memories found that specific details decayed over months while confidence remained high. The BEST explanation is:",
+    options: [
+      "Emotional memories are photographic but decay at the same rate as regular memories",
+      "Amygdala activation tags memories as 'important' producing high confidence, but hippocampal content still undergoes normal decay and reconsolidation errors — vividness and confidence do not equal accuracy",
+      "PTSD caused hippocampal atrophy in the 9/11 survivors, explaining memory degradation",
+      "High confidence in flashbulb memories is always justified — the apparent decay was a measurement artifact"
+    ],
+    correct: 1,
+    tag: "Flashbulb Memory",
+    explanation: "Key dissociation: <strong>vividness and confidence ≠ accuracy.</strong> The amygdala's emotional tagging gives memories a subjective sense of permanence, but the content (stored in hippocampus and cortex) still undergoes normal decay, distortion, and reconsolidation errors. High confidence is a feeling, not a validity check."
+  },
+  {
+    text: "The Bechara et al. (1995) double dissociation showed that amygdala damage vs. hippocampal damage produce opposite patterns in fear conditioning. Which is correct?",
+    options: [
+      "Amygdala damage: impairs declarative knowledge; preserves conditioned SCR. Hippocampal damage: impairs SCR; preserves declarative knowledge",
+      "Amygdala damage: impairs conditioned SCR; preserves declarative knowledge. Hippocampal damage: impairs declarative knowledge; preserves SCR",
+      "Both lesions equally impair both the SCR and declarative knowledge",
+      "Amygdala damage has no effect; only hippocampal damage alters fear conditioning"
+    ],
+    correct: 1,
+    tag: "Amygdala-Hippocampus Dissociation",
+    explanation: "The amygdala handles the <strong>emotional/autonomic response (SCR)</strong>; the hippocampus handles the <strong>declarative record</strong>. Each can be selectively damaged. This is the strongest evidence that emotional learning and episodic memory of emotional events use dissociable systems. Know this pattern cold."
+  },
+  {
+    text: "LeDoux's dual pathway model for sensory input to the amygdala predicts that:",
+    options: [
+      "All sensory inputs must first be fully processed by the cortex before reaching the amygdala",
+      "A fast, coarse signal (~12ms) via thalamus and a slow, detailed signal via cortex both reach the lateral amygdala; the fast path enables rapid response before cortical identification is complete",
+      "The slow cortical path always overrides the fast thalamic path",
+      "The dual pathway only operates for auditory fear conditioning, not visual"
+    ],
+    correct: 1,
+    tag: "LeDoux Dual Pathway",
+    explanation: "The <strong>fast path</strong> enables survival-relevant rapid responses (react to ambiguous threat before you know what it is). The <strong>slow path</strong> allows the cortex to cancel the fear response if the stimulus turns out to be harmless. This is a speed-accuracy tradeoff at the neural level — a fundamental design principle."
+  },
+  {
+    text: "A patient with bilateral amygdala damage is tested on fear conditioning. Which pattern do you predict?",
+    options: [
+      "Intact conditioned avoidance; impaired declarative memory of the contingency",
+      "Impaired conditioned autonomic response (SCR) and conditioned avoidance; intact declarative knowledge that the CS was paired with the US",
+      "Impaired declarative knowledge; intact conditioned avoidance and SCR",
+      "Both conditioned responses and declarative knowledge equally impaired"
+    ],
+    correct: 1,
+    tag: "Amygdala Lesion",
+    explanation: "Amygdala lesions impair <strong>expressing CRs</strong> (SCR, avoidance) but preserve <strong>declarative knowledge</strong> of the contingency ('the CS was paired with shock' — hippocampal). The patient can tell you intellectually that the CS preceded shock, yet shows no physiological or behavioral fear response. Bechara double dissociation."
+  },
+  {
+    text: "Gilbertson et al. (2002) found that Vietnam veterans WITH PTSD and their non-deployed identical twin brothers BOTH had smaller hippocampal volumes. The correct interpretation is:",
+    options: [
+      "Combat trauma caused hippocampal atrophy that spread epigenetically to twins",
+      "Smaller hippocampal volume predisposes individuals to PTSD rather than being a consequence of trauma — since non-exposed twins also showed the effect",
+      "PTSD cannot be caused by trauma; it is entirely a genetic disorder",
+      "Hippocampal volume differences between veterans with and without PTSD are due to treatment differences"
+    ],
+    correct: 1,
+    tag: "PTSD Predisposition",
+    explanation: "The twin design is powerful. Non-deployed twins had NOT experienced combat but shared hippocampal volume with their PTSD-affected brothers. This means smaller hippocampal volume is a <strong>predisposing vulnerability</strong>, not a trauma consequence. It reframes PTSD risk as partly biological."
+  },
+  {
+    text: "In Whiten et al.'s artificial fruit task, children who observed a model POKING a lid were more likely to poke it themselves, while chimpanzees tended to use their palms regardless of what was modeled. This demonstrates:",
+    options: [
+      "Chimps are better learners than children because they found a more efficient method",
+      "Children show true imitation (specific motor act copying); chimps show emulation (goal-oriented but method-flexible). Counterintuitively, children are better true imitators",
+      "Observational conditioning — both species were conditioned to approach the box by watching the reward",
+      "Chimps cannot perform the poking action due to anatomical constraints"
+    ],
+    correct: 1,
+    tag: "True Imitation vs. Emulation",
+    explanation: "True imitation = copying the <strong>specific motor act</strong>. Emulation = achieving the same outcome your own way. Children faithfully copy; chimps are more pragmatic. The counterintuitive finding: we'd expect chimps to be better imitators, but they are actually better emulators — children over-imitate even irrelevant actions."
+  },
+  {
+    text: "Bandura's social-learning theory specifies four necessary conditions for imitation. Which of the following is NOT one of them?",
+    options: [
+      "Attention — observer must attend to the model's behavior",
+      "Direct reinforcement for performing the observed action",
+      "Retention — observed action must be encoded in memory",
+      "Motor reproduction capacity — observer must be physically able to perform the action"
+    ],
+    correct: 1,
+    tag: "Bandura's Conditions",
+    explanation: "<strong>Direct reinforcement is NOT required.</strong> Bandura's key insight: observing a model receive a reward creates a learned expectation sufficient for learning. Performance (whether the action is expressed) is affected by motivation, but the <em>learning itself</em> does not require direct reinforcement. This is the core departure from Skinnerian behaviorism."
+  },
+  {
+    text: "The Goldberg lab's zebra finch experiment showed that the dopamine 'performance prediction error' signal in Area X was present during solo singing but disappeared when a female was present. The best interpretation is:",
+    options: [
+      "Female presence causes stress that globally suppresses dopamine",
+      "Context gates two modes: during rehearsal (alone), internal performance evaluation drives dopamine learning; during performance (female), external social feedback replaces internal self-evaluation as the learning signal",
+      "Dopamine in Area X encodes sexual arousal, not song quality",
+      "Female presence disrupts recording equipment measuring dopamine"
+    ],
+    correct: 1,
+    tag: "Birdsong Learning",
+    explanation: "The same circuit serves two modes: <strong>rehearsal</strong> (self-correction via internal template comparison, dopamine-mediated TD learning) and <strong>performance</strong> (social feedback from female). These modes are mutually exclusive and context-gated. This is a beautiful example of context-dependent switching between learning algorithms."
+  },
+  {
+    text: "Mirror neurons in macaque premotor cortex (area F5) are 'goal-selective' rather than 'action-selective.' What does goal-selectivity enable?",
+    options: [
+      "Goal-selective mirror neurons enable pure true imitation by encoding the specific motor sequence",
+      "Goal-selective mirror neurons fire for any action achieving a particular outcome regardless of specific movements — providing a neural basis for EMULATION (same goal, different means)",
+      "Goal-selective neurons only fire during social interactions involving food reward",
+      "Goal-selectivity is a developmental property lost in adult primates"
+    ],
+    correct: 1,
+    tag: "Mirror Neurons",
+    explanation: "<strong>Action-selective neurons</strong> = true imitation basis (fire for one specific movement). <strong>Goal-selective neurons</strong> = emulation basis (fire for any action achieving the outcome). Having both types means the mirror system can support both types of copying — explaining the spectrum from precise motor imitation to outcome-focused emulation."
+  },
+  {
+    text: "Frontal lobe damage produces INCREASED automatic imitation combined with IMPAIRED voluntary imitation. ASD shows a similar pattern (echolalia + impaired voluntary imitation). What is the UNIFYING insight?",
+    options: [
+      "Both conditions disrupt mirror neurons, eliminating all forms of imitation",
+      "Both conditions disrupt the meta-competency of controlling WHEN to copy: frontal damage removes inhibitory control over automatic mirroring; voluntary imitation requires both the mirror system AND frontal gate",
+      "Both conditions are caused by the same genetic variant affecting premotor cortex development",
+      "Automatic imitation is always preserved across neurological conditions because it is subcortically mediated"
+    ],
+    correct: 1,
+    tag: "Frontal Gate / ASD",
+    explanation: "The paradox: more automatic imitation AND less voluntary imitation coexist because they require different circuits. <strong>Automatic imitation</strong> = mirror neuron activation (intact). <strong>Voluntary imitation</strong> = mirror neurons + frontal gate that decides WHEN to engage copying (impaired). Frontal damage removes the gate — automatic mirroring runs unchecked."
+  },
+  {
+    text: "The rat food-preference paradigm (Galef & Wigmore, 1983) showed hippocampal lesions disrupted the socially transmitted food preference with a retrograde gradient (immediate lesions = worst impairment). This demonstrates:",
+    options: [
+      "Social food memories are stored in the basal forebrain, not hippocampus",
+      "Socially transmitted food preference has the functional profile of hippocampal-dependent episodic memory — single exposure, long-lasting, and showing the standard retrograde amnesia gradient",
+      "Rat food preferences are immune to retrograde amnesia because they are formed by habit learning",
+      "The basal forebrain stores old social memories while the hippocampus stores new ones"
+    ],
+    correct: 1,
+    tag: "Social Memory / Hippocampus",
+    explanation: "The <strong>retrograde gradient</strong> (worse disruption when lesion is closer to learning) is the signature of hippocampal consolidation. The one-shot, long-lasting nature also suggests episodic encoding. Social information uses the same general memory system as any other contextually rich episode — the hippocampus does not discriminate by content domain."
+  },
+  {
+    text: "Propranolol administered before viewing an emotional story eliminated the memory advantage for emotional portions. The most important CLINICAL implication is:",
+    options: [
+      "Propranolol should be given to PTSD patients before every therapy session to enhance therapeutic memory formation",
+      "Propranolol given at the moment of trauma memory REACTIVATION (the reconsolidation window) may reduce the emotional charge of the traumatic memory while leaving factual content intact",
+      "Propranolol prevents all emotional memory formation and should be given to trauma survivors immediately after trauma",
+      "Blocking norepinephrine eliminates all declarative memory, useful for treatment of intrusive memories"
+    ],
+    correct: 1,
+    tag: "Reconsolidation Therapy",
+    explanation: "The <strong>reconsolidation window</strong> is the therapeutic key: reactivating the memory (bringing it to mind) opens a labile window where NE-dependent re-consolidation occurs. Propranolol during this window can dampen the emotional component (BLA-mediated) without eliminating the factual record (hippocampal). Selective emotional dampening, not memory erasure."
+  },
+  {
+    text: "What is the connection between birdsong learning circuits in birds and mammalian skill learning circuits?",
+    options: [
+      "Both rely exclusively on the cerebellum for error correction",
+      "Both implement reinforcement-based error correction: a learning circuit (Area X / basal ganglia, dopamine-modulated) updates a production circuit (HVC-RA / motor cortex) using a mismatch error signal — TD learning applied to motor output",
+      "Both require the hippocampus as the primary site for storing learned sequences",
+      "The two circuits evolved independently with no computational similarity"
+    ],
+    correct: 1,
+    tag: "Birdsong / Skill Learning",
+    explanation: "Area X (birds) ≅ basal ganglia (mammals); LMAN ≅ frontal cortex; HVC-RA ≅ motor cortex. <strong>Dopamine-modulated error signals</strong> drive synaptic modification in the production circuit. This is conserved vertebrate architecture for skill learning — the same computational solution evolved (or was conserved) across lineages."
+  },
+  {
+    text: "The instructor summarized social learning as 'the highest-bandwidth information channel available to an intelligent agent.' Why?",
+    options: [
+      "Social learning is faster than individual trial-and-error because it requires fewer neural computations",
+      "Rather than accumulating errors across thousands of personal experiences, you can inherit compressed outcomes of others' experiences in minutes — and build on prior knowledge cumulatively across generations",
+      "Social learning channels have higher sensory bandwidth because they involve more sensory modalities",
+      "The social cortex is larger than other brain regions, giving it more processing capacity"
+    ],
+    correct: 1,
+    tag: "Social Learning Theory",
+    explanation: "Bandura's core insight (and the RL framing): social learning is model-based RL where the model includes representations of other agents' value functions. Instead of learning your own Q-values from scratch, you <strong>inherit the experienced agent's compressed solution</strong>. Cumulative culture makes this even more powerful — each generation starts from the prior generation's knowledge."
+  }
+];
+
+let quizState = {};
+
+function buildQuiz() {
+  const container = document.getElementById('quizContainer');
+  container.innerHTML = '';
+  quizState = {};
+
+  questions.forEach((q, i) => {
+    quizState[i] = null;
+    const card = document.createElement('div');
+    card.className = 'q-card';
+    card.id = 'q-' + i;
+
+    const optsHtml = q.options.map((opt, j) =>
+      `<button class="q-opt" data-qi="${i}" data-oi="${j}" onclick="answerQ(${i},${j})">${String.fromCharCode(65+j)}. ${opt}</button>`
+    ).join('');
+
+    card.innerHTML = `
+      <div class="q-header">
+        <div class="q-meta">
+          <span class="q-num">${i+1}</span>
+          <span class="q-tag">${q.tag}</span>
+          <span class="q-status" id="qs-${i}"></span>
+        </div>
+        <div class="q-text">${q.text}</div>
+      </div>
+      <div class="q-options">${optsHtml}</div>
+      <div class="q-explanation hidden" id="qe-${i}">${q.explanation}</div>
+    `;
+    container.appendChild(card);
+  });
+  updateStats();
+}
+
+function answerQ(qi, oi) {
+  if (quizState[qi] !== null) return;
+  quizState[qi] = oi;
+
+  const card = document.getElementById('q-' + qi);
+  const opts = card.querySelectorAll('.q-opt');
+  const isCorrect = oi === questions[qi].correct;
+
+  opts.forEach((btn, j) => {
+    btn.disabled = true;
+    if (j === questions[qi].correct) btn.classList.add('show-correct');
+  });
+  if (!isCorrect) {
+    opts[oi].classList.remove('show-correct');
+    opts[oi].classList.add('selected-wrong');
+  } else {
+    opts[oi].classList.add('selected-correct');
+  }
+
+  card.classList.add(isCorrect ? 'correct' : 'incorrect');
+  document.getElementById('qs-' + qi).textContent = isCorrect ? '✓ Correct' : '✗ Incorrect';
+  document.getElementById('qs-' + qi).style.color = isCorrect ? 'var(--emerald)' : 'var(--rose)';
+  document.getElementById('qe-' + qi).classList.remove('hidden');
+
+  updateStats();
+}
+
+function updateStats() {
+  const answered = Object.values(quizState).filter(v => v !== null).length;
+  const correct = Object.entries(quizState).filter(([i, v]) => v !== null && v === questions[i].correct).length;
+  const wrong = answered - correct;
+  document.getElementById('statCorrect').textContent = correct;
+  document.getElementById('statWrong').textContent = wrong;
+  const pctEl = document.getElementById('statPct');
+  if (answered > 0) {
+    const pct = Math.round((correct / answered) * 100);
+    pctEl.textContent = pct + '%';
+    pctEl.style.color = pct >= 80 ? 'var(--emerald)' : pct >= 60 ? 'var(--amber)' : 'var(--rose)';
+  } else {
+    pctEl.textContent = '—';
+    pctEl.style.color = 'var(--gray-light)';
+  }
+  const pct = (answered / 20) * 100;
+  document.getElementById('quizProgressBar').style.width = pct + '%';
+  document.getElementById('quizProgressLabel').textContent = answered + ' / 20';
+}
+
+function resetQuiz() {
+  buildQuiz();
+}
+
+// ─── SCROLL PROGRESS ───
+window.addEventListener('scroll', () => {
+  const el = document.documentElement;
+  const pct = (el.scrollTop / (el.scrollHeight - el.clientHeight)) * 100;
+  document.getElementById('scrollProgress').style.width = pct + '%';
+});
+
+// ─── INIT ───
+buildQuiz();
+</script>
+</body>
+</html>

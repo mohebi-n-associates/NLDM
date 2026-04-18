@@ -1,0 +1,1746 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Module 9 Exam Prep — Generalization &amp; Discrimination Learning</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --primary: #6366f1;
+      --primary-dark: #4f46e5;
+      --secondary: #ec4899;
+      --accent: #06b6d4;
+      --emerald: #10b981;
+      --amber: #f59e0b;
+      --rose: #f43f5e;
+      --dark: #0f172a;
+      --dark-light: #1e293b;
+      --dark-mid: #162032;
+      --gray: #64748b;
+      --gray-light: #94a3b8;
+      --light: #f1f5f9;
+      --white: #ffffff;
+      --border: rgba(255,255,255,0.08);
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--dark);
+      color: var(--white);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* ─── ANIMATED BACKGROUND ─── */
+    .bg-layer {
+      position: fixed; inset: 0; z-index: -1; pointer-events: none;
+      background:
+        radial-gradient(ellipse 80% 60% at 20% 10%, rgba(99,102,241,.12) 0%, transparent 60%),
+        radial-gradient(ellipse 60% 60% at 80% 80%, rgba(236,72,153,.08) 0%, transparent 60%),
+        radial-gradient(ellipse 40% 40% at 50% 50%, rgba(6,182,212,.05) 0%, transparent 60%);
+      animation: bgPulse 20s ease-in-out infinite;
+    }
+    @keyframes bgPulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.7; transform: scale(1.05); }
+    }
+
+    /* ─── TOPBAR ─── */
+    .topbar {
+      position: sticky; top: 0; z-index: 100;
+      padding: .75rem 2rem;
+      background: rgba(15,23,42,.85);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 1rem;
+    }
+    .topbar-left { display: flex; align-items: center; gap: 1rem; }
+    .back-link {
+      display: flex; align-items: center; gap: .5rem;
+      color: var(--gray-light); text-decoration: none; font-size: .85rem;
+      transition: color .2s;
+    }
+    .back-link:hover { color: var(--white); }
+    .back-link svg { flex-shrink: 0; }
+    .breadcrumb { color: var(--gray); font-size: .8rem; }
+    .breadcrumb span { color: var(--primary); }
+
+    .progress-bar-wrap {
+      flex: 1; max-width: 240px;
+      background: rgba(255,255,255,.08); border-radius: 99px; height: 6px; overflow: hidden;
+    }
+    .progress-bar-fill {
+      height: 100%; border-radius: 99px;
+      background: linear-gradient(90deg, var(--primary), var(--secondary));
+      transition: width .5s ease;
+      width: 0%;
+    }
+    .progress-label { font-size: .75rem; color: var(--gray); white-space: nowrap; }
+
+    /* ─── HERO ─── */
+    .hero {
+      padding: 5rem 2rem 3rem;
+      max-width: 900px; margin: 0 auto; text-align: center;
+    }
+    .module-badge {
+      display: inline-flex; align-items: center; gap: .5rem;
+      background: rgba(99,102,241,.15); border: 1px solid rgba(99,102,241,.3);
+      color: #a5b4fc; border-radius: 99px; padding: .35rem 1rem; font-size: .8rem;
+      font-weight: 600; letter-spacing: .05em; text-transform: uppercase; margin-bottom: 1.5rem;
+    }
+    .hero h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      line-height: 1.15; margin-bottom: 1rem;
+      background: linear-gradient(135deg, #fff 40%, #a5b4fc);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    }
+    .hero-subtitle { color: var(--gray-light); font-size: 1.05rem; max-width: 600px; margin: 0 auto 2rem; }
+
+    .tab-nav {
+      display: flex; gap: .5rem; justify-content: center;
+      flex-wrap: wrap; margin-bottom: 1rem;
+    }
+    .tab-btn {
+      padding: .6rem 1.2rem; border-radius: 99px; border: 1px solid var(--border);
+      background: rgba(255,255,255,.04); color: var(--gray-light);
+      font-size: .875rem; font-weight: 500; cursor: pointer; transition: all .2s;
+      font-family: 'Inter', sans-serif;
+    }
+    .tab-btn:hover { background: rgba(99,102,241,.12); color: var(--white); border-color: rgba(99,102,241,.4); }
+    .tab-btn.active {
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      color: var(--white); border-color: transparent;
+    }
+
+    /* ─── MAIN LAYOUT ─── */
+    .main { max-width: 900px; margin: 0 auto; padding: 0 2rem 6rem; }
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; animation: fadeIn .3s ease; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+    /* ─── SECTION CARDS (Study Guide) ─── */
+    .study-section {
+      border: 1px solid var(--border);
+      border-radius: 16px; overflow: hidden;
+      background: rgba(255,255,255,.02);
+      margin-bottom: 1rem;
+      transition: border-color .2s;
+    }
+    .study-section:hover { border-color: rgba(99,102,241,.25); }
+    .study-section-header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1.1rem 1.5rem; cursor: pointer; user-select: none;
+      gap: 1rem;
+    }
+    .study-section-header-left { display: flex; align-items: center; gap: .85rem; }
+    .section-icon {
+      width: 36px; height: 36px; border-radius: 10px; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center; font-size: 1.1rem;
+    }
+    .section-title { font-size: 1rem; font-weight: 600; }
+    .section-num { font-size: .75rem; color: var(--gray); }
+    .chevron { color: var(--gray); transition: transform .25s; flex-shrink: 0; }
+    .study-section.open .chevron { transform: rotate(180deg); }
+    .study-section-body { display: none; padding: 0 1.5rem 1.5rem; }
+    .study-section.open .study-section-body { display: block; }
+
+    /* ─── CONTENT ELEMENTS ─── */
+    .prose { color: var(--gray-light); font-size: .95rem; }
+    .prose p { margin-bottom: .85rem; }
+    .prose p:last-child { margin-bottom: 0; }
+    .prose strong { color: var(--white); font-weight: 600; }
+    .prose em { color: #a5b4fc; font-style: normal; font-weight: 500; }
+
+    .callout {
+      border-radius: 10px; padding: 1rem 1.2rem; margin: 1rem 0;
+      border-left: 3px solid; font-size: .9rem;
+    }
+    .callout-title { font-weight: 600; margin-bottom: .4rem; font-size: .8rem; letter-spacing: .06em; text-transform: uppercase; }
+    .callout.warn { background: rgba(245,158,11,.07); border-color: var(--amber); color: #fcd34d; }
+    .callout.tip { background: rgba(99,102,241,.07); border-color: var(--primary); color: #a5b4fc; }
+    .callout.connect { background: rgba(6,182,212,.07); border-color: var(--accent); color: #67e8f9; }
+    .callout.exam { background: rgba(16,185,129,.07); border-color: var(--emerald); color: #6ee7b7; }
+
+    .prop-table, .contrast-table {
+      width: 100%; border-collapse: collapse; font-size: .875rem; margin: 1rem 0;
+    }
+    .prop-table th, .contrast-table th {
+      background: rgba(99,102,241,.15); color: #a5b4fc;
+      padding: .6rem .9rem; text-align: left; font-weight: 600; font-size: .78rem;
+      letter-spacing: .04em; text-transform: uppercase;
+    }
+    .prop-table td, .contrast-table td {
+      padding: .65rem .9rem; border-bottom: 1px solid rgba(255,255,255,.05);
+      color: var(--gray-light); vertical-align: top;
+    }
+    .prop-table tr:last-child td, .contrast-table tr:last-child td { border-bottom: none; }
+    .prop-table tr:hover td, .contrast-table tr:hover td { background: rgba(255,255,255,.02); }
+    .prop-table td:first-child, .contrast-table td:first-child { color: var(--white); font-weight: 500; }
+
+    .circuit-box {
+      background: rgba(15,23,42,.6); border: 1px solid rgba(6,182,212,.2);
+      border-radius: 10px; padding: 1rem 1.2rem; margin: 1rem 0;
+      font-family: 'JetBrains Mono', monospace; font-size: .825rem; color: #67e8f9;
+    }
+    .circuit-label { color: var(--gray); font-size: .75rem; margin-bottom: .5rem; font-family: 'Inter', sans-serif; }
+
+    .bullet-list { list-style: none; padding: 0; margin: .75rem 0; }
+    .bullet-list li {
+      display: flex; gap: .75rem; padding: .4rem 0; color: var(--gray-light); font-size: .9rem;
+    }
+    .bullet-list li::before {
+      content: '›'; color: var(--primary); font-size: 1.1rem; line-height: 1.4; flex-shrink: 0;
+    }
+    .bullet-list li strong { color: var(--white); }
+
+    /* ─── KEY TERMS / FLASHCARDS ─── */
+    .terms-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: .75rem; }
+    .flashcard {
+      border: 1px solid var(--border); border-radius: 12px; overflow: hidden;
+      cursor: pointer; transition: border-color .2s, transform .15s;
+      background: rgba(255,255,255,.02);
+      perspective: 600px;
+    }
+    .flashcard:hover { border-color: rgba(99,102,241,.3); transform: translateY(-2px); }
+    .flashcard-inner { position: relative; min-height: 100px; transition: transform .45s; transform-style: preserve-3d; }
+    .flashcard.flipped .flashcard-inner { transform: rotateY(180deg); }
+    .flashcard-front, .flashcard-back {
+      padding: 1rem 1.1rem; backface-visibility: hidden;
+    }
+    .flashcard-back { position: absolute; inset: 0; transform: rotateY(180deg); background: rgba(99,102,241,.08); }
+    .flashcard-term { font-weight: 600; font-size: .95rem; margin-bottom: .4rem; }
+    .flashcard-hint { font-size: .73rem; color: var(--gray); }
+    .flashcard-def { font-size: .85rem; color: var(--gray-light); line-height: 1.55; }
+    .flashcard-tag {
+      display: inline-block; font-size: .68rem; padding: .15rem .5rem;
+      border-radius: 99px; margin-bottom: .6rem; font-weight: 600; letter-spacing: .04em;
+    }
+    .tag-neuro { background: rgba(6,182,212,.15); color: #67e8f9; }
+    .tag-behavior { background: rgba(99,102,241,.15); color: #a5b4fc; }
+    .tag-clinical { background: rgba(244,63,94,.15); color: #fda4af; }
+    .tag-theory { background: rgba(245,158,11,.15); color: #fcd34d; }
+    .tag-spatial { background: rgba(16,185,129,.15); color: #6ee7b7; }
+
+    .terms-controls { display: flex; gap: .5rem; margin-bottom: 1.5rem; flex-wrap: wrap; }
+    .filter-btn {
+      padding: .35rem .85rem; border-radius: 99px; font-size: .78rem; font-weight: 500;
+      border: 1px solid var(--border); background: transparent; color: var(--gray-light);
+      cursor: pointer; transition: all .2s; font-family: 'Inter', sans-serif;
+    }
+    .filter-btn:hover { border-color: rgba(99,102,241,.4); color: var(--white); }
+    .filter-btn.active { background: rgba(99,102,241,.15); border-color: rgba(99,102,241,.4); color: var(--white); }
+    .flip-all-btn {
+      margin-left: auto; padding: .35rem .85rem; border-radius: 99px;
+      font-size: .78rem; font-weight: 500; border: 1px solid rgba(99,102,241,.3);
+      background: rgba(99,102,241,.1); color: #a5b4fc; cursor: pointer;
+      transition: all .2s; font-family: 'Inter', sans-serif;
+    }
+    .flip-all-btn:hover { background: rgba(99,102,241,.2); }
+
+    /* ─── QUIZ ─── */
+    .quiz-stats {
+      display: flex; gap: 1.5rem; margin-bottom: 2rem;
+      padding: 1rem 1.5rem; background: rgba(255,255,255,.03);
+      border: 1px solid var(--border); border-radius: 12px; flex-wrap: wrap;
+    }
+    .stat-item { display: flex; flex-direction: column; gap: .2rem; }
+    .stat-val { font-size: 1.5rem; font-weight: 700; }
+    .stat-val.green { color: var(--emerald); }
+    .stat-val.red { color: var(--rose); }
+    .stat-val.blue { color: var(--primary); }
+    .stat-lbl { font-size: .75rem; color: var(--gray); }
+    .quiz-reset-btn {
+      margin-left: auto; padding: .45rem 1rem; border-radius: 8px;
+      background: rgba(255,255,255,.05); border: 1px solid var(--border);
+      color: var(--gray-light); font-size: .8rem; cursor: pointer;
+      transition: all .2s; font-family: 'Inter', sans-serif; align-self: center;
+    }
+    .quiz-reset-btn:hover { background: rgba(255,255,255,.1); color: var(--white); }
+
+    .q-card {
+      border: 1px solid var(--border); border-radius: 14px;
+      background: rgba(255,255,255,.02); margin-bottom: 1rem; overflow: hidden;
+      transition: border-color .2s;
+    }
+    .q-card.correct { border-color: rgba(16,185,129,.4); }
+    .q-card.incorrect { border-color: rgba(244,63,94,.4); }
+    .q-header { padding: 1.2rem 1.5rem; cursor: pointer; }
+    .q-meta { display: flex; gap: .75rem; align-items: center; margin-bottom: .65rem; }
+    .q-num {
+      width: 26px; height: 26px; border-radius: 8px; flex-shrink: 0;
+      background: rgba(99,102,241,.2); color: #a5b4fc;
+      font-size: .75rem; font-weight: 700; display: flex; align-items: center; justify-content: center;
+    }
+    .q-tag {
+      font-size: .7rem; padding: .15rem .6rem; border-radius: 99px; font-weight: 600;
+      background: rgba(99,102,241,.12); color: #a5b4fc;
+    }
+    .q-status { margin-left: auto; font-size: .75rem; }
+    .q-text { font-size: .95rem; color: var(--light); line-height: 1.55; }
+    .q-options { padding: 0 1.5rem 1rem; display: grid; gap: .5rem; }
+    .q-opt {
+      padding: .65rem 1rem; border-radius: 9px;
+      border: 1px solid rgba(255,255,255,.07);
+      background: rgba(255,255,255,.03); font-size: .875rem; color: var(--gray-light);
+      cursor: pointer; transition: all .2s; text-align: left; width: 100%;
+      font-family: 'Inter', sans-serif;
+    }
+    .q-opt:hover:not(:disabled) { background: rgba(99,102,241,.1); border-color: rgba(99,102,241,.3); color: var(--white); }
+    .q-opt.selected-correct { background: rgba(16,185,129,.12); border-color: rgba(16,185,129,.5); color: #6ee7b7; }
+    .q-opt.selected-wrong { background: rgba(244,63,94,.12); border-color: rgba(244,63,94,.5); color: #fda4af; }
+    .q-opt.show-correct { background: rgba(16,185,129,.08); border-color: rgba(16,185,129,.3); color: #6ee7b7; }
+    .q-opt:disabled { cursor: default; }
+    .q-explanation {
+      margin: 0 1.5rem 1.25rem; padding: .9rem 1.1rem;
+      background: rgba(99,102,241,.07); border-radius: 10px;
+      border-left: 3px solid var(--primary); font-size: .875rem; color: var(--gray-light);
+      animation: fadeIn .25s ease;
+    }
+    .q-explanation strong { color: #a5b4fc; }
+    .q-explanation.hidden { display: none; }
+
+    /* ─── SYNTHESIS ─── */
+    .synthesis-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin: 1.5rem 0; }
+    @media (max-width: 600px) { .synthesis-grid { grid-template-columns: 1fr; } }
+    .synth-card {
+      border: 1px solid var(--border); border-radius: 12px; padding: 1.25rem;
+      background: rgba(255,255,255,.02);
+    }
+    .synth-card-title {
+      font-size: .8rem; font-weight: 600; letter-spacing: .05em; text-transform: uppercase;
+      margin-bottom: .75rem; display: flex; align-items: center; gap: .5rem;
+    }
+    .synth-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+    .synth-card ul { list-style: none; padding: 0; }
+    .synth-card li { font-size: .875rem; color: var(--gray-light); padding: .3rem 0; border-bottom: 1px solid rgba(255,255,255,.04); }
+    .synth-card li:last-child { border-bottom: none; }
+    .synth-card li span { color: var(--white); font-weight: 500; }
+
+    .levels-strip {
+      display: flex; gap: 0; border: 1px solid var(--border); border-radius: 12px; overflow: hidden;
+      margin: 1.5rem 0;
+    }
+    .level-col { flex: 1; padding: 1rem; }
+    .level-col + .level-col { border-left: 1px solid var(--border); }
+    .level-label { font-size: .72rem; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; margin-bottom: .6rem; }
+    .level-items { display: flex; flex-direction: column; gap: .5rem; }
+    .level-item { font-size: .8rem; padding: .35rem .6rem; border-radius: 7px; }
+
+    /* ─── RESPONSIVE ─── */
+    @media (max-width: 700px) {
+      .topbar { padding: .65rem 1rem; }
+      .hero { padding: 3rem 1rem 2rem; }
+      .main { padding: 0 1rem 5rem; }
+      .tab-nav { gap: .35rem; }
+      .tab-btn { font-size: .8rem; padding: .5rem .9rem; }
+      .prop-table, .contrast-table { font-size: .8rem; }
+    }
+
+    /* scroll indicator */
+    .scroll-progress {
+      position: fixed; top: 0; left: 0; height: 2px; z-index: 200;
+      background: linear-gradient(90deg, var(--primary), var(--secondary));
+      transition: width .1s; width: 0%;
+    }
+  </style>
+</head>
+<body>
+<div class="bg-layer"></div>
+<div class="scroll-progress" id="scrollProgress"></div>
+
+<!-- TOPBAR -->
+<header class="topbar">
+  <div class="topbar-left">
+    <a href="../../index.html" class="back-link">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+      Back
+    </a>
+    <span class="breadcrumb">Exam Prep › <span>Module 9</span></span>
+  </div>
+  <div style="display:flex;align-items:center;gap:.75rem;">
+    <div class="progress-bar-wrap" title="Quiz progress">
+      <div class="progress-bar-fill" id="quizProgressBar"></div>
+    </div>
+    <span class="progress-label" id="quizProgressLabel">0 / 25</span>
+  </div>
+</header>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="module-badge">
+    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+    PSYCH 505 · Week 9
+  </div>
+  <h1>Generalization &amp; Discrimination<br>Learning</h1>
+  <p class="hero-subtitle">How the brain decides when to treat new experiences as familiar — and when to treat them as distinct. Chapter 6, Gluck, Mercado &amp; Myers.</p>
+  <nav class="tab-nav">
+    <button class="tab-btn active" data-tab="guide">Study Guide</button>
+    <button class="tab-btn" data-tab="terms">Key Terms</button>
+    <button class="tab-btn" data-tab="quiz">Practice Quiz</button>
+    <button class="tab-btn" data-tab="synthesis">Big Picture</button>
+  </nav>
+</div>
+
+<!-- MAIN -->
+<main class="main">
+
+  <!-- ════════════════════════════ STUDY GUIDE ════════════════════════════ -->
+  <div class="tab-panel active" id="tab-guide">
+
+    <!-- 1. Core Problem -->
+    <div class="study-section open" data-section="1">
+      <div class="study-section-header" onclick="toggleSection(this)">
+        <div class="study-section-header-left">
+          <div class="section-icon" style="background:rgba(99,102,241,.15);">🎯</div>
+          <div><div class="section-num">Section 1</div><div class="section-title">The Core Problem: Generalization vs. Discrimination</div></div>
+        </div>
+        <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
+      </div>
+      <div class="study-section-body">
+        <div class="callout connect">
+          <div class="callout-title">⟳ Course Arc — Extending the R-W Framework</div>
+          This week extends the prediction error framework from Weeks 5–8. R-W explains <em>how weights update</em>. Week 9 asks: <em>what is the stimulus being represented?</em> How you represent a stimulus determines what you generalize.
+        </div>
+        <div class="prose">
+          <p><strong>Generalization</strong>: transfer of past learning to novel events. The brain's default — treat similar things similarly.</p>
+          <p><strong>Discrimination</strong>: perception of differences between stimuli; knowing when <em>not</em> to generalize.</p>
+          <p><strong>Core tension:</strong> Too broad = fails (broccoli = all vegetables). Too narrow = fails (yellow = only exactly 580 nm). Adaptive behavior requires calibrated generalization.</p>
+        </div>
+        <div class="callout tip">
+          <div class="callout-title">Classic Evidence: Guttman &amp; Kalish (1956)</div>
+          Pigeons trained to peck yellow light (580 nm) for food. Tested on 520–620 nm range. Result: <strong>bell-shaped generalization gradient</strong> peaking at trained stimulus, falling symmetrically. Generally symmetric unless discrimination training intervenes.
+        </div>
+      </div>
+    </div>
+
+    <!-- 2. Stimulus Representation -->
+    <div class="study-section open" data-section="2">
+      <div class="study-section-header" onclick="toggleSection(this)">
+        <div class="study-section-header-left">
+          <div class="section-icon" style="background:rgba(6,182,212,.12);">🔢</div>
+          <div><div class="section-num">Section 2</div><div class="section-title">Stimulus Representation: Discrete vs. Distributed</div></div>
+        </div>
+        <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
+      </div>
+      <div class="study-section-body">
+        <table class="contrast-table">
+          <thead><tr><th>Feature</th><th>Discrete-Component</th><th>Distributed (Shared Elements)</th></tr></thead>
+          <tbody>
+            <tr><td>Encoding</td><td>One unique node per stimulus</td><td>Overlapping node sets for similar stimuli</td></tr>
+            <tr><td>Generalization</td><td>None — untrained node = response 0</td><td>Automatic — trained nodes activate for similar stimuli</td></tr>
+            <tr><td>Example (yellow → orange)</td><td>Orange node weight = 0; response = 0</td><td>Node 5 shared → response = 0.33</td></tr>
+            <tr><td>When sufficient</td><td>Categorically distinct stimuli (tone vs. light); simple organisms</td><td>Stimuli on continuous dimensions (color, pitch, brightness)</td></tr>
+          </tbody>
+        </table>
+        <div class="circuit-box">
+          <div class="circuit-label">Distributed Representation Example — Light Wavelengths</div>
+          Yellow (580 nm)  → nodes [3, 4, 5]  weight = 0.33 each after training<br>
+          Yellow-orange    → nodes [4, 5, 6]  → response = 0.33+0.33 = 0.66<br>
+          Orange           → nodes [5, 6, 7]  → response = 0.33 (only node 5 trained)
+        </div>
+        <div class="prose">
+          <p><strong>A1 (primary auditory cortex)</strong> is tonotopically organized. Tuning curves get <em>broader</em> as signals climb from cochlea to cortex — more generalization at higher levels, not less. Removing A1 in cats eliminates gradient (massive overgeneralization). A1 is necessary for <strong>appropriate generalization</strong>.</p>
+        </div>
+        <div class="callout warn">
+          <div class="callout-title">⚠ Common Misconception</div>
+          Distributed representations are NOT always required. Categorically distinct stimuli (tone vs. light) → discrete is sufficient. Hospital wall colors (blue/red/green recovery times) → <strong>REQUIRES distributed</strong> (colors lie on a continuous wavelength dimension, so interpolation is needed).
+        </div>
+      </div>
+    </div>
+
+    <!-- 3. Discrimination Training & Peak Shift -->
+    <div class="study-section" data-section="3">
+      <div class="study-section-header" onclick="toggleSection(this)">
+        <div class="study-section-header-left">
+          <div class="section-icon" style="background:rgba(236,72,153,.12);">📈</div>
+          <div><div class="section-num">Section 3</div><div class="section-title">Discrimination Training &amp; Peak Shift</div></div>
+        </div>
+        <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
+      </div>
+      <div class="study-section-body">
+        <div class="prose">
+          <p><strong>Discrimination training sharpens gradient (Jenkins &amp; Harrison, 1962):</strong> Standard 1000 Hz training → broad gradient. Discrimination (1000 Hz food; 950 Hz no food) → much steeper, narrow gradient centered on 1000 Hz. Why: S- builds inhibitory gradient counteracting generalization from S+.</p>
+          <p><strong>Human analog (Wills &amp; McLaren, 1997):</strong> A-only training → broader gradients than A-vs-B discrimination training.</p>
+        </div>
+        <div class="callout tip">
+          <div class="callout-title">Peak Shift — Hanson (1959)</div>
+          After S+=550 nm, S-=555 nm discrimination, peak responding SHIFTS AWAY from S+ (to ~540 nm), toward stimuli OPPOSITE the S-. <strong>Spence's theory:</strong> excitatory gradient around S+; inhibitory gradient around S-. Net = excitation minus inhibition. Maximum net is on the side of S+ furthest from S-.
+        </div>
+        <ul class="bullet-list">
+          <li><strong>Universality:</strong> Peak shift occurs in bees, horses, rats, goldfish, chickens, pigeons, and humans — one of the most robust findings in learning research.</li>
+          <li><strong>Human relevance:</strong> Caricatures work via peak shift — exaggerating features that distinguish a face from the average face.</li>
+        </ul>
+        <div class="callout exam">
+          <div class="callout-title">📝 Exam Tip</div>
+          Know S+, S-, and direction of shift. Peak moves <strong>AWAY from S-</strong> (opposite side from S-). S+=550, S-=555 → peak at ~540 (not 560).
+        </div>
+      </div>
+    </div>
+
+    <!-- 4. Meaning-Based Generalization -->
+    <div class="study-section" data-section="4">
+      <div class="study-section-header" onclick="toggleSection(this)">
+        <div class="study-section-header-left">
+          <div class="section-icon" style="background:rgba(245,158,11,.12);">🔗</div>
+          <div><div class="section-num">Section 4</div><div class="section-title">Meaning-Based Generalization</div></div>
+        </div>
+        <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
+      </div>
+      <div class="study-section-body">
+        <div class="prose">
+          <p>Not all generalization is similarity-based. Two stimuli sharing the same consequences can generalize even without physical similarity. Three paradigms illustrate this — know all three cold.</p>
+        </div>
+
+        <p style="font-size:.85rem;font-weight:600;color:var(--white);margin:1rem 0 .5rem;">4.1 Sensory Preconditioning (3-phase procedure)</p>
+        <div class="circuit-box">
+          <div class="circuit-label">Phase Structure — Sensory Preconditioning</div>
+          Phase 1: Tone + Light together (compound-exp.) vs. separately (control)<br>
+          Phase 2: Light → Airpuff  [both groups learn to blink to light]<br>
+          Phase 3: Test Tone alone → compound group blinks; control does NOT
+        </div>
+        <div class="prose">
+          <p><strong>Interpretation:</strong> Co-occurrence creates association. Light's meaning (airpuff) transfers to tone — cross-modality, meaning-based generalization without physical similarity.</p>
+          <p><strong>Hippocampal dependence:</strong> Rabbits with fornix lesions show NO sensory preconditioning. Lesioned compound-exposure animals look exactly like controls (Port &amp; Patterson, 1984).</p>
+        </div>
+
+        <p style="font-size:.85rem;font-weight:600;color:var(--white);margin:1rem 0 .5rem;">4.2 Acquired Equivalence</p>
+        <div class="prose">
+          <p>A1 and A2 both paired with X1 → become "equivalent." Then A1 reinforced → animals generalize strongly to A2 but not to B2 (different equivalence class).</p>
+          <p><strong>Human version (Myers et al., 2003):</strong> Cartoon people preferring fish. Brown-haired and blonde both prefer blue fish. Brown-haired newly prefers red fish → adults infer blonde also prefers red fish.</p>
+          <p><strong>Hippocampal dependence:</strong> Entorhinal cortex lesions in rats eliminate Phase 3 transfer. Phase 1+2 intact but generalization fails.</p>
+        </div>
+
+        <p style="font-size:.85rem;font-weight:600;color:var(--white);margin:1rem 0 .5rem;">4.3 Latent Inhibition</p>
+        <div class="prose">
+          <p>Pre-exposing animal to CS (without US) slows later CS-US conditioning. Must "unlearn" tone-nothing association before building tone-shock.</p>
+          <p><strong>Entorhinal cortex lesions ELIMINATE latent inhibition</strong> — lesioned pre-exposed animals learn as fast as controls. Brain damage HELPS learning speed by removing the prior inhibitory memory.</p>
+        </div>
+        <div class="callout connect">
+          <div class="callout-title">⟳ Common Thread</div>
+          In ALL three cases, hippocampal region deficit appears at <strong>transfer (Phase 3)</strong> — never at acquisition (Phase 1+2). The hippocampus builds the representational scaffold; other areas use it.
+        </div>
+      </div>
+    </div>
+
+    <!-- 5. Cortical Plasticity & ACh -->
+    <div class="study-section" data-section="5">
+      <div class="study-section-header" onclick="toggleSection(this)">
+        <div class="study-section-header-left">
+          <div class="section-icon" style="background:rgba(16,185,129,.12);">🔬</div>
+          <div><div class="section-num">Section 5</div><div class="section-title">Cortical Plasticity &amp; Acetylcholine</div></div>
+        </div>
+        <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
+      </div>
+      <div class="study-section-body">
+        <div class="prose">
+          <p><strong>Weinberger's studies:</strong> Paired 2500 Hz tone with shock in guinea pigs. A1 neurons that originally preferred ~1000 Hz <em>shifted</em> to respond best to ~2500 Hz (trained frequency). More A1 neurons become tuned to trained stimulus. Requires pairing (CS-US): tone alone → habituation; unpaired → no shift.</p>
+          <p><strong>How does A1 "know" what's important?</strong> A1 doesn't directly receive input from pain/reward systems. The answer: Nucleus Basalis.</p>
+        </div>
+        <table class="contrast-table">
+          <thead><tr><th>Neuromodulator</th><th>Source</th><th>Signal</th><th>Role</th></tr></thead>
+          <tbody>
+            <tr><td>Dopamine</td><td>VTA / Substantia Nigra</td><td>Valence (signed PE: good or bad)</td><td>Reward/punishment prediction error</td></tr>
+            <tr><td>Acetylcholine (ACh)</td><td>Nucleus Basalis (basal forebrain)</td><td>Salience (unsigned: how important)</td><td>Cortical plasticity &amp; remapping</td></tr>
+          </tbody>
+        </table>
+        <div class="circuit-box">
+          <div class="circuit-label">Mechanism — Cortical Remapping via ACh</div>
+          Salient event → Amygdala signals Nucleus Basalis<br>
+          → ACh released broadly across cortex<br>
+          → Enables cortical remapping (tuning shifts toward trained stimulus)
+        </div>
+        <ul class="bullet-list">
+          <li><strong>Nucleus basalis lesion + prior auditory discrimination:</strong> Previously learned auditory discrimination intact (remapping already happened).</li>
+          <li><strong>Nucleus basalis lesion + new visual discrimination:</strong> IMPAIRED — cannot narrow gradient to distinguish colors; overgeneralizes. New cortical remapping requires ACh.</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- 6. Hippocampus in Generalization -->
+    <div class="study-section" data-section="6">
+      <div class="study-section-header" onclick="toggleSection(this)">
+        <div class="study-section-header-left">
+          <div class="section-icon" style="background:rgba(99,102,241,.15);">🗺️</div>
+          <div><div class="section-num">Section 6</div><div class="section-title">Hippocampus in Generalization</div></div>
+        </div>
+        <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
+      </div>
+      <div class="study-section-body">
+        <div class="prose">
+          <p>The hippocampus is <strong>NOT required</strong> for simple S-R associations. It <strong>IS required</strong> for meaning-based generalization (sensory preconditioning, acquired equivalence) and context-dependent discrimination (latent inhibition).</p>
+          <p><strong>Gluck &amp; Myers (1993) model:</strong> Hippocampus <em>compresses</em> redundant/unimportant information AND <em>differentiates</em> (expands the representation of) useful information.</p>
+          <p><strong>New Yorker map analogy:</strong> Fine detail on 9th/10th Ave (expanded for what matters); featureless Midwest (compressed for what doesn't). This is what the hippocampus does with stimulus representations.</p>
+        </div>
+        <div class="callout tip">
+          <div class="callout-title">Key fMRI Finding</div>
+          Hippocampal activation <strong>during Phase 1</strong> (equivalence training) — NOT during Phase 3 testing — predicts Phase 3 accuracy. Hippocampus builds the representation; other areas use it.
+        </div>
+        <div class="callout connect">
+          <div class="callout-title">⟳ Connect — Across All Three Paradigms</div>
+          Sensory preconditioning, acquired equivalence, latent inhibition: in ALL cases, hippocampal region deficit is at <strong>TRANSFER (Phase 3)</strong>, never at acquisition (Phase 1+2). This is the behavioral signature of hippocampal involvement.
+        </div>
+      </div>
+    </div>
+
+    <!-- 7. Categorization, Language & Sapir-Whorf -->
+    <div class="study-section" data-section="7">
+      <div class="study-section-header" onclick="toggleSection(this)">
+        <div class="study-section-header-left">
+          <div class="section-icon" style="background:rgba(236,72,153,.12);">💬</div>
+          <div><div class="section-num">Section 7</div><div class="section-title">Categorization, Language &amp; Sapir-Whorf</div></div>
+        </div>
+        <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
+      </div>
+      <div class="study-section-body">
+        <div class="prose">
+          <p><strong>Prototype:</strong> "Average" or most central member of a category. Assign new observations by distance from prototype. Animals can form categories: pigeons distinguish benign/malignant tumors at radiologist-level accuracy.</p>
+          <p><strong>Sapir-Whorf hypothesis:</strong> The language you speak can affect how you categorize the world.</p>
+        </div>
+        <table class="prop-table">
+          <thead><tr><th>Example</th><th>Observation</th><th>Principle</th></tr></thead>
+          <tbody>
+            <tr><td>Russian blue shades</td><td>Two words for blue → Russian speakers show finer blue discrimination than English speakers (same visual hardware)</td><td>Category labels tune generalization gradients</td></tr>
+            <tr><td>Arabic camel (~160 words)</td><td>Finer discrimination of camel types</td><td>Rich vocabulary → more cortical resources → finer gradient</td></tr>
+            <tr><td>English hen/rooster vs. one word for lion</td><td>Gender-specific terms improve discrimination</td><td>Naming creates category boundary</td></tr>
+          </tbody>
+        </table>
+        <div class="callout warn">
+          <div class="callout-title">Directionality Debate</div>
+          Does language shape thought, OR does thought/experience shape language? Ali was explicit: "Is it because of the language that I think in a certain way, or is it because the way I think that we develop this language?" <strong>Both directions possible; unresolved.</strong>
+        </div>
+        <div class="callout connect">
+          <div class="callout-title">⟳ Connect to Cortical Maps</div>
+          Things important to you → more cortical representations. Same principle as the homunculus, violinists' hand expansion, and Weinberger's remapping. Language may drive cortical allocation.
+        </div>
+      </div>
+    </div>
+
+    <!-- 8. Clinical: Schizophrenia -->
+    <div class="study-section" data-section="8">
+      <div class="study-section-header" onclick="toggleSection(this)">
+        <div class="study-section-header-left">
+          <div class="section-icon" style="background:rgba(244,63,94,.12);">🏥</div>
+          <div><div class="section-num">Section 8</div><div class="section-title">Clinical: Schizophrenia &amp; Generalization Deficits</div></div>
+        </div>
+        <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
+      </div>
+      <div class="study-section-body">
+        <div class="prose">
+          <p><strong>Neural substrate:</strong> Schizophrenia is associated with reduced hippocampal volume and reduced hippocampal fMRI activity.</p>
+          <p><strong>Core behavioral profile:</strong> Learn simple associations NORMALLY; TRANSFER generalization impaired.</p>
+        </div>
+        <table class="contrast-table">
+          <thead><tr><th>Task</th><th>Performance</th><th>Interpretation</th></tr></thead>
+          <tbody>
+            <tr><td>Acquired equivalence — Phases 1 &amp; 2 (acquisition)</td><td>Normal</td><td>Basic associative learning intact</td></tr>
+            <tr><td>Acquired equivalence — Phase 3 (transfer)</td><td>Significantly impaired (Keri et al., 2005)</td><td>Hippocampal encoding of equivalences failed</td></tr>
+            <tr><td>Transitive inference — non-relational pairs (AE)</td><td>Succeed</td><td>Rote memory intact (A always wins, E always loses)</td></tr>
+            <tr><td>Transitive inference — relational pairs (BD)</td><td>Fail</td><td>Requires hippocampal relational inference across chain</td></tr>
+          </tbody>
+        </table>
+        <ul class="bullet-list">
+          <li><strong>Antipsychotic medications</strong> partially remediate the transfer generalization deficit.</li>
+          <li><strong>Behavioral signature:</strong> Intact acquisition + impaired generalization transfer points specifically to hippocampal dysfunction.</li>
+        </ul>
+        <div class="callout connect">
+          <div class="callout-title">⟳ Forward Connection to Week 10</div>
+          The schizophrenia generalization deficit established here connects directly to the Week 10 clinical section on psychiatric disorders and hippocampal memory.
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /tab-guide -->
+
+
+  <!-- ════════════════════════════ KEY TERMS ════════════════════════════ -->
+  <div class="tab-panel" id="tab-terms">
+    <div style="margin-bottom:1.5rem;">
+      <h2 style="font-size:1.3rem;margin-bottom:.4rem;">Key Terms — 20 Flashcards</h2>
+      <p style="color:var(--gray-light);font-size:.9rem;">Click any card to reveal its definition. Use the filters to focus on a category.</p>
+    </div>
+    <div class="terms-controls">
+      <button class="filter-btn active" data-filter="all">All</button>
+      <button class="filter-btn" data-filter="behavior">Behavioral</button>
+      <button class="filter-btn" data-filter="neuro">Neural</button>
+      <button class="filter-btn" data-filter="theory">Theoretical</button>
+      <button class="filter-btn" data-filter="spatial">Spatial</button>
+      <button class="filter-btn" data-filter="clinical">Clinical</button>
+      <button class="flip-all-btn" id="flipAllBtn">Reveal All</button>
+    </div>
+    <div class="terms-grid" id="termsGrid">
+
+      <!-- BEHAVIORAL -->
+      <div class="flashcard" data-category="behavior" onclick="flipCard(this)">
+        <div class="flashcard-inner">
+          <div class="flashcard-front">
+            <span class="flashcard-tag tag-behavior">Behavioral</span>
+            <div class="flashcard-term">Generalization</div>
+            <div class="flashcard-hint">Click to reveal →</div>
+          </div>
+          <div class="flashcard-back">
+            <span class="flashcard-tag tag-behavior">Behavioral</span>
+            <div class="flashcard-def">Transfer of learning to novel stimuli; the brain's <strong>default mode</strong> — treat similar things similarly.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flashcard" data-category="behavior" onclick="flipCard(this)">
+        <div class="flashcard-inner">
+          <div class="flashcard-front">
+            <span class="flashcard-tag tag-behavior">Behavioral</span>
+            <div class="flashcard-term">Discrimination</div>
+            <div class="flashcard-hint">Click to reveal →</div>
+          </div>
+          <div class="flashcard-back">
+            <span class="flashcard-tag tag-behavior">Behavioral</span>
+            <div class="flashcard-def">Perceiving and responding to <strong>differences</strong> between stimuli; knowing when NOT to generalize.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flashcard" data-category="behavior" onclick="flipCard(this)">
+        <div class="flashcard-inner">
+          <div class="flashcard-front">
+            <span class="flashcard-tag tag-behavior">Behavioral</span>
+            <div class="flashcard-term">Generalization Gradient</div>
+            <div class="flashcard-hint">Click to reveal →</div>
+          </div>
+          <div class="flashcard-back">
+            <span class="flashcard-tag tag-behavior">Behavioral</span>
+            <div class="flashcard-def"><strong>Bell-shaped curve</strong> showing graded responding as a function of stimulus difference from the trained stimulus. Peaks at training value; falls symmetrically.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flashcard" data-category="behavior" onclick="flipCard(this)">
+        <div class="flashcard-inner">
+          <div class="flashcard-front">
+            <span class="flashcard-tag tag-behavior">Behavioral</span>
+            <div class="flashcard-term">Peak Shift</div>
+            <div class="flashcard-hint">Click to reveal →</div>
+          </div>
+          <div class="flashcard-back">
+            <span class="flashcard-tag tag-behavior">Behavioral</span>
+            <div class="flashcard-def">After discrimination training, peak responding moves <strong>away from S+</strong> toward the side opposite S-. Explained by Spence's net excitatory minus inhibitory gradients.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flashcard" data-category="behavior" onclick="flipCard(this)">
+        <div class="flashcard-inner">
+          <div class="flashcard-front">
+            <span class="flashcard-tag tag-behavior">Behavioral</span>
+            <div class="flashcard-term">Latent Inhibition</div>
+            <div class="flashcard-hint">Click to reveal →</div>
+          </div>
+          <div class="flashcard-back">
+            <span class="flashcard-tag tag-behavior">Behavioral</span>
+            <div class="flashcard-def">Pre-exposing an animal to CS (without US) <strong>slows later CS-US conditioning</strong>. Must overcome prior tone-nothing association. Eliminated by entorhinal cortex lesions.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- THEORETICAL -->
+      <div class="flashcard" data-category="theory" onclick="flipCard(this)">
+        <div class="flashcard-inner">
+          <div class="flashcard-front">
+            <span class="flashcard-tag tag-theory">Theoretical</span>
+            <div class="flashcard-term">Discrete-Component Representation</div>
+            <div class="flashcard-hint">Click to reveal →</div>
+          </div>
+          <div class="flashcard-back">
+            <span class="flashcard-tag tag-theory">Theoretical</span>
+            <div class="flashcard-def">Unique node per stimulus; <strong>zero generalization</strong> to similar stimuli. Sufficient for categorically distinct stimuli; fails for continuous dimensions.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flashcard" data-category="theory" onclick="flipCard(this)">
+        <div class="flashcard-inner">
+          <div class="flashcard-front">
+            <span class="flashcard-tag tag-theory">Theoretical</span>
+            <div class="flashcard-term">Distributed Representation</div>
+            <div class="flashcard-hint">Click to reveal →</div>
+          </div>
+          <div class="flashcard-back">
+            <span class="flashcard-tag tag-theory">Theoretical</span>
+            <div class="flashcard-def">Stimuli encoded by <strong>overlapping node sets</strong>; similar stimuli share nodes → automatic generalization gradient. Produces smooth, realistic gradients for continuous dimensions.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flashcard" data-category="theory" onclick="flipCard(this)">
+        <div class="flashcard-inner">
+          <div class="flashcard-front">
+            <span class="flashcard-tag tag-theory">Theoretical</span>
+            <div class="flashcard-term">Spence's Theory</div>
+            <div class="flashcard-hint">Click to reveal →</div>
+          </div>
+          <div class="flashcard-back">
+            <span class="flashcard-tag tag-theory">Theoretical</span>
+            <div class="flashcard-def">Peak shift arises from <strong>net excitatory (around S+) minus inhibitory (around S-) gradients</strong>. Maximum net responding falls on side of S+ opposite to S-.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flashcard" data-category="theory" onclick="flipCard(this)">
+        <div class="flashcard-inner">
+          <div class="flashcard-front">
+            <span class="flashcard-tag tag-theory">Theoretical</span>
+            <div class="flashcard-term">Configural Node</div>
+            <div class="flashcard-hint">Click to reveal →</div>
+          </div>
+          <div class="flashcard-back">
+            <span class="flashcard-tag tag-theory">Theoretical</span>
+            <div class="flashcard-def">AND-gate node firing only for a specific <strong>combination</strong> of stimuli; solves negative patterning (AB compound → no US even when A alone and B alone → US).</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flashcard" data-category="theory" onclick="flipCard(this)">
+        <div class="flashcard-inner">
+          <div class="flashcard-front">
+            <span class="flashcard-tag tag-theory">Theoretical</span>
+            <div class="flashcard-term">Negative Patterning</div>
+            <div class="flashcard-hint">Click to reveal →</div>
+          </div>
+          <div class="flashcard-back">
+            <span class="flashcard-tag tag-theory">Theoretical</span>
+            <div class="flashcard-def">A alone → US; B alone → US; <strong>AB compound → no US</strong>. Requires configural representation; cannot be solved by simple element-based models.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flashcard" data-category="theory" onclick="flipCard(this)">
+        <div class="flashcard-inner">
+          <div class="flashcard-front">
+            <span class="flashcard-tag tag-theory">Theoretical</span>
+            <div class="flashcard-term">Sapir-Whorf Hypothesis</div>
+            <div class="flashcard-hint">Click to reveal →</div>
+          </div>
+          <div class="flashcard-back">
+            <span class="flashcard-tag tag-theory">Theoretical</span>
+            <div class="flashcard-def">The language you speak can influence <strong>how you categorize and perceive the world</strong>. Directionality (language → thought OR thought → language) remains debated.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flashcard" data-category="theory" onclick="flipCard(this)">
+        <div class="flashcard-inner">
+          <div class="flashcard-front">
+            <span class="flashcard-tag tag-theory">Theoretical</span>
+            <div class="flashcard-term">Gluck-Myers Model</div>
+            <div class="flashcard-hint">Click to reveal →</div>
+          </div>
+          <div class="flashcard-back">
+            <span class="flashcard-tag tag-theory">Theoretical</span>
+            <div class="flashcard-def">Hippocampus <strong>compresses redundant/unimportant info</strong> and <strong>differentiates useful info</strong> for learning. New Yorker map analogy: compressed Midwest, detailed 9th/10th Ave.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SPATIAL (meaning-based paradigms) -->
+      <div class="flashcard" data-category="spatial" onclick="flipCard(this)">
+        <div class="flashcard-inner">
+          <div class="flashcard-front">
+            <span class="flashcard-tag tag-spatial">Spatial</span>
+            <div class="flashcard-term">Sensory Preconditioning</div>
+            <div class="flashcard-hint">Click to reveal →</div>
+          </div>
+          <div class="flashcard-back">
+            <span class="flashcard-tag tag-spatial">Spatial</span>
+            <div class="flashcard-def"><strong>3-phase:</strong> Phase 1 co-expose AB; Phase 2 B→US; Phase 3 A→CR. Hippocampus-dependent. Demonstrates cross-modality <strong>meaning-based generalization</strong> via co-occurrence.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flashcard" data-category="spatial" onclick="flipCard(this)">
+        <div class="flashcard-inner">
+          <div class="flashcard-front">
+            <span class="flashcard-tag tag-spatial">Spatial</span>
+            <div class="flashcard-term">Acquired Equivalence</div>
+            <div class="flashcard-hint">Click to reveal →</div>
+          </div>
+          <div class="flashcard-back">
+            <span class="flashcard-tag tag-spatial">Spatial</span>
+            <div class="flashcard-def">Two stimuli sharing same outcome become <strong>"equivalent"</strong>; learning about one transfers to the other. Hippocampus-dependent at Phase 3 (transfer).</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flashcard" data-category="spatial" onclick="flipCard(this)">
+        <div class="flashcard-inner">
+          <div class="flashcard-front">
+            <span class="flashcard-tag tag-spatial">Spatial</span>
+            <div class="flashcard-term">Prototype</div>
+            <div class="flashcard-hint">Click to reveal →</div>
+          </div>
+          <div class="flashcard-back">
+            <span class="flashcard-tag tag-spatial">Spatial</span>
+            <div class="flashcard-def">The <strong>central/average member</strong> of a category. New observations assigned by distance from prototype. Animals (even pigeons) can form prototype-based categories.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- NEURAL -->
+      <div class="flashcard" data-category="neuro" onclick="flipCard(this)">
+        <div class="flashcard-inner">
+          <div class="flashcard-front">
+            <span class="flashcard-tag tag-neuro">Neural</span>
+            <div class="flashcard-term">Cortical Remapping</div>
+            <div class="flashcard-hint">Click to reveal →</div>
+          </div>
+          <div class="flashcard-back">
+            <span class="flashcard-tag tag-neuro">Neural</span>
+            <div class="flashcard-def">Experience-driven <strong>reorganization of cortical tuning</strong>; salient stimuli acquire more cortical neurons. Requires ACh from nucleus basalis. Persists after lesion (established memories).</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flashcard" data-category="neuro" onclick="flipCard(this)">
+        <div class="flashcard-inner">
+          <div class="flashcard-front">
+            <span class="flashcard-tag tag-neuro">Neural</span>
+            <div class="flashcard-term">Nucleus Basalis</div>
+            <div class="flashcard-hint">Click to reveal →</div>
+          </div>
+          <div class="flashcard-back">
+            <span class="flashcard-tag tag-neuro">Neural</span>
+            <div class="flashcard-def">Basal forebrain structure; releases <strong>ACh broadly when salient events occur</strong>. Lesion: established discriminations intact; NEW discrimination learning impaired (overgeneralization).</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flashcard" data-category="neuro" onclick="flipCard(this)">
+        <div class="flashcard-inner">
+          <div class="flashcard-front">
+            <span class="flashcard-tag tag-neuro">Neural</span>
+            <div class="flashcard-term">Acetylcholine (ACh)</div>
+            <div class="flashcard-hint">Click to reveal →</div>
+          </div>
+          <div class="flashcard-back">
+            <span class="flashcard-tag tag-neuro">Neural</span>
+            <div class="flashcard-def">Signals <strong>salience (not valence)</strong>; promotes cortical plasticity. Contrast: dopamine signals valence (good/bad). ACh broadcasts "something important happened" regardless of reward/punishment.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flashcard" data-category="neuro" onclick="flipCard(this)">
+        <div class="flashcard-inner">
+          <div class="flashcard-front">
+            <span class="flashcard-tag tag-neuro">Neural</span>
+            <div class="flashcard-term">Hippocampal Region</div>
+            <div class="flashcard-hint">Click to reveal →</div>
+          </div>
+          <div class="flashcard-back">
+            <span class="flashcard-tag tag-neuro">Neural</span>
+            <div class="flashcard-def">Includes hippocampus + entorhinal/perirhinal/parahippocampal cortices. <strong>Critical for meaning-based generalization and relational memory</strong>. NOT required for simple S-R associations.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- CLINICAL -->
+      <div class="flashcard" data-category="clinical" onclick="flipCard(this)">
+        <div class="flashcard-inner">
+          <div class="flashcard-front">
+            <span class="flashcard-tag tag-clinical">Clinical</span>
+            <div class="flashcard-term">Schizophrenia Generalization Deficit</div>
+            <div class="flashcard-hint">Click to reveal →</div>
+          </div>
+          <div class="flashcard-back">
+            <span class="flashcard-tag tag-clinical">Clinical</span>
+            <div class="flashcard-def"><strong>Intact acquisition + impaired transfer generalization</strong>. Signature of hippocampal region dysfunction. Antipsychotics partially remediate. Fails relational pairs (BD) but succeeds on rote pairs (AE) in transitive inference.</div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /termsGrid -->
+  </div><!-- /tab-terms -->
+
+
+  <!-- ════════════════════════════ PRACTICE QUIZ ════════════════════════════ -->
+  <div class="tab-panel" id="tab-quiz">
+    <div class="quiz-stats">
+      <div class="stat-item">
+        <span class="stat-val blue" id="statTotal">25</span>
+        <span class="stat-lbl">Questions</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-val green" id="statCorrect">0</span>
+        <span class="stat-lbl">Correct</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-val red" id="statWrong">0</span>
+        <span class="stat-lbl">Incorrect</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-val" id="statPct" style="color:var(--gray-light);">—</span>
+        <span class="stat-lbl">Score</span>
+      </div>
+      <button class="quiz-reset-btn" onclick="resetQuiz()">Reset Quiz</button>
+    </div>
+
+    <!-- Q1 -->
+    <div class="q-card" id="qcard-0">
+      <div class="q-header">
+        <div class="q-meta">
+          <div class="q-num">1</div>
+          <span class="q-tag">Core Concepts</span>
+          <span class="q-status" id="qstatus-0"></span>
+        </div>
+        <div class="q-text">In lecture, the broccoli/cauliflower scenario illustrated the central challenge of generalization. This is best described as:</div>
+      </div>
+      <div class="q-options">
+        <button class="q-opt" onclick="answerQ(0,0)">A) Deciding whether to use operant or classical conditioning to encode a new stimulus</button>
+        <button class="q-opt" onclick="answerQ(0,1)">B) Finding the right balance between specificity (how narrowly a rule applies) and generality (how broadly it applies)</button>
+        <button class="q-opt" onclick="answerQ(0,2)">C) Choosing between discrete and distributed representations in the cortex</button>
+        <button class="q-opt" onclick="answerQ(0,3)">D) Determining whether dopamine or acetylcholine mediates the learned association</button>
+      </div>
+      <div class="q-explanation hidden" id="qexp-0"><strong>Correct: B.</strong> The core challenge is the specificity-generality tradeoff — both extremes (over or under-generalize) produce poor adaptive outcomes.</div>
+    </div>
+
+    <!-- Q2 -->
+    <div class="q-card" id="qcard-1">
+      <div class="q-header">
+        <div class="q-meta">
+          <div class="q-num">2</div>
+          <span class="q-tag">Generalization Gradient</span>
+          <span class="q-status" id="qstatus-1"></span>
+        </div>
+        <div class="q-text">Pigeons trained to peck a yellow light (580 nm) are tested with lights of other colors. Their response rates form a bell-shaped curve peaking at 580 nm. This curve is called a:</div>
+      </div>
+      <div class="q-options">
+        <button class="q-opt" onclick="answerQ(1,0)">A) Discrimination gradient</button>
+        <button class="q-opt" onclick="answerQ(1,1)">B) Tuning curve</button>
+        <button class="q-opt" onclick="answerQ(1,2)">C) Generalization gradient</button>
+        <button class="q-opt" onclick="answerQ(1,3)">D) Inhibitory gradient</button>
+      </div>
+      <div class="q-explanation hidden" id="qexp-1"><strong>Correct: C.</strong> A generalization gradient shows how responding changes as a function of physical stimulus properties. Peaks at trained stimulus and declines for differing stimuli.</div>
+    </div>
+
+    <!-- Q3 -->
+    <div class="q-card" id="qcard-2">
+      <div class="q-header">
+        <div class="q-meta">
+          <div class="q-num">3</div>
+          <span class="q-tag">Discrete Representation</span>
+          <span class="q-status" id="qstatus-2"></span>
+        </div>
+        <div class="q-text">In the discrete-component model trained on yellow light, what response would the network produce when shown yellow-orange light for the first time?</div>
+      </div>
+      <div class="q-options">
+        <button class="q-opt" onclick="answerQ(2,0)">A) Strong response of 1.0, because yellow-orange is very similar</button>
+        <button class="q-opt" onclick="answerQ(2,1)">B) Moderate response of 0.66, because stimuli share some nodes</button>
+        <button class="q-opt" onclick="answerQ(2,2)">C) No response (0.0), because the yellow-orange node has never been trained</button>
+        <button class="q-opt" onclick="answerQ(2,3)">D) Inhibitory response, because yellow-orange is associated with no reward</button>
+      </div>
+      <div class="q-explanation hidden" id="qexp-2"><strong>Correct: C.</strong> Discrete model assigns weight=1.0 to trained yellow node, 0 to all others. Yellow-orange activates a different node (weight=0), so response=0. This is why discrete model fails to explain generalization gradients.</div>
+    </div>
+
+    <!-- Q4 -->
+    <div class="q-card" id="qcard-3">
+      <div class="q-header">
+        <div class="q-meta">
+          <div class="q-num">4</div>
+          <span class="q-tag">Representation</span>
+          <span class="q-status" id="qstatus-3"></span>
+        </div>
+        <div class="q-text">In the "retina directly wired to the finger with nothing in between" analogy from lecture, what concept does this explain?</div>
+      </div>
+      <div class="q-options">
+        <button class="q-opt" onclick="answerQ(3,0)">A) Absence of configural nodes in simple networks</button>
+        <button class="q-opt" onclick="answerQ(3,1)">B) Absence of internal representations — no cognition between input and output</button>
+        <button class="q-opt" onclick="answerQ(3,2)">C) Direct cortical-to-motor connections bypassing hippocampus</button>
+        <button class="q-opt" onclick="answerQ(3,3)">D) Role of nucleus basalis in broadcasting acetylcholine to motor cortex</button>
+      </div>
+      <div class="q-explanation hidden" id="qexp-3"><strong>Correct: B.</strong> This explains discrete-component representations — pure input-output with no internal representation layer, hence no distributed coding allowing generalization to similar stimuli.</div>
+    </div>
+
+    <!-- Q5 -->
+    <div class="q-card" id="qcard-4">
+      <div class="q-header">
+        <div class="q-meta">
+          <div class="q-num">5</div>
+          <span class="q-tag">Distributed Representation</span>
+          <span class="q-status" id="qstatus-4"></span>
+        </div>
+        <div class="q-text">A distributed representation network trained on yellow (nodes 3,4,5 each weighted 0.33). When orange is presented (activating nodes 5,6,7), what response is produced?</div>
+      </div>
+      <div class="q-options">
+        <button class="q-opt" onclick="answerQ(4,0)">A) 1.0, because orange is within visible spectrum</button>
+        <button class="q-opt" onclick="answerQ(4,1)">B) 0.66, because two orange nodes overlap with yellow</button>
+        <button class="q-opt" onclick="answerQ(4,2)">C) 0.33, because only node 5 is trained from yellow training</button>
+        <button class="q-opt" onclick="answerQ(4,3)">D) 0.0, because orange was never presented</button>
+      </div>
+      <div class="q-explanation hidden" id="qexp-4"><strong>Correct: C.</strong> Orange activates nodes 5,6,7. Only node 5 has trained weight (0.33). Nodes 6,7 have weight=0. Net response=0.33. Matches biological finding that even dissimilar stimuli produce some weakened response.</div>
+    </div>
+
+    <!-- Q6 -->
+    <div class="q-card" id="qcard-5">
+      <div class="q-header">
+        <div class="q-meta">
+          <div class="q-num">6</div>
+          <span class="q-tag">Which Model?</span>
+          <span class="q-status" id="qstatus-5"></span>
+        </div>
+        <div class="q-text">The hospital wall-color scenario (blue→2 days recovery, red→4 days, how many for green?) was used in lecture to show which model IS required:</div>
+      </div>
+      <div class="q-options">
+        <button class="q-opt" onclick="answerQ(5,0)">A) Distributed representation is required because colors lie on a continuous wavelength axis</button>
+        <button class="q-opt" onclick="answerQ(5,1)">B) Discrete-component representation is sufficient, because blue/red/green are categorically distinct</button>
+        <button class="q-opt" onclick="answerQ(5,2)">C) Neither model can explain this; configural node required</button>
+        <button class="q-opt" onclick="answerQ(5,3)">D) Rescorla-Wagner alone is sufficient without representational assumptions</button>
+      </div>
+      <div class="q-explanation hidden" id="qexp-5"><strong>Correct: A.</strong> Green (520 nm) lies between blue (470 nm) and red (620 nm) on a continuous spectrum. Predicting green recovery requires interpolating along that continuum — exactly what distributed representation does via overlapping node activations.</div>
+    </div>
+
+    <!-- Q7 -->
+    <div class="q-card" id="qcard-6">
+      <div class="q-header">
+        <div class="q-meta">
+          <div class="q-num">7</div>
+          <span class="q-tag">Discrimination Training</span>
+          <span class="q-status" id="qstatus-6"></span>
+        </div>
+        <div class="q-text">Following discrimination training (S+=1000 Hz food; S-=950 Hz no food), how does the pigeon's generalization gradient change?</div>
+      </div>
+      <div class="q-options">
+        <button class="q-opt" onclick="answerQ(6,0)">A) Becomes broader, because the animal has experienced more stimuli</button>
+        <button class="q-opt" onclick="answerQ(6,1)">B) Becomes steeper and more narrowly focused around 1000 Hz, because the inhibitory S- gradient sharpens discrimination</button>
+        <button class="q-opt" onclick="answerQ(6,2)">C) The gradient shifts its peak to 950 Hz</button>
+        <button class="q-opt" onclick="answerQ(6,3)">D) Remains unchanged; discrimination training only affects response rates, not gradient shape</button>
+      </div>
+      <div class="q-explanation hidden" id="qexp-6"><strong>Correct: B.</strong> Jenkins &amp; Harrison (1962): discrimination training dramatically steepens the generalization gradient. S- (950 Hz) builds inhibitory gradient counteracting generalization from S+, narrowing the profile.</div>
+    </div>
+
+    <!-- Q8 -->
+    <div class="q-card" id="qcard-7">
+      <div class="q-header">
+        <div class="q-meta">
+          <div class="q-num">8</div>
+          <span class="q-tag">Peak Shift</span>
+          <span class="q-status" id="qstatus-7"></span>
+        </div>
+        <div class="q-text">Hanson (1959) trained S+=550 nm and S-=555 nm. According to Spence's theory, test results would show:</div>
+      </div>
+      <div class="q-options">
+        <button class="q-opt" onclick="answerQ(7,0)">A) Peak responding at 555 nm (S-), attracted to novel stimulus</button>
+        <button class="q-opt" onclick="answerQ(7,1)">B) Peak responding at exactly 550 nm (S+), unchanged</button>
+        <button class="q-opt" onclick="answerQ(7,2)">C) Peak responding shifted below 550 nm (e.g., ~540 nm), away from S-</button>
+        <button class="q-opt" onclick="answerQ(7,3)">D) Responding broadened across all wavelengths</button>
+      </div>
+      <div class="q-explanation hidden" id="qexp-7"><strong>Correct: C.</strong> Peak shift: net gradient (excitatory around S+ minus inhibitory around S-) maximized on side of S+ opposite S-. Peak moves below 550 nm, away from 555 nm.</div>
+    </div>
+
+    <!-- Q9 -->
+    <div class="q-card" id="qcard-8">
+      <div class="q-header">
+        <div class="q-meta">
+          <div class="q-num">9</div>
+          <span class="q-tag">Peak Shift Universality</span>
+          <span class="q-status" id="qstatus-8"></span>
+        </div>
+        <div class="q-text">Peak shift occurs in bees, horses, rats, goldfish, chickens, pigeons, and humans. This universality suggests:</div>
+      </div>
+      <div class="q-options">
+        <button class="q-opt" onclick="answerQ(8,0)">A) Uniquely mammalian phenomenon dependent on prefrontal cortex</button>
+        <button class="q-opt" onclick="answerQ(8,1)">B) Fundamental property of associative learning from overlapping excitatory and inhibitory gradients</button>
+        <button class="q-opt" onclick="answerQ(8,2)">C) Artifact of operant conditioning disappearing with Pavlovian procedures</button>
+        <button class="q-opt" onclick="answerQ(8,3)">D) Dependent on hippocampus and related to episodic memory</button>
+      </div>
+      <div class="q-explanation hidden" id="qexp-8"><strong>Correct: B.</strong> Universality supports Spence's explanation: emerges from basic associative principles — interaction of excitatory (S+) and inhibitory (S-) gradients. No hippocampus or PFC required.</div>
+    </div>
+
+    <!-- Q10 -->
+    <div class="q-card" id="qcard-9">
+      <div class="q-header">
+        <div class="q-meta">
+          <div class="q-num">10</div>
+          <span class="q-tag">Application</span>
+          <span class="q-status" id="qstatus-9"></span>
+        </div>
+        <div class="q-text">A physician trained only in Wisconsin who moves to California may have a "too broad" generalization gradient. This would mean:</div>
+      </div>
+      <div class="q-options">
+        <button class="q-opt" onclick="answerQ(9,0)">A) Unable to recognize any disease patterns</button>
+        <button class="q-opt" onclick="answerQ(9,1)">B) Overgeneralizes — applies rules learned from Wisconsin patients too broadly to California patients, treating genuinely different cases as equivalent</button>
+        <button class="q-opt" onclick="answerQ(9,2)">C) Undergeneralizes — treats cases that should be grouped as distinct</button>
+        <button class="q-opt" onclick="answerQ(9,3)">D) Lost ability to form new associations due to cortical rigidity</button>
+      </div>
+      <div class="q-explanation hidden" id="qexp-9"><strong>Correct: B.</strong> Too-broad gradient = overgeneralization: applies learned associations to stimuli different enough from training set that different responses would be appropriate.</div>
+    </div>
+
+    <!-- Q11 -->
+    <div class="q-card" id="qcard-10">
+      <div class="q-header">
+        <div class="q-meta">
+          <div class="q-num">11</div>
+          <span class="q-tag">Sensory Preconditioning</span>
+          <span class="q-status" id="qstatus-10"></span>
+        </div>
+        <div class="q-text">In sensory preconditioning, the compound-exposure group blinks to the tone in Phase 3 even though tone was never directly paired with airpuff. This is:</div>
+      </div>
+      <div class="q-options">
+        <button class="q-opt" onclick="answerQ(10,0)">A) Similarity-based generalization, because tone and light are both sensory stimuli</button>
+        <button class="q-opt" onclick="answerQ(10,1)">B) Meaning-based generalization, because tone acquired predictive meaning via co-occurrence with light</button>
+        <button class="q-opt" onclick="answerQ(10,2)">C) Peak shift, because response shifted from light to tone</button>
+        <button class="q-opt" onclick="answerQ(10,3)">D) Latent inhibition, because tone was pre-exposed before conditioning</button>
+      </div>
+      <div class="q-explanation hidden" id="qexp-10"><strong>Correct: B.</strong> Tone and light are physically dissimilar but become functionally equivalent through co-occurrence. This is cross-modality, meaning-based (not similarity-based) generalization.</div>
+    </div>
+
+    <!-- Q12 -->
+    <div class="q-card" id="qcard-11">
+      <div class="q-header">
+        <div class="q-meta">
+          <div class="q-num">12</div>
+          <span class="q-tag">Hippocampus &amp; SPC</span>
+          <span class="q-status" id="qstatus-11"></span>
+        </div>
+        <div class="q-text">Rabbits with fornix lesions receive compound-exposure training (tone+light) in Phase 1, light-airpuff in Phase 2. In Phase 3, how do lesioned rabbits respond to the tone?</div>
+      </div>
+      <div class="q-options">
+        <button class="q-opt" onclick="answerQ(11,0)">A) Strong blinking, because fornix lesion enhances sensory preconditioning</button>
+        <button class="q-opt" onclick="answerQ(11,1)">B) Same level as control (separate-exposure) animals — preconditioning effect abolished</button>
+        <button class="q-opt" onclick="answerQ(11,2)">C) Stronger responding because attention to tone was enhanced</button>
+        <button class="q-opt" onclick="answerQ(11,3)">D) Blinking to all stimuli indiscriminately due to overgeneralization</button>
+      </div>
+      <div class="q-explanation hidden" id="qexp-11"><strong>Correct: B.</strong> Hippocampal damage eliminates sensory preconditioning. Lesioned compound-exposure rabbits look exactly like lesioned separate-exposure rabbits — Phase 1 co-occurrence cannot support Phase 3 generalization without intact hippocampus.</div>
+    </div>
+
+    <!-- Q13 -->
+    <div class="q-card" id="qcard-12">
+      <div class="q-header">
+        <div class="q-meta">
+          <div class="q-num">13</div>
+          <span class="q-tag">Acquired Equivalence</span>
+          <span class="q-status" id="qstatus-12"></span>
+        </div>
+        <div class="q-text">Rats with entorhinal cortex lesions learn Phase 1 (A1→X1, A2→X1) and Phase 2 (A1→food) normally but fail Phase 3 transfer. The entorhinal cortex is specifically required for:</div>
+      </div>
+      <div class="q-options">
+        <button class="q-opt" onclick="answerQ(12,0)">A) Simple stimulus-response learning</button>
+        <button class="q-opt" onclick="answerQ(12,1)">B) Retaining recently learned associations over a delay</button>
+        <button class="q-opt" onclick="answerQ(12,2)">C) Generalizing previously learned equivalences to novel transfer situations</button>
+        <button class="q-opt" onclick="answerQ(12,3)">D) Detecting physical similarity between A1 and A2</button>
+      </div>
+      <div class="q-explanation hidden" id="qexp-12"><strong>Correct: C.</strong> Acquisition and retention intact but transfer impaired pinpoints the entorhinal cortex's role in using previously learned equivalences to guide novel generalization — not basic learning itself.</div>
+    </div>
+
+    <!-- Q14 -->
+    <div class="q-card" id="qcard-13">
+      <div class="q-header">
+        <div class="q-meta">
+          <div class="q-num">14</div>
+          <span class="q-tag">Latent Inhibition</span>
+          <span class="q-status" id="qstatus-13"></span>
+        </div>
+        <div class="q-text">In latent inhibition, the pre-exposed animal must do what to acquire the new tone-shock association?</div>
+      </div>
+      <div class="q-options">
+        <button class="q-opt" onclick="answerQ(13,0)">A) Strengthen the existing tone-shock association from pre-exposure</button>
+        <button class="q-opt" onclick="answerQ(13,1)">B) Suppress responding because tone is now associated with shock</button>
+        <button class="q-opt" onclick="answerQ(13,2)">C) Unlearn or override the tone-nothing association established in Phase 1 before acquiring the new tone-shock one</button>
+        <button class="q-opt" onclick="answerQ(13,3)">D) Transfer the shock association to a different sensory modality</button>
+      </div>
+      <div class="q-explanation hidden" id="qexp-13"><strong>Correct: C.</strong> The pre-exposed animal built a tone→nothing association in Phase 1. Phase 2 requires building tone→shock while overcoming the prior inhibitory association — "getting rid of a memory."</div>
+    </div>
+
+    <!-- Q15 -->
+    <div class="q-card" id="qcard-14">
+      <div class="q-header">
+        <div class="q-meta">
+          <div class="q-num">15</div>
+          <span class="q-tag">Latent Inhibition &amp; Lesions</span>
+          <span class="q-status" id="qstatus-14"></span>
+        </div>
+        <div class="q-text">Shohamy, Allen &amp; Gluck (2000) showed entorhinal cortex lesions ELIMINATE latent inhibition. Lesioned pre-exposed rabbits learned the tone-airpuff association FASTER than healthy controls. This tells us:</div>
+      </div>
+      <div class="q-options">
+        <button class="q-opt" onclick="answerQ(14,0)">A) Entorhinal damage enhances all forms of conditioning</button>
+        <button class="q-opt" onclick="answerQ(14,1)">B) Entorhinal cortex required to maintain the Phase 1 "tone-nothing" representation that normally interferes with Phase 2. Without it, learning is unimpeded</button>
+        <button class="q-opt" onclick="answerQ(14,2)">C) Lesion caused better attention to CS</button>
+        <button class="q-opt" onclick="answerQ(14,3)">D) Nucleus basalis compensated by releasing more ACh</button>
+      </div>
+      <div class="q-explanation hidden" id="qexp-14"><strong>Correct: B.</strong> Without entorhinal cortex, animal has no "memory" of pre-exposure to override, so learns Phase 2 as if naive — actually faster than hippocampally-intact controls who must first overcome their prior association.</div>
+    </div>
+
+    <!-- Q16 -->
+    <div class="q-card" id="qcard-15">
+      <div class="q-header">
+        <div class="q-meta">
+          <div class="q-num">16</div>
+          <span class="q-tag">Cortical Plasticity</span>
+          <span class="q-status" id="qstatus-15"></span>
+        </div>
+        <div class="q-text">Weinberger's guinea pig study showed that after pairing 2500 Hz tone with shock:</div>
+      </div>
+      <div class="q-options">
+        <button class="q-opt" onclick="answerQ(15,0)">A) Neurons throughout A1 became broadly responsive to all frequencies above 2000 Hz</button>
+        <button class="q-opt" onclick="answerQ(15,1)">B) Individual neurons that originally preferred ~1000 Hz shifted to respond best to ~2500 Hz (the trained frequency)</button>
+        <button class="q-opt" onclick="answerQ(15,2)">C) Trained tone caused nucleus basalis neurons to increase preferred frequency</button>
+        <button class="q-opt" onclick="answerQ(15,3)">D) Training reduced A1 responsiveness, reflecting habituation</button>
+      </div>
+      <div class="q-explanation hidden" id="qexp-15"><strong>Correct: B.</strong> A1 neurons remapped their tuning toward the CS frequency (2500 Hz). More neurons now respond best to trained stimulus — consistent with principle that important stimuli earn more cortical real estate.</div>
+    </div>
+
+    <!-- Q17 -->
+    <div class="q-card" id="qcard-16">
+      <div class="q-header">
+        <div class="q-meta">
+          <div class="q-num">17</div>
+          <span class="q-tag">ACh vs. Dopamine</span>
+          <span class="q-status" id="qstatus-16"></span>
+        </div>
+        <div class="q-text">ACh's role relative to dopamine: "dopamine signals valence, ACh signals salience." In practical terms:</div>
+      </div>
+      <div class="q-options">
+        <button class="q-opt" onclick="answerQ(16,0)">A) ACh tells cortex whether event was good or bad; dopamine tells how surprising</button>
+        <button class="q-opt" onclick="answerQ(16,1)">B) Dopamine tells cortex whether event was good or bad; ACh tells that something important happened, without specifying valence</button>
+        <button class="q-opt" onclick="answerQ(16,2)">C) Both signal prediction errors identically; difference only anatomical</button>
+        <button class="q-opt" onclick="answerQ(16,3)">D) ACh involved in reward learning; dopamine in fear learning</button>
+      </div>
+      <div class="q-explanation hidden" id="qexp-16"><strong>Correct: B.</strong> Dopamine codes signed value (positive or negative PE). ACh codes unsigned importance — "something happened that you need to represent more." This is why ACh can drive cortical remapping regardless of whether US was reward or punishment.</div>
+    </div>
+
+    <!-- Q18 -->
+    <div class="q-card" id="qcard-17">
+      <div class="q-header">
+        <div class="q-meta">
+          <div class="q-num">18</div>
+          <span class="q-tag">Nucleus Basalis Lesion</span>
+          <span class="q-status" id="qstatus-17"></span>
+        </div>
+        <div class="q-text">A researcher lesions cholinergic nucleus basalis neurons before training a rat on a NEW visual discrimination task; rat previously learned an auditory discrimination. Prediction:</div>
+      </div>
+      <div class="q-options">
+        <button class="q-opt" onclick="answerQ(17,0)">A) Rat loses previously learned auditory discrimination — ACh required to maintain established memories</button>
+        <button class="q-opt" onclick="answerQ(17,1)">B) Rat unable to learn new visual discrimination (overgeneralizes colors) but previously learned auditory discrimination remains intact</button>
+        <button class="q-opt" onclick="answerQ(17,2)">C) Rat unable to perform either auditory or visual discrimination</button>
+        <button class="q-opt" onclick="answerQ(17,3)">D) Rat learns visual discrimination normally but forgets auditory</button>
+      </div>
+      <div class="q-explanation hidden" id="qexp-17"><strong>Correct: B.</strong> Auditory cortex remapping already occurred — doesn't need ongoing ACh to maintain. Nucleus basalis lesion prevents NEW cortical remapping, so new visual discrimination learning fails.</div>
+    </div>
+
+    <!-- Q19 -->
+    <div class="q-card" id="qcard-18">
+      <div class="q-header">
+        <div class="q-meta">
+          <div class="q-num">19</div>
+          <span class="q-tag">Gluck-Myers Model</span>
+          <span class="q-status" id="qstatus-18"></span>
+        </div>
+        <div class="q-text">Gluck &amp; Myers (1993) model proposes the hippocampal region performs two complementary operations on stimulus representations:</div>
+      </div>
+      <div class="q-options">
+        <button class="q-opt" onclick="answerQ(18,0)">A) Encoding and retrieval</button>
+        <button class="q-opt" onclick="answerQ(18,1)">B) Excitation and inhibition</button>
+        <button class="q-opt" onclick="answerQ(18,2)">C) Compression of redundant/unimportant info AND differentiation (expansion) of useful info</button>
+        <button class="q-opt" onclick="answerQ(18,3)">D) Sensory preconditioning and acquired equivalence</button>
+      </div>
+      <div class="q-explanation hidden" id="qexp-18"><strong>Correct: C.</strong> Hippocampus compresses redundant/unimportant stimuli (fewer resources) and differentiates stimuli that matter (expanding representations). The New Yorker map analogy: compressed Midwest, detailed 9th/10th Ave.</div>
+    </div>
+
+    <!-- Q20 -->
+    <div class="q-card" id="qcard-19">
+      <div class="q-header">
+        <div class="q-meta">
+          <div class="q-num">20</div>
+          <span class="q-tag">fMRI &amp; Hippocampus</span>
+          <span class="q-status" id="qstatus-19"></span>
+        </div>
+        <div class="q-text">fMRI data showed hippocampal activation during Phase 1 (equivalence training) predicted Phase 3 accuracy, but hippocampal activation DURING Phase 3 did not. This supports:</div>
+      </div>
+      <div class="q-options">
+        <button class="q-opt" onclick="answerQ(19,0)">A) Hippocampus primarily retrieval structure — must be active at test for generalization</button>
+        <button class="q-opt" onclick="answerQ(19,1)">B) Hippocampus builds representational scaffold during learning that other areas later use for transfer; critical work at encoding not generalization</button>
+        <button class="q-opt" onclick="answerQ(19,2)">C) Hippocampal activity unrelated to generalization</button>
+        <button class="q-opt" onclick="answerQ(19,3)">D) Midbrain, not hippocampus, primarily mediates acquired equivalence</button>
+      </div>
+      <div class="q-explanation hidden" id="qexp-19"><strong>Correct: B.</strong> Confirms Gluck-Myers model: hippocampus constructs appropriate stimulus representations during learning. Once built, other brain areas execute transfer — hippocampus doesn't need to be active at test.</div>
+    </div>
+
+    <!-- Q21 -->
+    <div class="q-card" id="qcard-20">
+      <div class="q-header">
+        <div class="q-meta">
+          <div class="q-num">21</div>
+          <span class="q-tag">New Yorker Map</span>
+          <span class="q-status" id="qstatus-20"></span>
+        </div>
+        <div class="q-text">The New Yorker caricature (Steinberg, 1976) with 9th/10th Avenues taking up half the map illustrated:</div>
+      </div>
+      <div class="q-options">
+        <button class="q-opt" onclick="answerQ(20,0)">A) How stereotypes are formed through confirmation bias</button>
+        <button class="q-opt" onclick="answerQ(20,1)">B) How cortical and hippocampal representations expand for frequently discriminated stimuli and compress for rarely discriminated ones</button>
+        <button class="q-opt" onclick="answerQ(20,2)">C) How distributed representations naturally arise from co-occurrence</button>
+        <button class="q-opt" onclick="answerQ(20,3)">D) Why Sapir-Whorf predicts better color discrimination in New Yorkers</button>
+      </div>
+      <div class="q-explanation hidden" id="qexp-20"><strong>Correct: B.</strong> Analogy for representational distortion: regions requiring fine discrimination (9th/10th Ave for New Yorkers) get more resources; irrelevant regions (Midwest) are compressed. Mirrors both cortical maps and the Gluck-Myers hippocampal model.</div>
+    </div>
+
+    <!-- Q22 -->
+    <div class="q-card" id="qcard-21">
+      <div class="q-header">
+        <div class="q-meta">
+          <div class="q-num">22</div>
+          <span class="q-tag">Sapir-Whorf</span>
+          <span class="q-status" id="qstatus-21"></span>
+        </div>
+        <div class="q-text">The Sapir-Whorf hypothesis predicts Russian speakers should show better discrimination of certain blue shades than English speakers. This is because:</div>
+      </div>
+      <div class="q-options">
+        <button class="q-opt" onclick="answerQ(21,0)">A) Russian speakers have larger primary visual cortices due to cultural emphasis on art</button>
+        <button class="q-opt" onclick="answerQ(21,1)">B) Russian has two distinct words for blue, which may tune perceptual/categorical boundaries and allocate more representational resources to distinguishing those shades</button>
+        <button class="q-opt" onclick="answerQ(21,2)">C) English lacks color terms entirely</button>
+        <button class="q-opt" onclick="answerQ(21,3)">D) Russian speakers receive more color feedback during childhood</button>
+      </div>
+      <div class="q-explanation hidden" id="qexp-21"><strong>Correct: B.</strong> Having separate words for categories (two words for blue in Russian) shapes how people perceive and discriminate stimuli — consistent with category labels tuning generalization gradients.</div>
+    </div>
+
+    <!-- Q23 -->
+    <div class="q-card" id="qcard-22">
+      <div class="q-header">
+        <div class="q-meta">
+          <div class="q-num">23</div>
+          <span class="q-tag">Sapir-Whorf Directionality</span>
+          <span class="q-status" id="qstatus-22"></span>
+        </div>
+        <div class="q-text">Ali mentioned the camel example: Arabic ~160 words for camel vs English one word. He asked about directionality. The two possible directions are:</div>
+      </div>
+      <div class="q-options">
+        <button class="q-opt" onclick="answerQ(22,0)">A) Language shapes perception, OR perception shapes language — unclear which drives which</button>
+        <button class="q-opt" onclick="answerQ(22,1)">B) Culture shapes language, OR genetics shapes language</button>
+        <button class="q-opt" onclick="answerQ(22,2)">C) Childhood experience shapes vocabulary, OR adult experience shapes perception</button>
+        <button class="q-opt" onclick="answerQ(22,3)">D) Discrimination training creates words, OR words create discrimination training</button>
+      </div>
+      <div class="q-explanation hidden" id="qexp-22"><strong>Correct: A.</strong> Ali was explicit about this uncertainty: "Is it because of the language that I think in a certain way, or is it because the way I think that we develop this language?" Directionality of Sapir-Whorf remains an active debate.</div>
+    </div>
+
+    <!-- Q24 -->
+    <div class="q-card" id="qcard-23">
+      <div class="q-header">
+        <div class="q-meta">
+          <div class="q-num">24</div>
+          <span class="q-tag">Schizophrenia</span>
+          <span class="q-status" id="qstatus-23"></span>
+        </div>
+        <div class="q-text">Patients with schizophrenia are tested on acquired equivalence. On which phase do they show the clearest deficit?</div>
+      </div>
+      <div class="q-options">
+        <button class="q-opt" onclick="answerQ(23,0)">A) Phase 1: cannot learn that two people prefer same fish</button>
+        <button class="q-opt" onclick="answerQ(23,1)">B) Phase 2: cannot learn that one person newly prefers different fish</button>
+        <button class="q-opt" onclick="answerQ(23,2)">C) Phase 3: cannot infer that equivalent person also prefers the newly trained fish</button>
+        <button class="q-opt" onclick="answerQ(23,3)">D) Both Phase 1 and Phase 3 equally</button>
+      </div>
+      <div class="q-explanation hidden" id="qexp-23"><strong>Correct: C.</strong> Schizophrenia: intact acquisition (Phase 1) and retention, impaired transfer generalization (Phase 3). Behavioral signature points specifically to hippocampal region dysfunction during encoding of equivalences.</div>
+    </div>
+
+    <!-- Q25 -->
+    <div class="q-card" id="qcard-24">
+      <div class="q-header">
+        <div class="q-meta">
+          <div class="q-num">25</div>
+          <span class="q-tag">Transitive Inference</span>
+          <span class="q-status" id="qstatus-24"></span>
+        </div>
+        <div class="q-text">Patients with schizophrenia succeed on non-relational pairs (AE) but fail on relational pairs (BD) in transitive inference. This is consistent with:</div>
+      </div>
+      <div class="q-options">
+        <button class="q-opt" onclick="answerQ(24,0)">A) Impaired hippocampal relational memory specifically affecting B-D comparison that requires inference across the chain</button>
+        <button class="q-opt" onclick="answerQ(24,1)">B) General memory deficit affecting all pair types equally</button>
+        <button class="q-opt" onclick="answerQ(24,2)">C) Impaired attention to pairs in the middle of the sequence</button>
+        <button class="q-opt" onclick="answerQ(24,3)">D) Enhanced discrimination that makes B and D appear more similar</button>
+      </div>
+      <div class="q-explanation hidden" id="qexp-24"><strong>Correct: A.</strong> AE pairs can be solved by rote (A always wins, E always loses). BD requires relational inference (B&gt;C&gt;D) — this is hippocampal relational memory. Schizophrenia disrupts the hippocampal circuit needed for this inferential transfer.</div>
+    </div>
+
+  </div><!-- /tab-quiz -->
+
+
+  <!-- ════════════════════════════ BIG PICTURE ════════════════════════════ -->
+  <div class="tab-panel" id="tab-synthesis">
+    <div style="margin-bottom:1.5rem;">
+      <h2 style="font-size:1.3rem;margin-bottom:.4rem;">Big Picture Synthesis</h2>
+      <p style="color:var(--gray-light);font-size:.9rem;">How the pieces connect — the unifying framework for Module 9.</p>
+    </div>
+
+    <div class="synth-card" style="margin-bottom:1rem;border-color:rgba(99,102,241,.25);">
+      <div class="synth-card-title" style="color:#a5b4fc;">
+        <div class="synth-dot" style="background:#6366f1;"></div>
+        Unifying Principle
+      </div>
+      <div class="prose" style="font-size:.9rem;">
+        <p>How a stimulus is <strong>REPRESENTED</strong> in the brain determines everything about what generalizes to what. The same learning mechanism (prediction error update) produces radically different generalization patterns depending on whether stimuli are encoded <em>discretely</em> or as <em>overlapping distributed patterns</em>.</p>
+        <p>The hippocampus does not learn associations directly — it builds the <em>representational scaffold</em> (compressing irrelevant variation, differentiating useful distinctions) that lets other brain areas generalize correctly.</p>
+      </div>
+    </div>
+
+    <!-- Levels Strip -->
+    <div class="levels-strip">
+      <div class="level-col">
+        <div class="level-label" style="color:#a5b4fc;">Behavior</div>
+        <div class="level-items">
+          <div class="level-item" style="background:rgba(99,102,241,.1);color:#a5b4fc;">Generalization gradient</div>
+          <div class="level-item" style="background:rgba(99,102,241,.1);color:#a5b4fc;">Peak shift</div>
+          <div class="level-item" style="background:rgba(99,102,241,.1);color:#a5b4fc;">Sensory preconditioning</div>
+          <div class="level-item" style="background:rgba(99,102,241,.1);color:#a5b4fc;">Acquired equivalence</div>
+        </div>
+      </div>
+      <div class="level-col">
+        <div class="level-label" style="color:#67e8f9;">Circuit</div>
+        <div class="level-items">
+          <div class="level-item" style="background:rgba(6,182,212,.1);color:#67e8f9;">A1 tonotopic maps</div>
+          <div class="level-item" style="background:rgba(6,182,212,.1);color:#67e8f9;">Hippocampal region (compression/differentiation)</div>
+          <div class="level-item" style="background:rgba(6,182,212,.1);color:#67e8f9;">Nucleus basalis (ACh broadcast)</div>
+        </div>
+      </div>
+      <div class="level-col">
+        <div class="level-label" style="color:#6ee7b7;">Synapse</div>
+        <div class="level-items">
+          <div class="level-item" style="background:rgba(16,185,129,.1);color:#6ee7b7;">ACh enables cortical plasticity</div>
+          <div class="level-item" style="background:rgba(16,185,129,.1);color:#6ee7b7;">Hippocampal Phase 1 encoding → later transfer</div>
+        </div>
+      </div>
+      <div class="level-col">
+        <div class="level-label" style="color:#fcd34d;">Structure</div>
+        <div class="level-items">
+          <div class="level-item" style="background:rgba(245,158,11,.1);color:#fcd34d;">A1 cortical remapping</div>
+          <div class="level-item" style="background:rgba(245,158,11,.1);color:#fcd34d;">Hippocampal volume/activity predicts generalization</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Exam themes -->
+    <div class="synthesis-grid">
+      <div class="synth-card">
+        <div class="synth-card-title" style="color:#6ee7b7;">
+          <div class="synth-dot" style="background:#10b981;"></div>
+          Key Exam Themes
+        </div>
+        <ul>
+          <li><span>Discrete vs. distributed</span> — which model is required when (hospital color example)</li>
+          <li><span>Peak shift direction</span> — away from S-, know S+ and S-</li>
+          <li><span>3-phase structures</span> — sensory preconditioning and acquired equivalence</li>
+          <li><span>Hippocampus deficit</span> — Phase 3 ONLY, not acquisition</li>
+          <li><span>ACh vs. dopamine</span> — salience vs. valence</li>
+          <li><span>Sapir-Whorf</span> — directionality debate unresolved</li>
+          <li><span>Schizophrenia</span> — intact acquisition + impaired transfer</li>
+        </ul>
+      </div>
+      <div class="synth-card">
+        <div class="synth-card-title" style="color:#67e8f9;">
+          <div class="synth-dot" style="background:#06b6d4;"></div>
+          Cross-Course Connections
+        </div>
+        <ul>
+          <li><span>R-W (Weeks 5-8):</span> Distributed representation implements graded generalization R-W describes mathematically</li>
+          <li><span>ACh + Dopamine:</span> Complementary neuromodulators — salience vs. valence</li>
+          <li><span>Hippocampus (Week 6):</span> Same structure as spatial learning and declarative memory</li>
+          <li><span>Schizophrenia → Week 10:</span> Clinical generalization deficits connect to psychiatric disorders module</li>
+          <li><span>Cortical maps:</span> Same principle as homunculus, violinists' hand expansion, and Weinberger's remapping</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Common confusions -->
+    <div class="synth-card" style="margin-top:0;border-color:rgba(245,158,11,.2);">
+      <div class="synth-card-title" style="color:#fcd34d;">
+        <div class="synth-dot" style="background:#f59e0b;"></div>
+        Common Confusions to Avoid
+      </div>
+      <ul>
+        <li><span>Peak shift direction:</span> Peak moves AWAY from S- (not toward it). S+=550, S-=555 → peak at ~540, NOT ~565.</li>
+        <li><span>Latent inhibition lesion paradox:</span> Entorhinal lesion HELPS speed (not hurts) — removes interference from prior tone-nothing memory.</li>
+        <li><span>Hippocampus timing:</span> Critical at ENCODING (Phase 1), not retrieval (Phase 3). fMRI at Phase 1 predicts success; Phase 3 activity does not.</li>
+        <li><span>ACh vs. dopamine:</span> ACh = unsigned salience (good or bad matters equally). Dopamine = signed valence (which direction matters).</li>
+        <li><span>Nucleus basalis lesion:</span> Old discriminations INTACT; only NEW discriminations fail. ACh needed for future remapping, not maintenance of past.</li>
+      </ul>
+    </div>
+
+  </div><!-- /tab-synthesis -->
+
+</main>
+
+<script>
+  // ─── TABS ───
+  document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById('tab-' + btn.dataset.tab).classList.add('active');
+    });
+  });
+
+  // ─── COLLAPSIBLE SECTIONS ───
+  function toggleSection(header) {
+    const section = header.closest('.study-section');
+    section.classList.toggle('open');
+  }
+
+  // ─── FLASHCARDS ───
+  function flipCard(card) {
+    card.classList.toggle('flipped');
+  }
+
+  // Filter buttons
+  document.querySelectorAll('.filter-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const filter = btn.dataset.filter;
+      document.querySelectorAll('.flashcard').forEach(card => {
+        if (filter === 'all' || card.dataset.category === filter) {
+          card.style.display = '';
+        } else {
+          card.style.display = 'none';
+        }
+      });
+    });
+  });
+
+  // Flip all button
+  let allFlipped = false;
+  document.getElementById('flipAllBtn').addEventListener('click', function() {
+    allFlipped = !allFlipped;
+    document.querySelectorAll('.flashcard').forEach(card => {
+      if (card.style.display !== 'none') {
+        if (allFlipped) card.classList.add('flipped');
+        else card.classList.remove('flipped');
+      }
+    });
+    this.textContent = allFlipped ? 'Hide All' : 'Reveal All';
+  });
+
+  // ─── QUIZ ───
+  const TOTAL_QUESTIONS = 25;
+  // correctAnswers array: 0-indexed (A=0, B=1, C=2, D=3)
+  const correctAnswers = [
+    1, // Q1 B
+    2, // Q2 C
+    2, // Q3 C
+    1, // Q4 B
+    2, // Q5 C
+    0, // Q6 A
+    1, // Q7 B
+    2, // Q8 C
+    1, // Q9 B
+    1, // Q10 B
+    1, // Q11 B
+    1, // Q12 B
+    2, // Q13 C
+    2, // Q14 C
+    1, // Q15 B
+    1, // Q16 B
+    1, // Q17 B
+    1, // Q18 B
+    2, // Q19 C
+    1, // Q20 B
+    1, // Q21 B
+    1, // Q22 B
+    0, // Q23 A
+    2, // Q24 C
+    0  // Q25 A
+  ];
+
+  let answered = new Array(TOTAL_QUESTIONS).fill(false);
+  let results = new Array(TOTAL_QUESTIONS).fill(null);
+
+  function answerQ(qIndex, optIndex) {
+    if (answered[qIndex]) return;
+    answered[qIndex] = true;
+
+    const card = document.getElementById('qcard-' + qIndex);
+    const opts = card.querySelectorAll('.q-opt');
+    const exp = document.getElementById('qexp-' + qIndex);
+    const statusEl = document.getElementById('qstatus-' + qIndex);
+    const correct = correctAnswers[qIndex];
+
+    opts.forEach((opt, i) => {
+      opt.disabled = true;
+      if (i === optIndex && i === correct) {
+        opt.classList.add('selected-correct');
+      } else if (i === optIndex && i !== correct) {
+        opt.classList.add('selected-wrong');
+      } else if (i === correct) {
+        opt.classList.add('show-correct');
+      }
+    });
+
+    const isCorrect = (optIndex === correct);
+    results[qIndex] = isCorrect;
+
+    if (isCorrect) {
+      card.classList.add('correct');
+      statusEl.textContent = '✓ Correct';
+      statusEl.style.color = 'var(--emerald)';
+    } else {
+      card.classList.add('incorrect');
+      statusEl.textContent = '✗ Incorrect';
+      statusEl.style.color = 'var(--rose)';
+    }
+
+    exp.classList.remove('hidden');
+    updateStats();
+  }
+
+  function updateStats() {
+    const answeredCount = answered.filter(Boolean).length;
+    const correctCount = results.filter(r => r === true).length;
+    const wrongCount = results.filter(r => r === false).length;
+
+    document.getElementById('statCorrect').textContent = correctCount;
+    document.getElementById('statWrong').textContent = wrongCount;
+
+    if (answeredCount > 0) {
+      const pct = Math.round((correctCount / answeredCount) * 100);
+      document.getElementById('statPct').textContent = pct + '%';
+    }
+
+    // Progress bar
+    const pct = (answeredCount / TOTAL_QUESTIONS) * 100;
+    document.getElementById('quizProgressBar').style.width = pct + '%';
+    document.getElementById('quizProgressLabel').textContent = answeredCount + ' / ' + TOTAL_QUESTIONS;
+  }
+
+  function resetQuiz() {
+    answered = new Array(TOTAL_QUESTIONS).fill(false);
+    results = new Array(TOTAL_QUESTIONS).fill(null);
+
+    for (let i = 0; i < TOTAL_QUESTIONS; i++) {
+      const card = document.getElementById('qcard-' + i);
+      card.classList.remove('correct', 'incorrect');
+
+      const opts = card.querySelectorAll('.q-opt');
+      opts.forEach(opt => {
+        opt.disabled = false;
+        opt.classList.remove('selected-correct', 'selected-wrong', 'show-correct');
+      });
+
+      document.getElementById('qexp-' + i).classList.add('hidden');
+      document.getElementById('qstatus-' + i).textContent = '';
+    }
+
+    document.getElementById('statCorrect').textContent = '0';
+    document.getElementById('statWrong').textContent = '0';
+    document.getElementById('statPct').textContent = '—';
+    document.getElementById('quizProgressBar').style.width = '0%';
+    document.getElementById('quizProgressLabel').textContent = '0 / ' + TOTAL_QUESTIONS;
+  }
+
+  // ─── SCROLL PROGRESS ───
+  window.addEventListener('scroll', () => {
+    const scrolled = (window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100;
+    document.getElementById('scrollProgress').style.width = scrolled + '%';
+  });
+</script>
+</body>
+</html>

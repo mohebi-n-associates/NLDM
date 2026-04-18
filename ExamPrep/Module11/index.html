@@ -1,0 +1,1610 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Module 11 Exam Prep — Working Memory, Cognitive Control &amp; Dopamine in the PFC</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --primary: #6366f1;
+      --primary-dark: #4f46e5;
+      --secondary: #ec4899;
+      --accent: #06b6d4;
+      --emerald: #10b981;
+      --amber: #f59e0b;
+      --rose: #f43f5e;
+      --dark: #0f172a;
+      --dark-light: #1e293b;
+      --dark-mid: #162032;
+      --gray: #64748b;
+      --gray-light: #94a3b8;
+      --light: #f1f5f9;
+      --white: #ffffff;
+      --border: rgba(255,255,255,0.08);
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--dark);
+      color: var(--white);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* ─── ANIMATED BACKGROUND ─── */
+    .bg-layer {
+      position: fixed; inset: 0; z-index: -1; pointer-events: none;
+      background:
+        radial-gradient(ellipse 80% 60% at 20% 10%, rgba(99,102,241,.12) 0%, transparent 60%),
+        radial-gradient(ellipse 60% 60% at 80% 80%, rgba(236,72,153,.08) 0%, transparent 60%),
+        radial-gradient(ellipse 40% 40% at 50% 50%, rgba(6,182,212,.05) 0%, transparent 60%);
+      animation: bgPulse 20s ease-in-out infinite;
+    }
+    @keyframes bgPulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.7; transform: scale(1.05); }
+    }
+
+    /* ─── TOPBAR ─── */
+    .topbar {
+      position: sticky; top: 0; z-index: 100;
+      padding: .75rem 2rem;
+      background: rgba(15,23,42,.85);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 1rem;
+    }
+    .topbar-left { display: flex; align-items: center; gap: 1rem; }
+    .back-link {
+      display: flex; align-items: center; gap: .5rem;
+      color: var(--gray-light); text-decoration: none; font-size: .85rem;
+      transition: color .2s;
+    }
+    .back-link:hover { color: var(--white); }
+    .back-link svg { flex-shrink: 0; }
+    .breadcrumb { color: var(--gray); font-size: .8rem; }
+    .breadcrumb span { color: var(--primary); }
+
+    .progress-bar-wrap {
+      flex: 1; max-width: 240px;
+      background: rgba(255,255,255,.08); border-radius: 99px; height: 6px; overflow: hidden;
+    }
+    .progress-bar-fill {
+      height: 100%; border-radius: 99px;
+      background: linear-gradient(90deg, var(--primary), var(--secondary));
+      transition: width .5s ease;
+      width: 0%;
+    }
+    .progress-label { font-size: .75rem; color: var(--gray); white-space: nowrap; }
+
+    /* ─── HERO ─── */
+    .hero {
+      padding: 5rem 2rem 3rem;
+      max-width: 900px; margin: 0 auto; text-align: center;
+    }
+    .module-badge {
+      display: inline-flex; align-items: center; gap: .5rem;
+      background: rgba(99,102,241,.15); border: 1px solid rgba(99,102,241,.3);
+      color: #a5b4fc; border-radius: 99px; padding: .35rem 1rem; font-size: .8rem;
+      font-weight: 600; letter-spacing: .05em; text-transform: uppercase; margin-bottom: 1.5rem;
+    }
+    .hero h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      line-height: 1.15; margin-bottom: 1rem;
+      background: linear-gradient(135deg, #fff 40%, #a5b4fc);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    }
+    .hero-subtitle { color: var(--gray-light); font-size: 1.05rem; max-width: 600px; margin: 0 auto 2rem; }
+
+    .tab-nav {
+      display: flex; gap: .5rem; justify-content: center;
+      flex-wrap: wrap; margin-bottom: 1rem;
+    }
+    .tab-btn {
+      padding: .6rem 1.2rem; border-radius: 99px; border: 1px solid var(--border);
+      background: rgba(255,255,255,.04); color: var(--gray-light);
+      font-size: .875rem; font-weight: 500; cursor: pointer; transition: all .2s;
+      font-family: 'Inter', sans-serif;
+    }
+    .tab-btn:hover { background: rgba(99,102,241,.12); color: var(--white); border-color: rgba(99,102,241,.4); }
+    .tab-btn.active {
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      color: var(--white); border-color: transparent;
+    }
+
+    /* ─── MAIN LAYOUT ─── */
+    .main { max-width: 900px; margin: 0 auto; padding: 0 2rem 6rem; }
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; animation: fadeIn .3s ease; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+    /* ─── SECTION CARDS (Study Guide) ─── */
+    .study-section {
+      border: 1px solid var(--border);
+      border-radius: 16px; overflow: hidden;
+      background: rgba(255,255,255,.02);
+      margin-bottom: 1rem;
+      transition: border-color .2s;
+    }
+    .study-section:hover { border-color: rgba(99,102,241,.25); }
+    .study-section-header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1.1rem 1.5rem; cursor: pointer; user-select: none;
+      gap: 1rem;
+    }
+    .study-section-header-left { display: flex; align-items: center; gap: .85rem; }
+    .section-icon {
+      width: 36px; height: 36px; border-radius: 10px; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center; font-size: 1.1rem;
+    }
+    .section-title { font-size: 1rem; font-weight: 600; }
+    .section-num { font-size: .75rem; color: var(--gray); }
+    .chevron { color: var(--gray); transition: transform .25s; flex-shrink: 0; }
+    .study-section.open .chevron { transform: rotate(180deg); }
+    .study-section-body { display: none; padding: 0 1.5rem 1.5rem; }
+    .study-section.open .study-section-body { display: block; }
+
+    /* ─── CONTENT ELEMENTS ─── */
+    .prose { color: var(--gray-light); font-size: .95rem; }
+    .prose p { margin-bottom: .85rem; }
+    .prose p:last-child { margin-bottom: 0; }
+    .prose strong { color: var(--white); font-weight: 600; }
+    .prose em { color: #a5b4fc; font-style: normal; font-weight: 500; }
+
+    .callout {
+      border-radius: 10px; padding: 1rem 1.2rem; margin: 1rem 0;
+      border-left: 3px solid; font-size: .9rem;
+    }
+    .callout-title { font-weight: 600; margin-bottom: .4rem; font-size: .8rem; letter-spacing: .06em; text-transform: uppercase; }
+    .callout.warn { background: rgba(245,158,11,.07); border-color: var(--amber); color: #fcd34d; }
+    .callout.tip { background: rgba(99,102,241,.07); border-color: var(--primary); color: #a5b4fc; }
+    .callout.connect { background: rgba(6,182,212,.07); border-color: var(--accent); color: #67e8f9; }
+    .callout.exam { background: rgba(16,185,129,.07); border-color: var(--emerald); color: #6ee7b7; }
+
+    .prop-table, .contrast-table {
+      width: 100%; border-collapse: collapse; font-size: .875rem; margin: 1rem 0;
+    }
+    .prop-table th, .contrast-table th {
+      background: rgba(99,102,241,.15); color: #a5b4fc;
+      padding: .6rem .9rem; text-align: left; font-weight: 600; font-size: .78rem;
+      letter-spacing: .04em; text-transform: uppercase;
+    }
+    .prop-table td, .contrast-table td {
+      padding: .65rem .9rem; border-bottom: 1px solid rgba(255,255,255,.05);
+      color: var(--gray-light); vertical-align: top;
+    }
+    .prop-table tr:last-child td, .contrast-table tr:last-child td { border-bottom: none; }
+    .prop-table tr:hover td, .contrast-table tr:hover td { background: rgba(255,255,255,.02); }
+    .prop-table td:first-child, .contrast-table td:first-child { color: var(--white); font-weight: 500; }
+
+    .circuit-box {
+      background: rgba(15,23,42,.6); border: 1px solid rgba(6,182,212,.2);
+      border-radius: 10px; padding: 1rem 1.2rem; margin: 1rem 0;
+      font-family: 'JetBrains Mono', monospace; font-size: .825rem; color: #67e8f9;
+    }
+    .circuit-label { color: var(--gray); font-size: .75rem; margin-bottom: .5rem; font-family: 'Inter', sans-serif; }
+
+    .bullet-list { list-style: none; padding: 0; margin: .75rem 0; }
+    .bullet-list li {
+      display: flex; gap: .75rem; padding: .4rem 0; color: var(--gray-light); font-size: .9rem;
+    }
+    .bullet-list li::before {
+      content: '›'; color: var(--primary); font-size: 1.1rem; line-height: 1.4; flex-shrink: 0;
+    }
+    .bullet-list li strong { color: var(--white); }
+
+    /* ─── KEY TERMS / FLASHCARDS ─── */
+    .terms-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: .75rem; }
+    .flashcard {
+      border: 1px solid var(--border); border-radius: 12px; overflow: hidden;
+      cursor: pointer; transition: border-color .2s, transform .15s;
+      background: rgba(255,255,255,.02);
+      perspective: 600px;
+    }
+    .flashcard:hover { border-color: rgba(99,102,241,.3); transform: translateY(-2px); }
+    .flashcard-inner { position: relative; min-height: 100px; transition: transform .45s; transform-style: preserve-3d; }
+    .flashcard.flipped .flashcard-inner { transform: rotateY(180deg); }
+    .flashcard-front, .flashcard-back {
+      padding: 1rem 1.1rem; backface-visibility: hidden;
+    }
+    .flashcard-back { position: absolute; inset: 0; transform: rotateY(180deg); background: rgba(99,102,241,.08); }
+    .flashcard-term { font-weight: 600; font-size: .95rem; margin-bottom: .4rem; }
+    .flashcard-hint { font-size: .73rem; color: var(--gray); }
+    .flashcard-def { font-size: .85rem; color: var(--gray-light); line-height: 1.55; }
+    .flashcard-tag {
+      display: inline-block; font-size: .68rem; padding: .15rem .5rem;
+      border-radius: 99px; margin-bottom: .6rem; font-weight: 600; letter-spacing: .04em;
+    }
+    .tag-neuro { background: rgba(6,182,212,.15); color: #67e8f9; }
+    .tag-behavior { background: rgba(99,102,241,.15); color: #a5b4fc; }
+    .tag-clinical { background: rgba(244,63,94,.15); color: #fda4af; }
+    .tag-theory { background: rgba(245,158,11,.15); color: #fcd34d; }
+    .tag-bmi { background: rgba(16,185,129,.15); color: #6ee7b7; }
+
+    .terms-controls { display: flex; gap: .5rem; margin-bottom: 1.5rem; flex-wrap: wrap; }
+    .filter-btn {
+      padding: .35rem .85rem; border-radius: 99px; font-size: .78rem; font-weight: 500;
+      border: 1px solid var(--border); background: transparent; color: var(--gray-light);
+      cursor: pointer; transition: all .2s; font-family: 'Inter', sans-serif;
+    }
+    .filter-btn:hover { border-color: rgba(99,102,241,.4); color: var(--white); }
+    .filter-btn.active { background: rgba(99,102,241,.15); border-color: rgba(99,102,241,.4); color: var(--white); }
+    .flip-all-btn {
+      margin-left: auto; padding: .35rem .85rem; border-radius: 99px;
+      font-size: .78rem; font-weight: 500; border: 1px solid rgba(99,102,241,.3);
+      background: rgba(99,102,241,.1); color: #a5b4fc; cursor: pointer;
+      transition: all .2s; font-family: 'Inter', sans-serif;
+    }
+    .flip-all-btn:hover { background: rgba(99,102,241,.2); }
+
+    /* ─── QUIZ ─── */
+    .quiz-stats {
+      display: flex; gap: 1.5rem; margin-bottom: 2rem;
+      padding: 1rem 1.5rem; background: rgba(255,255,255,.03);
+      border: 1px solid var(--border); border-radius: 12px; flex-wrap: wrap;
+    }
+    .stat-item { display: flex; flex-direction: column; gap: .2rem; }
+    .stat-val { font-size: 1.5rem; font-weight: 700; }
+    .stat-val.green { color: var(--emerald); }
+    .stat-val.red { color: var(--rose); }
+    .stat-val.blue { color: var(--primary); }
+    .stat-lbl { font-size: .75rem; color: var(--gray); }
+    .quiz-reset-btn {
+      margin-left: auto; padding: .45rem 1rem; border-radius: 8px;
+      background: rgba(255,255,255,.05); border: 1px solid var(--border);
+      color: var(--gray-light); font-size: .8rem; cursor: pointer;
+      transition: all .2s; font-family: 'Inter', sans-serif; align-self: center;
+    }
+    .quiz-reset-btn:hover { background: rgba(255,255,255,.1); color: var(--white); }
+
+    .q-card {
+      border: 1px solid var(--border); border-radius: 14px;
+      background: rgba(255,255,255,.02); margin-bottom: 1rem; overflow: hidden;
+      transition: border-color .2s;
+    }
+    .q-card.correct { border-color: rgba(16,185,129,.4); }
+    .q-card.incorrect { border-color: rgba(244,63,94,.4); }
+    .q-header { padding: 1.2rem 1.5rem; cursor: pointer; }
+    .q-meta { display: flex; gap: .75rem; align-items: center; margin-bottom: .65rem; }
+    .q-num {
+      width: 26px; height: 26px; border-radius: 8px; flex-shrink: 0;
+      background: rgba(99,102,241,.2); color: #a5b4fc;
+      font-size: .75rem; font-weight: 700; display: flex; align-items: center; justify-content: center;
+    }
+    .q-tag {
+      font-size: .7rem; padding: .15rem .6rem; border-radius: 99px; font-weight: 600;
+      background: rgba(99,102,241,.12); color: #a5b4fc;
+    }
+    .q-status { margin-left: auto; font-size: .75rem; }
+    .q-text { font-size: .95rem; color: var(--light); line-height: 1.55; }
+    .q-options { padding: 0 1.5rem 1rem; display: grid; gap: .5rem; }
+    .q-opt {
+      padding: .65rem 1rem; border-radius: 9px;
+      border: 1px solid rgba(255,255,255,.07);
+      background: rgba(255,255,255,.03); font-size: .875rem; color: var(--gray-light);
+      cursor: pointer; transition: all .2s; text-align: left; width: 100%;
+      font-family: 'Inter', sans-serif;
+    }
+    .q-opt:hover:not(:disabled) { background: rgba(99,102,241,.1); border-color: rgba(99,102,241,.3); color: var(--white); }
+    .q-opt.selected-correct { background: rgba(16,185,129,.12); border-color: rgba(16,185,129,.5); color: #6ee7b7; }
+    .q-opt.selected-wrong { background: rgba(244,63,94,.12); border-color: rgba(244,63,94,.5); color: #fda4af; }
+    .q-opt.show-correct { background: rgba(16,185,129,.08); border-color: rgba(16,185,129,.3); color: #6ee7b7; }
+    .q-opt:disabled { cursor: default; }
+    .q-explanation {
+      margin: 0 1.5rem 1.25rem; padding: .9rem 1.1rem;
+      background: rgba(99,102,241,.07); border-radius: 10px;
+      border-left: 3px solid var(--primary); font-size: .875rem; color: var(--gray-light);
+      animation: fadeIn .25s ease;
+    }
+    .q-explanation strong { color: #a5b4fc; }
+    .q-explanation.hidden { display: none; }
+
+    /* ─── SYNTHESIS ─── */
+    .synthesis-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin: 1.5rem 0; }
+    @media (max-width: 600px) { .synthesis-grid { grid-template-columns: 1fr; } }
+    .synth-card {
+      border: 1px solid var(--border); border-radius: 12px; padding: 1.25rem;
+      background: rgba(255,255,255,.02);
+    }
+    .synth-card-title {
+      font-size: .8rem; font-weight: 600; letter-spacing: .05em; text-transform: uppercase;
+      margin-bottom: .75rem; display: flex; align-items: center; gap: .5rem;
+    }
+    .synth-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+    .synth-card ul { list-style: none; padding: 0; }
+    .synth-card li { font-size: .875rem; color: var(--gray-light); padding: .3rem 0; border-bottom: 1px solid rgba(255,255,255,.04); }
+    .synth-card li:last-child { border-bottom: none; }
+    .synth-card li span { color: var(--white); font-weight: 500; }
+
+    .levels-strip {
+      display: flex; gap: 0; border: 1px solid var(--border); border-radius: 12px; overflow: hidden;
+      margin: 1.5rem 0;
+    }
+    .level-col { flex: 1; padding: 1rem; }
+    .level-col + .level-col { border-left: 1px solid var(--border); }
+    .level-label { font-size: .72rem; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; margin-bottom: .6rem; }
+    .level-items { display: flex; flex-direction: column; gap: .5rem; }
+    .level-item { font-size: .8rem; padding: .35rem .6rem; border-radius: 7px; }
+
+    /* ─── RESPONSIVE ─── */
+    @media (max-width: 700px) {
+      .topbar { padding: .65rem 1rem; }
+      .hero { padding: 3rem 1rem 2rem; }
+      .main { padding: 0 1rem 5rem; }
+      .tab-nav { gap: .35rem; }
+      .tab-btn { font-size: .8rem; padding: .5rem .9rem; }
+      .prop-table, .contrast-table { font-size: .8rem; }
+    }
+
+    /* scroll indicator */
+    .scroll-progress {
+      position: fixed; top: 0; left: 0; height: 2px; z-index: 200;
+      background: linear-gradient(90deg, var(--primary), var(--secondary));
+      transition: width .1s; width: 0%;
+    }
+  </style>
+</head>
+<body>
+<div class="bg-layer"></div>
+<div class="scroll-progress" id="scrollProgress"></div>
+
+<!-- TOPBAR -->
+<header class="topbar">
+  <div class="topbar-left">
+    <a href="../../index.html" class="back-link">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+      Back
+    </a>
+    <span class="breadcrumb">Exam Prep › <span>Module 11</span></span>
+  </div>
+  <div style="display:flex;align-items:center;gap:.75rem;">
+    <div class="progress-bar-wrap" title="Quiz progress">
+      <div class="progress-bar-fill" id="quizProgressBar"></div>
+    </div>
+    <span class="progress-label" id="quizProgressLabel">0 / 20</span>
+  </div>
+</header>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="module-badge">
+    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+    PSYCH 505 · Week 11
+  </div>
+  <h1>Working Memory,<br>Cognitive Control &amp; Dopamine</h1>
+  <p class="hero-subtitle">The PFC as the brain's "operating system" — how D1/D2 dopamine balance regulates what we hold in mind, and why disruption collapses goal-directed behavior into habit. Film tribute: <em>Memento</em>.</p>
+  <nav class="tab-nav">
+    <button class="tab-btn active" data-tab="guide">Study Guide</button>
+    <button class="tab-btn" data-tab="terms">Key Terms</button>
+    <button class="tab-btn" data-tab="quiz">Practice Quiz</button>
+    <button class="tab-btn" data-tab="synthesis">Big Picture</button>
+  </nav>
+</div>
+
+<!-- MAIN -->
+<main class="main">
+
+  <!-- ════════════════════════════ STUDY GUIDE ════════════════════════════ -->
+  <div class="tab-panel active" id="tab-guide">
+
+    <div class="callout tip" style="margin-bottom:1.25rem;">
+      <div class="callout-title">Primary Readings</div>
+      Gluck, Mercado &amp; Myers <strong>Chapter 9</strong>; <strong>Ott &amp; Nieder (2019)</strong> — dopamine and cognitive control. The Goldberg zebra finch dopamine study was lecture-emphasized and is likely exam-relevant.
+    </div>
+
+    <!-- 1. Course Arc -->
+    <div class="study-section open" data-section="1">
+      <div class="study-section-header" onclick="toggleSection(this)">
+        <div class="study-section-header-left">
+          <div class="section-icon" style="background:rgba(99,102,241,.15);">🗺️</div>
+          <div><div class="section-num">Section 1</div><div class="section-title">Course Arc: Where Module 11 Fits</div></div>
+        </div>
+        <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
+      </div>
+      <div class="study-section-body">
+        <div class="prose">
+          <p>Working memory (WM) is the <strong>"operating system"</strong> that all reinforcement learning algorithms run on. Without WM, the agent cannot hold the current goal in mind long enough to execute goal-directed behavior.</p>
+        </div>
+        <ul class="bullet-list">
+          <li><strong>PFC uses dopamine to gate</strong> what we hold in mind — the D1/D2 balance determines what enters WM, how stably it is maintained, and when it influences action.</li>
+          <li><strong>Disruption</strong> of PFC dopamine signaling causes collapse from goal-directed (model-based) to habitual (model-free) responding.</li>
+          <li><strong>Connect backward:</strong> actor-critic, basal ganglia as the actor, WM as the gating system that tells the actor which problem it is currently solving.</li>
+          <li><strong>Connect forward (Module 12):</strong> the same PFC gating logic regulates emotional expression via the amygdala.</li>
+        </ul>
+        <div class="callout connect">
+          <div class="callout-title">The Unifying Metaphor (Memento)</div>
+          Leonard Shelby cannot update his WM with new information — he is forever locked in a single frozen representation ("find John G."). This is an extreme caricature of D1 over-stabilization: the goal state is maintained so rigidly it cannot be updated by new evidence.
+        </div>
+      </div>
+    </div>
+
+    <!-- 2. Memory Systems -->
+    <div class="study-section open" data-section="2">
+      <div class="study-section-header" onclick="toggleSection(this)">
+        <div class="study-section-header-left">
+          <div class="section-icon" style="background:rgba(236,72,153,.12);">🧩</div>
+          <div><div class="section-num">Section 2</div><div class="section-title">Memory Systems — Behavioral Framework</div></div>
+        </div>
+        <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
+      </div>
+      <div class="study-section-body">
+        <table class="contrast-table">
+          <thead><tr><th>System</th><th>Duration</th><th>Capacity</th><th>Key Feature</th></tr></thead>
+          <tbody>
+            <tr><td>Sensory (Iconic / Echoic)</td><td>&lt;1 second</td><td>Very large — holds ALL visual items briefly</td><td>Sperling partial-report: attention selects from it; capacity far exceeds STM</td></tr>
+            <tr><td>Short-Term Memory (STM)</td><td>~15–30 s without rehearsal</td><td>7 ± 2 items (Miller)</td><td>Atkinson-Shiffrin: passive temporary storage; gateway to LTM</td></tr>
+            <tr><td>Working Memory (WM)</td><td>Variable — maintained actively</td><td>~4 chunks (modern estimate)</td><td>Baddeley: <strong>active, goal-directed maintenance and manipulation</strong> under ongoing cognitive demands</td></tr>
+            <tr><td>Long-Term Memory (LTM)</td><td>Potentially permanent</td><td>Effectively unlimited</td><td>Declarative (hippocampus) + Non-declarative (BG, cerebellum)</td></tr>
+          </tbody>
+        </table>
+        <div class="prose" style="margin-top:.75rem;">
+          <p><strong>WM ≠ STM.</strong> STM is passive temporary storage. WM is active, goal-directed — it involves ongoing manipulation of information while simultaneously doing something else. The phonological loop rehearsing a phone number while you walk to write it down is WM, not STM.</p>
+        </div>
+        <p style="font-size:.8rem;color:var(--gray);margin:.75rem 0 .5rem;font-weight:600;letter-spacing:.04em;text-transform:uppercase;">Baddeley's Working Memory Components</p>
+        <table class="prop-table">
+          <thead><tr><th>Component</th><th>Function</th></tr></thead>
+          <tbody>
+            <tr><td>Phonological Loop</td><td>Verbal/auditory info; phonological store (~1-2 s) + subvocal articulatory rehearsal</td></tr>
+            <tr><td>Visuospatial Sketchpad</td><td>Spatial and visual information; mental rotation, spatial navigation</td></tr>
+            <tr><td>Central Executive</td><td>Attention-controlling component; coordinates subsystems, focuses attention, switches tasks</td></tr>
+            <tr><td>Episodic Buffer</td><td>Integrates information across subsystems and with LTM; binds multi-modal representations</td></tr>
+          </tbody>
+        </table>
+        <div class="callout exam">
+          <div class="callout-title">Sperling Partial-Report — Know This</div>
+          Sperling flashed a 3×4 letter grid for 50 ms. Whole-report: subjects recalled only ~4 of 12. Partial-report (cue which row after offset): subjects could recall ANY cued row — proving that ~12 items were briefly available in iconic memory. Attention selects from a large sensory buffer; STM capacity is the bottleneck, not iconic memory.
+        </div>
+      </div>
+    </div>
+
+    <!-- 3. PFC -->
+    <div class="study-section" data-section="3">
+      <div class="study-section-header" onclick="toggleSection(this)">
+        <div class="study-section-header-left">
+          <div class="section-icon" style="background:rgba(245,158,11,.12);">🧠</div>
+          <div><div class="section-num">Section 3</div><div class="section-title">The Prefrontal Cortex</div></div>
+        </div>
+        <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
+      </div>
+      <div class="study-section-body">
+        <table class="prop-table">
+          <thead><tr><th>Region</th><th>Primary Role</th><th>Key Evidence</th></tr></thead>
+          <tbody>
+            <tr><td>DLPFC (Dorsolateral PFC)</td><td>WM maintenance (delay-period activity) + manipulation; top-down cognitive control</td><td>Goldman-Rakic monkey recordings; WCST failures after lesion → perseveration</td></tr>
+            <tr><td>VLPFC (Ventrolateral PFC)</td><td>Retrieval from LTM; response inhibition</td><td>Verbal WM tasks; go/no-go inhibition</td></tr>
+            <tr><td>mPFC (Medial PFC)</td><td>Emotional regulation; social cognition; self-referential processing</td><td>Default mode network; connects to amygdala</td></tr>
+          </tbody>
+        </table>
+        <div class="callout tip">
+          <div class="callout-title">Goldman-Rakic's Foundational Finding</div>
+          In monkey recordings during delayed-response tasks, DLPFC neurons maintained <strong>elevated firing THROUGHOUT the delay period</strong> — even seconds after the cue was gone. This "delay-period activity" is the direct neural signature of WM: the circuit sustains a representation without external input, via recurrent excitation forming <strong>attractor states</strong>.
+        </div>
+        <div class="prose">
+          <p><strong>WCST (Wisconsin Card Sorting Task):</strong> Cards can be sorted by color, shape, or number. The rule changes periodically. DLPFC-damaged patients continue sorting by the old rule even after being told it changed — they <strong>perseverate</strong>. They cannot update WM and switch behavioral rules.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- 4. D1/D2 Balance -->
+    <div class="study-section" data-section="4">
+      <div class="study-section-header" onclick="toggleSection(this)">
+        <div class="study-section-header-left">
+          <div class="section-icon" style="background:rgba(6,182,212,.12);">⚗️</div>
+          <div><div class="section-num">Section 4</div><div class="section-title">Dopamine and the PFC: D1/D2 Balance</div></div>
+        </div>
+        <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
+      </div>
+      <div class="study-section-body">
+        <table class="contrast-table">
+          <thead><tr><th>Receptor</th><th>Primary Effect on WM</th><th>Mechanism</th><th>Clinical Extreme</th></tr></thead>
+          <tbody>
+            <tr><td>D1 (Gs-coupled)</td><td><strong>Stabilizes</strong> WM representations — deepens attractor basins; increases resistance to distractors</td><td>cAMP → PKA → closes HCN channels, potentiates NMDA → deeper attractor</td><td>Too much D1 → rigidity, locked representations (schizophrenia)</td></tr>
+            <tr><td>D2 (Gi-coupled)</td><td><strong>Facilitates updating</strong> and flexibility — flattens attractor basins; allows new info to enter</td><td>Inhibits cAMP cascade → reduces attractor depth → easier to update</td><td>Too much D2 tone / too little D1 → distractibility (ADHD)</td></tr>
+          </tbody>
+        </table>
+        <div class="callout warn">
+          <div class="callout-title">Inverted-U Relationship</div>
+          Both too little AND too much dopamine impair WM performance. Optimal dopamine (moderate level) → optimal WM. This inverted-U applies across PFC-dependent tasks: WM capacity, cognitive flexibility, distractor resistance. Moving off the peak in either direction impairs performance.
+        </div>
+        <div class="prose">
+          <p><strong>Earl Miller's DLPFC distractor experiments:</strong> While monkeys maintained a visual cue in WM through a delay period, irrelevant distractor stimuli were flashed. DLPFC neurons maintained the cue representation through the distractor; D1 stimulation increased this resistance. D1-mediated attractor deepening keeps WM contents stable against competitive inputs.</p>
+        </div>
+        <div class="circuit-box">
+          <div class="circuit-label">D1 Stabilization Pathway</div>
+          DA release → D1 receptor → Gs protein → adenylyl cyclase ↑ → cAMP ↑ → PKA activation<br>
+          → HCN channels close (↑ membrane resistance) + NMDA potentiation<br>
+          → Deeper attractor basin → WM representation MORE stable
+        </div>
+      </div>
+    </div>
+
+    <!-- 5. Stability-Flexibility Tradeoff -->
+    <div class="study-section" data-section="5">
+      <div class="study-section-header" onclick="toggleSection(this)">
+        <div class="study-section-header-left">
+          <div class="section-icon" style="background:rgba(99,102,241,.15);">⚖️</div>
+          <div><div class="section-num">Section 5</div><div class="section-title">Stability-Flexibility Tradeoff</div></div>
+        </div>
+        <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
+      </div>
+      <div class="study-section-body">
+        <div class="circuit-box">
+          <div class="circuit-label">Three-Gate Model of Working Memory</div>
+          INPUT GATE (D2-mediated)  →  [WM Maintenance — D1-mediated stability]  →  OUTPUT GATE<br>
+          What enters WM              What stays in WM                              What influences action
+        </div>
+        <table class="contrast-table">
+          <thead><tr><th>Gate</th><th>Dopamine Receptor</th><th>Function</th></tr></thead>
+          <tbody>
+            <tr><td>Input gate</td><td>D2 — facilitates updating</td><td>Controls what NEW information enters WM; too little D2 activity → WM too sticky; too much → promiscuous updating</td></tr>
+            <tr><td>Maintenance</td><td>D1 — stabilizes</td><td>Keeps current WM contents active against interference; too little → distraction; too much → cannot update (perseveration)</td></tr>
+            <tr><td>Output gate</td><td>Both</td><td>Controls when WM contents influence downstream action selection; disruption here dissociates knowing-from-doing</td></tr>
+          </tbody>
+        </table>
+        <table class="contrast-table" style="margin-top:1rem;">
+          <thead><tr><th>Condition</th><th>D1/D2 Imbalance</th><th>Behavioral Consequence</th></tr></thead>
+          <tbody>
+            <tr><td>Schizophrenia</td><td>Excess D1 (or hyperactive D1 circuits) → too much stability</td><td>Representations locked — cannot update WM with new disconfirming information → hallucinations and delusions persist</td></tr>
+            <tr><td>ADHD</td><td>Insufficient D1 tone → too much flexibility (or too little stability)</td><td>WM contents replaced too easily by distractors; difficulty maintaining goal across time</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- 6. Persistent Activity and Attractors -->
+    <div class="study-section" data-section="6">
+      <div class="study-section-header" onclick="toggleSection(this)">
+        <div class="study-section-header-left">
+          <div class="section-icon" style="background:rgba(16,185,129,.12);">🔄</div>
+          <div><div class="section-num">Section 6</div><div class="section-title">Neural Mechanisms: Persistent Activity and Attractors</div></div>
+        </div>
+        <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
+      </div>
+      <div class="study-section-body">
+        <div class="prose">
+          <p><strong>Delay-period firing:</strong> PFC neurons maintain elevated firing rates throughout a delay between cue offset and required response — even in the absence of any external stimulus. This is the neural signature of active WM maintenance.</p>
+          <p><strong>Attractor states:</strong> recurrent excitatory connections between PFC neurons create self-sustaining activity patterns. Once a representation is activated, the recurrent circuit keeps neurons firing each other — no external input required. These stable patterns are the neural implementation of WM.</p>
+        </div>
+        <table class="prop-table">
+          <thead><tr><th>Parameter</th><th>High D1 (Deep Basin)</th><th>Low D1 / High D2 (Shallow Basin)</th></tr></thead>
+          <tbody>
+            <tr><td>Stability</td><td>High — representation resists noise and distractors</td><td>Low — representation easily disrupted or replaced</td></tr>
+            <tr><td>Updatability</td><td>Low — hard to shift to a new representation</td><td>High — easy to update with new inputs</td></tr>
+            <tr><td>Clinical analog</td><td>Schizophrenic locked thoughts</td><td>ADHD distraction</td></tr>
+          </tbody>
+        </table>
+        <div class="callout tip">
+          <div class="callout-title">Why Attractor Models Explain WM Better Than Buffer Models</div>
+          A simple buffer needs constant external refreshing. Attractor models generate persistent activity spontaneously through recurrent excitation — the network is self-sustaining. D1 makes the attractor basin deeper (representation harder to knock out); D2 flattens the basin (easier to update). Noise in the dopamine system can cause a representation to escape the attractor — this is how WM "forgets."
+        </div>
+      </div>
+    </div>
+
+    <!-- 7. Goldberg Zebra Finch -->
+    <div class="study-section" data-section="7">
+      <div class="study-section-header" onclick="toggleSection(this)">
+        <div class="study-section-header-left">
+          <div class="section-icon" style="background:rgba(245,158,11,.12);">🐦</div>
+          <div><div class="section-num">Section 7</div><div class="section-title">The Goldberg Zebra Finch Studies (Lecture-Emphasized)</div></div>
+        </div>
+        <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
+      </div>
+      <div class="study-section-body">
+        <div class="callout exam">
+          <div class="callout-title">Exam-Relevant Lecture Content</div>
+          The Goldberg finch dopamine study was emphasized in lecture. Know: (1) what the performance prediction error signal encodes, (2) what happens in the presence of a female, and (3) the analogy to actor-critic and WM gating.
+        </div>
+        <div class="prose">
+          <p><strong>Performance prediction error:</strong> dopaminergic neurons in the finch's basal ganglia fire when the bird's song output matches its internal template (song is not distorted → "I sang well") and pause when the output is distorted ("I sang poorly"). This encodes a self-generated performance quality signal — analogous to TD prediction error but applied to self-monitoring.</p>
+          <p><strong>The female effect:</strong> when a female is present ("performance mode"), this internal dopamine signal <strong>disappears</strong>. The bird switches from internal learning feedback to external social feedback (the female's behavioral responses).</p>
+        </div>
+        <div class="circuit-box">
+          <div class="circuit-label">Two Modes — Context Gates the Learning Signal</div>
+          REHEARSAL MODE: Internal error signal active → dopamine encodes self-assessed song quality → drives vocal learning<br><br>
+          PERFORMANCE MODE (female present): Internal error signal gated OFF → social feedback from female replaces it → no self-revision
+        </div>
+        <div class="callout connect">
+          <div class="callout-title">Actor-Critic Analogy</div>
+          The critic adjusts the actor's policy (vocal learning) during rehearsal. During performance, the critic is silent — the actor executes without self-correction. This is identical to the output gate logic: context gates which feedback signal operates. The WM gating framework predicts exactly when internal vs. external feedback should dominate.
+        </div>
+      </div>
+    </div>
+
+    <!-- 8. Clinical Perspectives -->
+    <div class="study-section" data-section="8">
+      <div class="study-section-header" onclick="toggleSection(this)">
+        <div class="study-section-header-left">
+          <div class="section-icon" style="background:rgba(244,63,94,.12);">🏥</div>
+          <div><div class="section-num">Section 8</div><div class="section-title">Clinical Perspectives</div></div>
+        </div>
+        <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
+      </div>
+      <div class="study-section-body">
+        <table class="prop-table">
+          <thead><tr><th>Condition</th><th>Dopamine Mechanism</th><th>WM Effect</th><th>Treatment Logic</th></tr></thead>
+          <tbody>
+            <tr>
+              <td>Schizophrenia</td>
+              <td>Excess dopamine in D1/subcortical circuits → PFC representations locked; subcortical D2 hyperactivity generates hallucinatory "noise"</td>
+              <td>Representations too stable — cannot update with new evidence; delusions and hallucinations persist</td>
+              <td>D2 antagonists (antipsychotics) reduce subcortical noise → allow PFC to update more normally</td>
+            </tr>
+            <tr>
+              <td>ADHD</td>
+              <td>Insufficient PFC dopamine → D1 hypo-activation → WM attractor basins too shallow</td>
+              <td>WM contents easily replaced by distractors; cannot sustain goal across time; impulsivity</td>
+              <td>Methylphenidate (Ritalin) boosts synaptic dopamine → more D1 activation → deeper attractor → WM stabilizes</td>
+            </tr>
+            <tr>
+              <td>Aging</td>
+              <td>Gradual loss of PFC dopamine with age (dopaminergic neurons decline)</td>
+              <td>Reduced WM capacity; more perseveration; harder to update rules</td>
+              <td>No validated pharmacological reversal; cognitive training; lifestyle factors</td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="callout tip">
+          <div class="callout-title">Why D2 Antagonists Help Schizophrenia Despite a D1 Problem</div>
+          The prevailing view: excess dopamine in subcortical D2 circuits generates the hallucinatory "noise" signal that floods PFC. Blocking D2 receptors reduces this noise → PFC dopamine levels can operate in a more normal range → WM representations can be updated. The PFC D1 instability is a separate route to the same phenomenology.
+        </div>
+      </div>
+    </div>
+
+    <!-- 9. Neurotransmitter Basics -->
+    <div class="study-section" data-section="9">
+      <div class="study-section-header" onclick="toggleSection(this)">
+        <div class="study-section-header-left">
+          <div class="section-icon" style="background:rgba(6,182,212,.12);">⚡</div>
+          <div><div class="section-num">Section 9</div><div class="section-title">Neurotransmitter Basics (Lecture-Only Section)</div></div>
+        </div>
+        <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
+      </div>
+      <div class="study-section-body">
+        <p style="font-size:.8rem;color:var(--gray);margin-bottom:.5rem;font-weight:600;letter-spacing:.04em;text-transform:uppercase;">Neurotransmitter Release Sequence</p>
+        <div class="circuit-box">
+          <div class="circuit-label">Calcium-Mediated Vesicle Fusion</div>
+          Action potential arrives at presynaptic terminal<br>
+          → Membrane depolarization → voltage-gated Ca²⁺ channels OPEN<br>
+          → Ca²⁺ influx (high outside, low inside cytoplasm)<br>
+          → SNARE complex (synaptobrevin, syntaxin, SNAP-25) mediates vesicle docking and fusion<br>
+          → Exocytosis: transmitter released into synaptic cleft<br>
+          → Binds postsynaptic receptors → effect
+        </div>
+        <table class="contrast-table" style="margin-top:1rem;">
+          <thead><tr><th>Receptor Type</th><th>Mechanism</th><th>Speed</th><th>Examples</th></tr></thead>
+          <tbody>
+            <tr><td>Ionotropic</td><td>Ligand-gated ion channel — transmitter directly opens channel</td><td>Fast (milliseconds)</td><td>AMPA (Na⁺/K⁺), NMDA (Na⁺/Ca²⁺), GABA-A (Cl⁻)</td></tr>
+            <tr><td>Metabotropic (GPCR)</td><td>G-protein coupled → second messenger cascade → indirect channel modulation</td><td>Slow (seconds to minutes)</td><td>D1 (Gs → cAMP ↑), D2 (Gi → cAMP ↓), mGluR, GABA-B</td></tr>
+          </tbody>
+        </table>
+        <table class="prop-table" style="margin-top:.75rem;">
+          <thead><tr><th>Transmitter</th><th>Main Action</th><th>Key Receptor</th><th>Ion / Effect</th></tr></thead>
+          <tbody>
+            <tr><td>GABA</td><td>Main inhibitory neurotransmitter</td><td>GABA-A (ionotropic)</td><td>Cl⁻ influx → hyperpolarization → reduced firing probability</td></tr>
+            <tr><td>Glutamate</td><td>Main excitatory neurotransmitter</td><td>AMPA + NMDA (ionotropic)</td><td>Na⁺ (AMPA) + Ca²⁺ (NMDA) influx → depolarization → LTP</td></tr>
+            <tr><td>Dopamine</td><td>Neuromodulator — slow, modulatory</td><td>D1, D2 (metabotropic GPCRs)</td><td>Via cAMP-PKA cascade → modulates channel states &amp; synaptic strength</td></tr>
+          </tbody>
+        </table>
+        <div class="callout warn">
+          <div class="callout-title">D1 and D2 Are Metabotropic — Practical Consequence</div>
+          Because D1/D2 signal via G-proteins and second messengers (not direct ion channel opening), their effects are <strong>slow</strong> (seconds to minutes) and <strong>modulatory</strong> — they change the excitability and synaptic strength of neurons over longer timescales. This makes dopamine a <em>neuromodulator</em>, not a classical fast transmitter. It tunes the gain of PFC circuits, not individual action potentials.
+        </div>
+      </div>
+    </div>
+
+    <!-- 10. Key Terms Checklist -->
+    <div class="study-section" data-section="10">
+      <div class="study-section-header" onclick="toggleSection(this)">
+        <div class="study-section-header-left">
+          <div class="section-icon" style="background:rgba(99,102,241,.15);">✅</div>
+          <div><div class="section-num">Section 10</div><div class="section-title">Key Terms Checklist</div></div>
+        </div>
+        <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
+      </div>
+      <div class="study-section-body">
+        <ul class="bullet-list">
+          <li><strong>Working memory</strong> — active maintenance and manipulation; operating system for cognition</li>
+          <li><strong>Phonological loop</strong> — verbal/auditory WM subsystem; phonological store + subvocal rehearsal</li>
+          <li><strong>Visuospatial sketchpad</strong> — spatial/visual WM subsystem</li>
+          <li><strong>Central executive</strong> — attention-controlling WM component; coordinates subsystems</li>
+          <li><strong>Delay-period activity</strong> — persistent elevated PFC firing throughout delay; neural WM signature</li>
+          <li><strong>Attractor state</strong> — stable self-sustaining neural pattern via recurrent excitation</li>
+          <li><strong>DLPFC</strong> — WM maintenance + top-down control; Goldman-Rakic's key site</li>
+          <li><strong>VLPFC</strong> — retrieval and inhibition</li>
+          <li><strong>mPFC</strong> — emotional regulation; social cognition; connects to amygdala</li>
+          <li><strong>D1/D2 receptors</strong> — metabotropic GPCRs; D1 stabilizes, D2 updates</li>
+          <li><strong>Inverted-U</strong> — optimal WM at moderate dopamine; too little or too much impairs</li>
+          <li><strong>Stability-flexibility tradeoff</strong> — D1 maintains, D2 updates; core tension of WM</li>
+          <li><strong>Perseveration</strong> — failure to switch rules; DLPFC damage hallmark</li>
+          <li><strong>Wisconsin Card Sorting Task (WCST)</strong> — standard test of cognitive flexibility / rule switching</li>
+          <li><strong>Input/output gate</strong> — D2-mediated entry into WM; D1-mediated stable maintenance</li>
+          <li><strong>Performance prediction error</strong> — Goldberg finch: dopamine encodes song quality; silent during performance</li>
+          <li><strong>Schizophrenia</strong> — excess D1 stability → locked representations; treated with D2 antagonists</li>
+          <li><strong>ADHD</strong> — insufficient WM stability; treated with methylphenidate</li>
+          <li><strong>Ionotropic vs. metabotropic</strong> — fast/direct vs. slow/GPCR-mediated</li>
+          <li><strong>SNARE complex</strong> — synaptobrevin, syntaxin, SNAP-25; mediates vesicle fusion and exocytosis</li>
+          <li><strong>GABA</strong> — main inhibitory transmitter; Cl⁻ influx → hyperpolarization</li>
+          <li><strong>Glutamate</strong> — main excitatory transmitter; AMPA/NMDA → depolarization and LTP</li>
+          <li><strong>Goldman-Rakic</strong> — identified delay-period activity in DLPFC as neural signature of WM</li>
+          <li><strong>Ott &amp; Nieder (2019)</strong> — review: D1/D2 balance, inverted-U, stability-flexibility, clinical implications</li>
+        </ul>
+      </div>
+    </div>
+
+  </div><!-- /tab-guide -->
+
+
+  <!-- ════════════════════════════ KEY TERMS ════════════════════════════ -->
+  <div class="tab-panel" id="tab-terms">
+    <div style="margin-bottom:1.5rem;">
+      <h2 style="font-size:1.3rem;margin-bottom:.4rem;">Key Terms — 25 Flashcards</h2>
+      <p style="color:var(--gray-light);font-size:.9rem;">Click any card to reveal its definition. Use the filters to focus on a category.</p>
+    </div>
+    <div class="terms-controls">
+      <button class="filter-btn active" data-filter="all">All</button>
+      <button class="filter-btn" data-filter="behavior">Behavioral</button>
+      <button class="filter-btn" data-filter="neuro">Neural</button>
+      <button class="filter-btn" data-filter="theory">Theory</button>
+      <button class="filter-btn" data-filter="clinical">Clinical</button>
+      <button class="flip-all-btn" id="flipAllBtn">Reveal All</button>
+    </div>
+    <div class="terms-grid" id="termsGrid">
+
+      <!-- BEHAVIORAL -->
+      <div class="flashcard" data-category="behavior" onclick="flipCard(this)">
+        <div class="flashcard-inner">
+          <div class="flashcard-front">
+            <span class="flashcard-tag tag-behavior">Behavioral</span>
+            <div class="flashcard-term">Working Memory</div>
+            <div class="flashcard-hint">Click to reveal →</div>
+          </div>
+          <div class="flashcard-back">
+            <span class="flashcard-tag tag-behavior">Behavioral</span>
+            <div class="flashcard-def">Active maintenance and manipulation of information; the <strong>"operating system" for cognition</strong>. Distinct from STM: WM is goal-directed and involves manipulation under ongoing cognitive demands, not merely passive storage.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flashcard" data-category="behavior" onclick="flipCard(this)">
+        <div class="flashcard-inner">
+          <div class="flashcard-front">
+            <span class="flashcard-tag tag-behavior">Behavioral</span>
+            <div class="flashcard-term">Phonological Loop</div>
+            <div class="flashcard-hint">Click to reveal →</div>
+          </div>
+          <div class="flashcard-back">
+            <span class="flashcard-tag tag-behavior">Behavioral</span>
+            <div class="flashcard-def">WM subsystem for verbal/auditory information. Two parts: (1) <strong>phonological store</strong> holds sound-based info ~1-2 s; (2) <strong>articulatory rehearsal</strong> (subvocal repetition) refreshes the store. Explains why verbal rehearsal helps you remember a phone number.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flashcard" data-category="behavior" onclick="flipCard(this)">
+        <div class="flashcard-inner">
+          <div class="flashcard-front">
+            <span class="flashcard-tag tag-behavior">Behavioral</span>
+            <div class="flashcard-term">Visuospatial Sketchpad</div>
+            <div class="flashcard-hint">Click to reveal →</div>
+          </div>
+          <div class="flashcard-back">
+            <span class="flashcard-tag tag-behavior">Behavioral</span>
+            <div class="flashcard-def">WM subsystem for spatial and visual information. Supports mental rotation, spatial navigation, and visual imagery. Operates in parallel with the phonological loop under central executive coordination.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flashcard" data-category="behavior" onclick="flipCard(this)">
+        <div class="flashcard-inner">
+          <div class="flashcard-front">
+            <span class="flashcard-tag tag-behavior">Behavioral</span>
+            <div class="flashcard-term">Central Executive</div>
+            <div class="flashcard-hint">Click to reveal →</div>
+          </div>
+          <div class="flashcard-back">
+            <span class="flashcard-tag tag-behavior">Behavioral</span>
+            <div class="flashcard-def"><strong>Attention-controlling component</strong> of Baddeley's WM model. Coordinates the phonological loop, visuospatial sketchpad, and episodic buffer. Focuses and switches attention; analogous to DLPFC function in top-down control.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flashcard" data-category="behavior" onclick="flipCard(this)">
+        <div class="flashcard-inner">
+          <div class="flashcard-front">
+            <span class="flashcard-tag tag-behavior">Behavioral</span>
+            <div class="flashcard-term">Perseveration</div>
+            <div class="flashcard-hint">Click to reveal →</div>
+          </div>
+          <div class="flashcard-back">
+            <span class="flashcard-tag tag-behavior">Behavioral</span>
+            <div class="flashcard-def">Failure to switch responses or rules after conditions change. <strong>Hallmark of DLPFC damage</strong>. Demonstrated on WCST: patients continue sorting by color after the rule changes to shape. Reflects inability to update WM and shift behavioral strategy.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flashcard" data-category="behavior" onclick="flipCard(this)">
+        <div class="flashcard-inner">
+          <div class="flashcard-front">
+            <span class="flashcard-tag tag-behavior">Behavioral</span>
+            <div class="flashcard-term">Wisconsin Card Sorting Task (WCST)</div>
+            <div class="flashcard-hint">Click to reveal →</div>
+          </div>
+          <div class="flashcard-back">
+            <span class="flashcard-tag tag-behavior">Behavioral</span>
+            <div class="flashcard-def">Neuropsychological test of cognitive flexibility. Cards sorted by color, shape, or number; rule changes periodically. <strong>Frontal lobe / DLPFC damage → failure to shift sorting rules → perseveration</strong>. Standard clinical test of PFC-dependent rule-switching.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- NEURAL -->
+      <div class="flashcard" data-category="neuro" onclick="flipCard(this)">
+        <div class="flashcard-inner">
+          <div class="flashcard-front">
+            <span class="flashcard-tag tag-neuro">Neural</span>
+            <div class="flashcard-term">Delay-Period Activity</div>
+            <div class="flashcard-hint">Click to reveal →</div>
+          </div>
+          <div class="flashcard-back">
+            <span class="flashcard-tag tag-neuro">Neural</span>
+            <div class="flashcard-def">Persistent <strong>elevated firing of DLPFC neurons throughout a delay period</strong> after cue offset, even without external stimulus present. Goldman-Rakic's foundational finding in monkeys. The direct neural signature of active WM maintenance; sustained by recurrent excitation forming attractor states.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flashcard" data-category="neuro" onclick="flipCard(this)">
+        <div class="flashcard-inner">
+          <div class="flashcard-front">
+            <span class="flashcard-tag tag-neuro">Neural</span>
+            <div class="flashcard-term">Attractor State</div>
+            <div class="flashcard-hint">Click to reveal →</div>
+          </div>
+          <div class="flashcard-back">
+            <span class="flashcard-tag tag-neuro">Neural</span>
+            <div class="flashcard-def">Stable neural pattern maintained by <strong>recurrent excitation</strong> among PFC neurons; the neural implementation of WM. D1 deepens attractor basins (harder to disrupt); D2 flattens them (easier to update). Noise can knock the representation out of the attractor — equivalent to "forgetting."</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flashcard" data-category="neuro" onclick="flipCard(this)">
+        <div class="flashcard-inner">
+          <div class="flashcard-front">
+            <span class="flashcard-tag tag-neuro">Neural</span>
+            <div class="flashcard-term">DLPFC</div>
+            <div class="flashcard-hint">Click to reveal →</div>
+          </div>
+          <div class="flashcard-back">
+            <span class="flashcard-tag tag-neuro">Neural</span>
+            <div class="flashcard-def">Dorsolateral prefrontal cortex. <strong>Site of WM maintenance and top-down cognitive control</strong>. Neurons show delay-period activity. Damage → perseveration on WCST. Goldman-Rakic's foundational recording site. High D1 receptor density — critical for stability-flexibility balance.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flashcard" data-category="neuro" onclick="flipCard(this)">
+        <div class="flashcard-inner">
+          <div class="flashcard-front">
+            <span class="flashcard-tag tag-neuro">Neural</span>
+            <div class="flashcard-term">D1 Receptor</div>
+            <div class="flashcard-hint">Click to reveal →</div>
+          </div>
+          <div class="flashcard-back">
+            <span class="flashcard-tag tag-neuro">Neural</span>
+            <div class="flashcard-def">Metabotropic dopamine receptor (Gs-coupled). <strong>Stabilizes WM representations</strong> by deepening attractor basins via cAMP-PKA pathway: closes HCN channels, potentiates NMDA receptors. Increases resistance to distractors. Too much D1 → rigidity (schizophrenia); too little → distractibility (ADHD).</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flashcard" data-category="neuro" onclick="flipCard(this)">
+        <div class="flashcard-inner">
+          <div class="flashcard-front">
+            <span class="flashcard-tag tag-neuro">Neural</span>
+            <div class="flashcard-term">D2 Receptor</div>
+            <div class="flashcard-hint">Click to reveal →</div>
+          </div>
+          <div class="flashcard-back">
+            <span class="flashcard-tag tag-neuro">Neural</span>
+            <div class="flashcard-def">Metabotropic dopamine receptor (Gi-coupled). <strong>Facilitates WM updating and flexibility</strong> by flattening attractor basins (inhibits cAMP cascade). Controls the input gate — allows new information into WM. Too much D2 / too little D1 → ADHD-like distractibility; D2 antagonism → reduces subcortical noise in schizophrenia.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flashcard" data-category="neuro" onclick="flipCard(this)">
+        <div class="flashcard-inner">
+          <div class="flashcard-front">
+            <span class="flashcard-tag tag-neuro">Neural</span>
+            <div class="flashcard-term">Input Gate</div>
+            <div class="flashcard-hint">Click to reveal →</div>
+          </div>
+          <div class="flashcard-back">
+            <span class="flashcard-tag tag-neuro">Neural</span>
+            <div class="flashcard-def"><strong>D2-mediated process</strong> that controls what information enters WM. When D2 activity facilitates updating, the input gate is open and new representations can displace old ones. When D2 is low (relative to D1), the gate is closed and existing WM contents are maintained against competing inputs.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flashcard" data-category="neuro" onclick="flipCard(this)">
+        <div class="flashcard-inner">
+          <div class="flashcard-front">
+            <span class="flashcard-tag tag-neuro">Neural</span>
+            <div class="flashcard-term">Output Gate</div>
+            <div class="flashcard-hint">Click to reveal →</div>
+          </div>
+          <div class="flashcard-back">
+            <span class="flashcard-tag tag-neuro">Neural</span>
+            <div class="flashcard-def">Process that controls <strong>when WM contents influence behavior/action</strong>. Dissociates knowing from doing — a representation can be held in WM without necessarily driving current behavior. Disruption here can cause WM contents to inappropriately gate actions, or fail to do so when needed.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flashcard" data-category="neuro" onclick="flipCard(this)">
+        <div class="flashcard-inner">
+          <div class="flashcard-front">
+            <span class="flashcard-tag tag-neuro">Neural</span>
+            <div class="flashcard-term">Performance Prediction Error</div>
+            <div class="flashcard-hint">Click to reveal →</div>
+          </div>
+          <div class="flashcard-back">
+            <span class="flashcard-tag tag-neuro">Neural</span>
+            <div class="flashcard-def">In Goldberg's zebra finch studies: <strong>dopamine signal encoding the match between song output and internal template</strong>. Fires when bird sings undistorted (good match), pauses when distorted (mismatch). Critically, this signal <strong>disappears in performance mode</strong> (female present) — replaced by external social feedback.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flashcard" data-category="neuro" onclick="flipCard(this)">
+        <div class="flashcard-inner">
+          <div class="flashcard-front">
+            <span class="flashcard-tag tag-neuro">Neural</span>
+            <div class="flashcard-term">Ionotropic Receptor</div>
+            <div class="flashcard-hint">Click to reveal →</div>
+          </div>
+          <div class="flashcard-back">
+            <span class="flashcard-tag tag-neuro">Neural</span>
+            <div class="flashcard-def"><strong>Ligand-gated ion channel</strong>; direct, fast (milliseconds). Transmitter binds → channel opens → ions flow. Examples: AMPA (Na⁺/K⁺ → depolarization), NMDA (Na⁺/Ca²⁺ → depolarization + LTP), GABA-A (Cl⁻ → hyperpolarization).</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flashcard" data-category="neuro" onclick="flipCard(this)">
+        <div class="flashcard-inner">
+          <div class="flashcard-front">
+            <span class="flashcard-tag tag-neuro">Neural</span>
+            <div class="flashcard-term">Metabotropic Receptor</div>
+            <div class="flashcard-hint">Click to reveal →</div>
+          </div>
+          <div class="flashcard-back">
+            <span class="flashcard-tag tag-neuro">Neural</span>
+            <div class="flashcard-def"><strong>G-protein coupled receptor (GPCR)</strong>; indirect, slow (seconds to minutes). Transmitter binds → G-protein activation → second messenger cascade (e.g., cAMP-PKA) → channel modulation or gene expression changes. Examples: D1, D2, mGluR, GABA-B. Dopamine is a neuromodulator — tunes gain, not individual action potentials.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flashcard" data-category="neuro" onclick="flipCard(this)">
+        <div class="flashcard-inner">
+          <div class="flashcard-front">
+            <span class="flashcard-tag tag-neuro">Neural</span>
+            <div class="flashcard-term">SNARE Complex</div>
+            <div class="flashcard-hint">Click to reveal →</div>
+          </div>
+          <div class="flashcard-back">
+            <span class="flashcard-tag tag-neuro">Neural</span>
+            <div class="flashcard-def">Protein machinery mediating <strong>vesicle fusion and neurotransmitter exocytosis</strong>. Key proteins: synaptobrevin (vesicle), syntaxin (presynaptic membrane), SNAP-25 (presynaptic membrane). Ca²⁺ influx via voltage-gated channels triggers SNARE-mediated docking and membrane fusion → transmitter released into cleft.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flashcard" data-category="neuro" onclick="flipCard(this)">
+        <div class="flashcard-inner">
+          <div class="flashcard-front">
+            <span class="flashcard-tag tag-neuro">Neural</span>
+            <div class="flashcard-term">GABA</div>
+            <div class="flashcard-hint">Click to reveal →</div>
+          </div>
+          <div class="flashcard-back">
+            <span class="flashcard-tag tag-neuro">Neural</span>
+            <div class="flashcard-def"><strong>Main inhibitory neurotransmitter</strong>. GABA-A is ionotropic: GABA binds → Cl⁻ channel opens → Cl⁻ influx → membrane hyperpolarization → reduced firing probability. GABA-B is metabotropic (slow, via K⁺ channels). Critical for inhibitory control and balancing excitation in cortical circuits.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flashcard" data-category="neuro" onclick="flipCard(this)">
+        <div class="flashcard-inner">
+          <div class="flashcard-front">
+            <span class="flashcard-tag tag-neuro">Neural</span>
+            <div class="flashcard-term">Glutamate</div>
+            <div class="flashcard-hint">Click to reveal →</div>
+          </div>
+          <div class="flashcard-back">
+            <span class="flashcard-tag tag-neuro">Neural</span>
+            <div class="flashcard-def"><strong>Main excitatory neurotransmitter</strong>. AMPA receptors: Na⁺ influx → fast depolarization. NMDA receptors: Na⁺ + Ca²⁺ influx (requires depolarization to relieve Mg²⁺ block) → depolarization + LTP induction via Ca²⁺ signaling. Glutamate's recurrent excitation underlies attractor states in PFC.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- THEORY -->
+      <div class="flashcard" data-category="theory" onclick="flipCard(this)">
+        <div class="flashcard-inner">
+          <div class="flashcard-front">
+            <span class="flashcard-tag tag-theory">Theory</span>
+            <div class="flashcard-term">Inverted-U Relationship</div>
+            <div class="flashcard-hint">Click to reveal →</div>
+          </div>
+          <div class="flashcard-back">
+            <span class="flashcard-tag tag-theory">Theory</span>
+            <div class="flashcard-def">Relationship between dopamine level and WM/PFC performance. <strong>Too little dopamine → impaired WM; too much → also impaired; optimal moderate level → peak WM performance.</strong> The U-shape applies across WM capacity, cognitive flexibility, distractor resistance, and most PFC-dependent tasks.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flashcard" data-category="theory" onclick="flipCard(this)">
+        <div class="flashcard-inner">
+          <div class="flashcard-front">
+            <span class="flashcard-tag tag-theory">Theory</span>
+            <div class="flashcard-term">Stability-Flexibility Tradeoff</div>
+            <div class="flashcard-hint">Click to reveal →</div>
+          </div>
+          <div class="flashcard-back">
+            <span class="flashcard-tag tag-theory">Theory</span>
+            <div class="flashcard-def">Core tension in WM: <strong>maintaining current contents (D1-mediated stability) vs. updating them with new information (D2-mediated flexibility)</strong>. The system must balance these opposing pressures. This is the central synthesis of Ott &amp; Nieder (2019): opposite perturbations of the same balance produce ADHD vs. schizophrenia.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flashcard" data-category="theory" onclick="flipCard(this)">
+        <div class="flashcard-inner">
+          <div class="flashcard-front">
+            <span class="flashcard-tag tag-theory">Theory</span>
+            <div class="flashcard-term">Goldman-Rakic</div>
+            <div class="flashcard-hint">Click to reveal →</div>
+          </div>
+          <div class="flashcard-back">
+            <span class="flashcard-tag tag-theory">Theory</span>
+            <div class="flashcard-def">Neuroscientist who <strong>identified delay-period activity in DLPFC as the neural signature of WM</strong> through foundational monkey single-unit recording studies. Established that PFC neurons maintain representations through recurrent excitation without ongoing external input. Foundational for the attractor state model of WM.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flashcard" data-category="theory" onclick="flipCard(this)">
+        <div class="flashcard-inner">
+          <div class="flashcard-front">
+            <span class="flashcard-tag tag-theory">Theory</span>
+            <div class="flashcard-term">Ott &amp; Nieder (2019)</div>
+            <div class="flashcard-hint">Click to reveal →</div>
+          </div>
+          <div class="flashcard-back">
+            <span class="flashcard-tag tag-theory">Theory</span>
+            <div class="flashcard-def">Review paper on <strong>dopamine and cognitive control in PFC</strong>. Central synthesis: D1/D2 balance regulates the stability-flexibility tradeoff that is fundamental to adaptive goal-directed behavior. Perturbations in either direction produce distinct clinical phenotypes: excess D1 stability → schizophrenia; insufficient D1 stability → ADHD.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- CLINICAL -->
+      <div class="flashcard" data-category="clinical" onclick="flipCard(this)">
+        <div class="flashcard-inner">
+          <div class="flashcard-front">
+            <span class="flashcard-tag tag-clinical">Clinical</span>
+            <div class="flashcard-term">Schizophrenia</div>
+            <div class="flashcard-hint">Click to reveal →</div>
+          </div>
+          <div class="flashcard-back">
+            <span class="flashcard-tag tag-clinical">Clinical</span>
+            <div class="flashcard-def">Characterized by <strong>excess D1-mediated stability → PFC representations locked</strong> in, cannot be updated by disconfirming evidence → hallucinations and delusions persist. Also: subcortical D2 hyperactivity generates noise. Treatment: D2 antagonists reduce subcortical noise → allow PFC to update more normally.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flashcard" data-category="clinical" onclick="flipCard(this)">
+        <div class="flashcard-inner">
+          <div class="flashcard-front">
+            <span class="flashcard-tag tag-clinical">Clinical</span>
+            <div class="flashcard-term">ADHD</div>
+            <div class="flashcard-hint">Click to reveal →</div>
+          </div>
+          <div class="flashcard-back">
+            <span class="flashcard-tag tag-clinical">Clinical</span>
+            <div class="flashcard-def">Characterized by <strong>insufficient WM stability</strong> (insufficient D1 tone → shallow attractor basins). WM contents easily replaced by distractors; difficulty maintaining goals across time; impulsivity. Treatment: methylphenidate (Ritalin) boosts synaptic dopamine → more D1 activation → deeper attractors → WM contents stabilize.</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div><!-- /tab-terms -->
+
+
+  <!-- ════════════════════════════ QUIZ ════════════════════════════ -->
+  <div class="tab-panel" id="tab-quiz">
+    <div style="margin-bottom:1.5rem;">
+      <h2 style="font-size:1.3rem;margin-bottom:.4rem;">Practice Multiple Choice — 20 Questions</h2>
+      <p style="color:var(--gray-light);font-size:.9rem;">Click an option to check your answer. Explanations appear automatically.</p>
+    </div>
+
+    <div class="quiz-stats">
+      <div class="stat-item"><div class="stat-val blue" id="statTotal">20</div><div class="stat-lbl">Questions</div></div>
+      <div class="stat-item"><div class="stat-val green" id="statCorrect">0</div><div class="stat-lbl">Correct</div></div>
+      <div class="stat-item"><div class="stat-val red" id="statWrong">0</div><div class="stat-lbl">Incorrect</div></div>
+      <div class="stat-item"><div class="stat-val" id="statPct" style="color:var(--gray-light);">—</div><div class="stat-lbl">Score</div></div>
+      <button class="quiz-reset-btn" onclick="resetQuiz()">Reset Quiz</button>
+    </div>
+
+    <div id="quizContainer"></div>
+  </div><!-- /tab-quiz -->
+
+
+  <!-- ════════════════════════════ SYNTHESIS ════════════════════════════ -->
+  <div class="tab-panel" id="tab-synthesis">
+    <div style="margin-bottom:1.5rem;">
+      <h2 style="font-size:1.3rem;margin-bottom:.4rem;">Big Picture Synthesis</h2>
+      <p style="color:var(--gray-light);font-size:.9rem;">How the week's concepts connect across levels of analysis and to the course arc.</p>
+    </div>
+
+    <div class="callout connect" style="margin-bottom:1.5rem;">
+      <div class="callout-title">The Unifying Principle</div>
+      "The same dopamine signal that teaches the actor-critic system which actions to reinforce also maintains the working memory context that tells the system <strong>WHICH problem it is currently solving</strong>." D1/D2 balance is not just a detail of receptor pharmacology — it is the mechanism by which the brain decides whether to hold on to the current goal or update it.
+    </div>
+
+    <p style="font-size:.8rem;color:var(--gray);margin-bottom:.75rem;font-weight:600;letter-spacing:.04em;text-transform:uppercase;">Levels of Analysis</p>
+    <div class="levels-strip">
+      <div class="level-col">
+        <div class="level-label" style="color:#a5b4fc;">Behavioral</div>
+        <div class="level-items">
+          <div class="level-item" style="background:rgba(99,102,241,.1);color:#c7d2fe;">WM capacity: ~4 chunks</div>
+          <div class="level-item" style="background:rgba(99,102,241,.08);color:#c7d2fe;">Cognitive flexibility vs. perseveration</div>
+          <div class="level-item" style="background:rgba(99,102,241,.06);color:#c7d2fe;">WCST: rule-switching failures after DLPFC damage</div>
+        </div>
+      </div>
+      <div class="level-col">
+        <div class="level-label" style="color:#67e8f9;">Neural</div>
+        <div class="level-items">
+          <div class="level-item" style="background:rgba(6,182,212,.1);color:#a5f3fc;">DLPFC delay-period activity</div>
+          <div class="level-item" style="background:rgba(6,182,212,.08);color:#a5f3fc;">D1/D2 balance; attractor states</div>
+          <div class="level-item" style="background:rgba(6,182,212,.06);color:#a5f3fc;">Goldberg dopamine signal; two modes</div>
+        </div>
+      </div>
+      <div class="level-col">
+        <div class="level-label" style="color:#6ee7b7;">Molecular</div>
+        <div class="level-items">
+          <div class="level-item" style="background:rgba(16,185,129,.1);color:#a7f3d0;">cAMP-PKA cascade (D1)</div>
+          <div class="level-item" style="background:rgba(16,185,129,.08);color:#a7f3d0;">SNARE-mediated exocytosis</div>
+          <div class="level-item" style="background:rgba(16,185,129,.06);color:#a7f3d0;">GABA/Glutamate; ionotropic vs. metabotropic</div>
+        </div>
+      </div>
+      <div class="level-col">
+        <div class="level-label" style="color:#fcd34d;">Clinical</div>
+        <div class="level-items">
+          <div class="level-item" style="background:rgba(245,158,11,.1);color:#fde68a;">Schizophrenia: too stable</div>
+          <div class="level-item" style="background:rgba(245,158,11,.08);color:#fde68a;">ADHD: too flexible</div>
+          <div class="level-item" style="background:rgba(245,158,11,.06);color:#fde68a;">Aging: gradual D1 loss</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="synthesis-grid">
+      <div class="synth-card">
+        <div class="synth-card-title">
+          <div class="synth-dot" style="background:var(--rose);"></div>
+          <span style="color:var(--rose);">Likely Exam Themes</span>
+        </div>
+        <ul>
+          <li>D1/D2 balance and the <span>stability-flexibility tradeoff</span> — core Ott &amp; Nieder synthesis</li>
+          <li><span>Inverted-U</span>: optimal WM at moderate dopamine</li>
+          <li><span>Delay-period activity</span> as neural signature of WM (Goldman-Rakic)</li>
+          <li><span>WCST perseveration</span> = DLPFC damage signature</li>
+          <li><span>Goldberg finch</span>: performance prediction error disappears with female present</li>
+          <li><span>Methylphenidate</span> mechanism: boosts DA → D1 → WM stability</li>
+          <li><span>Antipsychotics</span>: D2 antagonism reduces subcortical noise</li>
+          <li><span>SNARE complex</span> and Ca²⁺ mechanism of transmitter release</li>
+          <li><span>Ionotropic vs. metabotropic</span> speed difference</li>
+        </ul>
+      </div>
+      <div class="synth-card">
+        <div class="synth-card-title">
+          <div class="synth-dot" style="background:var(--accent);"></div>
+          <span style="color:var(--accent);">Cross-Course Connections</span>
+        </div>
+        <ul>
+          <li><span>WM = model-based substrate</span>; BG = model-free (Weeks 8-9)</li>
+          <li><span>D1 stability</span> = maintaining current goal = model-based control</li>
+          <li><span>D2 flexibility</span> = goal updating = model-free transition trigger</li>
+          <li><span>Dopamine prediction error</span> (Week 8) same DA system that modulates WM</li>
+          <li><span>Actor-critic</span>: PFC = meta-controller; Goldberg critic silent during performance</li>
+          <li><span>Module 10</span>: WM is the gating system the basal ganglia actor operates within</li>
+          <li><span>Module 12 preview</span>: PFC gates emotional expression via amygdala — same D1/D2 logic</li>
+        </ul>
+      </div>
+    </div>
+  </div><!-- /tab-synthesis -->
+
+</main>
+
+<script>
+// ─── TAB NAVIGATION ───
+document.querySelectorAll('.tab-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById('tab-' + btn.dataset.tab).classList.add('active');
+  });
+});
+
+// ─── COLLAPSIBLE SECTIONS ───
+function toggleSection(header) {
+  const section = header.closest('.study-section');
+  section.classList.toggle('open');
+}
+
+// ─── FLASHCARDS ───
+function flipCard(card) {
+  card.classList.toggle('flipped');
+}
+
+let allFlipped = false;
+document.getElementById('flipAllBtn').addEventListener('click', function() {
+  allFlipped = !allFlipped;
+  const visible = Array.from(document.querySelectorAll('.flashcard')).filter(c => c.style.display !== 'none');
+  visible.forEach(c => { if (allFlipped) c.classList.add('flipped'); else c.classList.remove('flipped'); });
+  this.textContent = allFlipped ? 'Hide All' : 'Reveal All';
+});
+
+document.querySelectorAll('.filter-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    const filter = btn.dataset.filter;
+    document.querySelectorAll('.flashcard').forEach(card => {
+      if (filter === 'all' || card.dataset.category === filter) {
+        card.style.display = '';
+      } else {
+        card.style.display = 'none';
+      }
+    });
+    allFlipped = false;
+    document.getElementById('flipAllBtn').textContent = 'Reveal All';
+  });
+});
+
+// ─── QUIZ DATA ───
+const questions = [
+  {
+    text: "The instructor described working memory as the 'operating system' on which all learning algorithms run. Which of the following BEST captures why dopaminergic modulation of PFC is fundamental to this 'operating system'?",
+    options: [
+      "Dopamine solely controls LTP in PFC",
+      "Dopamine modulates the stability-flexibility tradeoff via D1/D2 balance — regulating what enters WM (input gate), how stably it is maintained, and when it is output; without this, goal-directed cognition collapses",
+      "Dopamine only controls motor output",
+      "D1 and D2 are interchangeable"
+    ],
+    correct: 1,
+    tag: "WM Framework",
+    explanation: "This is the core synthesis: dopamine via D1/D2 controls all three stages of WM processing. <strong>Disruption</strong> (schizophrenia, ADHD) collapses goal-directed behavior into habitual model-free responding."
+  },
+  {
+    text: "Baddeley's model of working memory differs from Atkinson-Shiffrin's short-term memory because:",
+    options: [
+      "WM has unlimited capacity",
+      "WM is entirely dependent on hippocampal function",
+      "WM involves active goal-directed maintenance and manipulation across subsystems, not merely passive temporary storage",
+      "WM only handles verbal information via the phonological loop"
+    ],
+    correct: 2,
+    tag: "Memory Models",
+    explanation: "Baddeley added the central executive and specialized subsystems. <strong>WM is active manipulation</strong>, not passive storage. Atkinson-Shiffrin STM was passive. The phonological loop, visuospatial sketchpad, and episodic buffer operate under central executive control."
+  },
+  {
+    text: "In Goldman-Rakic's monkey recordings, neurons in DLPFC showed sustained elevated firing THROUGHOUT a delay period (between cue offset and response). The significance of this 'delay-period activity' is:",
+    options: [
+      "It shows that PFC is simply an extension of sensory cortex",
+      "It is the direct neural signature of WM — the circuit maintains a representation without ongoing external input, through recurrent excitation forming attractor states",
+      "It proves that dopamine is not involved in PFC function",
+      "It demonstrates that WM is stored subcortically in the basal ganglia"
+    ],
+    correct: 1,
+    tag: "DLPFC",
+    explanation: "Delay-period firing = WM in action. The PFC sustains the representation internally via <strong>recurrent excitation</strong>. Goldman-Rakic's work established this as the neural basis of WM — the attractor state mechanism keeps representations active without external input."
+  },
+  {
+    text: "According to the D1/D2 framework, what happens to WM when D1 stimulation is excessive?",
+    options: [
+      "WM representations update too rapidly, producing distraction",
+      "WM representations become too stable and rigid — the brain cannot update them when conditions change, similar to perseveration in schizophrenia",
+      "D1 excess has no effect on WM; only D2 modulates it",
+      "Excessive D1 activity causes hippocampal atrophy"
+    ],
+    correct: 1,
+    tag: "D1/D2 Balance",
+    explanation: "D1 deepens attractor basins. Too much → representations are <strong>locked in</strong> (too stable), cannot be updated by new inputs. This parallels schizophrenic thought patterns: hallucinations and delusions persist because the WM representation cannot be updated."
+  },
+  {
+    text: "A patient with damage to the DLPFC continues sorting cards by color even after being told the rule has changed to shape. This is called _____ and is a hallmark of:",
+    options: [
+      "Learned helplessness; amygdala damage",
+      "Semantic priming; temporal lobe damage",
+      "Perseveration; DLPFC damage — failure to update WM and switch behavioral rules",
+      "Proactive interference; hippocampal damage"
+    ],
+    correct: 2,
+    tag: "WCST",
+    explanation: "The WCST (Wisconsin Card Sorting Task) is the standard test. <strong>DLPFC damage → perseveration</strong> → failure to switch rules. This is cognitive inflexibility, the opposite of flexibility enabled by D2. The patient knows the rule changed (declarative) but cannot update WM to drive new behavior."
+  },
+  {
+    text: "The 'inverted-U' relationship described in the lecture refers to:",
+    options: [
+      "The fact that practice improvement slows over time (power law)",
+      "The relationship between dopamine level and WM/PFC performance — too little or too much dopamine both impair performance; optimal is moderate",
+      "The correlation between age and hippocampal volume",
+      "The tradeoff between speed and accuracy in decision-making"
+    ],
+    correct: 1,
+    tag: "Inverted-U",
+    explanation: "Both too little and too much dopamine impair PFC function. This <strong>U-shape</strong> applies to WM capacity, cognitive flexibility, and most PFC-dependent tasks. Moving off the peak in either direction — toward ADHD (too little) or schizophrenia (too much) — impairs performance."
+  },
+  {
+    text: "How does methylphenidate (Ritalin) improve WM performance in ADHD?",
+    options: [
+      "It increases D2 receptor density in the striatum",
+      "It selectively blocks glutamate in the hippocampus",
+      "It boosts dopamine availability in PFC, increasing D1-mediated stability of WM representations and reducing susceptibility to distractors",
+      "It blocks D1 receptors, allowing more flexible WM updating"
+    ],
+    correct: 2,
+    tag: "ADHD",
+    explanation: "ADHD involves insufficient WM stability (insufficient D1 tone). Methylphenidate raises synaptic dopamine → more D1 activation → <strong>deeper attractor basins</strong> → WM contents are maintained better and are less susceptible to distractors."
+  },
+  {
+    text: "In Jesse Goldberg's zebra finch experiment, dopamine cells showed elevated firing when the bird's song was NOT distorted (bird thinks it performed well) and suppressed firing when distorted. When a female was present, this signal disappeared. What is the best interpretation?",
+    options: [
+      "Female presence causes stress that globally suppresses dopamine",
+      "In performance mode (female present), the internal performance-prediction error is gated off and replaced by external social feedback from the female's responses",
+      "Dopamine encodes sexual arousal, not song quality",
+      "The female's presence disrupts the recording equipment used to measure dopamine"
+    ],
+    correct: 1,
+    tag: "Goldberg Finch",
+    explanation: "This is the <strong>same gating logic as D1/D2 control of WM</strong>. Two modes: rehearsal (internal learning) vs. performance (external feedback). Context gates which learning signal operates — identical to the output gate concept. The critic is silent during performance."
+  },
+  {
+    text: "The stability-flexibility tradeoff in WM maps onto which broader framework covered earlier in the course?",
+    options: [
+      "The distinction between habituation and sensitization (Week 6)",
+      "The distinction between model-based (goal-directed) and model-free (habitual) RL — stability enables current goal maintenance; flexibility enables updating to new goals",
+      "The Rescorla-Wagner error-correction learning rule",
+      "The three-stage model of skill memory from Fitts"
+    ],
+    correct: 1,
+    tag: "Cross-Course",
+    explanation: "D1 stability = <strong>model-based control</strong> (maintaining the current goal); D2 flexibility = allowing goal updating. Too much D1 → cannot update goals (perseverate). Too little → cannot maintain goals (distraction). This maps directly to the model-based vs. model-free distinction from Weeks 8-9."
+  },
+  {
+    text: "Which of the following correctly describes the calcium mechanism of neurotransmitter release?",
+    options: [
+      "Ca²⁺ efflux from the presynaptic terminal triggers vesicle endocytosis",
+      "Action potential arrives → voltage-gated Ca²⁺ channels open → Ca²⁺ influx → SNARE-mediated vesicle fusion → transmitter exocytosis",
+      "Ca²⁺ influx hyperpolarizes the presynaptic membrane, causing vesicles to release",
+      "GABA activates Ca²⁺ channels to facilitate glutamate release"
+    ],
+    correct: 1,
+    tag: "Neurotransmission",
+    explanation: "The sequence: AP arrives → presynaptic depolarization → voltage-gated Ca²⁺ channels open → <strong>Ca²⁺ rushes IN</strong> (high outside, low inside) → SNARE complex (synaptobrevin, syntaxin, SNAP-25) mediates vesicle docking and fusion → transmitter released into cleft."
+  },
+  {
+    text: "D1 and D2 receptors are metabotropic, not ionotropic. What practical consequence does this have for their effects?",
+    options: [
+      "They have faster effects than ionotropic receptors (open directly)",
+      "Their effects are slower and more modulatory — acting via G-proteins and second messengers to change neuronal excitability and synaptic strength over longer timescales",
+      "They only work in the hippocampus, not the PFC",
+      "They can only inhibit neurons, not excite them"
+    ],
+    correct: 1,
+    tag: "Receptor Types",
+    explanation: "Ionotropic = fast (milliseconds); metabotropic = slow (seconds to minutes). D1/D2 signal via Gs/Gi proteins, cAMP, PKA, etc. This makes dopamine a <strong>neuromodulator</strong> — it tunes the gain of PFC circuits rather than directly triggering action potentials."
+  },
+  {
+    text: "The Sperling partial-report experiment demonstrated that sensory (iconic) memory:",
+    options: [
+      "Has a capacity of exactly 7±2 items",
+      "Is identical to short-term memory",
+      "Briefly holds ALL visual items before attention selects from them — capacity is much larger than STM but duration is very brief (<1 second)",
+      "Requires hippocampal function for encoding"
+    ],
+    correct: 2,
+    tag: "Memory Systems",
+    explanation: "Sperling used a partial-report technique (cue which row to report after offset) to show that subjects could access <strong>any part of the array immediately after offset</strong> — proving more was held in memory than they could report. Iconic memory capacity is large; STM capacity is the bottleneck."
+  },
+  {
+    text: "In schizophrenia, why do antipsychotic drugs (D2 antagonists) help, even though the problem is associated with excess D1-mediated stability in PFC?",
+    options: [
+      "D2 antagonists in PFC increase D1 activity, making WM even more stable",
+      "D2 antagonists primarily work in the striatum, reducing the dopamine noise that floods PFC via subcortical-to-cortical pathways, allowing PFC representations to be updated more normally",
+      "D2 blockade directly targets hippocampal consolidation of delusional memories",
+      "Antipsychotics work by increasing GABA inhibition throughout the brain"
+    ],
+    correct: 1,
+    tag: "Schizophrenia",
+    explanation: "The mechanism: excess dopamine in <strong>subcortical D2 circuits</strong> creates noise/hallucinations. D2 blockade reduces this noise. The PFC D1 problem is a separate route to the same instability. Antipsychotics don't fix the D1 issue directly — they reduce the subcortical noise signal that feeds hallucinations."
+  },
+  {
+    text: "What does the 'attractor state' concept explain about WM that simple buffer models cannot?",
+    options: [
+      "Attractor states explain why WM capacity is exactly 7 items",
+      "Attractor models explain how WM can be maintained persistently without external input: recurrent excitation between neurons creates self-sustaining activity patterns that are stable unless disrupted",
+      "Attractor states explain why WM is stored in the hippocampus",
+      "Attractor models are only relevant for motor WM, not verbal WM"
+    ],
+    correct: 1,
+    tag: "Attractor States",
+    explanation: "A simple buffer model requires constant refreshing. <strong>Attractor models generate persistent activity spontaneously through recurrent excitation</strong> — neurons keep each other firing. D1 makes the attractor basin deeper (harder to knock out); D2 flattens it (easier to update). Noise in dopamine signaling can kick the representation out."
+  },
+  {
+    text: "The phonological loop in Baddeley's model consists of:",
+    options: [
+      "The phonological store (passive maintenance of sound-based info) and the articulatory rehearsal process (active subvocal repetition)",
+      "The central executive plus the episodic buffer",
+      "The visuospatial sketchpad plus echoic memory",
+      "A direct link between Wernicke's area and the hippocampus"
+    ],
+    correct: 0,
+    tag: "Baddeley's Model",
+    explanation: "The phonological loop has two parts: (1) the <strong>phonological store</strong> holds sound-based representations for ~1-2 seconds; (2) <strong>subvocal rehearsal</strong> (like inner speech) refreshes this store to maintain information longer. This is why verbal rehearsal helps you remember a phone number."
+  },
+  {
+    text: "Which of the following correctly describes how D1 receptor activation stabilizes WM?",
+    options: [
+      "D1 activation opens GABA-A channels, hyperpolarizing PFC neurons and reducing noise",
+      "D1 (via cAMP-PKA pathway) closes HCN channels and potentiates NMDA receptors in deep-layer PFC neurons, deepening attractor states and reducing the probability that noise will knock a representation out",
+      "D1 directly inhibits D2 receptors via competitive binding",
+      "D1 closes voltage-gated Na⁺ channels, reducing action potential frequency"
+    ],
+    correct: 1,
+    tag: "D1 Mechanism",
+    explanation: "The mechanism: D1 → Gs → adenylyl cyclase → cAMP → PKA → phosphorylation of <strong>HCN channels</strong> (closes them, increasing membrane resistance) and <strong>potentiation of NMDA receptors</strong> → deeper attractor basin → more stable WM representation resistant to noise and distractors."
+  },
+  {
+    text: "A researcher uses a 'distractor' task: while holding a visual cue in WM (delay period), subjects see irrelevant visual stimuli. DLPFC neurons of trained monkeys are more resistant to the distractors than posterior cortex neurons. What is the best explanation?",
+    options: [
+      "DLPFC neurons fire less to the cue, so distractors cannot compete",
+      "D1-mediated attractor deepening in DLPFC neurons means the WM representation resists being overwritten by distractor input; posterior cortex lacks this D1-modulated stability",
+      "DLPFC neurons are myelinated differently, reducing conduction time for distractor signals",
+      "The task cannot be used to compare different brain areas because neurons have different baseline firing rates"
+    ],
+    correct: 1,
+    tag: "D1 Distractor",
+    explanation: "This is Earl Miller's finding. PFC (especially DLPFC with high D1 tone) <strong>maintains the cue representation through distractor presentation</strong>; posterior cortex responds to each distractor. This stability is the D1-attractor mechanism at work — deeper basin = harder to knock the representation out."
+  },
+  {
+    text: "Ott & Nieder (2019) review both the cellular mechanisms and the clinical implications of PFC dopamine. Which of the following represents their central synthesis?",
+    options: [
+      "PFC dopamine is primarily relevant for motor planning, not WM or cognition",
+      "The D1/D2 balance regulates a stability-flexibility tradeoff that is fundamental to adaptive goal-directed behavior; perturbations in either direction (too much D1 → schizophrenia; too little D1 → ADHD) disrupt this tradeoff and produce distinct cognitive phenotypes",
+      "Dopamine is only transiently active in PFC during reward; its sustained effects are mediated by norepinephrine",
+      "Clinical conditions involving PFC dopamine are best treated by glutamate-targeting drugs"
+    ],
+    correct: 1,
+    tag: "Ott & Nieder",
+    explanation: "The D1-D2 stability-flexibility framework is Ott &amp; Nieder's central contribution. The same circuit, same neuromodulator, same receptor types — but <strong>opposite perturbations produce opposite clinical pictures</strong>: too little stability → ADHD; too much stability → schizophrenia."
+  },
+  {
+    text: "The instructor placed working memory in the context of the model-based vs. model-free distinction from Weeks 8-9. Which mapping is correct?",
+    options: [
+      "WM is the substrate for model-free (habitual) behavior; basal ganglia implements model-based",
+      "WM (PFC) is the substrate for model-based (goal-directed) behavior — it holds the current goal and model; basal ganglia implements model-free cached S-R mappings",
+      "WM implements both model-based and model-free in different PFC subregions",
+      "The distinction between model-based and model-free was shown to be irrelevant when WM is considered"
+    ],
+    correct: 1,
+    tag: "Model-Based / Model-Free",
+    explanation: "<strong>PFC = model-based</strong> (maintain goal, plan multi-step actions). <strong>Basal ganglia = model-free</strong> (cached S-R policies). When WM/PFC is disrupted (stress, distraction, dopamine depletion), model-free responding takes over — habit dominates. This is why ADHD and schizophrenia both produce failures of goal-directed behavior."
+  },
+  {
+    text: "GABA is the main inhibitory neurotransmitter. Its postsynaptic effect (via GABA-A) is:",
+    options: [
+      "Depolarization via Na⁺ influx — increases firing probability",
+      "Hyperpolarization via Cl⁻ influx — makes the postsynaptic membrane more negative, reducing firing probability",
+      "Long-term potentiation via Ca²⁺ influx through NMDA",
+      "Second-messenger activation via G-protein coupling — slow inhibition lasting minutes"
+    ],
+    correct: 1,
+    tag: "GABA",
+    explanation: "GABA-A is <strong>ionotropic</strong> (ligand-gated ion channel). It is permeable to Cl⁻. Since [Cl⁻] is high outside and low inside, GABA binding → Cl⁻ influx → membrane hyperpolarization → neuron is less likely to fire. GABA-B is metabotropic (slow inhibition via K⁺ channels) — the option describing second-messenger activation."
+  }
+];
+
+let quizState = {};
+
+function buildQuiz() {
+  const container = document.getElementById('quizContainer');
+  container.innerHTML = '';
+  quizState = {};
+
+  questions.forEach((q, i) => {
+    quizState[i] = null;
+    const card = document.createElement('div');
+    card.className = 'q-card';
+    card.id = 'q-' + i;
+
+    const optsHtml = q.options.map((opt, j) =>
+      `<button class="q-opt" data-qi="${i}" data-oi="${j}" onclick="answerQ(${i},${j})">${String.fromCharCode(65+j)}. ${opt}</button>`
+    ).join('');
+
+    card.innerHTML = `
+      <div class="q-header">
+        <div class="q-meta">
+          <span class="q-num">${i+1}</span>
+          <span class="q-tag">${q.tag}</span>
+          <span class="q-status" id="qs-${i}"></span>
+        </div>
+        <div class="q-text">${q.text}</div>
+      </div>
+      <div class="q-options">${optsHtml}</div>
+      <div class="q-explanation hidden" id="qe-${i}">${q.explanation}</div>
+    `;
+    container.appendChild(card);
+  });
+  updateStats();
+}
+
+function answerQ(qi, oi) {
+  if (quizState[qi] !== null) return;
+  quizState[qi] = oi;
+
+  const card = document.getElementById('q-' + qi);
+  const opts = card.querySelectorAll('.q-opt');
+  const isCorrect = oi === questions[qi].correct;
+
+  opts.forEach((btn, j) => {
+    btn.disabled = true;
+    if (j === questions[qi].correct) btn.classList.add('show-correct');
+  });
+  if (!isCorrect) {
+    opts[oi].classList.remove('show-correct');
+    opts[oi].classList.add('selected-wrong');
+  } else {
+    opts[oi].classList.add('selected-correct');
+  }
+
+  card.classList.add(isCorrect ? 'correct' : 'incorrect');
+  document.getElementById('qs-' + qi).textContent = isCorrect ? '✓ Correct' : '✗ Incorrect';
+  document.getElementById('qs-' + qi).style.color = isCorrect ? 'var(--emerald)' : 'var(--rose)';
+  document.getElementById('qe-' + qi).classList.remove('hidden');
+
+  updateStats();
+}
+
+function updateStats() {
+  const answered = Object.values(quizState).filter(v => v !== null).length;
+  const correct = Object.entries(quizState).filter(([i, v]) => v !== null && v === questions[i].correct).length;
+  const wrong = answered - correct;
+  document.getElementById('statCorrect').textContent = correct;
+  document.getElementById('statWrong').textContent = wrong;
+  const pctEl = document.getElementById('statPct');
+  if (answered > 0) {
+    const pct = Math.round((correct / answered) * 100);
+    pctEl.textContent = pct + '%';
+    pctEl.style.color = pct >= 80 ? 'var(--emerald)' : pct >= 60 ? 'var(--amber)' : 'var(--rose)';
+  } else {
+    pctEl.textContent = '—';
+    pctEl.style.color = 'var(--gray-light)';
+  }
+  const pct = (answered / 20) * 100;
+  document.getElementById('quizProgressBar').style.width = pct + '%';
+  document.getElementById('quizProgressLabel').textContent = answered + ' / 20';
+}
+
+function resetQuiz() {
+  buildQuiz();
+}
+
+// ─── SCROLL PROGRESS ───
+window.addEventListener('scroll', () => {
+  const el = document.documentElement;
+  const pct = (el.scrollTop / (el.scrollHeight - el.clientHeight)) * 100;
+  document.getElementById('scrollProgress').style.width = pct + '%';
+});
+
+// ─── INIT ───
+buildQuiz();
+</script>
+</body>
+</html>
