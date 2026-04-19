@@ -499,7 +499,7 @@
     <div class="progress-bar-wrap" title="Quiz progress">
       <div class="progress-bar-fill" id="quizProgressBar"></div>
     </div>
-    <span class="progress-label" id="quizProgressLabel">0 / 25</span>
+    <span class="progress-label" id="quizProgressLabel">0 / 35</span>
   </div>
   <button id="theme-toggle" onclick="__toggleTheme()" aria-label="Toggle theme"></button>
 </header>
@@ -1169,7 +1169,7 @@
     </div>
 
     <div class="quiz-stats">
-      <div class="stat-item"><div class="stat-val blue" id="statTotal">25</div><div class="stat-lbl">Questions</div></div>
+      <div class="stat-item"><div class="stat-val blue" id="statTotal">35</div><div class="stat-lbl">Questions</div></div>
       <div class="stat-item"><div class="stat-val green" id="statCorrect">0</div><div class="stat-lbl">Correct</div></div>
       <div class="stat-item"><div class="stat-val red" id="statWrong">0</div><div class="stat-lbl">Incorrect</div></div>
       <div class="stat-item"><div class="stat-val" id="statPct" style="color:var(--gray-light);">—</div><div class="stat-lbl">Score</div></div>
@@ -1313,305 +1313,250 @@ document.querySelectorAll('.filter-btn').forEach(btn => {
 // ─── QUIZ DATA ───
 const questions = [
   {
-    text: "A dog naturally salivates when presented with food. After many pairings of a bell followed by food, the dog begins to salivate when it hears the bell alone. Salivation to the food is the _____, while salivation to the bell alone is the _____.",
-    options: [
-      "conditioned response; unconditioned response",
-      "unconditioned response; conditioned response",
-      "unconditioned stimulus; conditioned stimulus",
-      "conditioned stimulus; unconditioned stimulus"
-    ],
-    correct: 1,
-    tag: "Basic Concepts",
-    explanation: "<strong>Salivation to food</strong> is reflexive and requires no training (UR). <strong>Salivation to the bell alone</strong> is the learned anticipatory response (CR). The same behavior can serve as both UR and CR depending on the eliciting stimulus."
+    text: "Classical conditioning involves learning:",
+    options: ["that a particular behavior leads to a reward.", "about a stimulus by being repeatedly exposed to it.", "that a stimulus predicts an important event.", "by observing another person perform a behavior."],
+    correct: 2,
+    tag: "Definition of classical conditioning",
+    explanation: "Classical conditioning is fundamentally about predictive relationships: a neutral stimulus (CS) comes to predict a biologically significant event (US). Option A describes operant/instrumental conditioning, B describes habituation or mere exposure, and D describes observational/social learning."
   },
   {
-    text: "Julianne feels naturally nervous before a basketball game. Simply seeing the basketball court on non-game days also makes her nervous. Her nervousness at seeing the court on non-game days is best classified as a:",
-    options: [
-      "unconditioned stimulus",
-      "unconditioned response",
-      "conditioned stimulus",
-      "conditioned response"
-    ],
+    text: "Every day when Marie returns home from work, her daughter gives her a big hug as soon as she walks through the front door. Now, the sight of the front door makes Marie feel happy. In this example, the conditioned stimulus is:",
+    options: ["the front door.", "a big hug.", "Marie's daughter.", "Marie."],
+    correct: 0,
+    tag: "Identifying the CS in a real-world scenario",
+    explanation: "The front door is the neutral stimulus that was repeatedly paired with the hug (US), becoming a CS that now elicits happiness (CR) on its own. The hug is the US; the daughter is not a stimulus element; Marie is the learner."
+  },
+  {
+    text: "Something that naturally elicits a reflexive response is called a(n):",
+    options: ["conditioned stimulus.", "unconditioned stimulus.", "conditioned response.", "unconditioned response."],
+    correct: 1,
+    tag: "Definition of unconditioned stimulus",
+    explanation: "The unconditioned stimulus (US) is defined by its ability to evoke a response naturally, without any prior learning. The key word is 'naturally' — the response requires no conditioning history."
+  },
+  {
+    text: "Juan's dog salivates when Juan goes to the cupboard to get a dog biscuit. What is the unconditioned stimulus?",
+    options: ["the cupboard", "Juan", "the dog biscuit", "salivation"],
+    correct: 2,
+    tag: "Identifying the US in a salivation scenario",
+    explanation: "The dog biscuit is the US because it naturally and reflexively causes salivation. The cupboard is the CS (a learned predictor of the biscuit). Salivation is the response (either UR to the biscuit or CR to the cupboard). Juan is the handler, not a stimulus."
+  },
+  {
+    text: "Lightning is usually followed by thunder. Eventually, one can be startled by the lightning alone. The unconditioned response is being:",
+    options: ["startled by thunder.", "startled by lightning.", "scared of thunder.", "scared of lightning."],
+    correct: 0,
+    tag: "Distinguishing UR from CR in a thunder/lightning scenario",
+    explanation: "Being startled by thunder is the natural, unlearned reflex to the US (thunder). Being startled by lightning is the CR — it is the learned response to the CS. The distinction hinges on which stimulus is doing the eliciting: natural reflex to the US = UR; learned reaction to the CS = CR."
+  },
+  {
+    text: "The conditioned stimulus elicits the:",
+    options: ["conditioned stimulus.", "conditioned response.", "unconditioned stimulus.", "unconditioned response."],
+    correct: 1,
+    tag: "CS-CR relationship",
+    explanation: "By definition, after conditioning, the CS elicits the CR — an anticipatory learned response. The CS does not elicit the US (the US occurs independently); it does not elicit the UR (that is the natural reflex to the US)."
+  },
+  {
+    text: "Suppose a child only goes to the doctor when she has to get a shot, and the child eventually learns to cry as soon as her doctor walks into the room. What is the conditioned response?",
+    options: ["crying when getting a shot", "crying when the doctor comes in", "fear of the doctor", "fear of the shot"],
+    correct: 1,
+    tag: "Identifying the CR in a clinical scenario",
+    explanation: "The CR is crying when the doctor enters — this is the learned anticipatory response to the CS (doctor). Crying when getting the shot is the UR (the natural response to the US). Options C and D name emotional states rather than the specific behavioral response."
+  },
+  {
+    text: "The _____ prepares the organism for the expected _____.",
+    options: ["unconditioned response; conditioned stimulus", "conditioned response; unconditioned stimulus", "unconditioned stimulus; unconditioned response", "conditioned response; conditioned stimulus"],
+    correct: 1,
+    tag: "Functional role of the conditioned response",
+    explanation: "This captures the key functional role of the CR: it is an anticipatory response that prepares the organism for the arriving US. The CR occurs before the US to allow adaptive preparation (e.g., salivating before food, blinking before an airpuff)."
+  },
+  {
+    text: "Julianne competes on her high school's basketball team. She always feels naturally nervous right before a game. She has also noticed that on days when she does not have a game, just seeing the basketball court makes her feel nervous. Her nervousness at seeing the court on non-game days is a(n):",
+    options: ["unconditioned stimulus.", "unconditioned response.", "conditioned stimulus.", "conditioned response."],
     correct: 3,
-    tag: "Basic Concepts",
-    explanation: "The basketball court has become a <strong>CS</strong> through association with actual games. Her nervousness in response to the court (without an actual game) is an anticipatory <strong>CR</strong>."
+    tag: "Identifying the CR in an everyday scenario",
+    explanation: "Nervousness in response to the court (CS) on non-game days is a CR — a learned anticipatory response to a stimulus that has been associated with actual games (US). It is not a UR because seeing an empty court does not naturally produce nervousness; the nervousness is acquired through conditioning. Section II: Appetitive and Aversive Conditioning  (Questions 10-12)"
   },
   {
-    text: "The conditioned response can best be understood as:",
-    options: [
-      "an automatic reflex triggered by the unconditioned stimulus",
-      "an anticipatory response that prepares the organism for the expected US",
-      "a response always identical in form to the unconditioned response",
-      "a response that occurs without any prior training"
-    ],
+    text: "Which is an example of appetitive conditioning?",
+    options: ["dogs being trained to use smell to find drugs", "rats learning to run a maze to avoid being shocked", "associating a person's cologne or perfume with having sex", "displaying a reflexive knee-jerk response"],
+    correct: 2,
+    tag: "Example of appetitive conditioning",
+    explanation: "Appetitive conditioning uses a positive/desirable US. Associating a cologne with sex uses a sexually appetitive US (sex). A is aversive (shock avoidance). B is aversive conditioning. D describes a simple reflex — no conditioning has occurred."
+  },
+  {
+    text: "When the US is an unpleasant event such as shock, the conditioning is called _____ conditioning.",
+    options: ["aversive", "appetitive", "delay", "trace"],
+    correct: 0,
+    tag: "Definition of aversive conditioning",
+    explanation: "Aversive conditioning uses an unpleasant US (shock, airpuff, nausea). Appetitive conditioning uses a desirable US. Delay and trace refer to the temporal arrangement of CS and US within a trial — not to the valence of the US."
+  },
+  {
+    text: "The Conditioned Emotional Response (CER) was a technique developed to study:",
+    options: ["emotional response.", "learned fear.", "sound response.", "influence of surroundings."],
     correct: 1,
-    tag: "Basic Concepts",
-    explanation: "The CR is <strong>anticipatory</strong> — it prepares the organism for the US before it arrives. In eyeblink conditioning, the CR peaks precisely as the airpuff is expected to arrive."
+    tag: "Purpose of the Conditioned Emotional Response procedure",
+    explanation: "Estes and Skinner developed the CER specifically to quantify learned fear. Hungry rats pressing a lever for food would freeze (suppressing lever presses) when a tone CS predicted an upcoming shock US. The degree of lever-press suppression measured the strength of conditioned fear. Section III: Conditioned Compensatory Responses and Tolerance  (Questions 13-14)"
   },
   {
-    text: "When the unconditioned stimulus is a positive event such as food or sex, the conditioning procedure is called:",
-    options: [
-      "aversive conditioning",
-      "trace conditioning",
-      "appetitive conditioning",
-      "delay conditioning"
-    ],
-    correct: 2,
-    tag: "Basic Concepts",
-    explanation: "<strong>Appetitive conditioning</strong> uses a desirable US. <strong>Aversive conditioning</strong> uses an unpleasant US. Trace and delay refer to the temporal relationship between CS and US, not the valence of the US."
+    text: "When a conditioned compensatory response occurs, the:",
+    options: ["CR is the opposite of the UR.", "CR is the same as the UR.", "US is the same as the CS.", "US is the same as the CR."],
+    correct: 0,
+    tag: "Nature of conditioned compensatory responses",
+    explanation: "In a compensatory response, the CR counteracts (opposes) the effect of the US, in order to maintain homeostasis. For example, if a drug raises heart rate (UR), environmental cues (CS) trigger a compensatory decrease in heart rate (CR) in anticipation of the drug. The CR and UR are opposite in direction."
   },
   {
-    text: "A regular drug user takes their usual dose of heroin in an unfamiliar hotel room and suffers a near-fatal overdose. This best illustrates:",
-    options: [
-      "extinction of the conditioned response",
-      "conditioned compensatory response and tolerance",
-      "spontaneous recovery of the unconditioned response",
-      "latent inhibition of the drug's effects"
-    ],
-    correct: 1,
-    tag: "Clinical",
-    explanation: "Drug tolerance is classically conditioned. Familiar environmental CSs trigger a homeostatic CR that counteracts the drug. In the <strong>novel context</strong>, those CSs are absent, so no compensatory CR fires — the same dose produces a much stronger and potentially fatal effect."
-  },
-  {
-    text: "In eyeblink conditioning, what is the functional significance of the CR (eyeblink) beginning before the US (airpuff) arrives?",
-    options: [
-      "It demonstrates that CR and UR are neurologically identical",
-      "It shows the CS has become a substitute for the US",
-      "It reveals the anticipatory nature of the CR — it protects the eye before the harmful stimulus arrives",
-      "It indicates extinction has occurred"
-    ],
-    correct: 2,
-    tag: "Basic Concepts",
-    explanation: "The CR is timed to arrive in advance of the US, providing adaptive protection. The eyelid is maximally closed at precisely the moment the airpuff is expected — a hallmark of the CR's anticipatory, protective function."
-  },
-  {
-    text: "Which provides the strongest evidence that extinction does NOT simply erase the original CS-US association?",
-    options: [
-      "CR increases in strength during acquisition",
-      "Lesions of the interpositus nucleus permanently prevent acquisition",
-      "The CR spontaneously recovers after a delay following extinction",
-      "Blocking prevents the tone from becoming a CS"
-    ],
-    correct: 2,
-    tag: "Extinction",
-    explanation: "<strong>Spontaneous recovery</strong> — the return of the CR after a rest period following extinction — demonstrates the original memory was not destroyed. If extinction were simple unlearning, no recovery would ever be possible."
-  },
-  {
-    text: "According to Bouton's work, which strategy would be MOST effective for reducing long-term relapse risk in a recovering addict?",
-    options: [
-      "Conducting all cue-exposure therapy in a single neutral clinical environment",
-      "Spreading cue-exposure therapy across multiple contexts and time periods",
-      "Ensuring the addict is never exposed to drug-related cues during treatment",
-      "Waiting until the patient has been abstinent 6 months before beginning therapy"
-    ],
-    correct: 1,
-    tag: "Clinical",
-    explanation: "Extinction is highly context-specific. Extinguishing cravings only in one clinical setting does not generalize well. <strong>Multiple contexts and time periods</strong> produces broader, more robust inhibitory learning that is less likely to fail in real-world environments."
-  },
-  {
-    text: "In Siegel et al.'s heroin study, rats who received a large dose in the SAME environment where they had previously received smaller doses showed:",
-    options: [
-      "the highest mortality rate of all groups tested",
-      "the same mortality rate as the first-time group",
-      "the lowest mortality rate, because conditioned tolerance was present",
-      "complete immunity due to sensitization"
-    ],
-    correct: 2,
-    tag: "Clinical",
-    explanation: "The same-environment group had the <strong>lowest mortality</strong> because familiar environmental cues triggered a conditioned compensatory response that partially counteracted the drug's effects, providing classically conditioned tolerance."
-  },
-  {
-    text: "The conditioned compensatory response occurs in response to the _____, in order to prepare the organism for the _____.",
-    options: [
-      "CS; CR",
-      "US; UR",
-      "CS; UR",
-      "US; CR"
-    ],
-    correct: 2,
-    tag: "Clinical",
-    explanation: "The compensatory CR is triggered by the <strong>CS</strong> (environmental drug cues) in order to counteract the body's expected response to the <strong>US</strong> (the drug itself). The CS provides advance warning."
-  },
-  {
-    text: "A rat is trained that a light predicts shock (Phase 1). In Phase 2, a light-and-tone compound also predicts shock. In Phase 3, the rat is tested with the tone alone. What result is expected?",
-    options: [
-      "Strong CR to tone; demonstrates overshadowing",
-      "No CR to tone; demonstrates blocking",
-      "No CR to tone; demonstrates extinction",
-      "Strong CR to tone; demonstrates latent inhibition"
-    ],
-    correct: 1,
-    tag: "Blocking",
-    explanation: "This is Kamin's (1969) classic <strong>blocking</strong> paradigm. The light already perfectly predicted shock in Phase 1 (PE = 0 in Phase 2), so the tone provided no new predictive information and never acquired associative weight."
-  },
-  {
-    text: "Blocking demonstrates that classical conditioning requires more than simple contiguity. Specifically, it shows a CS must:",
-    options: [
-      "occur at least 3 seconds before the US",
-      "be novel with no prior history of being presented alone",
-      "provide nonredundant, predictive information about the US",
-      "be paired with the US at least 50 times"
-    ],
-    correct: 2,
-    tag: "Blocking",
-    explanation: "Even when the tone and shock were <strong>contiguous</strong> in Phase 2, no association formed because the tone was <em>redundant</em> — the light already fully predicted the shock. The CS must add genuine predictive value."
-  },
-  {
-    text: "When a more salient cue in a compound CS captures a disproportionately large associative weight compared to a less salient cue, this is called:",
-    options: [
-      "blocking",
-      "latent inhibition",
-      "overshadowing",
-      "spontaneous recovery"
-    ],
-    correct: 2,
-    tag: "Compound Conditioning",
-    explanation: "<strong>Overshadowing</strong> occurs within compound conditioning when cues compete for associative strength based on salience. Unlike blocking (requires Phase 1 pre-training), it can occur on the very first compound trial."
-  },
-  {
-    text: "Rachel's oncologist gives her cucumber-flavored popsicles immediately before each chemotherapy session. This intervention is designed to:",
-    options: [
-      "extinguish the nausea response through repeated exposure",
-      "block the conditioning of a taste aversion to other foods Rachel normally eats",
-      "increase effectiveness of chemotherapy by reducing anxiety",
-      "sensitize Rachel's immune system to the chemotherapy agent"
-    ],
-    correct: 1,
-    tag: "Clinical",
-    explanation: "Clinical application of <strong>blocking</strong>. The novel cucumber flavor becomes a strongly conditioned CS for nausea, blocking conditioning to more familiar preferred foods — protecting her everyday food preferences from acquired aversion."
-  },
-  {
-    text: "In the Rescorla-Wagner model, when a well-trained CS accurately predicts the US and the US occurs, the prediction error is:",
-    options: [
-      "positive, causing further weight increase",
-      "negative, causing weight decrease",
-      "zero, resulting in no change",
-      "indeterminate, depending on learning rate"
-    ],
-    correct: 2,
-    tag: "Rescorla-Wagner",
-    explanation: "When the US is fully predicted (expected = actual), actual − expected = 0. No error = no learning. <strong>Learning reaches asymptote.</strong> The learning rate α is irrelevant when PE = 0."
-  },
-  {
-    text: "In the Rescorla-Wagner model, when two cues (A and B) are presented together, the expected US is calculated as:",
-    options: [
-      "the average of W_A and W_B",
-      "the maximum of W_A and W_B",
-      "the product of W_A and W_B",
-      "the sum of W_A and W_B"
-    ],
+    text: "According to the phenomenon of conditioned compensatory response, drug addicts develop a tolerance to their drug because:",
+    options: ["the drug elicits a UR that becomes weaker over time.", "environmental cues elicit URs that enhance the effect of the drug.", "the drug elicits a CR that enhances the effect of the drug.", "environmental cues elicit CRs that counteract the effect of the drug."],
     correct: 3,
-    tag: "Rescorla-Wagner",
-    explanation: "R-W <strong>sums all associative weights</strong> for CSs present on a trial. This additive property explains blocking: W_Light = 100 already equals the maximum US value, leaving PE = 0 for the tone."
+    tag: "Classical conditioning account of drug tolerance",
+    explanation: "Environmental cues (CS) associated with drug use come to elicit a homeostatic compensatory CR that opposes the drug's effect. This CR grows stronger with repeated exposure, requiring ever-larger doses to overcome it — the hallmark of tolerance. The cues do not elicit URs; the drug does. Section IV: Extinction and Spontaneous Recovery  (Questions 15-16)"
   },
   {
-    text: "A rat has W_Tone = 100. Extinction begins (tone without shock). Learning rate α = 0.2. What is the change in W_Tone on the first extinction trial?",
-    options: [
-      "+20 (increases to 120)",
-      "0 (stays at 100)",
-      "−20 (decreases to 80)",
-      "−100 (immediately drops to 0)"
-    ],
+    text: "In order to get Pavlov's dog to experience extinction, one would:",
+    options: ["give the dog a little extra food on each trial.", "play the tone more loudly on each trial.", "present the food repeatedly without playing the tone.", "play the tone repeatedly without any food."],
+    correct: 3,
+    tag: "Procedure for producing extinction",
+    explanation: "Extinction requires presenting the CS (tone) repeatedly in the absence of the US (food). The CS loses its predictive value when it is no longer followed by the US. Presenting food without the tone does not affect the tone-food association; it simply feeds the dog."
+  },
+  {
+    text: "The spontaneous recovery of a CR suggests that:",
+    options: ["the body tends to gravitate toward a state of equilibrium.", "any stimulus can be a CS.", "any stimulus can be a US.", "the CR is not gone after extinction."],
+    correct: 3,
+    tag: "Theoretical significance of spontaneous recovery",
+    explanation: "Spontaneous recovery — the return of the CR after a delay following extinction — demonstrates that extinction does not erase the original CS-US memory. Rather, extinction produces a competing inhibitory association. The original learning lies dormant and can re-emerge, which has major clinical implications for relapse prevention. Section V: Compound Conditioning, Overshadowing, and Blocking  (Questions 17-19)"
+  },
+  {
+    text: "When a more salient cue within a compound acquires more of the share of the attention and learning than the less salient cue, it is known as:",
+    options: ["compound conditioning", "classical conditioning.", "overshadowing.", "blocking."],
     correct: 2,
-    tag: "Rescorla-Wagner",
-    explanation: "actual US = 0, expected = 100, PE = 0 − 100 = −100. ΔW = 0.2 × (−100) = <strong>−20</strong>. W drops from 100 to 80. Gradual decrease across trials produces the extinction learning curve."
+    tag: "Definition and distinction of overshadowing",
+    explanation: "Overshadowing occurs within a single compound conditioning procedure when one cue's greater salience causes it to capture a disproportionate share of associative weight, leaving less for the weaker cue. Unlike blocking, overshadowing does not require prior training of one element — it can occur on the very first compound trial."
   },
   {
-    text: "The Rescorla-Wagner model is classified as a 'US modulation theory' because:",
-    options: [
-      "it describes how the US modulates overt behavior",
-      "learning is determined by how unexpected the US is — a more surprising US produces more learning",
-      "the US must be presented before the CS for conditioning to occur",
-      "the US directly controls which CSs form associations"
-    ],
+    text: "The phenomenon of blocking demonstrates that:",
+    options: ["a compound CS cannot be learned.", "a compound US cannot be learned.", "the US must provide nonredundant information.", "the CS must provide nonredundant information."],
+    correct: 3,
+    tag: "Theoretical implication of the blocking effect",
+    explanation: "Blocking shows that even when a CS is contiguous with the US, no association forms if that CS is redundant with another, already-trained CS. This proves that for conditioning to occur, the CS must provide new, nonredundant predictive information — mere contiguity between CS and US is insufficient."
+  },
+  {
+    text: "Suppose one conditions a rabbit to give an eyeblink response to a tone. If one then presents both a tone and a light together followed by a puff of air to the eyes, the rabbit will not blink in response to the light. This demonstrates:",
+    options: ["homeostasis.", "extinction.", "spontaneous recovery.", "blocking."],
+    correct: 3,
+    tag: "Identifying blocking in an eyeblink conditioning scenario",
+    explanation: "This is a textbook blocking paradigm. Because the tone was already conditioned to predict the airpuff (Phase 1), it fully accounts for the US when both tone and light are presented together (Phase 2). The light provides no additional predictive value, so no association forms between the light and the airpuff. Section VI: The Rescorla-Wagner Model  (Questions 20-24)"
+  },
+  {
+    text: "The difference between whether an animal expects the US and whether the US actually occurs is known as:",
+    options: ["homeostasis.", "a prediction error.", "an error-correction rule.", "latent inhibition."],
     correct: 1,
-    tag: "Rescorla-Wagner",
-    explanation: "The critical R-W variable is how <strong>surprising the US is</strong> (prediction error = actual − expected). CS properties like salience are not explicitly modeled. This contrasts with CS modulation theories where attention to the CS is key."
+    tag: "Definition of prediction error",
+    explanation: "Prediction error is the central quantity in the Rescorla-Wagner model: it is the difference between the actual US (did it happen?) and the expected US (how much was predicted by the CSs present?). The error-correction rule is the principle that changes in associative weights are proportional to this prediction error."
   },
   {
-    text: "Latent inhibition is problematic for the Rescorla-Wagner model because:",
-    options: [
-      "R-W predicts blocking should occur but latent inhibition should not",
-      "R-W cannot explain why the US is more surprising in the pre-exposed group",
-      "during CS-alone pre-exposure, PE = 0, so R-W predicts nothing learned, but empirically pre-exposure retards conditioning significantly",
-      "R-W predicts pre-exposed animals should learn faster than controls"
-    ],
+    text: "In the Rescorla-Wagner model, if a novel CS is followed by an unexpected US, the prediction error is:",
+    options: ["positive.", "negative.", "zero.", "either positive or negative."],
+    correct: 0,
+    tag: "Sign of prediction error for unexpected US",
+    explanation: "When a novel CS is followed by an unexpected US: actual US = 100, expected US = 0 (W = 0 for a novel cue). Prediction error = 100 - 0 = +100. Positive errors drive increases in associative weight. This is the condition of maximum learning."
+  },
+  {
+    text: "In the Rescorla-Wagner model, if a CS predicts a US, but no US occurs, the prediction error is:",
+    options: ["positive.", "negative.", "zero.", "either positive or negative."],
+    correct: 1,
+    tag: "Sign of prediction error during extinction",
+    explanation: "When the CS predicts the US but no US occurs: actual US = 0, expected US > 0. Prediction error = 0 - (expected US) = negative. Negative errors drive decreases in associative weight — this is the mechanism of extinction in the Rescorla-Wagner model."
+  },
+  {
+    text: "In the Rescorla-Wagner model, the expectation of the US is described by the:",
+    options: ["association weight for the CS-US association at the end of training.", "association weight for the CS-US association at the start of training.", "sum of the association weights of all the cues in a trial.", "difference of the association weights of all the cues in a trial."],
     correct: 2,
-    tag: "Latent Inhibition",
-    explanation: "During CS-alone pre-exposure: actual = 0, expected = 0, <strong>PE = 0</strong>. R-W predicts nothing learned. But pre-exposure significantly retards later conditioning — something meaningful was learned (CS predicts nothing). This requires a CS modulation account."
+    tag: "How expected US is computed with multiple cues",
+    explanation: "When multiple cues are present on a trial, the expected US equals the SUM of all their associative weights. This additive property is essential for explaining blocking: in Phase 2, W_Light is already 100, so the sum already equals 100 before adding W_Tone, leaving zero prediction error for the tone."
   },
   {
-    text: "Removing the interpositus nucleus in a trained rabbit would be expected to:",
-    options: [
-      "abolish UR but leave CR intact",
-      "abolish CR but leave UR intact",
-      "abolish both CR and UR",
-      "impair timing of CR but not its frequency"
-    ],
-    correct: 1,
-    tag: "Cerebellum",
-    explanation: "The interpositus is the <strong>final output pathway</strong> for the CR. Its lesion permanently abolishes CRs without affecting URs, because the UR is a brainstem reflex that does not pass through the cerebellum."
+    text: "According to the Rescorla-Wagner model, blocking occurs because:",
+    options: ["both conditioned stimuli perfectly predict the unconditioned stimulus.", "neither CS perfectly predicts the unconditioned stimulus.", "the CS that is trained in the first phase does not provide any new or predictive information.", "the CS that is added in the second phase does not provide any new or predictive information."],
+    correct: 3,
+    tag: "Rescorla-Wagner explanation of blocking",
+    explanation: "In Kamin's blocking paradigm, the CS added in Phase 2 (e.g., the tone) provides no new predictive information because the Phase 1 CS (e.g., the light) already perfectly predicts the US. The prediction error is therefore zero during Phase 2, and no association forms for the new CS. Section VII: Latent Inhibition and CS vs. US Modulation  (Questions 25-26)"
   },
   {
-    text: "Inferior olive activity during eyeblink conditioning starts HIGH early in training and DECREASES as CR is acquired. This pattern is best interpreted as:",
-    options: [
-      "habituation of the brainstem to repeated airpuff",
-      "evidence the inferior olive implements the Rescorla-Wagner prediction error signal",
-      "confirmation that the hippocampus is necessary for error-correction learning",
-      "result of Purkinje cell degeneration"
-    ],
-    correct: 1,
-    tag: "Cerebellum",
-    explanation: "In R-W, PE is large early (US is surprising) and approaches 0 as the CS becomes a perfect predictor. <strong>Inferior olive activity mirrors this exactly</strong> — it is the neural substrate of the 'actual − expected US' computation."
-  },
-  {
-    text: "Hippocampal lesions in rabbits are most likely to impair which of the following?",
-    options: [
-      "Acquisition of a basic conditioned eyeblink to a tone",
-      "The unconditioned eyeblink reflex to an airpuff",
-      "Latent inhibition effects in eyeblink conditioning",
-      "The timing of the CR relative to the CS-US interval"
-    ],
+    text: "Latent inhibition is problematic for the Rescorla-Wagner model because the model predicts that there will be:",
+    options: ["learning in the pre-exposure phase (phase 1).", "learning in the training phase (phase 2).", "no learning in the pre-exposure phase (phase 1).", "no learning in the training phase (phase 2)."],
     correct: 2,
-    tag: "Hippocampus",
-    explanation: "The hippocampus is <strong>not necessary</strong> for basic CR acquisition (cerebellar circuits handle that). It is essential for CS modulation effects like <strong>latent inhibition</strong> — lesions eliminate LI in rabbit eyeblink conditioning."
+    tag: "Why latent inhibition challenges the Rescorla-Wagner model",
+    explanation: "During CS pre-exposure, the actual US = 0 and the expected US = 0 (no associative weight yet), so prediction error = 0 and no learning is predicted. But empirically, pre-exposure strongly retards later conditioning. Something was learned about the CS's irrelevance — a CS modulation effect the R-W model cannot capture."
   },
   {
-    text: "Lesion studies comparing the cerebellar cortex and interpositus nucleus suggest:",
-    options: [
-      "cerebellar cortex required for CR formation; interpositus modulates timing",
-      "interpositus required for CR formation and execution; cerebellar cortex involved in response timing",
-      "both equally required; neither alone is sufficient",
-      "interpositus governs UR; cerebellar cortex governs CR"
-    ],
-    correct: 1,
-    tag: "Cerebellum",
-    explanation: "<strong>Interpositus</strong> = CR formation and execution (lesion abolishes CRs). <strong>Cerebellar cortex / Purkinje cells</strong> = CR timing (lesion produces small, poorly-timed CRs rather than abolishing them entirely)."
+    text: "Regarding CS modulation theories versus US modulation theories, it seems to be that _____ is/are correct.",
+    options: ["CS modulation theories", "US modulation theories", "both theories", "neither theory"],
+    correct: 2,
+    tag: "Current consensus on CS vs. US modulation theories",
+    explanation: "Contemporary evidence supports both types of mechanisms operating in parallel, mediated by different neural systems. The cerebellum implements error-correction (US modulation, as in R-W), while the hippocampus mediates CS modulation effects such as latent inhibition. Neither account alone is sufficient. Section VIII: Timing — Delay, Trace, and Interstimulus Interval  (Question 27)"
   },
   {
-    text: "Classical conditioning in Aplysia requires the CS to precede the US by ~0.5 seconds. This reveals the mechanism depends on:",
-    options: [
-      "the rate at which serotonin is cleared from the synapse",
-      "an activity-dependent priming of the sensory neuron lasting ~half a second",
-      "the time required for CREB-1 to activate gene transcription",
-      "conduction velocity of climbing fibers to Purkinje cells"
-    ],
-    correct: 1,
-    tag: "Aplysia",
-    explanation: "The 0.5-second ISI corresponds to the duration of an <strong>intracellular priming state</strong>. After CS-evoked activity, the sensory neuron is transiently primed so subsequent serotonin (US pathway) produces larger glutamate release. CS must come first."
+    text: "In trace conditioning, the:",
+    options: ["CS begins before the US and stays on until the US has occurred.", "US begins before the CS and stays on until the CS has occurred.", "CS begins before the US and ends before the onset of the US.", "US begins before the CS and ends before the onset of the CS."],
+    correct: 2,
+    tag: "Definition of trace conditioning",
+    explanation: "Trace conditioning is defined by a gap between CS offset and US onset — the CS ends before the US begins, requiring the animal to maintain a memory 'trace' of the CS to bridge the interval. This contrasts with delay conditioning, where the CS remains on until the US occurs (Option A). Section IX: Brain Substrates — Cerebellum and Hippocampus  (Questions 28-30)"
   },
   {
-    text: "Which correctly describes the difference between short-term and long-term classical conditioning memory in Aplysia?",
-    options: [
-      "Short-term involves new synapse growth; long-term involves vesicle number changes",
-      "Short-term involves intracellular changes in neurotransmitter release; long-term involves anatomical growth of new synapses requiring CREB-1",
-      "Both require CREB-1 gene activation",
-      "Long-term depends on increased serotonin release; short-term on decreased glutamate"
-    ],
+    text: "Removing the _____ abolishes conditioned responses.",
+    options: ["pontine nuclei", "cerebellar cortex", "interpositus nucleus", "inferior olive"],
+    correct: 2,
+    tag: "Critical role of the interpositus nucleus",
+    explanation: "The interpositus nucleus is the sole output gateway for the CR from the cerebellum. Even a 1 cubic-millimeter lesion permanently and completely abolishes all conditioned responses without affecting the unconditioned reflex (UR), which is mediated by a separate brainstem circuit."
+  },
+  {
+    text: "Lesion studies suggest that the interpositus nucleus is involved in _____, while the cerebellar cortex is involved in _____.",
+    options: ["response timing; formation and execution of the CR", "formation and execution of the CR; response timing", "computing the degree to which the US is unexpected; formation and execution of the CR", "response timing; computing the degree to which the US is unexpected"],
     correct: 1,
-    tag: "Aplysia",
-    explanation: "<strong>Short-term</strong>: intracellular/transmission-level changes (vesicle counts). <strong>Long-term</strong>: structural changes (new synapses) requiring serotonin → second messengers → CREB-1 → gene expression → protein synthesis → synapse growth. CREB-1 inactivation blocks long-term but not short-term."
-  }
+    tag: "Functional dissociation between interpositus nucleus and cerebellar cortex",
+    explanation: "The double dissociation is clear: interpositus lesions abolish CRs entirely (formation and execution), while cerebellar cortex (Purkinje cell) lesions produce CRs that are small and poorly timed. Both structures contribute, but to different aspects of the learned response."
+  },
+  {
+    text: "Which result suggests that the hippocampus is critical for CS modulation effects?",
+    options: ["Hippocampal lesions eliminate latent inhibition in rabbit eyeblink conditioning.", "The hippocampus is not necessary for acquiring basic conditioned responses.", "The hippocampus is highly active during conditioning.", "The hippocampus is not necessary for eyeblink conditioning to occur."],
+    correct: 0,
+    tag: "Hippocampus and CS modulation",
+    explanation: "The most direct evidence is the lesion finding: removing the hippocampus (and associated cortical regions) eliminates latent inhibition in rabbit eyeblink conditioning. Since latent inhibition is a CS modulation effect (learning about a cue's irrelevance), and hippocampal lesions eliminate it, the hippocampus is implicated in CS modulation processing. Section X: Aplysia and the Molecular Basis of Learning  (Questions 31-32)"
+  },
+  {
+    text: "Classical conditioning in Aplysia occurs when the:",
+    options: ["CS precedes the US by about 4 seconds.", "US precedes the CS by about 4 seconds.", "CS precedes the US by about one-half second.", "US precedes the CS by about one-half second."],
+    correct: 2,
+    tag: "Timing requirements for classical conditioning in Aplysia",
+    explanation: "In Aplysia, the CS (siphon touch) must precede the US (tail shock) by approximately 0.5 seconds. This tight timing constraint reflects an activity-dependent intracellular priming state in the sensory neuron that lasts only about half a second. Forward pairing (CS before US) is required; backward pairing yields only nonspecific sensitization."
+  },
+  {
+    text: "Anatomical changes in neural circuits (such as growth or loss of synapses) seem to be responsible for _____ forms of memory; intracellular changes (such as an increase or decrease in neurotransmitter vesicles) seem to be responsible for _____ forms of memory.",
+    options: ["long-term; short-term", "short-term; long-term", "short-term; short-term", "long-term; long-term"],
+    correct: 0,
+    tag: "Short-term vs. long-term memory mechanisms in Aplysia",
+    explanation: "A key principle from Aplysia research (and broadly in memory neuroscience): long-term memory requires structural changes (new synapse growth, requiring CREB-1 activation and gene expression), while short-term memory relies on reversible intracellular changes (shifts in neurotransmitter vesicle availability). This dissociation is confirmed by CREB-1 inactivation, which abolishes long-term but not short-term conditioning. Section XI: Clinical Applications — Drug Tolerance, Overdose, and Extinction Therapy  (Questions 33-35)"
+  },
+  {
+    text: "Victims of heroin overdose tend to be:",
+    options: ["long-time heroin addicts who take their usual dose in an unusual setting.", "long-time heroin addicts who take a larger dose in their usual setting.", "novice users who have no experience taking heroin.", "recreational users who take a usual dose after a long period of nondrug use."],
+    correct: 0,
+    tag: "Classical conditioning explanation of heroin overdose",
+    explanation: "The conditioned compensatory response (CR) is triggered by familiar environmental cues (CS). In an unfamiliar setting, those cues are absent, so the compensatory CR does not occur, and the drug's full effect (UR) goes unopposed. The same dose that was tolerable in a familiar context becomes a fatal overdose in a novel one — a real-world consequence of classical conditioning."
+  },
+  {
+    text: "In Siegel et al.'s study of heroin tolerance in rats, which group experienced the LOWEST mortality rate when given a large dose of heroin?",
+    options: ["the group that had not previously been exposed to heroin", "the group that received a large dose in the same environment they had previously received smaller doses", "the group that received a large dose in a different environment from where they had previously received smaller doses", "All groups had about the same mortality rate."],
+    correct: 1,
+    tag: "Siegel heroin study: contextual conditioning and mortality",
+    explanation: "Rats tested in the same environment where they had received smaller prior doses showed only 32% mortality — the lowest of any group. Their familiar environmental cues (CS) triggered a conditioned compensatory CR that partially offset the large dose's effects. The first-time group had 96% mortality; the different-environment group showed intermediate levels."
+  },
+  {
+    text: "Rachel's doctor gives her cucumber popsicles before her chemotherapy treatment. This 'scapegoat' will _____ the conditioning of a taste aversion to other, normal foods she eats around the time of her treatment.",
+    options: ["increase", "block", "enhance", "interact with"],
+    correct: 1,
+    tag: "Clinical application of blocking to chemotherapy-induced taste aversion",
+    explanation: "This is a direct clinical application of blocking. The novel cucumber flavor, because it is new and highly salient, becomes strongly conditioned as the CS for chemotherapy-induced nausea. This blocks the conditioning of aversive associations to the more familiar foods Rachel normally eats — protecting those foods from becoming conditioned aversion stimuli."
+  },
 ];
 
 let quizState = {};

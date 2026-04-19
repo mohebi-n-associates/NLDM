@@ -499,7 +499,7 @@
     <div class="progress-bar-wrap" title="Quiz progress">
       <div class="progress-bar-fill" id="quizProgressBar"></div>
     </div>
-    <span class="progress-label" id="quizProgressLabel">0 / 20</span>
+    <span class="progress-label" id="quizProgressLabel">0 / 30</span>
   </div>
   <button id="theme-toggle" onclick="__toggleTheme()" aria-label="Toggle theme"></button>
 </header>
@@ -1255,7 +1255,7 @@
     </div>
 
     <div class="quiz-stats">
-      <div class="stat-item"><div class="stat-val blue" id="statTotal">20</div><div class="stat-lbl">Questions</div></div>
+      <div class="stat-item"><div class="stat-val blue" id="statTotal">30</div><div class="stat-lbl">Questions</div></div>
       <div class="stat-item"><div class="stat-val green" id="statCorrect">0</div><div class="stat-lbl">Correct</div></div>
       <div class="stat-item"><div class="stat-val red" id="statWrong">0</div><div class="stat-lbl">Incorrect</div></div>
       <div class="stat-item"><div class="stat-val" id="statPct" style="color:var(--gray-light);">—</div><div class="stat-lbl">Score</div></div>
@@ -1402,245 +1402,215 @@ document.querySelectorAll('.filter-btn').forEach(btn => {
 // ─── QUIZ DATA ───
 const questions = [
   {
-    text: "The instructor described working memory as the 'operating system' on which all learning algorithms run. Which of the following BEST captures why dopaminergic modulation of PFC is fundamental to this 'operating system'?",
-    options: [
-      "Dopamine solely controls LTP in PFC",
-      "Dopamine modulates the stability-flexibility tradeoff via D1/D2 balance — regulating what enters WM (input gate), how stably it is maintained, and when it is output; without this, goal-directed cognition collapses",
-      "Dopamine only controls motor output",
-      "D1 and D2 are interchangeable"
-    ],
-    correct: 1,
-    tag: "WM Framework",
-    explanation: "This is the core synthesis: dopamine via D1/D2 controls all three stages of WM processing. <strong>Disruption</strong> (schizophrenia, ADHD) collapses goal-directed behavior into habitual model-free responding."
-  },
-  {
-    text: "Baddeley's model of working memory differs from Atkinson-Shiffrin's short-term memory because:",
-    options: [
-      "WM has unlimited capacity",
-      "WM is entirely dependent on hippocampal function",
-      "WM involves active goal-directed maintenance and manipulation across subsystems, not merely passive temporary storage",
-      "WM only handles verbal information via the phonological loop"
-    ],
-    correct: 2,
-    tag: "Memory Models",
-    explanation: "Baddeley added the central executive and specialized subsystems. <strong>WM is active manipulation</strong>, not passive storage. Atkinson-Shiffrin STM was passive. The phonological loop, visuospatial sketchpad, and episodic buffer operate under central executive control."
-  },
-  {
-    text: "In Goldman-Rakic's monkey recordings, neurons in DLPFC showed sustained elevated firing THROUGHOUT a delay period (between cue offset and response). The significance of this 'delay-period activity' is:",
-    options: [
-      "It shows that PFC is simply an extension of sensory cortex",
-      "It is the direct neural signature of WM — the circuit maintains a representation without ongoing external input, through recurrent excitation forming attractor states",
-      "It proves that dopamine is not involved in PFC function",
-      "It demonstrates that WM is stored subcortically in the basal ganglia"
-    ],
-    correct: 1,
-    tag: "DLPFC",
-    explanation: "Delay-period firing = WM in action. The PFC sustains the representation internally via <strong>recurrent excitation</strong>. Goldman-Rakic's work established this as the neural basis of WM — the attractor state mechanism keeps representations active without external input."
-  },
-  {
-    text: "According to the D1/D2 framework, what happens to WM when D1 stimulation is excessive?",
-    options: [
-      "WM representations update too rapidly, producing distraction",
-      "WM representations become too stable and rigid — the brain cannot update them when conditions change, similar to perseveration in schizophrenia",
-      "D1 excess has no effect on WM; only D2 modulates it",
-      "Excessive D1 activity causes hippocampal atrophy"
-    ],
-    correct: 1,
-    tag: "D1/D2 Balance",
-    explanation: "D1 deepens attractor basins. Too much → representations are <strong>locked in</strong> (too stable), cannot be updated by new inputs. This parallels schizophrenic thought patterns: hallucinations and delusions persist because the WM representation cannot be updated."
-  },
-  {
-    text: "A patient with damage to the DLPFC continues sorting cards by color even after being told the rule has changed to shape. This is called _____ and is a hallmark of:",
-    options: [
-      "Learned helplessness; amygdala damage",
-      "Semantic priming; temporal lobe damage",
-      "Perseveration; DLPFC damage — failure to update WM and switch behavioral rules",
-      "Proactive interference; hippocampal damage"
-    ],
-    correct: 2,
-    tag: "WCST",
-    explanation: "The WCST (Wisconsin Card Sorting Task) is the standard test. <strong>DLPFC damage → perseveration</strong> → failure to switch rules. This is cognitive inflexibility, the opposite of flexibility enabled by D2. The patient knows the rule changed (declarative) but cannot update WM to drive new behavior."
-  },
-  {
-    text: "The 'inverted-U' relationship described in the lecture refers to:",
-    options: [
-      "The fact that practice improvement slows over time (power law)",
-      "The relationship between dopamine level and WM/PFC performance — too little or too much dopamine both impair performance; optimal is moderate",
-      "The correlation between age and hippocampal volume",
-      "The tradeoff between speed and accuracy in decision-making"
-    ],
-    correct: 1,
-    tag: "Inverted-U",
-    explanation: "Both too little and too much dopamine impair PFC function. This <strong>U-shape</strong> applies to WM capacity, cognitive flexibility, and most PFC-dependent tasks. Moving off the peak in either direction — toward ADHD (too little) or schizophrenia (too much) — impairs performance."
-  },
-  {
-    text: "How does methylphenidate (Ritalin) improve WM performance in ADHD?",
-    options: [
-      "It increases D2 receptor density in the striatum",
-      "It selectively blocks glutamate in the hippocampus",
-      "It boosts dopamine availability in PFC, increasing D1-mediated stability of WM representations and reducing susceptibility to distractors",
-      "It blocks D1 receptors, allowing more flexible WM updating"
-    ],
-    correct: 2,
-    tag: "ADHD",
-    explanation: "ADHD involves insufficient WM stability (insufficient D1 tone). Methylphenidate raises synaptic dopamine → more D1 activation → <strong>deeper attractor basins</strong> → WM contents are maintained better and are less susceptible to distractors."
-  },
-  {
-    text: "In Jesse Goldberg's zebra finch experiment, dopamine cells showed elevated firing when the bird's song was NOT distorted (bird thinks it performed well) and suppressed firing when distorted. When a female was present, this signal disappeared. What is the best interpretation?",
-    options: [
-      "Female presence causes stress that globally suppresses dopamine",
-      "In performance mode (female present), the internal performance-prediction error is gated off and replaced by external social feedback from the female's responses",
-      "Dopamine encodes sexual arousal, not song quality",
-      "The female's presence disrupts the recording equipment used to measure dopamine"
-    ],
-    correct: 1,
-    tag: "Goldberg Finch",
-    explanation: "This is the <strong>same gating logic as D1/D2 control of WM</strong>. Two modes: rehearsal (internal learning) vs. performance (external feedback). Context gates which learning signal operates — identical to the output gate concept. The critic is silent during performance."
-  },
-  {
-    text: "The stability-flexibility tradeoff in WM maps onto which broader framework covered earlier in the course?",
-    options: [
-      "The distinction between habituation and sensitization (Week 6)",
-      "The distinction between model-based (goal-directed) and model-free (habitual) RL — stability enables current goal maintenance; flexibility enables updating to new goals",
-      "The Rescorla-Wagner error-correction learning rule",
-      "The three-stage model of skill memory from Fitts"
-    ],
-    correct: 1,
-    tag: "Cross-Course",
-    explanation: "D1 stability = <strong>model-based control</strong> (maintaining the current goal); D2 flexibility = allowing goal updating. Too much D1 → cannot update goals (perseverate). Too little → cannot maintain goals (distraction). This maps directly to the model-based vs. model-free distinction from Weeks 8-9."
-  },
-  {
-    text: "Which of the following correctly describes the calcium mechanism of neurotransmitter release?",
-    options: [
-      "Ca²⁺ efflux from the presynaptic terminal triggers vesicle endocytosis",
-      "Action potential arrives → voltage-gated Ca²⁺ channels open → Ca²⁺ influx → SNARE-mediated vesicle fusion → transmitter exocytosis",
-      "Ca²⁺ influx hyperpolarizes the presynaptic membrane, causing vesicles to release",
-      "GABA activates Ca²⁺ channels to facilitate glutamate release"
-    ],
-    correct: 1,
-    tag: "Neurotransmission",
-    explanation: "The sequence: AP arrives → presynaptic depolarization → voltage-gated Ca²⁺ channels open → <strong>Ca²⁺ rushes IN</strong> (high outside, low inside) → SNARE complex (synaptobrevin, syntaxin, SNAP-25) mediates vesicle docking and fusion → transmitter released into cleft."
-  },
-  {
-    text: "D1 and D2 receptors are metabotropic, not ionotropic. What practical consequence does this have for their effects?",
-    options: [
-      "They have faster effects than ionotropic receptors (open directly)",
-      "Their effects are slower and more modulatory — acting via G-proteins and second messengers to change neuronal excitability and synaptic strength over longer timescales",
-      "They only work in the hippocampus, not the PFC",
-      "They can only inhibit neurons, not excite them"
-    ],
-    correct: 1,
-    tag: "Receptor Types",
-    explanation: "Ionotropic = fast (milliseconds); metabotropic = slow (seconds to minutes). D1/D2 signal via Gs/Gi proteins, cAMP, PKA, etc. This makes dopamine a <strong>neuromodulator</strong> — it tunes the gain of PFC circuits rather than directly triggering action potentials."
-  },
-  {
-    text: "The Sperling partial-report experiment demonstrated that sensory (iconic) memory:",
-    options: [
-      "Has a capacity of exactly 7±2 items",
-      "Is identical to short-term memory",
-      "Briefly holds ALL visual items before attention selects from them — capacity is much larger than STM but duration is very brief (<1 second)",
-      "Requires hippocampal function for encoding"
-    ],
-    correct: 2,
+    text: "Where does information automatically and rapidly decay?",
+    options: ["short-term memory", "working memory", "long-term memory", "sensory memory"],
+    correct: 3,
     tag: "Memory Systems",
-    explanation: "Sperling used a partial-report technique (cue which row to report after offset) to show that subjects could access <strong>any part of the array immediately after offset</strong> — proving more was held in memory than they could report. Iconic memory capacity is large; STM capacity is the bottleneck."
+    explanation: "Sensory memory is the first, most transient stage of the Atkinson-Shiffrin model. Visual iconic memory lasts less than one second; without attentional selection, the trace vanishes. This is distinct from STM, which can be prolonged through active rehearsal."
   },
   {
-    text: "In schizophrenia, why do antipsychotic drugs (D2 antagonists) help, even though the problem is associated with excess D1-mediated stability in PFC?",
-    options: [
-      "D2 antagonists in PFC increase D1 activity, making WM even more stable",
-      "D2 antagonists primarily work in the striatum, reducing the dopamine noise that floods PFC via subcortical-to-cortical pathways, allowing PFC representations to be updated more normally",
-      "D2 blockade directly targets hippocampal consolidation of delusional memories",
-      "Antipsychotics work by increasing GABA inhibition throughout the brain"
-    ],
-    correct: 1,
-    tag: "Schizophrenia",
-    explanation: "The mechanism: excess dopamine in <strong>subcortical D2 circuits</strong> creates noise/hallucinations. D2 blockade reduces this noise. The PFC D1 problem is a separate route to the same instability. Antipsychotics don't fix the D1 issue directly — they reduce the subcortical noise signal that feeds hallucinations."
+    text: "In Atkinson and Shiffrin's model of memory, information flows from:",
+    options: ["sensory memory, to short-term memory, to long-term memory.", "short-term memory, to sensory memory, to long-term memory.", "long-term memory, to sensory memory, to short-term memory.", "sensory memory, to long-term memory, to short-term memory."],
+    correct: 0,
+    tag: "Memory Systems",
+    explanation: "The Atkinson-Shiffrin model is a linear, multi-store model. Incoming stimuli are first registered in brief sensory memory, selectively attended items move into STM, and through rehearsal or elaboration some material is transferred to LTM. Information can also be retrieved back from LTM into STM."
   },
   {
-    text: "What does the 'attractor state' concept explain about WM that simple buffer models cannot?",
-    options: [
-      "Attractor states explain why WM capacity is exactly 7 items",
-      "Attractor models explain how WM can be maintained persistently without external input: recurrent excitation between neurons creates self-sustaining activity patterns that are stable unless disrupted",
-      "Attractor states explain why WM is stored in the hippocampus",
-      "Attractor models are only relevant for motor WM, not verbal WM"
-    ],
-    correct: 1,
-    tag: "Attractor States",
-    explanation: "A simple buffer model requires constant refreshing. <strong>Attractor models generate persistent activity spontaneously through recurrent excitation</strong> — neurons keep each other firing. D1 makes the attractor basin deeper (harder to knock out); D2 flattens it (easier to update). Noise in dopamine signaling can kick the representation out."
+    text: "When George Sperling (1960) used the partial report procedure, he found that participants could report about _____ of the letters in the array.",
+    options: ["5%", "25%", "75%", "95%"],
+    correct: 2,
+    tag: "Memory Systems — Sperling",
+    explanation: "Free recall yielded only ~35-40%, but a post-display tone cuing one row raised recall to ~75%. Sperling concluded that a rapidly decaying iconic (visual sensory) memory holds ALL items briefly; the tone guided attention to extract the cued row before decay erased it."
   },
   {
-    text: "The phonological loop in Baddeley's model consists of:",
-    options: [
-      "The phonological store (passive maintenance of sound-based info) and the articulatory rehearsal process (active subvocal repetition)",
-      "The central executive plus the episodic buffer",
-      "The visuospatial sketchpad plus echoic memory",
-      "A direct link between Wernicke's area and the hippocampus"
-    ],
+    text: "According to the findings of George Miller, the capacity of short-term memory is about _____ items.",
+    options: ["three", "four", "seven", "ten"],
+    correct: 2,
+    tag: "Memory Systems — STM Capacity",
+    explanation: "Miller's 1956 paper proposed the 'magic number 7 plus or minus 2.' Crucially, the limit applies to meaningful chunks, not raw bits, so chunking items into larger units (e.g., encoding 12 digits as three historical dates) can greatly increase effective capacity."
+  },
+  {
+    text: "When short-term memory is used as a buffer for maintaining information briefly before it is manipulated, it is referred to as _____ memory.",
+    options: ["long-term", "sensory", "working", "transient"],
+    correct: 2,
+    tag: "Working Memory",
+    explanation: "Working memory is the active, goal-directed use of STM. It is not merely a passive holding space — it is short-term storage in service of ongoing cognitive tasks such as mental arithmetic, planning, or comprehension. The professor described it as 'the operating system' for all learning algorithms."
+  },
+  {
+    text: "In Baddeley's working memory model, which system holds object and location information for manipulation?",
+    options: ["visuospatial sketchpad", "phonological loop", "central executive", "haptic memory"],
     correct: 0,
     tag: "Baddeley's Model",
-    explanation: "The phonological loop has two parts: (1) the <strong>phonological store</strong> holds sound-based representations for ~1-2 seconds; (2) <strong>subvocal rehearsal</strong> (like inner speech) refreshes this store to maintain information longer. This is why verbal rehearsal helps you remember a phone number."
+    explanation: "The visuospatial sketchpad maintains visual and spatial representations — e.g., mental images, object locations, mental rotation. It is right-lateralized and implemented primarily in the right VLPFC plus posterior visual cortex. It is independent of the phonological loop."
   },
   {
-    text: "Which of the following correctly describes how D1 receptor activation stabilizes WM?",
-    options: [
-      "D1 activation opens GABA-A channels, hyperpolarizing PFC neurons and reducing noise",
-      "D1 (via cAMP-PKA pathway) closes HCN channels and potentiates NMDA receptors in deep-layer PFC neurons, deepening attractor states and reducing the probability that noise will knock a representation out",
-      "D1 directly inhibits D2 receptors via competitive binding",
-      "D1 closes voltage-gated Na⁺ channels, reducing action potential frequency"
-    ],
-    correct: 1,
-    tag: "D1 Mechanism",
-    explanation: "The mechanism: D1 → Gs → adenylyl cyclase → cAMP → PKA → phosphorylation of <strong>HCN channels</strong> (closes them, increasing membrane resistance) and <strong>potentiation of NMDA receptors</strong> → deeper attractor basin → more stable WM representation resistant to noise and distractors."
+    text: "In Baddeley's working-memory model, which system monitors and manipulates the two working-memory buffers?",
+    options: ["visuospatial sketchpad", "phonological loop", "central executive", "haptic memory"],
+    correct: 2,
+    tag: "Baddeley's Model",
+    explanation: "The central executive is the highest-level component: it coordinates the two rehearsal buffers, directs selective attention, switches between tasks, and manages the transfer of information to and from LTM. It has no dedicated storage capacity of its own. Neurally, it maps onto the DLPFC."
   },
   {
-    text: "A researcher uses a 'distractor' task: while holding a visual cue in WM (delay period), subjects see irrelevant visual stimuli. DLPFC neurons of trained monkeys are more resistant to the distractors than posterior cortex neurons. What is the best explanation?",
-    options: [
-      "DLPFC neurons fire less to the cue, so distractors cannot compete",
-      "D1-mediated attractor deepening in DLPFC neurons means the WM representation resists being overwritten by distractor input; posterior cortex lacks this D1-modulated stability",
-      "DLPFC neurons are myelinated differently, reducing conduction time for distractor signals",
-      "The task cannot be used to compare different brain areas because neurons have different baseline firing rates"
-    ],
-    correct: 1,
-    tag: "D1 Distractor",
-    explanation: "This is Earl Miller's finding. PFC (especially DLPFC with high D1 tone) <strong>maintains the cue representation through distractor presentation</strong>; posterior cortex responds to each distractor. This stability is the D1-attractor mechanism at work — deeper basin = harder to knock the representation out."
+    text: "The word-length effect is the tendency for a person to remember more _____ words than _____ words.",
+    options: ["short; long", "long; short", "medium-length; short", "long; medium-length"],
+    correct: 0,
+    tag: "Baddeley's Model — Phonological Loop",
+    explanation: "The phonological loop has a ~2-second time window for internal rehearsal. Longer multisyllabic words take more rehearsal time per item, so fewer can be cycled within the window before decay. Shorter words are rehearsed faster, allowing more to be maintained simultaneously."
   },
   {
-    text: "Ott & Nieder (2019) review both the cellular mechanisms and the clinical implications of PFC dopamine. Which of the following represents their central synthesis?",
-    options: [
-      "PFC dopamine is primarily relevant for motor planning, not WM or cognition",
-      "The D1/D2 balance regulates a stability-flexibility tradeoff that is fundamental to adaptive goal-directed behavior; perturbations in either direction (too much D1 → schizophrenia; too little D1 → ADHD) disrupt this tradeoff and produce distinct cognitive phenotypes",
-      "Dopamine is only transiently active in PFC during reward; its sustained effects are mediated by norepinephrine",
-      "Clinical conditions involving PFC dopamine are best treated by glutamate-targeting drugs"
-    ],
-    correct: 1,
-    tag: "Ott & Nieder",
-    explanation: "The D1-D2 stability-flexibility framework is Ott &amp; Nieder's central contribution. The same circuit, same neuromodulator, same receptor types — but <strong>opposite perturbations produce opposite clinical pictures</strong>: too little stability → ADHD; too much stability → schizophrenia."
+    text: "In Brooks's task involving visualizing a block letter F, it was reasoned that:",
+    options: ["remembering the F used the visuospatial sketchpad, while making the response used the phonological loop.", "remembering the F used the phonological loop, while making the response used the visuospatial sketchpad.", "remembering the F and making the response both used the phonological loop.", "remembering the F and making the response both used the visuospatial sketchpad."],
+    correct: 3,
+    tag: "Baddeley's Model — Dual Task",
+    explanation: "Both holding the mental image of the letter F and pointing to visual symbols on a screen draw on the visuospatial sketchpad. Because both tasks compete for the same buffer, pointing was slowest. This dual-task interference demonstrates that visuospatial WM is a limited, modality-specific resource."
   },
   {
-    text: "The instructor placed working memory in the context of the model-based vs. model-free distinction from Weeks 8-9. Which mapping is correct?",
-    options: [
-      "WM is the substrate for model-free (habitual) behavior; basal ganglia implements model-based",
-      "WM (PFC) is the substrate for model-based (goal-directed) behavior — it holds the current goal and model; basal ganglia implements model-free cached S-R mappings",
-      "WM implements both model-based and model-free in different PFC subregions",
-      "The distinction between model-based and model-free was shown to be irrelevant when WM is considered"
-    ],
-    correct: 1,
-    tag: "Model-Based / Model-Free",
-    explanation: "<strong>PFC = model-based</strong> (maintain goal, plan multi-step actions). <strong>Basal ganglia = model-free</strong> (cached S-R policies). When WM/PFC is disrupted (stress, distraction, dopamine depletion), model-free responding takes over — habit dominates. This is why ADHD and schizophrenia both produce failures of goal-directed behavior."
+    text: "All of the functions of the central executive involve:",
+    options: ["maintaining verbal information.", "maintaining visuospatial information.", "manipulating information in sensory memory.", "manipulating information in short-term memory."],
+    correct: 3,
+    tag: "Cognitive Control",
+    explanation: "The central executive's defining feature is manipulation — adding, removing, reordering, and selecting among items held in STM — as opposed to simple passive rehearsal. All four classic executive functions (updating, goal-setting, task-switching, response inhibition) share this active manipulation of STM contents."
   },
   {
-    text: "GABA is the main inhibitory neurotransmitter. Its postsynaptic effect (via GABA-A) is:",
-    options: [
-      "Depolarization via Na⁺ influx — increases firing probability",
-      "Hyperpolarization via Cl⁻ influx — makes the postsynaptic membrane more negative, reducing firing probability",
-      "Long-term potentiation via Ca²⁺ influx through NMDA",
-      "Second-messenger activation via G-protein coupling — slow inhibition lasting minutes"
-    ],
+    text: "Which task is used to study the controlled updating of working memory?",
+    options: ["N-back task", "Tower of Hanoi", "Wisconsin Card Sorting Test", "Stroop task"],
+    correct: 0,
+    tag: "Cognitive Control Tasks",
+    explanation: "The N-back task requires continuously tracking the last N items and responding when the current item matches the one N positions back. Because the relevant 'target' slot changes on every trial, the task demands constant updating of what is being held in WM — the defining challenge for the central executive's monitoring function."
+  },
+  {
+    text: "The Tower of Hanoi puzzle is often used to examine the:",
+    options: ["controlled updating of memory buffers.", "ability to plan and set goals.", "ability to switch tasks.", "ability to select stimuli and inhibit responses."],
     correct: 1,
-    tag: "GABA",
-    explanation: "GABA-A is <strong>ionotropic</strong> (ligand-gated ion channel). It is permeable to Cl⁻. Since [Cl⁻] is high outside and low inside, GABA binding → Cl⁻ influx → membrane hyperpolarization → neuron is less likely to fire. GABA-B is metabotropic (slow inhibition via K⁺ channels) — the option describing second-messenger activation."
-  }
+    tag: "Cognitive Control Tasks",
+    explanation: "Solving the Tower of Hanoi requires maintaining a hierarchy of goals simultaneously: the abstract end goal, intermediate subgoals, and the immediate next move. Frontal-lobe patients move disks aimlessly because they cannot hold and sequence the needed subgoals — the hallmark of impaired planning."
+  },
+  {
+    text: "Which task is used to study task shifting in working memory?",
+    options: ["N-back task", "Tower of Hanoi", "Wisconsin Card Sorting Test", "Stroop task"],
+    correct: 2,
+    tag: "Cognitive Control Tasks",
+    explanation: "The WCST requires learning a sorting rule (color, shape, or number) from trial-by-trial feedback and then flexibly shifting to a new rule when the contingency changes without warning. Frontal-lobe patients show perseveration — they cannot abandon the old rule — revealing the PFC's role in task switching."
+  },
+  {
+    text: "The Stroop task demonstrates that:",
+    options: ["working memory is enhanced when information is in conflict.", "working memory is impaired when information is in conflict.", "reading is an attentional process.", "reading is an automatic process."],
+    correct: 3,
+    tag: "Cognitive Control — Stroop",
+    explanation: "The Stroop effect arises because reading a word is so overlearned that it happens automatically, without deliberate attention. This automatic word-reading response must be inhibited to name the ink color — requiring the central executive to suppress a reflexive response in favor of a goal-directed one."
+  },
+  {
+    text: "The existence of perseveration in patients with frontal-lobe damage provides evidence for the involvement of executive-control processes in:",
+    options: ["the updating of working memory.", "setting goals and planning.", "stimulus selection and response inhibition.", "task switching."],
+    correct: 3,
+    tag: "Frontal Lobe — Perseveration",
+    explanation: "Perseveration — continuing to apply an old rule after negative feedback — is the hallmark failure of task switching. WCST studies show that frontal patients learn the initial sorting rule normally but cannot shift when the rule changes. This implicates the PFC specifically in the flexible reallocation of cognitive set."
+  },
+  {
+    text: "Which area of the brain seems to play an especially important role in working memory?",
+    options: ["prefrontal cortex", "cerebellum", "sensory cortices", "basal ganglia"],
+    correct: 0,
+    tag: "Brain Substrates",
+    explanation: "Converging evidence from lesion studies, electrophysiology, and fMRI all point to the PFC — especially the lateral PFC — as critical for working memory and cognitive control. In humans, the PFC occupies roughly one-third of the cerebral cortex, and damage to it reliably impairs WM-dependent tasks."
+  },
+  {
+    text: "Which is a characteristic of someone with dysexecutive syndrome?",
+    options: ["disrupted ability to think and plan", "impaired language abilities", "below-average intelligence scores", "disrupted ability to remember facts and events"],
+    correct: 0,
+    tag: "Brain Substrates — Dysexecutive Syndrome",
+    explanation: "Dysexecutive syndrome results from frontal-lobe damage and is characterized by loss of planning, organization, and goal-directed behavior — while long-term declarative memory and language may be largely intact. Cases like Penfield's sister (lost ability to organize cooking) and Elliot (lost practical judgment) are classic illustrations."
+  },
+  {
+    text: "In a delayed-response task, Fuster found that monkey prefrontal neurons fired only:",
+    options: ["when a particular object was initially displayed.", "during a delay period when the monkey had to remember the location of an object.", "during a delay period when the monkey had to remember an object but not its location.", "after the monkey had chosen an object in the correct location."],
+    correct: 1,
+    tag: "Brain Substrates — Delay Activity",
+    explanation: "Fuster's landmark recordings showed that DLPFC neurons fire selectively during the delay period — when no external stimulus is present — only when the animal must hold a spatial location in mind. This 'delay activity' is the neural correlate of actively maintaining information in working memory and breaks down on error trials."
+  },
+  {
+    text: "In what way does the involvement of the prefrontal cortex during delays differ from the involvement of sensory and motor cortices?",
+    options: ["Only neurons in the prefrontal cortex show sustained activity during delay periods.", "Only neurons in the sensory and motor cortices show sustained activity during delay periods.", "Only neurons in the prefrontal cortex maintain their activity despite distractions.", "Only neurons in the sensory and motor cortices maintain their activity despite distractions."],
+    correct: 2,
+    tag: "Brain Substrates — PFC vs. Sensory Cortex",
+    explanation: "Earl Miller's experiments showed that both PFC and posterior sensory cortex show delay-period activity. The critical difference: DLPFC activity is robust to distractors, while posterior cortex activity is disrupted by them. This distractor resistance is the PFC's unique contribution — keeping task-relevant representations online despite interference."
+  },
+  {
+    text: "Research suggests that phonological loop and visuospatial sketchpad processes take place in the _____ prefrontal cortex, while central executive functions take place in the _____ prefrontal cortex.",
+    options: ["ventrolateral; dorsolateral", "dorsolateral; ventrolateral", "orbital; ventrolateral", "ventrolateral; orbital"],
+    correct: 0,
+    tag: "Brain Substrates — DLPFC vs. VLPFC",
+    explanation: "Petrides and colleagues established this functional dissociation: VLPFC supports encoding and maintenance (the buffer functions of Baddeley's phonological loop and visuospatial sketchpad), while DLPFC supports monitoring and manipulation (Baddeley's central executive). The professor summarized this as: VLPFC = 'the buckets,' DLPFC = 'the CEO.'"
+  },
+  {
+    text: "Which working-memory process occurs in the right ventrolateral prefrontal cortex?",
+    options: ["central executive", "phonological loop", "visuospatial sketchpad", "both phonological loop and visuospatial sketchpad"],
+    correct: 2,
+    tag: "Brain Substrates — Lateralization",
+    explanation: "Working memory is lateralized: verbal/phonological WM is left-lateralized (left VLPFC + left posterior language areas), and visuospatial WM is right-lateralized (right VLPFC + right posterior visual areas). This anatomical separation explains how both systems can operate simultaneously without mutual interference."
+  },
+  {
+    text: "The _____ is involved in manipulation of information, while the _____ is involved in maintenance/rehearsal of information.",
+    options: ["ventrolateral PFC; dorsolateral PFC", "dorsolateral PFC; ventrolateral PFC", "dorsolateral PFC; posterior cortical areas", "posterior cortical areas; ventrolateral PFC"],
+    correct: 1,
+    tag: "Brain Substrates — Manipulation vs. Maintenance",
+    explanation: "This is the fundamental PFC functional dissociation established by Petrides. DLPFC manipulates (monitors, updates, reorders, selects) — it is Baddeley's central executive. VLPFC maintains (rehearses and stores) — it implements the phonological loop and visuospatial sketchpad in frontal-posterior loops."
+  },
+  {
+    text: "The most abstract plans depend on the _____ areas of the frontal lobes, and the most concrete plans depend on the _____ areas of the frontal lobes.",
+    options: ["posterior; lateral", "anterior; posterior", "lateral; anterior", "posterior; anterior"],
+    correct: 1,
+    tag: "Brain Substrates — Goal Abstraction",
+    explanation: "There is an anterior-to-posterior gradient of goal abstraction within the frontal cortex. The frontal pole (most anterior) represents the highest-level abstract goals (e.g., 'host a dinner party'). Moving posteriorly, goals become progressively more concrete, down to specific motor commands at the premotor/motor border."
+  },
+  {
+    text: "Which statement is TRUE regarding goal abstraction in the frontal lobes?",
+    options: ["Activation of the frontal lobes during abstract goal-directed tasks proceeds from the posterior to the anterior regions.", "Posterior regions are involved mainly in processing the most abstract goals.", "Frontal-lobe development throughout childhood proceeds from the posterior regions to the anterior regions.", "Activation of the frontal lobes during highly specific goal-directed tasks proceeds from the posterior to the anterior regions."],
+    correct: 2,
+    tag: "Brain Substrates — Frontal Development",
+    explanation: "Maturation of frontal circuits progresses from posterior to anterior throughout childhood and into late adolescence. More concrete motor-linked regions mature earlier; the most anterior regions supporting abstract planning are the last to fully mature. This is why children need more concrete instructions than adults."
+  },
+  {
+    text: "Which statement suggests that the dorsolateral prefrontal cortex is dysfunctional in people with schizophrenia?",
+    options: ["People with schizophrenia are impaired on phonological memory tasks.", "People with schizophrenia show increased blood flow to this area when they perform the Wisconsin Card Sort task.", "People with schizophrenia display disturbance in both cognition and memory.", "People with schizophrenia are impaired on tasks requiring memory for a small number of items after a short delay."],
+    correct: 2,
+    tag: "Schizophrenia",
+    explanation: "Weinberger et al. (1986) found that schizophrenia patients show NO increase in DLPFC blood flow during WCST — unlike healthy controls. The broader cognitive and memory disturbances in schizophrenia are specifically tied to DLPFC manipulation deficits, not VLPFC maintenance. Option B is factually reversed: patients show less, not more, DLPFC activation."
+  },
+  {
+    text: "During working-memory tasks, patients with schizophrenia seem to:",
+    options: ["recruit the ventrolateral PFC to compensate for a dysfunctional dorsolateral PFC.", "recruit the dorsolateral PFC to compensate for a dysfunctional ventrolateral PFC.", "use the ventrolateral PFC less than normal.", "use all parts of the PFC less than normal."],
+    correct: 0,
+    tag: "Schizophrenia — Compensation",
+    explanation: "Neuroimaging studies show that when schizophrenia patients manage near-normal WM performance, they do so inefficiently: DLPFC is underactivated while VLPFC (and other posterior regions) are overactivated as a compensatory network. More activation is required for the same level of output — a signature of inefficient prefrontal processing."
+  },
+  {
+    text: "Deficits in working memory in people with schizophrenia may be caused by a(n) _____ in the prefrontal cortex.",
+    options: ["increased amount of dopamine", "lack of sufficient dopamine", "lack of dopamine receptors", "inactive dopamine receptor"],
+    correct: 1,
+    tag: "Schizophrenia — Dopamine",
+    explanation: "Schizophrenia is associated with insufficient dopamine signaling in the PFC (hypodopaminergia in the mesocortical pathway), which impairs DLPFC function. This contrasts with excess dopamine in the mesolimbic (striatal) pathway, which is associated with positive symptoms. Antipsychotics like haloperidol block D2 receptors to restore balance."
+  },
+  {
+    text: "Brain imaging studies show that people with _____ copies of the COMT allele show _____ prefrontal cortex activity during a 2-back task.",
+    options: ["one or two; lower", "one or two; higher", "zero; lower", "zero, one, or two; equal amounts of"],
+    correct: 0,
+    tag: "Schizophrenia — COMT Gene",
+    explanation: "COMT encodes an enzyme that degrades dopamine. Individuals with one or two copies of the less-effective COMT allele have worse dopamine metabolism in PFC, leading to lower DLPFC activation during the WM-demanding 2-back task. The more defective alleles, the worse dopamine functioning and the greater the cognitive impairment."
+  },
+  {
+    text: "Neuroimaging studies of children with ADHD have shown that these children have a(n) _____ prefrontal cortex region.",
+    options: ["enlarged right", "enlarged left", "smaller right", "smaller left"],
+    correct: 2,
+    tag: "ADHD",
+    explanation: "Structural imaging consistently finds a smaller right PFC in children with ADHD. The right PFC is particularly associated with spatial attention and WM. Reduced white matter connectivity and decreased prefrontal activation during cognitive tasks are also observed, consistent with the attentional and executive control deficits in ADHD."
+  },
+  {
+    text: "It has been suggested that in ADHD, the basal ganglia:",
+    options: ["send inappropriate signals to the prefrontal cortex.", "do not seem to communicate with the prefrontal cortex at all.", "suppress genes that normally regulate attention.", "do not send enough information to the cerebellum."],
+    correct: 0,
+    tag: "ADHD — Basal Ganglia",
+    explanation: "One hypothesis is that ADHD involves 'noisy' basal ganglia that send inappropriate or erratic signals to PFC — sometimes triggering responses when none are warranted, sometimes failing to signal when needed. This produces distractible behavior (false alarms) and perseveration (missed updates). Stimulant medications may reduce this noise by increasing striatal dopamine."
+  },
 ];
 
 let quizState = {};

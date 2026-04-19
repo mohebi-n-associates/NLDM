@@ -499,7 +499,7 @@
     <div class="progress-bar-wrap" title="Quiz progress">
       <div class="progress-bar-fill" id="quizProgressBar"></div>
     </div>
-    <span class="progress-label" id="quizProgressLabel">0 / 20</span>
+    <span class="progress-label" id="quizProgressLabel">0 / 60</span>
   </div>
   <button id="theme-toggle" onclick="__toggleTheme()" aria-label="Toggle theme"></button>
 </header>
@@ -1244,7 +1244,7 @@
     </div>
 
     <div class="quiz-stats">
-      <div class="stat-item"><div class="stat-val blue" id="statTotal">20</div><div class="stat-lbl">Questions</div></div>
+      <div class="stat-item"><div class="stat-val blue" id="statTotal">60</div><div class="stat-lbl">Questions</div></div>
       <div class="stat-item"><div class="stat-val green" id="statCorrect">0</div><div class="stat-lbl">Correct</div></div>
       <div class="stat-item"><div class="stat-val red" id="statWrong">0</div><div class="stat-lbl">Incorrect</div></div>
       <div class="stat-item"><div class="stat-val" id="statPct" style="color:var(--gray-light);">—</div><div class="stat-lbl">Score</div></div>
@@ -1392,245 +1392,425 @@ document.querySelectorAll('.filter-btn').forEach(btn => {
 // ─── QUIZ DATA ───
 const questions = [
   {
-    text: "Which of the following correctly pairs ALL THREE components of the three-component model of emotion?",
-    options: [
-      "Attention, Memory, Motivation",
-      "Physiological response, Overt behavior, Conscious feeling",
-      "Arousal, Valence, Dominance",
-      "Fight, Flight, Freeze"
-    ],
-    correct: 1,
-    tag: "Emotion Model",
-    explanation: "The three-component model: <strong>physiological</strong> (heart rate, hormones, ANS activation), <strong>behavioral</strong> (freezing, fleeing, facial expressions), and <strong>conscious feeling</strong> (subjective experience). All three occur together as a cluster during emotional episodes."
+    text: "Which statement is an example of an overt behavior caused by an emotion?",
+    options: ["Uma feels her heart rate increase right before she gives a presentation at work.", "Greg is elated when his soccer team wins the playoffs.", "Nancy is very sad when she misses her boyfriend.", "Derrick screams loudly when his brother startles him."],
+    correct: 3,
+    tag: "Emotions",
+    explanation: "An overt behavior is a visible, observable action. Screaming is a physically observable behavior, unlike the internal feelings or physiological states described in the other options."
   },
   {
-    text: "The Capilano Bridge study is a textbook example of the two-factor theory because:",
-    options: [
-      "It showed that fear always causes misidentification of emotional stimuli",
-      "Men's physical arousal from the swaying bridge was cognitively misattributed to attraction when an attractive interviewer was present",
-      "The study confirmed that bodily responses cause feelings before cognitive appraisal (James-Lange)",
-      "It demonstrated that amygdala activation triggers attraction-related dopamine release"
-    ],
-    correct: 1,
-    tag: "Two-Factor Theory",
-    explanation: "Two-factor theory: arousal + cognitive appraisal = emotion. The bridge's physical arousal was mislabeled as attraction because the cognitive context (attractive interviewer) was available. <strong>Same arousal + different context = different emotion.</strong> This is misattribution of arousal."
+    text: "The fear response involves all of these reactions EXCEPT:",
+    options: ["physiological responses.", "overt behaviors.", "conscious feelings.", "subconscious feelings."],
+    correct: 3,
+    tag: "Emotions",
+    explanation: "The fear response consists of physiological changes, overt behaviors, and conscious feelings. Subconscious feelings are not a defined component of the standard fear response framework."
   },
   {
-    text: "What is the key property of conditioned emotional responses (CERs) that distinguishes them from other forms of classical conditioning?",
-    options: [
-      "They require many more repetitions to acquire than eyeblink conditioning",
-      "They can only be formed in the first few years of life",
-      "They can be acquired after a single CS-US pairing, generalize broadly, and are highly resistant to extinction",
-      "They are exclusively controlled by the hippocampus, not the amygdala"
-    ],
+    text: "Which statement is TRUE regarding emotions?",
+    options: ["There seem to be many cultural differences in feeling emotions but not in expressing them.", "People have a difficult time recognizing emotions in the faces of people from other cultures.", "Emotions seem to be hardwired, although they may be expressed to different degrees.", "People experience very different emotions depending on their culture."],
     correct: 2,
-    tag: "CERs",
-    explanation: "CERs are <strong>fast</strong> (single pairing possible), <strong>broad</strong> (generalization), and <strong>sticky</strong> (extinction-resistant). This reflects the survival importance of rapid fear learning — better to generalize broadly and occasionally be wrong than to fail to detect a real threat."
+    tag: "Emotions",
+    explanation: "Cross-cultural research (e.g., Ekman) shows that basic emotions and their facial expressions are universal, though their intensity and display rules may vary across cultures."
   },
   {
-    text: "According to Mowrer's two-factor theory of avoidance, why does conditioned avoidance persist even though the aversive US is never presented once avoidance is learned?",
-    options: [
-      "The organism cannot distinguish the warning CS from the original context",
-      "The lever press/jump is reinforced by reduction of the conditioned FEAR to the warning CS — since the US never arrives, the fear never extinguishes, and neither does the avoidance",
-      "Avoidance persists because of habituation to the warning signal",
-      "The hippocampus permanently stores the US-context association, blocking extinction"
-    ],
-    correct: 1,
-    tag: "Avoidance Paradox",
-    explanation: "The avoidance response is maintained by <strong>CS-fear reduction</strong> (not US termination). Since the US never comes, the CS-US association is never updated by extinction trials. The organism can never 'learn' the US is gone because it never waits long enough. This is why PTSD avoidance is so intractable."
+    text: "During the fight-or-flight response:",
+    options: ["sexual arousal increases.", "respiration slows down.", "pain is suppressed.", "immune system function increases."],
+    correct: 2,
+    tag: "Emotions",
+    explanation: "During fight-or-flight, resources are directed toward survival. Pain suppression (analgesia) allows the organism to continue functioning despite injury, aiding escape or defense."
   },
   {
-    text: "Seligman's learned helplessness experiments showed that dogs pre-exposed to inescapable shock failed to escape in a shuttle box. The best explanation is:",
-    options: [
-      "The prior shocks caused physical damage to the dogs' muscles",
-      "Prior uncontrollability created an expectancy that responses are ineffectual, reducing motivation to attempt new escape behaviors",
-      "The conditioned fear response to the shuttle box prevented all movement",
-      "The dogs learned the specific response to crouch from the inescapable context"
-    ],
-    correct: 1,
-    tag: "Learned Helplessness",
-    explanation: "Learned helplessness is a <strong>motivational/cognitive phenomenon</strong>. Animals learned that nothing they do matters. Key evidence: physically carrying the dog over the barrier did not help — the expectancy of ineffectiveness persisted; they had to be carried <em>repeatedly</em> before re-learning that their own actions could succeed."
+    text: "The body changes that occur during arousal are mediated by the _____ system.",
+    options: ["autonomic nervous", "somatic", "central nervous", "respiratory"],
+    correct: 0,
+    tag: "Emotions",
+    explanation: "The autonomic nervous system (particularly the sympathetic branch) controls involuntary physiological changes such as heart rate acceleration, pupil dilation, and sweat gland activation during arousal."
   },
   {
-    text: "Cahill et al.'s (1995) slide show study showed memory enhancement specifically for the emotional middle section of the story. What neural mechanism explains this selective enhancement?",
-    options: [
-      "Emotional arousal reduces hippocampal activity, allowing the amygdala to store the emotional content exclusively",
-      "Amygdala activation during the emotional material modulates consolidation in hippocampus and cortex via norepinephrine from the BLA, strengthening the memory trace specifically for the arousing content",
-      "Epinephrine crosses the blood-brain barrier and directly potentiates hippocampal LTP",
-      "Emotional material activates the PFC, which encodes it into long-term memory independently of the hippocampus"
-    ],
+    text: "According to the James-Lange theory of emotion, the:",
+    options: ["conscious feeling of an emotion leads to the bodily responses associated with that emotion.", "bodily responses associated with an emotion leads to the conscious feeling of that emotion.", "cognitive assessment of an emotional situation leads to the conscious feeling of that emotion.", "conscious feeling of an emotion leads to the cognitive assessment of that emotional situation."],
     correct: 1,
-    tag: "Emotional Memory",
-    explanation: "The <strong>BLA → norepinephrine → hippocampus/cortex LTP</strong> pathway is the mechanism. Amygdala damage eliminates the enhancement; propranolol (NE blocker) eliminates it. The effect is specific to arousing content because the BLA is only strongly activated by emotionally significant material. Critical fact: epinephrine cannot cross the blood-brain barrier — norepinephrine is the central messenger."
+    tag: "Emotions",
+    explanation: "The James-Lange theory reverses the common-sense view: we feel afraid because we notice our body trembling, not the other way around. Bodily responses come first and give rise to the subjective emotion."
   },
   {
-    text: "Talarico and Rubin's (2003) study of 9/11 memories found that specific details decayed over months while confidence remained high. The BEST explanation is:",
-    options: [
-      "Emotional memories are photographic but decay at the same rate as regular memories",
-      "Amygdala activation tags memories as 'important' producing high confidence, but hippocampal content still undergoes normal decay and reconsolidation errors — vividness and confidence do not equal accuracy",
-      "PTSD caused hippocampal atrophy in the 9/11 survivors, explaining memory degradation",
-      "High confidence in flashbulb memories is always justified — the apparent decay was a measurement artifact"
-    ],
-    correct: 1,
-    tag: "Flashbulb Memory",
-    explanation: "Key dissociation: <strong>vividness and confidence ≠ accuracy.</strong> The amygdala's emotional tagging gives memories a subjective sense of permanence, but the content (stored in hippocampus and cortex) still undergoes normal decay, distortion, and reconsolidation errors. High confidence is a feeling, not a validity check."
+    text: "Holding a pencil between one's teeth so that one is \"smiling\" can increase feelings of happiness. This is consistent with the predictions of which theory?",
+    options: ["both the James-Lange theory and the Cannon-Bard theory", "neither the James-Lange theory nor the Cannon-Bard theory", "the Cannon-Bard theory", "the James-Lange theory"],
+    correct: 3,
+    tag: "Emotions",
+    explanation: "This facial feedback effect supports James-Lange: artificially inducing a bodily state (smiling muscles) produces the corresponding emotion. Cannon-Bard would predict that emotion and body states arise independently."
   },
   {
-    text: "The Bechara et al. (1995) double dissociation showed that amygdala damage vs. hippocampal damage produce opposite patterns in fear conditioning. Which is correct?",
-    options: [
-      "Amygdala damage: impairs declarative knowledge; preserves conditioned SCR. Hippocampal damage: impairs SCR; preserves declarative knowledge",
-      "Amygdala damage: impairs conditioned SCR; preserves declarative knowledge. Hippocampal damage: impairs declarative knowledge; preserves SCR",
-      "Both lesions equally impair both the SCR and declarative knowledge",
-      "Amygdala damage has no effect; only hippocampal damage alters fear conditioning"
-    ],
-    correct: 1,
-    tag: "Amygdala-Hippocampus Dissociation",
-    explanation: "The amygdala handles the <strong>emotional/autonomic response (SCR)</strong>; the hippocampus handles the <strong>declarative record</strong>. Each can be selectively damaged. This is the strongest evidence that emotional learning and episodic memory of emotional events use dissociable systems. Know this pattern cold."
+    text: "The idea that stimuli simultaneously and independently evoke both emotions and arousal, with neither causing the other, is known as:",
+    options: ["the Cannon-Bard theory.", "the two-factor theory.", "the James-Lange theory.", "a somatic theory of emotion."],
+    correct: 0,
+    tag: "Emotions",
+    explanation: "Cannon and Bard argued that a stimulus triggers both the conscious experience of emotion and the physiological arousal in parallel, via the thalamus, with neither process causing the other."
   },
   {
-    text: "LeDoux's dual pathway model for sensory input to the amygdala predicts that:",
-    options: [
-      "All sensory inputs must first be fully processed by the cortex before reaching the amygdala",
-      "A fast, coarse signal (~12ms) via thalamus and a slow, detailed signal via cortex both reach the lateral amygdala; the fast path enables rapid response before cortical identification is complete",
-      "The slow cortical path always overrides the fast thalamic path",
-      "The dual pathway only operates for auditory fear conditioning, not visual"
-    ],
-    correct: 1,
-    tag: "LeDoux Dual Pathway",
-    explanation: "The <strong>fast path</strong> enables survival-relevant rapid responses (react to ambiguous threat before you know what it is). The <strong>slow path</strong> allows the cortex to cancel the fear response if the stimulus turns out to be harmless. This is a speed-accuracy tradeoff at the neural level — a fundamental design principle."
+    text: "Based on the two-factor theory of emotion, if you want your date to become very attracted to you, you should:",
+    options: ["take your date on an exhilarating roller coaster ride.", "have a quiet dinner together.", "discuss topics that are not likely to be very emotional for your date.", "do something low key at the start of the date."],
+    correct: 0,
+    tag: "Emotions",
+    explanation: "The two-factor theory (Schachter & Singer) proposes that emotion = physiological arousal + cognitive label. High arousal from a thrilling ride can be misattributed as attraction to the companion."
   },
   {
-    text: "A patient with bilateral amygdala damage is tested on fear conditioning. Which pattern do you predict?",
-    options: [
-      "Intact conditioned avoidance; impaired declarative memory of the contingency",
-      "Impaired conditioned autonomic response (SCR) and conditioned avoidance; intact declarative knowledge that the CS was paired with the US",
-      "Impaired declarative knowledge; intact conditioned avoidance and SCR",
-      "Both conditioned responses and declarative knowledge equally impaired"
-    ],
+    text: "Which statement is TRUE regarding emotions in nonhuman animals?",
+    options: ["Emotions cannot be studied in nonhuman animals because there is no way to assess whether such animals have a subjective experience of emotions like humans do.", "The biological responses made in emotional situations are similar in humans and nonhuman animals.", "Nonhuman animals do not display any overt behaviors that can be linked to emotions.", "Different animals have vastly different reactions to emotional stimuli."],
     correct: 1,
-    tag: "Amygdala Lesion",
-    explanation: "Amygdala lesions impair <strong>expressing CRs</strong> (SCR, avoidance) but preserve <strong>declarative knowledge</strong> of the contingency ('the CS was paired with shock' — hippocampal). The patient can tell you intellectually that the CS preceded shock, yet shows no physiological or behavioral fear response. Bechara double dissociation."
+    tag: "Emotions",
+    explanation: "Physiological responses to emotional stimuli (e.g., fear-related heart rate and hormonal changes) are conserved across species, supporting an evolutionary continuity of emotion."
   },
   {
-    text: "Gilbertson et al. (2002) found that Vietnam veterans WITH PTSD and their non-deployed identical twin brothers BOTH had smaller hippocampal volumes. The correct interpretation is:",
-    options: [
-      "Combat trauma caused hippocampal atrophy that spread epigenetically to twins",
-      "Smaller hippocampal volume predisposes individuals to PTSD rather than being a consequence of trauma — since non-exposed twins also showed the effect",
-      "PTSD cannot be caused by trauma; it is entirely a genetic disorder",
-      "Hippocampal volume differences between veterans with and without PTSD are due to treatment differences"
-    ],
-    correct: 1,
-    tag: "PTSD Predisposition",
-    explanation: "The twin design is powerful. Non-deployed twins had NOT experienced combat but shared hippocampal volume with their PTSD-affected brothers. This means smaller hippocampal volume is a <strong>predisposing vulnerability</strong>, not a trauma consequence. It reframes PTSD risk as partly biological."
+    text: "Which statement is an example of a conditioned emotional response?",
+    options: ["A rat freezes in response to a tone that was previously paired with a shock.", "A pigeon is startled by a sudden loud noise.", "A rat runs away when it spots a cat.", "A rat's heart rate increases in response to a sudden unexpected shock."],
+    correct: 0,
+    tag: "Emotions",
+    explanation: "A conditioned emotional response arises through classical conditioning: a neutral CS (tone) acquires the power to elicit a fear response (freezing) after being paired with an aversive US (shock)."
   },
   {
-    text: "In Whiten et al.'s artificial fruit task, children who observed a model POKING a lid were more likely to poke it themselves, while chimpanzees tended to use their palms regardless of what was modeled. This demonstrates:",
-    options: [
-      "Chimps are better learners than children because they found a more efficient method",
-      "Children show true imitation (specific motor act copying); chimps show emulation (goal-oriented but method-flexible). Counterintuitively, children are better true imitators",
-      "Observational conditioning — both species were conditioned to approach the box by watching the reward",
-      "Chimps cannot perform the poking action due to anatomical constraints"
-    ],
-    correct: 1,
-    tag: "True Imitation vs. Emulation",
-    explanation: "True imitation = copying the <strong>specific motor act</strong>. Emulation = achieving the same outcome your own way. Children faithfully copy; chimps are more pragmatic. The counterintuitive finding: we'd expect chimps to be better imitators, but they are actually better emulators — children over-imitate even irrelevant actions."
+    text: "When compared with conditioned responses that do not involve emotion, conditioned emotional responses:",
+    options: ["require more pairings to learn.", "are harder to reinstate after extinction has occurred.", "are harder to extinguish.", "take more time to learn."],
+    correct: 2,
+    tag: "Emotions",
+    explanation: "Emotional memories are especially persistent. Conditioned fear responses are notoriously resistant to extinction, likely due to amygdala-mediated consolidation mechanisms."
   },
   {
-    text: "Bandura's social-learning theory specifies four necessary conditions for imitation. Which of the following is NOT one of them?",
-    options: [
-      "Attention — observer must attend to the model's behavior",
-      "Direct reinforcement for performing the observed action",
-      "Retention — observed action must be encoded in memory",
-      "Motor reproduction capacity — observer must be physically able to perform the action"
-    ],
-    correct: 1,
-    tag: "Bandura's Conditions",
-    explanation: "<strong>Direct reinforcement is NOT required.</strong> Bandura's key insight: observing a model receive a reward creates a learned expectation sufficient for learning. Performance (whether the action is expressed) is affected by motivation, but the <em>learning itself</em> does not require direct reinforcement. This is the core departure from Skinnerian behaviorism."
+    text: "Chris once failed a class taught by a particular professor. He now refuses to take another class with that professor and seeks out other professors who teach the classes he needs. Chris is demonstrating:",
+    options: ["mood congruency of memory.", "learned helplessness.", "conditioned avoidance.", "perseveration."],
+    correct: 2,
+    tag: "Emotions",
+    explanation: "Conditioned avoidance occurs when an organism learns to prevent exposure to an aversive stimulus (the feared professor) before encountering it, distinguishing it from escape which terminates an ongoing aversive event."
   },
   {
-    text: "The Goldberg lab's zebra finch experiment showed that the dopamine 'performance prediction error' signal in Area X was present during solo singing but disappeared when a female was present. The best interpretation is:",
-    options: [
-      "Female presence causes stress that globally suppresses dopamine",
-      "Context gates two modes: during rehearsal (alone), internal performance evaluation drives dopamine learning; during performance (female), external social feedback replaces internal self-evaluation as the learning signal",
-      "Dopamine in Area X encodes sexual arousal, not song quality",
-      "Female presence disrupts recording equipment measuring dopamine"
-    ],
-    correct: 1,
-    tag: "Birdsong Learning",
-    explanation: "The same circuit serves two modes: <strong>rehearsal</strong> (self-correction via internal template comparison, dopamine-mediated TD learning) and <strong>performance</strong> (social feedback from female). These modes are mutually exclusive and context-gated. This is a beautiful example of context-dependent switching between learning algorithms."
+    text: "A problem for the two-factor theory of avoidance learning is that:",
+    options: ["the avoidance response should extinguish easily, but it does not.", "the avoidance response should be hard to extinguish, but it is easy to extinguish.", "it is usually too hard for an organism to learn a conditioned emotional response.", "classical and operant conditioning cannot both operate at the same time."],
+    correct: 0,
+    tag: "Emotions",
+    explanation: "Once an avoidance response is learned, the organism never encounters the CS without escaping, so extinction should occur rapidly. Yet avoidance responses are notoriously persistent — a major challenge for this theory."
   },
   {
-    text: "Mirror neurons in macaque premotor cortex (area F5) are 'goal-selective' rather than 'action-selective.' What does goal-selectivity enable?",
-    options: [
-      "Goal-selective mirror neurons enable pure true imitation by encoding the specific motor sequence",
-      "Goal-selective mirror neurons fire for any action achieving a particular outcome regardless of specific movements — providing a neural basis for EMULATION (same goal, different means)",
-      "Goal-selective neurons only fire during social interactions involving food reward",
-      "Goal-selectivity is a developmental property lost in adult primates"
-    ],
+    text: "What is the phenomenon in which exposure to an uncontrollable punisher reduces the chance that an organism will try to make an avoidance response?",
+    options: ["conditioned emotional response", "learned helplessness", "conditioned avoidance", "perseveration"],
     correct: 1,
-    tag: "Mirror Neurons",
-    explanation: "<strong>Action-selective neurons</strong> = true imitation basis (fire for one specific movement). <strong>Goal-selective neurons</strong> = emulation basis (fire for any action achieving the outcome). Having both types means the mirror system can support both types of copying — explaining the spectrum from precise motor imitation to outcome-focused emulation."
+    tag: "Emotions",
+    explanation: "Seligman's learned helplessness: prior inescapable shock teaches the organism that its actions do not control outcomes, leading to passive failure to escape even when escape becomes possible."
   },
   {
-    text: "Frontal lobe damage produces INCREASED automatic imitation combined with IMPAIRED voluntary imitation. ASD shows a similar pattern (echolalia + impaired voluntary imitation). What is the UNIFYING insight?",
-    options: [
-      "Both conditions disrupt mirror neurons, eliminating all forms of imitation",
-      "Both conditions disrupt the meta-competency of controlling WHEN to copy: frontal damage removes inhibitory control over automatic mirroring; voluntary imitation requires both the mirror system AND frontal gate",
-      "Both conditions are caused by the same genetic variant affecting premotor cortex development",
-      "Automatic imitation is always preserved across neurological conditions because it is subcortically mediated"
-    ],
-    correct: 1,
-    tag: "Frontal Gate / ASD",
-    explanation: "The paradox: more automatic imitation AND less voluntary imitation coexist because they require different circuits. <strong>Automatic imitation</strong> = mirror neuron activation (intact). <strong>Voluntary imitation</strong> = mirror neurons + frontal gate that decides WHEN to engage copying (impaired). Frontal damage removes the gate — automatic mirroring runs unchecked."
+    text: "According to Seligman's research on learned helplessness, one way to help \"immunize\" people from becoming depressed would be to:",
+    options: ["surround them with as many pleasant stimuli as possible.", "put them in situations where they cannot possibly escape from adversity.", "make sure they do not experience much adversity in their life.", "expose them early in life to adversities they can overcome."],
+    correct: 3,
+    tag: "Emotions",
+    explanation: "Early mastery experiences teach that effort affects outcomes, building psychological resilience (an \"immunization\" effect) that buffers against later uncontrollable adversity."
   },
   {
-    text: "The rat food-preference paradigm (Galef & Wigmore, 1983) showed hippocampal lesions disrupted the socially transmitted food preference with a retrograde gradient (immediate lesions = worst impairment). This demonstrates:",
-    options: [
-      "Social food memories are stored in the basal forebrain, not hippocampus",
-      "Socially transmitted food preference has the functional profile of hippocampal-dependent episodic memory — single exposure, long-lasting, and showing the standard retrograde amnesia gradient",
-      "Rat food preferences are immune to retrograde amnesia because they are formed by habit learning",
-      "The basal forebrain stores old social memories while the hippocampus stores new ones"
-    ],
+    text: "Strong and vivid memories for highly emotional events are called:",
+    options: ["congruent memories.", "flashbulb memories.", "phobias.", "conditioned memories."],
     correct: 1,
-    tag: "Social Memory / Hippocampus",
-    explanation: "The <strong>retrograde gradient</strong> (worse disruption when lesion is closer to learning) is the signature of hippocampal consolidation. The one-shot, long-lasting nature also suggests episodic encoding. Social information uses the same general memory system as any other contextually rich episode — the hippocampus does not discriminate by content domain."
+    tag: "Emotions",
+    explanation: "Flashbulb memories are highly vivid, detailed recollections of the circumstances surrounding emotionally significant events. They feel photographic but are actually subject to distortion over time."
   },
   {
-    text: "Propranolol administered before viewing an emotional story eliminated the memory advantage for emotional portions. The most important CLINICAL implication is:",
-    options: [
-      "Propranolol should be given to PTSD patients before every therapy session to enhance therapeutic memory formation",
-      "Propranolol given at the moment of trauma memory REACTIVATION (the reconsolidation window) may reduce the emotional charge of the traumatic memory while leaving factual content intact",
-      "Propranolol prevents all emotional memory formation and should be given to trauma survivors immediately after trauma",
-      "Blocking norepinephrine eliminates all declarative memory, useful for treatment of intrusive memories"
-    ],
-    correct: 1,
-    tag: "Reconsolidation Therapy",
-    explanation: "The <strong>reconsolidation window</strong> is the therapeutic key: reactivating the memory (bringing it to mind) opens a labile window where NE-dependent re-consolidation occurs. Propranolol during this window can dampen the emotional component (BLA-mediated) without eliminating the factual record (hippocampal). Selective emotional dampening, not memory erasure."
+    text: "Which statement is TRUE regarding flashbulb memories?",
+    options: ["They remain accurate over time.", "It is usually easy to verify the accuracy of flashbulb memories.", "Rehearsing and discussing the event can introduce inaccuracies into the memory.", "People are usually very good at remembering where they first heard about the event."],
+    correct: 2,
+    tag: "Emotions",
+    explanation: "Each retelling of a flashbulb memory is a new memory trace that can incorporate errors. Despite high subjective confidence, rehearsal-based distortions accumulate, making these memories unreliable over time."
   },
   {
-    text: "What is the connection between birdsong learning circuits in birds and mammalian skill learning circuits?",
-    options: [
-      "Both rely exclusively on the cerebellum for error correction",
-      "Both implement reinforcement-based error correction: a learning circuit (Area X / basal ganglia, dopamine-modulated) updates a production circuit (HVC-RA / motor cortex) using a mismatch error signal — TD learning applied to motor output",
-      "Both require the hippocampus as the primary site for storing learned sequences",
-      "The two circuits evolved independently with no computational similarity"
-    ],
-    correct: 1,
-    tag: "Birdsong / Skill Learning",
-    explanation: "Area X (birds) ≅ basal ganglia (mammals); LMAN ≅ frontal cortex; HVC-RA ≅ motor cortex. <strong>Dopamine-modulated error signals</strong> drive synaptic modification in the production circuit. This is conserved vertebrate architecture for skill learning — the same computational solution evolved (or was conserved) across lineages."
+    text: "Which statement is TRUE regarding the brain and emotion?",
+    options: ["Emotion seems to arise from special circuits devoted to individual emotions.", "The cingulate cortex is activated by all of the emotions.", "There is a specialized emotion circuit in the limbic system.", "Emotion is a function of the brain operating as a whole."],
+    correct: 3,
+    tag: "Emotions",
+    explanation: "Modern neuroscience rejects the idea of single-emotion circuits. Emotions emerge from distributed brain activity across multiple systems, not a single dedicated limbic circuit."
   },
   {
-    text: "The instructor summarized social learning as 'the highest-bandwidth information channel available to an intelligent agent.' Why?",
-    options: [
-      "Social learning is faster than individual trial-and-error because it requires fewer neural computations",
-      "Rather than accumulating errors across thousands of personal experiences, you can inherit compressed outcomes of others' experiences in minutes — and build on prior knowledge cumulatively across generations",
-      "Social learning channels have higher sensory bandwidth because they involve more sensory modalities",
-      "The social cortex is larger than other brain regions, giving it more processing capacity"
-    ],
+    text: "Which part of the amygdala is primarily responsible for the increase in heart rate and blood pressure that is experienced when a person feels fear?",
+    options: ["lateral nucleus", "central nucleus", "basolateral nucleus", "thalamus"],
     correct: 1,
-    tag: "Social Learning Theory",
-    explanation: "Bandura's core insight (and the RL framing): social learning is model-based RL where the model includes representations of other agents' value functions. Instead of learning your own Q-values from scratch, you <strong>inherit the experienced agent's compressed solution</strong>. Cumulative culture makes this even more powerful — each generation starts from the prior generation's knowledge."
-  }
+    tag: "Emotions",
+    explanation: "The central nucleus is the output hub of the amygdala, projecting to the hypothalamus and brainstem to drive autonomic (cardiovascular) and behavioral fear responses."
+  },
+  {
+    text: "The direct pathway to the amygdala is _____ and conveys _____ detail than the indirect pathway to the amygdala.",
+    options: ["faster; more", "faster; less", "slower; more", "slower; less"],
+    correct: 1,
+    tag: "Emotions",
+    explanation: "LeDoux's \"low road\" goes thalamus -> amygdala: fast but coarse. The \"high road\" goes thalamus -> cortex -> amygdala: slower but carries finely processed, detailed sensory information."
+  },
+  {
+    text: "Neurons in the _____ have been shown to increase their response to a CS after it is paired with a fear-invoking US.",
+    options: ["basolateral nucleus of the amygdala", "central nucleus of the amygdala", "thalamus", "basal ganglia"],
+    correct: 0,
+    tag: "Emotions",
+    explanation: "CS-US pairing produces LTP-like plasticity in basolateral amygdala neurons: they fire more strongly to the CS after conditioning, making this region the site of fear memory formation."
+  },
+  {
+    text: "Epinephrine:",
+    options: ["crosses the blood-brain barrier to directly influence the amygdala.", "activates brainstem nuclei that produce norepinephrine.", "disrupts release of norepinephrine by brainstem nuclei.", "protects the brain from many chemicals that might cause harm."],
+    correct: 1,
+    tag: "Emotions",
+    explanation: "Epinephrine cannot cross the blood-brain barrier. Instead, it activates vagal afferents that signal brainstem (locus coeruleus) neurons to release norepinephrine, which then modulates amygdala activity and memory consolidation."
+  },
+  {
+    text: "Stress hormones at the time of learning _____ new memory formation; the presence of stress hormones at the time of recall _____ retrieval of older memories.",
+    options: ["always improve; always improve", "often improve; often improve", "often improve; often impair", "often impair; often improve"],
+    correct: 2,
+    tag: "Emotions",
+    explanation: "Stress hormones (cortisol/epinephrine) enhance encoding of emotionally salient events, but the same hormones at retrieval interfere with recall — explaining why stress before exams can impair test performance."
+  },
+  {
+    text: "The famous case of \"Little Albert\" fearing a white rat demonstrates that:",
+    options: ["phobias can arise through classical conditioning.", "people have a natural fear of certain animals such as rats.", "blocking epinephrine can suppress a biological response to fear.", "virtual-reality technology can be successful in treating phobias."],
+    correct: 0,
+    tag: "Emotions",
+    explanation: "Watson and Rayner conditioned fear in \"Little Albert\" by pairing a white rat (CS) with a loud noise (US), demonstrating that phobias can be learned through classical conditioning rather than being innate."
+  },
+  {
+    text: "Which statement is TRUE regarding phobias?",
+    options: ["People with phobias are particularly likely to have had a bad experience with the object or situation that they fear.", "Humans are equally likely to develop a phobia to just about any stimulus.", "A person can develop a phobia without directly experiencing the feared object or situation.", "Drugs that enhance epinephrine can help people learn to overcome phobias."],
+    correct: 2,
+    tag: "Emotions",
+    explanation: "Phobias can develop through vicarious conditioning (observing others' fear reactions) or even verbal information, without any direct personal experience with the feared object."
+  },
+  {
+    text: "One difference between posttraumatic stress disorder (PTSD) and phobias is that:",
+    options: ["with PTSD, the fear is triggered by a specific stimulus, whereas with phobias the fear is triggered by a wide variety of stimuli.", "with phobias, the fear is triggered by a specific stimulus, whereas with PTSD the fear is triggered by a wide variety of stimuli.", "PTSD, but not phobias, can be explained by classical conditioning.", "phobias, but not PTSD, can be explained by classical conditioning."],
+    correct: 1,
+    tag: "Emotions",
+    explanation: "Phobias involve narrowly focused fear to a specific object or situation. PTSD involves generalized fear to a broad range of trauma-related cues through stimulus generalization."
+  },
+  {
+    text: "The classical-conditioning explanation for PTSD suggests that patients with PTSD:",
+    options: ["take longer to extinguish a CR.", "fail to acquire CS-US associations.", "extinguish the CR more quickly.", "are slower to acquire CS-US associations."],
+    correct: 0,
+    tag: "Emotions",
+    explanation: "PTSD is characterized by persistent conditioned fear responses that are highly resistant to extinction, consistent with stronger or more deeply consolidated CS-US associations formed during trauma."
+  },
+  {
+    text: "Studies using MRI and twins have suggested that:",
+    options: ["PTSD causes the hippocampus to become larger.", "PTSD causes the hippocampus to become smaller.", "people with a larger hippocampus are predisposed to developing PTSD.", "people with a smaller hippocampus are predisposed to developing PTSD."],
+    correct: 3,
+    tag: "Emotions",
+    explanation: "Twin studies show that smaller hippocampal volume is a pre-existing vulnerability factor for PTSD, not just a consequence of trauma. Identical twins with PTSD and their unaffected co-twins both had smaller hippocampi."
+  },
+  {
+    text: "Researchers determined that teenagers were at higher risk of developing PTSD in the wake of the Boston Marathon bombing if they had shown _____ during the earlier fMRI.",
+    options: ["increased prefrontal cortex activity", "heightened amygdala reactions to negative emotional stimuli", "diminished amygdala reactions to negative emotional stimuli", "reduced prefrontal cortex activity"],
+    correct: 1,
+    tag: "Emotions",
+    explanation: "Pre-existing heightened amygdala reactivity to negative stimuli is a biomarker for PTSD vulnerability. This prospective finding shows that individual differences in amygdala excitability precede (and predict) trauma-related psychopathology. Section 2: Chapter 11 — Social Learning (Questions 31-60) Topics covered: social learning theory, Bandura's Bobo doll study, true imitation vs. emulation, perspective taking, emotional contagion, observational conditioning, stimulus enhancement, vocal learning in birds and mammals, social transmission, mirror neurons, and autism spectrum disorder."
+  },
+  {
+    text: "Which statement provides an example of social learning?",
+    options: ["A chimpanzee copies the hand motions made by its trainer.", "A cat learns through trial and error to escape from a puzzle box.", "A rat learns the correct route through a maze by being rewarded with food on reaching the end.", "A dog learns to salivate in response to a bell after the bell is repeatedly followed by food."],
+    correct: 0,
+    tag: "Social Learning",
+    explanation: "Social learning specifically involves learning through observation of another organism. Only option (a) involves copying another individual's actions; the others depict trial-and-error or classical conditioning."
+  },
+  {
+    text: "A process in which the learner actively monitors events and then chooses later actions based on those observations is known as:",
+    options: ["true imitation.", "social learning.", "cognitive learning.", "social conformity."],
+    correct: 1,
+    tag: "Social Learning",
+    explanation: "Social learning is characterized by observation-based learning that influences later behavioral choices — distinct from direct reinforcement or innate responses."
+  },
+  {
+    text: "In Bandura's Bobo doll study, Bandura believed that the children were learning the aggressive acts:",
+    options: ["after being rewarded for their behavior.", "when they were imitating the model.", "while they were observing the model.", "right before they observed the model."],
+    correct: 2,
+    tag: "Social Learning",
+    explanation: "Bandura's key insight was that learning occurs during observation itself (not just when performing), challenging behaviorist views that only reinforced behavior is learned."
+  },
+  {
+    text: "In Bandura's Bobo doll study, it was found that:",
+    options: ["aggressive behavior transferred to other contexts.", "for girls, aggression was more common when they observed a female model than a male model.", "only the children who were first provoked showed aggression toward the Bobo doll.", "the attack styles of the children who behaved aggressively were different from the attack styles of the models they observed."],
+    correct: 2,
+    tag: "Social Learning",
+    explanation: "Without provocation, many children who observed aggression did not spontaneously display it, showing the distinction between learning a behavior (acquisition) and performing it (performance)."
+  },
+  {
+    text: "Bandura listed four basic steps to explain people copying what they see. The four steps are:",
+    options: ["presence of a model, accessible format, ability to reproduce the action, and motivation for reproducing the action.", "accessible format, presence of a model, ability to reproduce the action, and motivation for reproducing the action.", "accessible format, presence of a model, motivation for reproducing the action, and ability to reproduce the action.", "motivation for reproducing the action, ability to reproduce the action, presence of a model, and accessible format."],
+    correct: 0,
+    tag: "Social Learning",
+    explanation: "Bandura's four steps are sequential: (1) attention drawn by the model's presence, (2) encoding in accessible format, (3) ability to physically reproduce the action, and (4) motivation to do so."
+  },
+  {
+    text: "If one wanted to encourage 8-year-old Alice to read, who would be the BEST person to serve as a model?",
+    options: ["another 8-year-old girl", "an 8-year-old boy", "a younger girl", "a teenage boy"],
+    correct: 0,
+    tag: "Social Learning",
+    explanation: "Social learning theory predicts that people are most likely to imitate models who are similar to themselves in relevant ways (age, gender). An age- and gender-matched peer is therefore optimal."
+  },
+  {
+    text: "Copying that involves reproducing motor acts is called:",
+    options: ["true imitation.", "emulation.", "social conformity.", "perspective taking."],
+    correct: 0,
+    tag: "Social Learning",
+    explanation: "True imitation involves faithfully reproducing the specific motor actions of a model. This is distinct from emulation, which reproduces only the goal or outcome without copying the exact movements."
+  },
+  {
+    text: "One-year-old Dahlia observed her mother eating peas by poking them with a fork and bringing them to her mouth. Dahlia picked up a fork, used her fingers to balance some peas on the fork, and brought them to her mouth. This is an example of:",
+    options: ["perspective taking.", "stimulus matching.", "emulation.", "true imitation."],
+    correct: 2,
+    tag: "Social Learning",
+    explanation: "Dahlia achieved the same goal (getting peas to mouth with a fork) but used a different motor strategy than her mother. Reaching the same end result via different means is the hallmark of emulation."
+  },
+  {
+    text: "The two-action test involves training two animals to perform:",
+    options: ["the same action, leading to the same outcome.", "two different actions, leading to two different outcomes.", "the same action, leading to two different outcomes.", "two different actions, leading to the same outcome."],
+    correct: 3,
+    tag: "Social Learning",
+    explanation: "The two-action test uses animals trained via different motor methods to the same outcome, then tests whether an observer copies the specific action (imitation) or just reaches the goal (emulation)."
+  },
+  {
+    text: "Perspective taking is an ability that:",
+    options: ["requires visual feedback.", "occurs in most mammals and birds.", "occurs only for relatively complex behaviors.", "is possessed by few species other than humans."],
+    correct: 3,
+    tag: "Social Learning",
+    explanation: "Perspective taking — the ability to mentally simulate another's viewpoint — is rare in the animal kingdom. It requires a theory of mind that is largely unique to humans, with limited evidence in great apes."
+  },
+  {
+    text: "The inborn tendency to react emotionally to visual or acoustic stimuli that indicate an emotional response in other members of one's species is called:",
+    options: ["observational conditioning.", "stimulus enhancement.", "imitation.", "emotional contagion."],
+    correct: 3,
+    tag: "Social Learning",
+    explanation: "Emotional contagion is an automatic, innate process: seeing another organism display fear or distress triggers a corresponding emotional state. It does not require learning and involves unconditioned responses."
+  },
+  {
+    text: "Which scenario is an example of emotional contagion?",
+    options: ["A mother yawns and her baby yawns as well.", "A dog salivates at the sound of a bell.", "A young child cries at the sight of her mom.", "Repeated shocks have taught a mouse to stay in a corner regardless of whether a shock is received."],
+    correct: 0,
+    tag: "Social Learning",
+    explanation: "Yawning triggered by seeing another yawn is a classic example of emotional contagion: an automatic, unconditioned response to observing a species-typical signal in another individual."
+  },
+  {
+    text: "An individual learns an emotional response after observing similar responses in others. This is known as:",
+    options: ["observational conditioning.", "stimulus enhancement.", "imitation.", "emotional contagion."],
+    correct: 0,
+    tag: "Social Learning",
+    explanation: "Observational conditioning is a learned emotional response acquired through watching another organism's emotional reaction to a stimulus — unlike emotional contagion, which is innate and unlearned."
+  },
+  {
+    text: "Marie has never been afraid of bees, but she constantly sees her mom scream at the sight of one. Eventually, Marie develops a fear of bees; this is an example of:",
+    options: ["stimulus enhancement.", "classical conditioning.", "emotional contagion.", "observational conditioning."],
+    correct: 3,
+    tag: "Social Learning",
+    explanation: "Marie acquired a conditioned fear response through observation of her mother's fear reaction — without any direct aversive experience with bees herself. This distinguishes it from classical conditioning."
+  },
+  {
+    text: "Direction of one organism's attention toward specific objects, events, or locations within an environment as a result of another organism's action is called:",
+    options: ["observational conditioning.", "stimulus enhancement.", "imitation.", "emotional contagion."],
+    correct: 1,
+    tag: "Social Learning",
+    explanation: "Stimulus enhancement increases the salience of objects or locations through another's behavior, increasing the probability that the observer will interact with them. It is simpler than true imitation."
+  },
+  {
+    text: "It was observed that some birds in England were learning to puncture the tops of milk bottles to get the cream. One explanation was that the birds' attention was being drawn to the milk bottles by other birds that had discovered this \"trick.\" Which learning concept does this explanation demonstrate?",
+    options: ["observational conditioning", "emotional contagion", "imitation", "stimulus enhancement"],
+    correct: 3,
+    tag: "Social Learning",
+    explanation: "Stimulus enhancement explains the spread of this behavior: birds did not copy the specific pecking technique but rather were drawn to the milk bottles by other birds' activity, then discovered the technique individually."
+  },
+  {
+    text: "The foundation of language and speech acquisition is:",
+    options: ["classical conditioning.", "operant conditioning.", "social learning.", "intelligence."],
+    correct: 2,
+    tag: "Social Learning",
+    explanation: "Children acquire language primarily through observation of others' speech, making social learning the foundational mechanism. Reinforcement alone cannot account for the speed and complexity of language acquisition."
+  },
+  {
+    text: "Which are the only mammals other than humans that have the flexibility to imitate sounds?",
+    options: ["rats", "whales", "birds", "dolphins"],
+    correct: 3,
+    tag: "Social Learning",
+    explanation: "Dolphins are the only other mammals with the flexible vocal imitation ability comparable to humans. Birds (not mammals) are actually the most well-studied vocal learners. Among mammals, it is dolphins."
+  },
+  {
+    text: "The only mammals other than humans that can learn to sing a song by hearing it are:",
+    options: ["chimpanzees.", "dolphins.", "gorillas.", "humpback whales."],
+    correct: 3,
+    tag: "Social Learning",
+    explanation: "Humpback whales learn and modify their complex songs from other whales — the only other mammals known to learn songs through acoustic copying, demonstrating true vocal learning."
+  },
+  {
+    text: "Which statement is TRUE regarding vocal learning in songbirds?",
+    options: ["Baby birds raised without contact with their own species still learn their own song.", "If young birds are exposed to both the songs of their own species and the songs of a different species, they will readily learn both species' songs.", "The songs that birds sing are genetically predetermined.", "The songs that birds sing can show differences in dialect."],
+    correct: 3,
+    tag: "Social Learning",
+    explanation: "Like human languages, birdsong shows regional dialects — populations of the same species develop distinct song variants, providing evidence for cultural transmission of vocal patterns."
+  },
+  {
+    text: "A model of song learning that consists of three basic phases that are song memorization, song practice, and song utilization is known as:",
+    options: ["social learning.", "the template model.", "social transitioning.", "classical conditioning."],
+    correct: 1,
+    tag: "Social Learning",
+    explanation: "The template model describes how songbirds first memorize a song template, then practice vocalizations until they match the template, and finally use the crystallized song in social contexts."
+  },
+  {
+    text: "The process in which an observer learns something new through experiences with others is called:",
+    options: ["observational conditioning.", "stimulus enhancement.", "social transmission of information.", "emotional contagion."],
+    correct: 2,
+    tag: "Social Learning",
+    explanation: "Social transmission of information is a broad term covering any learning that occurs via social interaction or observation, including food preferences, danger signals, and tool use across generations."
+  },
+  {
+    text: "Studies of social transmission of food preferences in rats have shown that:",
+    options: ["rats are more likely to eat a novel food if they smell the food on another rat's breath after observing the other rat eating the food.", "a novel food can become a preferred food if a rat observes another rat eating the food, even if the observer rat never smells the food.", "food preferences that are learned through observation are not passed down to subsequent generations.", "rats can learn to eat, but not to avoid, novel foods by observing another rat eating the food."],
+    correct: 0,
+    tag: "Social Learning",
+    explanation: "Olfactory cues (smelling food on a conspecific's breath) are the key social signal driving food preference transmission in rats. The combination of the food odor with a social (rat) odor is critical."
+  },
+  {
+    text: "The tendency to adopt the behavior of the group is known as:",
+    options: ["observational conditioning.", "social conformity.", "emulation.", "perspective taking."],
+    correct: 1,
+    tag: "Social Learning",
+    explanation: "Social conformity is the social pressure-driven adoption of group norms and behaviors. It differs from imitation in that the motivation is group membership/acceptance rather than the model's competence."
+  },
+  {
+    text: "Research suggests that viewing violent images:",
+    options: ["can increase the likelihood that a child will behave aggressively immediately after seeing them.", "can lead to positive outcomes when people imitate nonviolent \"heroes\" in otherwise violent TV shows.", "is much more likely to lead to aggression than is reading about violence or seeing violence in a play.", "can decrease a person's arousal level such that the person behaves less aggressively."],
+    correct: 0,
+    tag: "Social Learning",
+    explanation: "Research consistently shows a short-term increase in aggression immediately after viewing violent media, consistent with Bandura's social learning theory (observing aggression lowers inhibitions and provides a behavioral script)."
+  },
+  {
+    text: "_____ neurons respond during both performance of an action and observations of that same action.",
+    options: ["Template", "Mirror", "Echolalia", "Modeling"],
+    correct: 1,
+    tag: "Social Learning",
+    explanation: "Mirror neurons, first discovered in macaque premotor cortex, fire both when an animal performs a goal-directed action AND when it observes another performing the same action, providing a neural basis for imitation."
+  },
+  {
+    text: "Which statement is TRUE regarding mirror neurons?",
+    options: ["The most common type responds to actions involving the legs and feet.", "They provide the neural links needed for imitation but not emulation.", "They respond to the observation of an action performed by a model but not to the performance of the action by the observer.", "Some respond most strongly to observation of the outcome, rather than the specific action."],
+    correct: 3,
+    tag: "Social Learning",
+    explanation: "Some mirror neurons are \"goal-coded\" — they respond to the outcome (e.g., an object being grasped) regardless of the specific motor sequence used, suggesting they encode intention as well as action."
+  },
+  {
+    text: "Mirror neurons are rarely identified in humans because:",
+    options: ["they are rarely used in human learning.", "recording the firing patterns of individual neurons requires brain surgery.", "they are not considered an important mechanism for true imitation of simple actions.", "they are located throughout the nervous system and are not concentrated in the cerebral cortex."],
+    correct: 1,
+    tag: "Social Learning",
+    explanation: "Single-unit recording (the method used to identify mirror neurons in monkeys) requires implanted electrodes — a procedure done in humans only for clinical reasons. Human mirror neuron research therefore relies on fMRI."
+  },
+  {
+    text: "Stroke-related damage in the _____ in particular can disrupt imitative abilities.",
+    options: ["temporal lobes", "amygdala", "frontal lobes", "hippocampus"],
+    correct: 2,
+    tag: "Social Learning",
+    explanation: "Frontal lobe damage disrupts voluntary control of imitation. Paradoxically, patients may show excessive involuntary imitation (echopraxia/echolalia), revealing that the frontal lobes normally inhibit automatic imitation."
+  },
+  {
+    text: "Children with autism:",
+    options: ["have reduced intellectual abilities.", "have more trouble imitating individual actions than sequences of actions.", "cannot recognize when they are being copied.", "have problems with perspective taking."],
+    correct: 3,
+    tag: "Social Learning",
+    explanation: "A core deficit in autism spectrum disorder is theory-of-mind impairment, which includes perspective taking — the ability to understand that others have different mental states from one's own."
+  },
 ];
 
 let quizState = {};
