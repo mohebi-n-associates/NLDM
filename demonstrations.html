@@ -263,6 +263,34 @@
         .demo-launch-btn svg { width: 15px; height: 15px; transition: transform 0.2s; }
         .demo-launch-btn:hover svg { transform: translateX(3px); }
     
+
+        /* ── Light mode explicit (belt-and-suspenders over :root defaults) ── */
+        [data-theme="light"] {
+            --bg:         #f7f4ef;
+            --bg-card:    #ffffff;
+            --bg-muted:   #f0ece4;
+            --border:     #e2ddd5;
+            --ink:        #1c1917;
+            --ink-light:  #44403c;
+            --ink-faint:  #78716c;
+            --teal:       #0d9488;
+            --teal-soft:  rgba(13,148,136,0.1);
+            --amber:      #b45309;
+            --amber-soft: rgba(180,83,9,0.1);
+            --violet:     #6d28d9;
+            --violet-soft:rgba(109,40,217,0.1);
+            --green:      #15803d;
+            --green-soft: rgba(21,128,61,0.1);
+            --shadow-sm:  0 1px 3px rgba(0,0,0,0.07), 0 1px 2px rgba(0,0,0,0.05);
+            --shadow-md:  0 4px 16px rgba(0,0,0,0.09), 0 1px 4px rgba(0,0,0,0.06);
+            --shadow-lg:  0 12px 32px rgba(0,0,0,0.1), 0 2px 8px rgba(0,0,0,0.07);
+        }
+        [data-theme="light"] body { background: #f7f4ef; color: #1c1917; }
+        [data-theme="light"] .logo-icon { background: #1c1917; }
+        [data-theme="light"] header { background: #f7f4ef; border-bottom-color: #e2ddd5; }
+        [data-theme="light"] footer { background: #ffffff; border-top-color: #e2ddd5; color: #78716c; }
+        [data-theme="light"] footer a { color: #44403c; }
+
         /* ── Dark mode overrides ── */
         [data-theme="dark"] {
             --bg:         #1c1917;
