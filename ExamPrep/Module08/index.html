@@ -498,7 +498,7 @@
     <div class="progress-bar-wrap" title="Quiz progress">
       <div class="progress-bar-fill" id="quizProgressBar"></div>
     </div>
-    <span class="progress-label" id="quizProgressLabel">0 / 20</span>
+    <span class="progress-label" id="quizProgressLabel">0 / 30</span>
   </div>
   <button id="theme-toggle" onclick="__toggleTheme()" aria-label="Toggle theme"></button>
 </header>
@@ -1317,7 +1317,7 @@
     </div>
 
     <div class="quiz-stats">
-      <div class="stat-item"><div class="stat-val blue" id="statTotal">20</div><div class="stat-lbl">Questions</div></div>
+      <div class="stat-item"><div class="stat-val blue" id="statTotal">30</div><div class="stat-lbl">Questions</div></div>
       <div class="stat-item"><div class="stat-val green" id="statCorrect">0</div><div class="stat-lbl">Correct</div></div>
       <div class="stat-item"><div class="stat-val red" id="statWrong">0</div><div class="stat-lbl">Incorrect</div></div>
       <div class="stat-item"><div class="stat-val" id="statPct" style="color:var(--gray-light);">—</div><div class="stat-lbl">Score</div></div>
@@ -1461,245 +1461,215 @@ document.querySelectorAll('.filter-btn').forEach(btn => {
 // ─── QUIZ DATA ───
 const questions = [
   {
-    text: "Thorndike's law of effect states that a response followed by a satisfying outcome will:",
-    options: [
-      "Decrease in frequency due to habituation to the reward",
-      "Increase in frequency, strengthening the stimulus-response association",
-      "Become independent of any discriminative stimulus",
-      "Transfer automatically to new stimuli through generalization"
-    ],
+    text: "According to the law of effect, which circumstance would lead to a weakening of the association between stimulus and response?",
+    options: ["buying a new toy for a whining child", "grounding a teenager for staying out too late", "giving a child $10 for cleaning the house", "putting an ice pack on a swollen ankle"],
     correct: 1,
     tag: "Law of Effect",
-    explanation: "<strong>Satisfying outcomes increase response frequency</strong> and strengthen the S-R association. This is the foundation of operant learning, directly paralleling the Rescorla-Wagner update rule: a positive outcome is like a positive prediction error."
+    explanation: "Grounding (punishment) follows the response of staying out late. An unsatisfying outcome weakens the S-R association, decreasing the probability that the response recurs. Options a and c both add desirable outcomes (reinforcement), which would strengthen associations."
   },
   {
-    text: "The key difference between classical and operant conditioning is:",
-    options: [
-      "In classical conditioning, the animal performs an action to get a reward",
-      "In operant conditioning, the outcome only arrives if the animal makes a response; in classical, it arrives regardless",
-      "Classical conditioning is studied in mammals only",
-      "Operant conditioning involves only aversive stimuli"
-    ],
+    text: "In what way does operant conditioning differ from classical conditioning?",
+    options: ["In classical conditioning, learning is fastest during the early trials, while in operant conditioning, learning is fastest during the later trials.", "In classical conditioning, the consequence arrives regardless of the animal's behavior, while in operant conditioning, it only arrives once the animal has made a response.", "Classical conditioning can be used to train animals to make responses they would not normally make; operant conditioning cannot.", "Extinction occurs in classical conditioning but not in operant conditioning."],
     correct: 1,
     tag: "Classical vs. Operant",
-    explanation: "<strong>Response contingency</strong> is the defining feature of operant conditioning. In classical conditioning, the US follows the CS whether or not any response occurs. In operant, the outcome is contingent on the response."
+    explanation: "The defining distinction is response contingency. In classical (Pavlovian) conditioning the US is delivered whether or not the animal responds. In operant conditioning the outcome only follows if the organism performs the required response. Both paradigms show extinction and negatively accelerated learning curves."
   },
   {
-    text: "In Thorndike's puzzle-box experiment, which correctly maps onto the S-R-O framework?",
-    options: [
-      "S=food reward, R=entering box, O=cat's hunger state",
-      "S=puzzle box environment, R=sequence of movements to open door, O=escape and access to food",
-      "S=Thorndike's observation, R=cat's meowing, O=experimenter opening door",
-      "S=door latch, R=trial duration, O=cat's decrease in anxiety"
-    ],
-    correct: 1,
-    tag: "S-R-O Framework",
-    explanation: "<strong>S=box (context), R=movement sequence, O=escape+food</strong>. Standard S-R-O mapping for Thorndike's procedure. The box is the discriminative stimulus, the lever/rope sequence is the response, and escape plus food is the outcome."
-  },
-  {
-    text: "Shaping relies on which core principle?",
-    options: [
-      "Delivering reinforcement only when the animal produces the exact target behavior",
-      "Reinforcing successive approximations to the target behavior, guiding the animal incrementally",
-      "Pairing a neutral stimulus with a primary reinforcer",
-      "Allowing free access to the reinforcer to reduce motivational state before training"
-    ],
-    correct: 1,
-    tag: "Shaping",
-    explanation: "<strong>Shaping = reinforcing successive approximations.</strong> The full target behavior is never required at the outset — the organism is guided gradually toward the desired response. This is why shaping works for behaviors organisms are unlikely to spontaneously emit."
-  },
-  {
-    text: "In a fixed-ratio (FR-5) reinforcement schedule, an animal will typically show:",
-    options: [
-      "Steady uniform response rate with no pause after reinforcement",
-      "Scalloped cumulative curve reflecting uncertainty about timing",
-      "Consistent responding followed by a brief post-reinforcement pause before resuming",
-      "Rapid extinction because predictability reduces incentive value"
-    ],
-    correct: 2,
-    tag: "FR Schedule",
-    explanation: "<strong>FR schedules produce steady responding + a post-reinforcement pause.</strong> The animal knows reinforcement won't arrive immediately after earning it, so it pauses briefly before starting the next ratio run. The scalloped curve is the FI pattern, not FR."
-  },
-  {
-    text: "Slot machines are best classified as which reinforcement schedule?",
-    options: [
-      "Fixed-interval (FI) — payoffs at regular time intervals",
-      "Variable-ratio (VR) — payoffs after variable number of plays",
-      "Fixed-ratio (FR) — machine always pays after exactly 10 plays",
-      "Variable-interval (VI) — timing of payoffs varies"
-    ],
-    correct: 1,
-    tag: "VR Schedule",
-    explanation: "<strong>Slot machines = VR</strong>: the player never knows which pull will pay off. This unpredictability maximizes persistent responding and produces minimal post-reinforcement pause, making it the schedule that produces the most compelling and hardest-to-extinguish behavior."
-  },
-  {
-    text: "The matching law predicts that on two concurrently available VI schedules, relative response rate will:",
-    options: [
-      "Always favor the option with most recent reinforcement",
-      "Match the relative rate of reinforcement from each option",
-      "Equalize over time regardless of reinforcement rates",
-      "Follow a winner-take-all pattern"
-    ],
-    correct: 1,
-    tag: "Matching Law",
-    explanation: "<strong>Herrnstein (1961):</strong> response proportion approximates reinforcement proportion on concurrent VI schedules. Rate(A)/Rate(B) = Reinforcement(A)/Reinforcement(B). This is one of the most robust quantitative laws in behavioral science."
-  },
-  {
-    text: "During the basal ganglia lecture, the direct and indirect pathways were labeled functionally as:",
-    options: [
-      "Reward and punishment pathways",
-      "Go and No-Go pathways",
-      "Pavlovian and instrumental pathways",
-      "Wanting and liking pathways"
-    ],
-    correct: 1,
-    tag: "Basal Ganglia",
-    explanation: "<strong>Go (direct, D1, facilitates action) and No-Go (indirect, D2, suppresses competing actions)</strong> are the standard functional labels. The Go pathway releases a selected action from tonic inhibition; the No-Go pathway suppresses competing motor programs."
-  },
-  {
-    text: "D1 dopamine receptors on direct pathway neurons are EXCITED by dopamine; D2 on indirect pathway neurons are INHIBITED by dopamine. The net functional consequence of dopamine release is:",
-    options: [
-      "Dopamine suppresses both pathways, reducing all motor output",
-      "Dopamine promotes selected actions via direct pathway AND suppresses competing actions via indirect pathway",
-      "Dopamine has opposite effects on cognition vs motor control",
-      "Dopamine only modulates the indirect pathway"
-    ],
-    correct: 1,
-    tag: "Dopamine D1/D2",
-    explanation: "<strong>Via D1: promotes Go. Via D2: suppresses No-Go.</strong> Together, dopamine tips the balance toward executing the rewarded action — a dual mechanism of selection and suppression. This is why dopamine depletion in Parkinson's impairs both movement initiation and action selection."
-  },
-  {
-    text: "The dorsal striatum is particularly important for which component of the S-R-O framework?",
-    options: [
-      "Associating response with expected outcome (R-O learning)",
-      "Associating discriminative stimulus with appropriate response (S-R learning)",
-      "Computing the prediction error that updates expected rewards",
-      "Encoding hedonic value of primary reinforcer after consumption"
-    ],
-    correct: 1,
-    tag: "Dorsal Striatum",
-    explanation: "<strong>Dorsal striatum = S-R learning.</strong> OFC = R-O learning. Confirmed by lesion dissociations: striatum lesions impair discriminative cue-guided responding; simple R-O association survives. The striatum is where habitual, cue-driven responses are stored."
-  },
-  {
-    text: "The OFC is most critical for:",
-    options: [
-      "Storing S-R associations that become automatic habits",
-      "Representing predicted outcomes and linking responses to expected reward identity",
-      "Computing timing of post-reinforcement pauses in FR schedules",
-      "Driving the Go signal releasing motor inhibition from GPi"
-    ],
-    correct: 1,
-    tag: "Orbitofrontal Cortex",
-    explanation: "<strong>OFC receives multimodal sensory + visceral signals and represents predicted outcomes.</strong> Critical for linking responses to expected reward identity — not just whether reward will occur, but which specific reward. OFC lesions impair reversal learning and steepen delay discounting."
-  },
-  {
-    text: "In the Schoenbaum et al. odor task, certain OFC neurons fired strongly during error trials (nose-poke after the odor predicting quinine). This indicates:",
-    options: [
-      "OFC neurons encode discriminative stimulus identity, not upcoming outcome",
-      "OFC neurons signal a reward prediction error after outcome is delivered",
-      "OFC neurons represent expected outcomes during the anticipatory delay, coding specifically for aversive quinine",
-      "OFC activity reflects a motor command to withdraw from the odor port"
-    ],
-    correct: 2,
-    tag: "OFC — Schoenbaum",
-    explanation: "<strong>OFC neurons fire during the anticipatory delay specifically predicting the aversive quinine outcome.</strong> They are tuned to outcome identity — which specific reward will arrive — not just valence (good vs. bad) or the motor response. This demonstrates OFC's role in R-O learning."
-  },
-  {
-    text: "Kent Berridge's work dissociates two types of value. Which statement correctly characterizes his distinction?",
-    options: [
-      "Hedonic value reflects motivation to work; motivational value reflects how pleasant the reward is",
-      "Hedonic value reflects pleasure of consuming; motivational value reflects drive to seek and work for reward",
-      "Hedonic value is encoded by dopamine; motivational value by opioids",
-      "Wanting and liking always activate together and cannot be experimentally separated"
-    ],
-    correct: 1,
-    tag: "Wanting vs. Liking",
-    explanation: "<strong>Berridge's distinction: LIKING = hedonic pleasure from consumption (opioids). WANTING = incentive salience / motivation to seek (dopamine).</strong> Both necessary but separable neural systems. They can dissociate — addicts often want intensely but no longer like the drug."
-  },
-  {
-    text: "In the extinction mimicry experiment, pimozide-treated rats stopped lever-pressing even though food was still delivered for each press. The most parsimonious interpretation:",
-    options: [
-      "Pimozide reduced physical ability to press lever (motor deficit)",
-      "Blocking dopamine reduced hedonic value of food so rats no longer enjoyed eating",
-      "Blocking dopamine reduced 'wanting' (incentive salience) so rats were unmotivated to work, though hedonic 'liking' remained intact",
-      "Pimozide eliminated rats' memory of lever-food association"
-    ],
-    correct: 2,
-    tag: "Extinction Mimicry",
-    explanation: "<strong>Pimozide blocked wanting (lever-pressing stopped) but not liking</strong> — food placed in mouth → normal hedonic 'yum' facial reactions. This confirms dopamine drives motivation to work, not pleasure of consumption. The behavior looked like extinction but the mechanism was different."
-  },
-  {
-    text: "Which evidence most directly supports that endogenous opioids (not dopamine) mediate hedonic 'liking'?",
-    options: [
-      "Rats given naloxone press lever less frequently for sugar pellets",
-      "Rats with destroyed dopamine neurons show reduced 'yum' facial reactions",
-      "Rats with destroyed dopamine neurons show intact hedonic facial reactions (tongue protrusion to sweet, gapes to bitter)",
-      "Parkinson's patients report reduced pleasure from sweet tastes"
-    ],
-    correct: 2,
-    tag: "Hedonic Liking / Opioids",
-    explanation: "<strong>Dopamine-depleted rats show normal tongue protrusion (yum) to sweet and normal gapes (yuck) to bitter.</strong> These phylogenetically conserved facial reactions are intact, confirming opioids carry the hedonic signal — not dopamine. Dopamine is required for working to obtain rewards, not for enjoying them."
-  },
-  {
-    text: "Cocaine and amphetamine both increase synaptic dopamine, but through different mechanisms:",
-    options: [
-      "Cocaine causes dopamine neurons to synthesize more dopamine; amphetamine blocks reuptake",
-      "Cocaine blocks dopamine reuptake (DAT blocker) so dopamine lingers; amphetamine triggers release of larger quantities",
-      "Both block D2 receptors on postsynaptic neurons",
-      "Cocaine acts on opioid receptors; amphetamine on dopamine receptors"
-    ],
-    correct: 1,
-    tag: "Cocaine vs. Amphetamine",
-    explanation: "<strong>Cocaine = DAT blocker</strong> (dopamine lingers longer in synapse because reuptake is blocked). <strong>Amphetamine = triggers release</strong> of more dopamine from vesicles. Both increase synaptic dopamine via different mechanisms, producing the wanting/craving that drives addiction."
-  },
-  {
-    text: "PIT (Pavlovian-to-Instrumental Transfer) is formally defined as:",
-    options: [
-      "A discriminative stimulus trained in instrumental context acquires Pavlovian properties",
-      "A Pavlovian CS modulates the vigor or rate of an ongoing instrumental response WITHOUT the CS being contingent on that response",
-      "An animal transfers its Pavlovian CR to a new instrumental context by observing another animal",
-      "Instrumental response rates decrease in presence of a CS associated with punishment"
-    ],
-    correct: 1,
-    tag: "PIT Definition",
-    explanation: "<strong>PIT formal definition:</strong> a Pavlovian CS (trained separately, no response required during Pavlovian phase) modulates ongoing instrumental responding without being part of the instrumental contingency. This bridges classical and instrumental conditioning."
-  },
-  {
-    text: "Specific PIT is attributed to which neural substrate?",
-    options: [
-      "Central amygdala, encoding general motivational arousal",
-      "Basolateral amygdala (BLA), encoding outcome-specific values projecting to nucleus accumbens shell",
-      "Orbitofrontal cortex, storing discriminative stimulus-response associations",
-      "Dorsal striatum, releasing habitual S-R behavior in presence of familiar cues"
-    ],
-    correct: 1,
-    tag: "PIT Neural Substrates",
-    explanation: "<strong>Specific PIT: BLA encodes outcome-specific values, projects to NAc shell.</strong> General PIT: CeA projects to NAc core via VTA for non-specific motivational arousal. Knowing this double dissociation is a common exam target."
-  },
-  {
-    text: "A person who quit smoking still reaches into their pocket upon walking into a bar where they used to smoke. This illustrates:",
-    options: [
-      "Extinction of instrumental response due to context change",
-      "Negative reinforcement of avoidance behavior",
-      "PIT: a Pavlovian cue (bar = CS associated with nicotine high) potentiates instrumental response (reaching) even though response no longer produces outcome",
-      "FI responding: bar acts as a timer for the next cigarette break"
-    ],
-    correct: 2,
-    tag: "PIT — Clinical",
-    explanation: "<strong>The bar is a Pavlovian CS</strong> associated with the nicotine high. Via PIT, it potentiates the reaching instrumental response even when quitting has removed the cigarette. This is the mechanism of cue-induced craving and relapse — a key clinical application of PIT."
-  },
-  {
-    text: "Which clinical observation most directly supports that long-term addiction involves a WANTING/LIKING dissociation?",
-    options: [
-      "Long-term cocaine users often report no longer experiencing a strong high ('liking') but continue to crave intensely ('wanting')",
-      "Addicts consistently report that hedonic pleasure increases with each use",
-      "Withdrawal from opioids is driven entirely by insular pain circuits",
-      "Behavioral addictions do not activate the dopaminergic system"
-    ],
+    text: "Which statement demonstrates operant rather than classical conditioning?",
+    options: ["A car salesperson receives a bonus for doing a good job at work. Afterward, she continues to work hard at selling cars.", "A toddler squeals and curls up in a ball when his mother moves her fingers as if she is going to tickle him.", "A teenager begins salivating as soon as he sees his mother bringing pizza to the table.", "Hearing the music of an ice cream truck causes children to get excited."],
     correct: 0,
-    tag: "Addiction — Wanting/Liking",
-    explanation: "<strong>Long-term users report diminished liking (no longer get same high) but escalated wanting (intense craving).</strong> This is the incentive salience dissociation applied to addiction: dopamine wanting system sensitized over time; opioid liking system down-regulated. This explains why addicts keep seeking despite no longer enjoying the drug."
-  }
+    tag: "Classical vs. Operant",
+    explanation: "The salesperson's hard work (R) produces a bonus (O). The outcome is contingent on her response — the hallmark of operant conditioning. Options b, c, and d are all examples of classically conditioned responses: a stimulus (tickling motion, sight of pizza, ice cream music) elicits a response without any response being required to produce the outcome."
+  },
+  {
+    text: "A mouse is placed in a maze and timed to see how long it takes him to reach the end. Once the first trial is completed, the experimenter places him back in the maze again to see if the speed changes. This is referred to as a:",
+    options: ["token response.", "drive-reduction method.", "free-operant paradigm.", "discrete trial."],
+    correct: 3,
+    tag: "Paradigms",
+    explanation: "In a discrete trial paradigm the experimenter controls the start and end of each trial and returns the animal to the starting position. This contrasts with the free-operant paradigm (Skinner box), where the animal determines its own rate of responding continuously."
+  },
+  {
+    text: "Which statement is TRUE about shaping?",
+    options: ["It is a difficult and time-consuming process.", "It has not yet been successfully used for modifying human behavior.", "It is a good way to train an animal very quickly.", "It involves giving bigger rewards as one gets closer to making the correct response."],
+    correct: 0,
+    tag: "Shaping",
+    explanation: "Shaping requires considerable experimenter skill and judgment — knowing when to advance criteria, when to back up, and how large each approximation step should be. It is not fast and has nothing to do with increasing reward magnitude; the same reinforcer is used throughout, but the criteria for earning it change progressively."
+  },
+  {
+    text: "Chaining involves _____, whereas shaping involves _____.",
+    options: ["reinforcement; punishment", "punishment; reinforcement", "reinforcing successive approximations to a desired behavior; training individual components of a complex response", "training individual components of a complex response; reinforcing successive approximations to a desired behavior"],
+    correct: 3,
+    tag: "Shaping and Chaining",
+    explanation: "Shaping targets a single behavior and incrementally raises the criterion until the full behavior is reached. Chaining targets a complex sequence of discrete responses and adds one link at a time (forward or backward) until the full chain is established. The two techniques are complementary — shaping refines individual components, chaining connects them. SECTION B  |  Reinforcers, Punishers, and the 2×2 Grid  (Q 7–14)"
+  },
+  {
+    text: "If an organism expects its favorite reinforcer but receives a less-preferred reinforcer, the phenomenon of negative _____ predicts that the organism may respond less than if it had received that less-preferred reinforcer at the start.",
+    options: ["contrast", "reinforcement", "behavior", "correlation"],
+    correct: 0,
+    tag: "Reinforcers",
+    explanation: "Negative contrast occurs when a downgrade in reinforcer quality produces responding that falls below the level that would be observed if the less-preferred reinforcer had been given all along. The organism responds as if the less-preferred outcome is even worse than its objective value because it is judged relative to the expected preferred outcome."
+  },
+  {
+    text: "For punishment to be MOST effective:",
+    options: ["it should start out weak and become gradually stronger each time the behavior is repeated.", "the organism should know under what circumstances a particular behavior will and will not be punished.", "the behavior cannot be concurrently reinforced.", "it should occur without reinforcement of the desired response."],
+    correct: 2,
+    tag: "Punishment",
+    explanation: "Concurrent reinforcement directly counteracts punishment. If the punished response also produces a reinforcer (e.g., a child gets peer approval for misbehaving even while being scolded), the reinforcement can maintain the behavior despite the punisher. Starting weak and escalating (option a) actually undermines punishment by habituating the organism."
+  },
+  {
+    text: "Which statement is an example of how discriminative stimuli can encourage cheating?",
+    options: ["A child who makes silly faces during class is reprimanded by the teacher, but his classmates tell him how funny he is.", "A teenager is punished for swearing at home but still swears when she is with her friends at school.", "A drug user is given a warning for his first offense and jail time if he repeats the offense.", "A politician who is exposed for illegally obtaining money one way will then find another way to obtain the money."],
+    correct: 1,
+    tag: "Punishment",
+    explanation: "The teenager's home environment is a discriminative stimulus for punishment (swearing is punished there). Her friends' context is a discriminative stimulus for non-punishment. Punishment only suppresses the behavior in the presence of the punishing stimulus — it does not eliminate the behavior when that stimulus is absent. Option a shows concurrent reinforcement undermining punishment, which is a different principle."
+  },
+  {
+    text: "Positive reinforcement involves _____ an outcome to _____ a behavior.",
+    options: ["adding; increase", "adding; decrease", "taking away; increase", "taking away; decrease"],
+    correct: 0,
+    tag: "Reinforcement Types",
+    explanation: "The word 'positive' means an outcome is added to the environment. 'Reinforcement' means the response increases in frequency. Together: a desirable stimulus is added following the response, causing the response to become more probable. Common misconception: 'positive' does not mean pleasant — it means added."
+  },
+  {
+    text: "Suppose a child whines continuously until his parents give him a cookie. The cessation of the child's whining would be _____ of the parents' behavior of giving the cookie.",
+    options: ["positive reinforcement", "positive punishment", "negative reinforcement", "negative punishment"],
+    correct: 2,
+    tag: "Reinforcement Types",
+    explanation: "View this from the parents' perspective: they give the cookie (R) and the aversive whining stops (O is removed). Removing an aversive outcome following a response is negative reinforcement. Parents are more likely to give in quickly in the future — their behavior has been negatively reinforced. This is also why giving in to tantrums can be counterproductive."
+  },
+  {
+    text: "Suppose a man has his driver's license revoked due to driving drunk. The taking away of his license would be _____ of the man's behavior of driving drunk.",
+    options: ["positive reinforcement", "positive punishment", "negative reinforcement", "negative punishment"],
+    correct: 3,
+    tag: "Reinforcement Types",
+    explanation: "Something desirable (driving privileges) is removed following the undesired behavior, making that behavior less likely in the future — this is negative punishment. A useful mnemonic: negative = subtraction; punishment = behavior decreases. Compare to positive punishment (adding an aversive outcome, such as a fine) and negative reinforcement (removing something aversive to increase behavior)."
+  },
+  {
+    text: "Children may misbehave in order to get the attention that is associated with being punished. In this example, the attention serves as _____ for misbehavior.",
+    options: ["negative reinforcement", "positive reinforcement", "negative punishment", "positive punishment"],
+    correct: 1,
+    tag: "Reinforcement Types",
+    explanation: "Even though the intent is to punish, attention is a positively reinforcing outcome for many children — it is something added (positive) that increases misbehavior. This illustrates why punishment must be applied carefully: if the punishing interaction inadvertently provides a reinforcer (attention), it can backfire and increase the very behavior it targets."
+  },
+  {
+    text: "Lauren is trying to stop her son from banging his spoon on the table during meals by praising him whenever he uses his spoon to eat his food. This is an example of differential:",
+    options: ["extinction.", "distancing.", "reinforcement of alternative behaviors.", "delayed reinforcement."],
+    correct: 2,
+    tag: "Punishment and Treatment",
+    explanation: "Differential reinforcement of alternative behaviors (DRA) reinforces a response that is incompatible with the unwanted behavior, giving the organism something to do instead. This is more effective than punishment alone because it shapes desired behavior while the undesired behavior is not reinforced. It is used extensively in applied behavior analysis and behavioral treatment of addiction. SECTION C  |  Schedules of Reinforcement, Matching Law, and Delay Discounting  (Q 15–21)"
+  },
+  {
+    text: "A child is given a gold star every time she gets an 'A' on a test. This is an example of:",
+    options: ["partial reinforcement.", "a fixed-interval schedule.", "continuous reinforcement.", "a variable-interval schedule."],
+    correct: 2,
+    tag: "Reinforcement Schedules",
+    explanation: "Every correct response (getting an A) is followed by reinforcement (a gold star) — this is a 100% or continuous reinforcement schedule (FR-1). Continuous reinforcement produces the fastest acquisition but also the fastest extinction when reinforcement stops. Partial/intermittent schedules produce slower acquisition but much greater resistance to extinction."
+  },
+  {
+    text: "A postreinforcement pause is seen when _____ schedules of reinforcement are used.",
+    options: ["variable-interval and variable-ratio", "fixed-interval and fixed-ratio", "variable-interval and fixed-ratio", "fixed-interval and variable-ratio"],
+    correct: 1,
+    tag: "Reinforcement Schedules",
+    explanation: "The post-reinforcement pause occurs only on fixed schedules, where the next reinforcement is predictably unavailable immediately after receiving one. On FI schedules, the pause is followed by a scalloped acceleration. On FR schedules, the pause is followed by a burst of steady responding. Variable schedules eliminate the pause because the next reinforcement could arrive at any moment."
+  },
+  {
+    text: "A teacher gives her class cupcakes every Friday. This is an example of a _____ schedule of reinforcement.",
+    options: ["fixed-ratio", "fixed-interval", "variable-ratio", "variable-interval"],
+    correct: 1,
+    tag: "Reinforcement Schedules",
+    explanation: "Reinforcement (cupcakes) is available after a fixed amount of time (one week/every Friday), not after a fixed number of responses. This is a fixed-interval schedule. Students often predict this and work harder as Friday approaches — a real-world version of the FI scallop. Comparing this to a fixed-ratio: if the teacher gave cupcakes every 5 homework assignments completed (not time-based), that would be FR."
+  },
+  {
+    text: "A baseball player gets a hit approximately every third time at bat. This is an example of a _____ schedule of reinforcement.",
+    options: ["fixed-ratio", "fixed-interval", "variable-ratio", "variable-interval"],
+    correct: 2,
+    tag: "Reinforcement Schedules",
+    explanation: "The player gets a hit (reinforcement) after an unpredictable number of at-bats — sometimes on the first, sometimes after five. The average works out to about every third try, making this a VR schedule. The uncertainty is key: the player never knows which swing will connect, which maintains persistent responding and resistance to extinction."
+  },
+  {
+    text: "A pigeon is given a choice between pecking an upper key on a VI 2-second schedule and pecking a lower key on a VI 4-second schedule. According to the matching law of choice behavior, the pigeon should:",
+    options: ["always peck the lower key.", "always peck the upper key.", "peck the lower key twice as frequently as the upper key.", "peck the upper key twice as frequently as the lower key."],
+    correct: 3,
+    tag: "Matching Law",
+    explanation: "The matching law states that response allocation approximates relative reinforcement rate. The upper key (VI 2-sec) pays off twice as often as the lower key (VI 4-sec). Therefore the pigeon should allocate approximately twice the responses to the upper key. It does not go all-in on the better option; it distributes responding proportionally."
+  },
+  {
+    text: "_____ is the progressive reduction of the subjective value of a reward the longer it is delayed.",
+    options: ["Response delaying", "Preference response", "Delay discounting", "Self-control"],
+    correct: 2,
+    tag: "Delay Discounting",
+    explanation: "Delay discounting describes how the subjective value of a reward decreases as a function of how far in the future it will be received. The discount rate varies across individuals and developmental stages — children and adolescents discount more steeply than adults. This concept explains impulsivity, addiction, and why immediate small rewards often outcompete larger delayed ones."
+  },
+  {
+    text: "Uma's birthday is in early November. Her parents tell her that if she gets a gift now, she will get a smaller gift for Christmas. However, if she forgoes a birthday gift now, she can get a larger gift for Christmas. Uma decides to forgo her birthday gift; however, her evaluation of the reward of a larger gift at Christmas loses value as she continues to wait many weeks for it. This illustrates the concept of:",
+    options: ["response deprivation.", "preference response.", "delay discounting.", "self-control."],
+    correct: 2,
+    tag: "Delay Discounting",
+    explanation: "Even though Uma initially chose the delayed larger reward (an act of self-control), the subjective value of that reward erodes as the delay stretches on — this is delay discounting in action. Her initial decision demonstrated self-control, but the erosion of subjective value over the waiting period illustrates why sustained delay discounting is cognitively demanding. SECTION D  |  Brain Substrates  (Q 22–24)"
+  },
+  {
+    text: "A rat with a dorsal striatum lesion would have trouble learning to:",
+    options: ["press a bar for a food reward.", "jump over a barrier to escape shock.", "run in an exercise wheel to obtain a drink of water.", "receive food when a red light comes on."],
+    correct: 3,
+    tag: "Brain Substrates",
+    explanation: "The dorsal striatum is specifically required when a discriminative stimulus (S) must guide the response (R). Option d requires learning that the red light signals when lever-pressing will be reinforced — a classic S-R association. Options a, b, and c are simpler R-O associations that do not require discriminative stimulus control and can survive dorsal striatum lesions."
+  },
+  {
+    text: "The orbitofrontal cortex is particularly important for learning:",
+    options: ["automatic S-R associations.", "to predict the outcomes of behaviors.", "R-O associations.", "the hedonic value of a stimulus."],
+    correct: 1,
+    tag: "Brain Substrates",
+    explanation: "The OFC mediates learning to predict what outcome a given response will produce. While options b and c sound similar, option b is the textbook's phrasing; R-O learning is the mechanism. OFC neurons fire during the anticipatory delay before an outcome is delivered, specifically coding the identity of the expected outcome (sucrose vs. quinine, grape juice vs. orange juice), not just its valence."
+  },
+  {
+    text: "Which statement is TRUE regarding the orbitofrontal cortex?",
+    options: ["Orbitofrontal neurons respond when the outcome is expected to be pleasant, but not when it is expected to be unpleasant.", "Orbitofrontal neurons respond when the outcome is expected to be unpleasant, but not when it is expected to be pleasant.", "Neurons code the expectation as well as the specific outcome.", "Orbitofrontal neurons code the pleasantness of a stimulus, but not its identity."],
+    correct: 2,
+    tag: "Brain Substrates",
+    explanation: "OFC neurons are selective for specific outcomes — some respond to the anticipation of sucrose, others to quinine; some fire to grape-juice-predicting pictures and also during grape juice delivery but not orange juice. They code both valence (reward vs. punisher) and identity (which specific reward). This is why OFC lesions disrupt reversal learning: the outcome-identity representations needed to update behavior are lost. SECTION E  |  Dopamine, Opioids, and Wanting vs. Liking  (Q 25–28)"
+  },
+  {
+    text: "If one has just finished eating one's favorite dessert, then that dessert will probably have _____ hedonic value and _____ motivational value.",
+    options: ["high; low", "low; high", "high; high", "low; low"],
+    correct: 0,
+    tag: "Wanting vs. Liking",
+    explanation: "This question captures the wanting/liking dissociation. The hedonic value (how pleasurable the dessert is when eaten — 'liking') remains high — you still enjoy it. But motivational value ('wanting' — how hard you would work for more) drops sharply after satiation. Dopamine encodes wanting (motivational value); endogenous opioids encode liking (hedonic value). These systems can be dissociated."
+  },
+  {
+    text: "The incentive salience hypothesis says that dopamine:",
+    options: ["gives food its 'goodness' qualities.", "is involved in predicting future rewards.", "provides organisms with the motivation to work for reinforcement.", "reduces the ability of an organism to enjoy food and other rewards."],
+    correct: 2,
+    tag: "Incentive Salience / Dopamine",
+    explanation: "Berridge's incentive salience hypothesis proposes that dopamine encodes 'wanting' — the motivational drive to seek and work for a reward — not 'liking' (hedonic pleasure). Dopamine-depleted animals still show normal hedonic facial reactions to food but are unwilling to work to obtain it. Dopamine is not a pleasure signal; it is an approach and effort signal."
+  },
+  {
+    text: "Rats that are given a dopamine antagonist will:",
+    options: ["prefer rat chow to sugar pellets if both are freely available.", "work for sugar pellets, even if rat chow is freely available.", "work for rat chow, even if sugar pellets are freely available.", "choose rat chow that is freely available over sugar pellets for which they must work."],
+    correct: 3,
+    tag: "Incentive Salience / Dopamine",
+    explanation: "Critically, dopamine-antagonized rats still prefer sucrose over chow when both are freely available (liking intact), but they will not press a lever to earn sucrose when plain chow requires no effort. This double dissociation — liking preserved, effort-based wanting abolished — is the core behavioral evidence for the incentive salience hypothesis."
+  },
+  {
+    text: "One suggestion regarding the roles of dopamine and opioids in the brain is that:",
+    options: ["dopamine is involved in 'wanting' a drug, whereas opioids are involved in 'liking' a drug.", "opioids are involved in 'wanting' a drug, whereas dopamine is involved in 'liking' a drug.", "dopamine and opioids are both involved in 'wanting' a drug.", "dopamine and opioids are both involved in 'liking' a drug."],
+    correct: 0,
+    tag: "Dopamine vs. Opioids",
+    explanation: "The canonical dissociation: dopamine = wanting (incentive salience, approach, motivation to work); endogenous opioids = liking (hedonic pleasure, the 'yum' reaction). In chronic addiction, the wanting system becomes sensitized (intense craving) while the liking system downregulates (diminished high) — explaining why addicts continue to crave a drug that no longer produces much pleasure. SECTION F  |  Addiction and Conditioning-Based Treatment  (Q 29–30)"
+  },
+  {
+    text: "What part of the brain is responsible for the motivational value of pain?",
+    options: ["insular cortex", "frontal cortex", "dACC", "orbitofrontal cortex"],
+    correct: 2,
+    tag: "Punishment Circuits",
+    explanation: "The dorsal anterior cingulate cortex (dACC) encodes how motivationally aversive pain is — how much it drives avoidance behavior — as distinct from its sensory intensity (encoded more in the insula and somatosensory cortex). This is why opioid analgesics can reduce pain's motivational value ('it still hurts, but it doesn't bother me') without fully eliminating its sensory perception."
+  },
+  {
+    text: "Drug addicts continue taking drugs in part to avoid the unpleasant effects of withdrawal. In this case, the behavior of taking drugs is being:",
+    options: ["positively reinforced.", "negatively reinforced.", "positively punished.", "negatively punished."],
+    correct: 1,
+    tag: "Addiction",
+    explanation: "Avoiding or escaping an aversive outcome (withdrawal symptoms are removed) following a response (taking the drug) is negative reinforcement — it increases the likelihood of drug-taking in the future. Drug addiction therefore involves a two-process reinforcement system: positive reinforcement from the initial high, and negative reinforcement from withdrawal avoidance as addiction progresses."
+  },
 ];
 
 let quizState = {};

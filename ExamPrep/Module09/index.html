@@ -499,7 +499,7 @@
     <div class="progress-bar-wrap" title="Quiz progress">
       <div class="progress-bar-fill" id="quizProgressBar"></div>
     </div>
-    <span class="progress-label" id="quizProgressLabel">0 / 25</span>
+    <span class="progress-label" id="quizProgressLabel">0 / 36</span>
   </div>
   <button id="theme-toggle" onclick="__toggleTheme()" aria-label="Toggle theme"></button>
 </header>
@@ -1101,7 +1101,7 @@
   <div class="tab-panel" id="tab-quiz">
     <div class="quiz-stats">
       <div class="stat-item">
-        <span class="stat-val blue" id="statTotal">25</span>
+        <span class="stat-val blue" id="statTotal">36</span>
         <span class="stat-lbl">Questions</span>
       </div>
       <div class="stat-item">
@@ -1124,18 +1124,18 @@
       <div class="q-header">
         <div class="q-meta">
           <div class="q-num">1</div>
-          <span class="q-tag">Core Concepts</span>
+          <span class="q-tag">Generalization &amp; Discrimination</span>
           <span class="q-status" id="qstatus-0"></span>
         </div>
-        <div class="q-text">In lecture, the broccoli/cauliflower scenario illustrated the central challenge of generalization. This is best described as:</div>
+        <div class="q-text">The transfer of past learning to new situations and problems is known as:</div>
       </div>
       <div class="q-options">
-        <button class="q-opt" onclick="answerQ(0,0)">A) Deciding whether to use operant or classical conditioning to encode a new stimulus</button>
-        <button class="q-opt" onclick="answerQ(0,1)">B) Finding the right balance between specificity (how narrowly a rule applies) and generality (how broadly it applies)</button>
-        <button class="q-opt" onclick="answerQ(0,2)">C) Choosing between discrete and distributed representations in the cortex</button>
-        <button class="q-opt" onclick="answerQ(0,3)">D) Determining whether dopamine or acetylcholine mediates the learned association</button>
+        <button class="q-opt" onclick="answerQ(0,0)">A) negative patterning.</button>
+        <button class="q-opt" onclick="answerQ(0,1)">B) acquired equivalence.</button>
+        <button class="q-opt" onclick="answerQ(0,2)">C) generalization.</button>
+        <button class="q-opt" onclick="answerQ(0,3)">D) discrimination.</button>
       </div>
-      <div class="q-explanation hidden" id="qexp-0"><strong>Correct: B.</strong> The core challenge is the specificity-generality tradeoff — both extremes (over or under-generalize) produce poor adaptive outcomes.</div>
+      <div class="q-explanation hidden" id="qexp-0"><strong>Correct: C.</strong> Generalization is the core process by which prior learning is applied to novel stimuli or situations. It is the brain's default response to similar inputs.</div>
     </div>
 
     <!-- Q2 -->
@@ -1143,18 +1143,18 @@
       <div class="q-header">
         <div class="q-meta">
           <div class="q-num">2</div>
-          <span class="q-tag">Generalization Gradient</span>
+          <span class="q-tag">Generalization &amp; Discrimination</span>
           <span class="q-status" id="qstatus-1"></span>
         </div>
-        <div class="q-text">Pigeons trained to peck a yellow light (580 nm) are tested with lights of other colors. Their response rates form a bell-shaped curve peaking at 580 nm. This curve is called a:</div>
+        <div class="q-text">Miranda was bitten by a small brown dog and now she has a fear of all dogs, regardless of their size or color. This is an example of:</div>
       </div>
       <div class="q-options">
-        <button class="q-opt" onclick="answerQ(1,0)">A) Discrimination gradient</button>
-        <button class="q-opt" onclick="answerQ(1,1)">B) Tuning curve</button>
-        <button class="q-opt" onclick="answerQ(1,2)">C) Generalization gradient</button>
-        <button class="q-opt" onclick="answerQ(1,3)">D) Inhibitory gradient</button>
+        <button class="q-opt" onclick="answerQ(1,0)">A) negative patterning.</button>
+        <button class="q-opt" onclick="answerQ(1,1)">B) acquired equivalence.</button>
+        <button class="q-opt" onclick="answerQ(1,2)">C) generalization.</button>
+        <button class="q-opt" onclick="answerQ(1,3)">D) discrimination.</button>
       </div>
-      <div class="q-explanation hidden" id="qexp-1"><strong>Correct: C.</strong> A generalization gradient shows how responding changes as a function of physical stimulus properties. Peaks at trained stimulus and declines for differing stimuli.</div>
+      <div class="q-explanation hidden" id="qexp-1"><strong>Correct: C.</strong> Miranda is applying (over-)generalizing her fear response from one specific stimulus (small brown dog) to an entire category (all dogs), regardless of physical similarity — a classic example of broad generalization.</div>
     </div>
 
     <!-- Q3 -->
@@ -1162,18 +1162,18 @@
       <div class="q-header">
         <div class="q-meta">
           <div class="q-num">3</div>
-          <span class="q-tag">Discrete Representation</span>
+          <span class="q-tag">Generalization &amp; Discrimination</span>
           <span class="q-status" id="qstatus-2"></span>
         </div>
-        <div class="q-text">In the discrete-component model trained on yellow light, what response would the network produce when shown yellow-orange light for the first time?</div>
+        <div class="q-text">Brian can tell from the way his baby cries whether she is hungry, needs changing, is sick, or is tired. This is an example of:</div>
       </div>
       <div class="q-options">
-        <button class="q-opt" onclick="answerQ(2,0)">A) Strong response of 1.0, because yellow-orange is very similar</button>
-        <button class="q-opt" onclick="answerQ(2,1)">B) Moderate response of 0.66, because stimuli share some nodes</button>
-        <button class="q-opt" onclick="answerQ(2,2)">C) No response (0.0), because the yellow-orange node has never been trained</button>
-        <button class="q-opt" onclick="answerQ(2,3)">D) Inhibitory response, because yellow-orange is associated with no reward</button>
+        <button class="q-opt" onclick="answerQ(2,0)">A) generalization.</button>
+        <button class="q-opt" onclick="answerQ(2,1)">B) discrimination.</button>
+        <button class="q-opt" onclick="answerQ(2,2)">C) sensory preconditioning.</button>
+        <button class="q-opt" onclick="answerQ(2,3)">D) negative patterning.</button>
       </div>
-      <div class="q-explanation hidden" id="qexp-2"><strong>Correct: C.</strong> Discrete model assigns weight=1.0 to trained yellow node, 0 to all others. Yellow-orange activates a different node (weight=0), so response=0. This is why discrete model fails to explain generalization gradients.</div>
+      <div class="q-explanation hidden" id="qexp-2"><strong>Correct: B.</strong> Brian has learned to distinguish between physically similar stimuli (different cry types) that predict different outcomes. This is discrimination — perceiving meaningful differences between similar stimuli.</div>
     </div>
 
     <!-- Q4 -->
@@ -1181,18 +1181,18 @@
       <div class="q-header">
         <div class="q-meta">
           <div class="q-num">4</div>
-          <span class="q-tag">Representation</span>
+          <span class="q-tag">Generalization &amp; Discrimination</span>
           <span class="q-status" id="qstatus-3"></span>
         </div>
-        <div class="q-text">In the "retina directly wired to the finger with nothing in between" analogy from lecture, what concept does this explain?</div>
+        <div class="q-text">The process by which one learns about new categories usually based on common features is known as:</div>
       </div>
       <div class="q-options">
-        <button class="q-opt" onclick="answerQ(3,0)">A) Absence of configural nodes in simple networks</button>
-        <button class="q-opt" onclick="answerQ(3,1)">B) Absence of internal representations — no cognition between input and output</button>
-        <button class="q-opt" onclick="answerQ(3,2)">C) Direct cortical-to-motor connections bypassing hippocampus</button>
-        <button class="q-opt" onclick="answerQ(3,3)">D) Role of nucleus basalis in broadcasting acetylcholine to motor cortex</button>
+        <button class="q-opt" onclick="answerQ(3,0)">A) negative patterning.</button>
+        <button class="q-opt" onclick="answerQ(3,1)">B) acquired equivalence.</button>
+        <button class="q-opt" onclick="answerQ(3,2)">C) generalization.</button>
+        <button class="q-opt" onclick="answerQ(3,3)">D) concept formation.</button>
       </div>
-      <div class="q-explanation hidden" id="qexp-3"><strong>Correct: B.</strong> This explains discrete-component representations — pure input-output with no internal representation layer, hence no distributed coding allowing generalization to similar stimuli.</div>
+      <div class="q-explanation hidden" id="qexp-3"><strong>Correct: D.</strong> Concept formation is the process of grouping stimuli into categories based on shared features, allowing inductive inference about new members of those categories.</div>
     </div>
 
     <!-- Q5 -->
@@ -1200,18 +1200,18 @@
       <div class="q-header">
         <div class="q-meta">
           <div class="q-num">5</div>
-          <span class="q-tag">Distributed Representation</span>
+          <span class="q-tag">Generalization &amp; Discrimination</span>
           <span class="q-status" id="qstatus-4"></span>
         </div>
-        <div class="q-text">A distributed representation network trained on yellow (nodes 3,4,5 each weighted 0.33). When orange is presented (activating nodes 5,6,7), what response is produced?</div>
+        <div class="q-text">Tommy is visiting his grandmother and cooking dinner for her. Since his grandmother has a different model of microwave oven than his, he has learned that he needs to push a different sequence of buttons on his grandmother's microwave oven when he wants to use it for cooking. This is an example of:</div>
       </div>
       <div class="q-options">
-        <button class="q-opt" onclick="answerQ(4,0)">A) 1.0, because orange is within visible spectrum</button>
-        <button class="q-opt" onclick="answerQ(4,1)">B) 0.66, because two orange nodes overlap with yellow</button>
-        <button class="q-opt" onclick="answerQ(4,2)">C) 0.33, because only node 5 is trained from yellow training</button>
-        <button class="q-opt" onclick="answerQ(4,3)">D) 0.0, because orange was never presented</button>
+        <button class="q-opt" onclick="answerQ(4,0)">A) generalization.</button>
+        <button class="q-opt" onclick="answerQ(4,1)">B) discrimination.</button>
+        <button class="q-opt" onclick="answerQ(4,2)">C) sensory preconditioning.</button>
+        <button class="q-opt" onclick="answerQ(4,3)">D) negative patterning.</button>
       </div>
-      <div class="q-explanation hidden" id="qexp-4"><strong>Correct: C.</strong> Orange activates nodes 5,6,7. Only node 5 has trained weight (0.33). Nodes 6,7 have weight=0. Net response=0.33. Matches biological finding that even dissimilar stimuli produce some weakened response.</div>
+      <div class="q-explanation hidden" id="qexp-4"><strong>Correct: B.</strong> Tommy must distinguish between two physically similar appliances (two microwave models) that require different responses — the defining feature of discrimination learning.</div>
     </div>
 
     <!-- Q6 -->
@@ -1219,18 +1219,18 @@
       <div class="q-header">
         <div class="q-meta">
           <div class="q-num">6</div>
-          <span class="q-tag">Which Model?</span>
+          <span class="q-tag">Generalization</span>
           <span class="q-status" id="qstatus-5"></span>
         </div>
-        <div class="q-text">The hospital wall-color scenario (blue→2 days recovery, red→4 days, how many for green?) was used in lecture to show which model IS required:</div>
+        <div class="q-text">Isaac once became sick after eating pepperoni pizza. Based on the idea of a generalization gradient, which food would he be MOST likely to avoid in the future?</div>
       </div>
       <div class="q-options">
-        <button class="q-opt" onclick="answerQ(5,0)">A) Distributed representation is required because colors lie on a continuous wavelength axis</button>
-        <button class="q-opt" onclick="answerQ(5,1)">B) Discrete-component representation is sufficient, because blue/red/green are categorically distinct</button>
-        <button class="q-opt" onclick="answerQ(5,2)">C) Neither model can explain this; configural node required</button>
-        <button class="q-opt" onclick="answerQ(5,3)">D) Rescorla-Wagner alone is sufficient without representational assumptions</button>
+        <button class="q-opt" onclick="answerQ(5,0)">A) spaghetti.</button>
+        <button class="q-opt" onclick="answerQ(5,1)">B) broccoli.</button>
+        <button class="q-opt" onclick="answerQ(5,2)">C) ice cream.</button>
+        <button class="q-opt" onclick="answerQ(5,3)">D) sausage pizza.</button>
       </div>
-      <div class="q-explanation hidden" id="qexp-5"><strong>Correct: A.</strong> Green (520 nm) lies between blue (470 nm) and red (620 nm) on a continuous spectrum. Predicting green recovery requires interpolating along that continuum — exactly what distributed representation does via overlapping node activations.</div>
+      <div class="q-explanation hidden" id="qexp-5"><strong>Correct: D.</strong> A generalization gradient predicts that the most generalization occurs to stimuli that are most physically similar to the training stimulus. Sausage pizza is most similar to pepperoni pizza in appearance, texture, and context.</div>
     </div>
 
     <!-- Q7 -->
@@ -1238,18 +1238,18 @@
       <div class="q-header">
         <div class="q-meta">
           <div class="q-num">7</div>
-          <span class="q-tag">Discrimination Training</span>
+          <span class="q-tag">Generalization</span>
           <span class="q-status" id="qstatus-6"></span>
         </div>
-        <div class="q-text">Following discrimination training (S+=1000 Hz food; S-=950 Hz no food), how does the pigeon's generalization gradient change?</div>
+        <div class="q-text">If a generalization gradient were a flat horizontal line, it would mean that:</div>
       </div>
       <div class="q-options">
-        <button class="q-opt" onclick="answerQ(6,0)">A) Becomes broader, because the animal has experienced more stimuli</button>
-        <button class="q-opt" onclick="answerQ(6,1)">B) Becomes steeper and more narrowly focused around 1000 Hz, because the inhibitory S- gradient sharpens discrimination</button>
-        <button class="q-opt" onclick="answerQ(6,2)">C) The gradient shifts its peak to 950 Hz</button>
-        <button class="q-opt" onclick="answerQ(6,3)">D) Remains unchanged; discrimination training only affects response rates, not gradient shape</button>
+        <button class="q-opt" onclick="answerQ(6,0)">A) very little generalization has occurred.</button>
+        <button class="q-opt" onclick="answerQ(6,1)">B) a lot of discrimination has occurred.</button>
+        <button class="q-opt" onclick="answerQ(6,2)">C) a lot of generalization has occurred.</button>
+        <button class="q-opt" onclick="answerQ(6,3)">D) both generalization and discrimination have occurred.</button>
       </div>
-      <div class="q-explanation hidden" id="qexp-6"><strong>Correct: B.</strong> Jenkins &amp; Harrison (1962): discrimination training dramatically steepens the generalization gradient. S- (950 Hz) builds inhibitory gradient counteracting generalization from S+, narrowing the profile.</div>
+      <div class="q-explanation hidden" id="qexp-6"><strong>Correct: C.</strong> A flat gradient means the organism responds equally to all stimuli regardless of their similarity to the training stimulus — complete (maximal) generalization, with no discrimination between trained and novel stimuli.</div>
     </div>
 
     <!-- Q8 -->
@@ -1257,18 +1257,18 @@
       <div class="q-header">
         <div class="q-meta">
           <div class="q-num">8</div>
-          <span class="q-tag">Peak Shift</span>
+          <span class="q-tag">Generalization</span>
           <span class="q-status" id="qstatus-7"></span>
         </div>
-        <div class="q-text">Hanson (1959) trained S+=550 nm and S-=555 nm. According to Spence's theory, test results would show:</div>
+        <div class="q-text">A typical generalization gradient for many different stimuli across a broad range of generalization experiments resembles a:</div>
       </div>
       <div class="q-options">
-        <button class="q-opt" onclick="answerQ(7,0)">A) Peak responding at 555 nm (S-), attracted to novel stimulus</button>
-        <button class="q-opt" onclick="answerQ(7,1)">B) Peak responding at exactly 550 nm (S+), unchanged</button>
-        <button class="q-opt" onclick="answerQ(7,2)">C) Peak responding shifted below 550 nm (e.g., ~540 nm), away from S-</button>
-        <button class="q-opt" onclick="answerQ(7,3)">D) Responding broadened across all wavelengths</button>
+        <button class="q-opt" onclick="answerQ(7,0)">A) flat line.</button>
+        <button class="q-opt" onclick="answerQ(7,1)">B) bell-shaped curve.</button>
+        <button class="q-opt" onclick="answerQ(7,2)">C) series of large hills.</button>
+        <button class="q-opt" onclick="answerQ(7,3)">D) sharp peak.</button>
       </div>
-      <div class="q-explanation hidden" id="qexp-7"><strong>Correct: C.</strong> Peak shift: net gradient (excitatory around S+ minus inhibitory around S-) maximized on side of S+ opposite S-. Peak moves below 550 nm, away from 555 nm.</div>
+      <div class="q-explanation hidden" id="qexp-7"><strong>Correct: B.</strong> The generalization gradient consistently shows a peak at the trained stimulus and graded, symmetric decline on both sides — producing a bell-shaped (Gaussian-like) curve. This is one of the most replicated findings in learning research.</div>
     </div>
 
     <!-- Q9 -->
@@ -1276,18 +1276,18 @@
       <div class="q-header">
         <div class="q-meta">
           <div class="q-num">9</div>
-          <span class="q-tag">Peak Shift Universality</span>
+          <span class="q-tag">Generalization &amp; Discrimination</span>
           <span class="q-status" id="qstatus-8"></span>
         </div>
-        <div class="q-text">Peak shift occurs in bees, horses, rats, goldfish, chickens, pigeons, and humans. This universality suggests:</div>
+        <div class="q-text">Suppose a person reinforces a rat for responding to an 800-Hz tone and then observes that its response to a novel 750-Hz tone is about 50% of its response to the 800-Hz tone. The lower response to the 750-Hz tone occurs because the rat:</div>
       </div>
       <div class="q-options">
-        <button class="q-opt" onclick="answerQ(8,0)">A) Uniquely mammalian phenomenon dependent on prefrontal cortex</button>
-        <button class="q-opt" onclick="answerQ(8,1)">B) Fundamental property of associative learning from overlapping excitatory and inhibitory gradients</button>
-        <button class="q-opt" onclick="answerQ(8,2)">C) Artifact of operant conditioning disappearing with Pavlovian procedures</button>
-        <button class="q-opt" onclick="answerQ(8,3)">D) Dependent on hippocampus and related to episodic memory</button>
+        <button class="q-opt" onclick="answerQ(8,0)">A) cannot tell the difference between the two tones, so it responds by guessing.</button>
+        <button class="q-opt" onclick="answerQ(8,1)">B) expects a 50% probability that its response will lead to a reward.</button>
+        <button class="q-opt" onclick="answerQ(8,2)">C) can hear the 750-Hz tone about half as well as the 800-Hz tone.</button>
+        <button class="q-opt" onclick="answerQ(8,3)">D) has learned to discriminate between the tones; therefore, it makes different responses to them.</button>
       </div>
-      <div class="q-explanation hidden" id="qexp-8"><strong>Correct: B.</strong> Universality supports Spence's explanation: emerges from basic associative principles — interaction of excitatory (S+) and inhibitory (S-) gradients. No hippocampus or PFC required.</div>
+      <div class="q-explanation hidden" id="qexp-8"><strong>Correct: B.</strong> Shepard's consequential region framework explains this: the rat is not confused — it is estimating the probability that the 750-Hz tone belongs to the same consequential region as 800 Hz. A 50% response reflects a 50% expectation of reward, not a perceptual deficit.</div>
     </div>
 
     <!-- Q10 -->
@@ -1295,18 +1295,18 @@
       <div class="q-header">
         <div class="q-meta">
           <div class="q-num">10</div>
-          <span class="q-tag">Application</span>
+          <span class="q-tag">Generalization</span>
           <span class="q-status" id="qstatus-9"></span>
         </div>
-        <div class="q-text">A physician trained only in Wisconsin who moves to California may have a "too broad" generalization gradient. This would mean:</div>
+        <div class="q-text">The shape of generalization gradients shows that two very similar stimuli are _____, while two very different stimuli are _____.</div>
       </div>
       <div class="q-options">
-        <button class="q-opt" onclick="answerQ(9,0)">A) Unable to recognize any disease patterns</button>
-        <button class="q-opt" onclick="answerQ(9,1)">B) Overgeneralizes — applies rules learned from Wisconsin patients too broadly to California patients, treating genuinely different cases as equivalent</button>
-        <button class="q-opt" onclick="answerQ(9,2)">C) Undergeneralizes — treats cases that should be grouped as distinct</button>
-        <button class="q-opt" onclick="answerQ(9,3)">D) Lost ability to form new associations due to cortical rigidity</button>
+        <button class="q-opt" onclick="answerQ(9,0)">A) expected to produce similar consequences; expected to produce different consequences.</button>
+        <button class="q-opt" onclick="answerQ(9,1)">B) expected to produce different consequences; expected to produce similar consequences.</button>
+        <button class="q-opt" onclick="answerQ(9,2)">C) difficult to tell apart; easy to tell apart.</button>
+        <button class="q-opt" onclick="answerQ(9,3)">D) easy to tell apart; difficult to tell apart.</button>
       </div>
-      <div class="q-explanation hidden" id="qexp-9"><strong>Correct: B.</strong> Too-broad gradient = overgeneralization: applies learned associations to stimuli different enough from training set that different responses would be appropriate.</div>
+      <div class="q-explanation hidden" id="qexp-9"><strong>Correct: A.</strong> This is the fundamental principle of generalization gradients: physical similarity predicts expectation of similar outcomes. As stimuli become more dissimilar, the expected overlap in consequences drops sharply.</div>
     </div>
 
     <!-- Q11 -->
@@ -1314,18 +1314,18 @@
       <div class="q-header">
         <div class="q-meta">
           <div class="q-num">11</div>
-          <span class="q-tag">Sensory Preconditioning</span>
+          <span class="q-tag">Generalization &amp; Discrimination</span>
           <span class="q-status" id="qstatus-10"></span>
         </div>
-        <div class="q-text">In sensory preconditioning, the compound-exposure group blinks to the tone in Phase 3 even though tone was never directly paired with airpuff. This is:</div>
+        <div class="q-text">_____ representations use a unique node to represent each individual stimulus.</div>
       </div>
       <div class="q-options">
-        <button class="q-opt" onclick="answerQ(10,0)">A) Similarity-based generalization, because tone and light are both sensory stimuli</button>
-        <button class="q-opt" onclick="answerQ(10,1)">B) Meaning-based generalization, because tone acquired predictive meaning via co-occurrence with light</button>
-        <button class="q-opt" onclick="answerQ(10,2)">C) Peak shift, because response shifted from light to tone</button>
-        <button class="q-opt" onclick="answerQ(10,3)">D) Latent inhibition, because tone was pre-exposed before conditioning</button>
+        <button class="q-opt" onclick="answerQ(10,0)">A) Discrete-component.</button>
+        <button class="q-opt" onclick="answerQ(10,1)">B) Distributed.</button>
+        <button class="q-opt" onclick="answerQ(10,2)">C) Topographic.</button>
+        <button class="q-opt" onclick="answerQ(10,3)">D) Consequential.</button>
       </div>
-      <div class="q-explanation hidden" id="qexp-10"><strong>Correct: B.</strong> Tone and light are physically dissimilar but become functionally equivalent through co-occurrence. This is cross-modality, meaning-based (not similarity-based) generalization.</div>
+      <div class="q-explanation hidden" id="qexp-10"><strong>Correct: A.</strong> In a discrete-component representation, each possible stimulus maps to exactly one input node. Because no nodes are shared between stimuli, there is no basis for generalization between them.</div>
     </div>
 
     <!-- Q12 -->
@@ -1333,18 +1333,18 @@
       <div class="q-header">
         <div class="q-meta">
           <div class="q-num">12</div>
-          <span class="q-tag">Hippocampus &amp; SPC</span>
+          <span class="q-tag">Representations</span>
           <span class="q-status" id="qstatus-11"></span>
         </div>
-        <div class="q-text">Rabbits with fornix lesions receive compound-exposure training (tone+light) in Phase 1, light-airpuff in Phase 2. In Phase 3, how do lesioned rabbits respond to the tone?</div>
+        <div class="q-text">When a discrete-component representation is used, there is:</div>
       </div>
       <div class="q-options">
-        <button class="q-opt" onclick="answerQ(11,0)">A) Strong blinking, because fornix lesion enhances sensory preconditioning</button>
-        <button class="q-opt" onclick="answerQ(11,1)">B) Same level as control (separate-exposure) animals — preconditioning effect abolished</button>
-        <button class="q-opt" onclick="answerQ(11,2)">C) Stronger responding because attention to tone was enhanced</button>
-        <button class="q-opt" onclick="answerQ(11,3)">D) Blinking to all stimuli indiscriminately due to overgeneralization</button>
+        <button class="q-opt" onclick="answerQ(11,0)">A) a lot of generalization.</button>
+        <button class="q-opt" onclick="answerQ(11,1)">B) no generalization.</button>
+        <button class="q-opt" onclick="answerQ(11,2)">C) no discrimination.</button>
+        <button class="q-opt" onclick="answerQ(11,3)">D) no discrimination or generalization.</button>
       </div>
-      <div class="q-explanation hidden" id="qexp-11"><strong>Correct: B.</strong> Hippocampal damage eliminates sensory preconditioning. Lesioned compound-exposure rabbits look exactly like lesioned separate-exposure rabbits — Phase 1 co-occurrence cannot support Phase 3 generalization without intact hippocampus.</div>
+      <div class="q-explanation hidden" id="qexp-11"><strong>Correct: B.</strong> Because each stimulus activates a unique, non-overlapping node, a weight trained for stimulus A has no effect when stimulus B is presented. This produces zero generalization to similar stimuli — the fundamental failure of discrete-component models.</div>
     </div>
 
     <!-- Q13 -->
@@ -1352,18 +1352,18 @@
       <div class="q-header">
         <div class="q-meta">
           <div class="q-num">13</div>
-          <span class="q-tag">Acquired Equivalence</span>
+          <span class="q-tag">Representations</span>
           <span class="q-status" id="qstatus-12"></span>
         </div>
-        <div class="q-text">Rats with entorhinal cortex lesions learn Phase 1 (A1→X1, A2→X1) and Phase 2 (A1→food) normally but fail Phase 3 transfer. The entorhinal cortex is specifically required for:</div>
+        <div class="q-text">If one trains a discrete-component model to respond to a blue light, how will it respond to a blue-green light?</div>
       </div>
       <div class="q-options">
-        <button class="q-opt" onclick="answerQ(12,0)">A) Simple stimulus-response learning</button>
-        <button class="q-opt" onclick="answerQ(12,1)">B) Retaining recently learned associations over a delay</button>
-        <button class="q-opt" onclick="answerQ(12,2)">C) Generalizing previously learned equivalences to novel transfer situations</button>
-        <button class="q-opt" onclick="answerQ(12,3)">D) Detecting physical similarity between A1 and A2</button>
+        <button class="q-opt" onclick="answerQ(12,0)">A) It will respond as strongly as it does to the blue light.</button>
+        <button class="q-opt" onclick="answerQ(12,1)">B) It will respond less strongly than it does to the blue light.</button>
+        <button class="q-opt" onclick="answerQ(12,2)">C) It will respond more strongly than it does to the blue light.</button>
+        <button class="q-opt" onclick="answerQ(12,3)">D) It will not respond at all to the blue-green light.</button>
       </div>
-      <div class="q-explanation hidden" id="qexp-12"><strong>Correct: C.</strong> Acquisition and retention intact but transfer impaired pinpoints the entorhinal cortex's role in using previously learned equivalences to guide novel generalization — not basic learning itself.</div>
+      <div class="q-explanation hidden" id="qexp-12"><strong>Correct: D.</strong> The blue-green node is a separate, untrained node with a weight of 0. No activation flows to the output, so the model produces no response — regardless of the close physical similarity to the trained blue light.</div>
     </div>
 
     <!-- Q14 -->
@@ -1371,18 +1371,18 @@
       <div class="q-header">
         <div class="q-meta">
           <div class="q-num">14</div>
-          <span class="q-tag">Latent Inhibition</span>
+          <span class="q-tag">Representations</span>
           <span class="q-status" id="qstatus-13"></span>
         </div>
-        <div class="q-text">In latent inhibition, the pre-exposed animal must do what to acquire the new tone-shock association?</div>
+        <div class="q-text">If one trains a distributed model to respond to a blue light and then presents it with a blue-green light, it responds to the blue-green light because:</div>
       </div>
       <div class="q-options">
-        <button class="q-opt" onclick="answerQ(13,0)">A) Strengthen the existing tone-shock association from pre-exposure</button>
-        <button class="q-opt" onclick="answerQ(13,1)">B) Suppress responding because tone is now associated with shock</button>
-        <button class="q-opt" onclick="answerQ(13,2)">C) Unlearn or override the tone-nothing association established in Phase 1 before acquiring the new tone-shock one</button>
-        <button class="q-opt" onclick="answerQ(13,3)">D) Transfer the shock association to a different sensory modality</button>
+        <button class="q-opt" onclick="answerQ(13,0)">A) both lights activate the same input nodes.</button>
+        <button class="q-opt" onclick="answerQ(13,1)">B) the weights from the input nodes to the internal representation layer are fixed.</button>
+        <button class="q-opt" onclick="answerQ(13,2)">C) both lights activate some of the same nodes in the internal representation layer.</button>
+        <button class="q-opt" onclick="answerQ(13,3)">D) the blue-green input node activates the blue input node.</button>
       </div>
-      <div class="q-explanation hidden" id="qexp-13"><strong>Correct: C.</strong> The pre-exposed animal built a tone→nothing association in Phase 1. Phase 2 requires building tone→shock while overcoming the prior inhibitory association — "getting rid of a memory."</div>
+      <div class="q-explanation hidden" id="qexp-13"><strong>Correct: C.</strong> Distributed representations work through overlap: blue and blue-green share internal representation nodes. Weights trained for blue transfer to blue-green via those shared nodes, producing a partial (generalized) response proportional to the degree of overlap.</div>
     </div>
 
     <!-- Q15 -->
@@ -1390,18 +1390,18 @@
       <div class="q-header">
         <div class="q-meta">
           <div class="q-num">15</div>
-          <span class="q-tag">Latent Inhibition &amp; Lesions</span>
+          <span class="q-tag">Representations</span>
           <span class="q-status" id="qstatus-14"></span>
         </div>
-        <div class="q-text">Shohamy, Allen &amp; Gluck (2000) showed entorhinal cortex lesions ELIMINATE latent inhibition. Lesioned pre-exposed rabbits learned the tone-airpuff association FASTER than healthy controls. This tells us:</div>
+        <div class="q-text">The discrete-component model and the distributed model differ in that only the:</div>
       </div>
       <div class="q-options">
-        <button class="q-opt" onclick="answerQ(14,0)">A) Entorhinal damage enhances all forms of conditioning</button>
-        <button class="q-opt" onclick="answerQ(14,1)">B) Entorhinal cortex required to maintain the Phase 1 "tone-nothing" representation that normally interferes with Phase 2. Without it, learning is unimpeded</button>
-        <button class="q-opt" onclick="answerQ(14,2)">C) Lesion caused better attention to CS</button>
-        <button class="q-opt" onclick="answerQ(14,3)">D) Nucleus basalis compensated by releasing more ACh</button>
+        <button class="q-opt" onclick="answerQ(14,0)">A) discrete-component model includes input nodes.</button>
+        <button class="q-opt" onclick="answerQ(14,1)">B) distributed model includes input nodes.</button>
+        <button class="q-opt" onclick="answerQ(14,2)">C) discrete-component model includes an internal representation layer.</button>
+        <button class="q-opt" onclick="answerQ(14,3)">D) distributed model includes an internal representation layer.</button>
       </div>
-      <div class="q-explanation hidden" id="qexp-14"><strong>Correct: B.</strong> Without entorhinal cortex, animal has no "memory" of pre-exposure to override, so learns Phase 2 as if naive — actually faster than hippocampally-intact controls who must first overcome their prior association.</div>
+      <div class="q-explanation hidden" id="qexp-14"><strong>Correct: D.</strong> Both models have input and output nodes. The critical architectural difference is that distributed models add an intermediate internal representation layer where overlapping representations create the basis for generalization.</div>
     </div>
 
     <!-- Q16 -->
@@ -1409,18 +1409,18 @@
       <div class="q-header">
         <div class="q-meta">
           <div class="q-num">16</div>
-          <span class="q-tag">Cortical Plasticity</span>
+          <span class="q-tag">Generalization</span>
           <span class="q-status" id="qstatus-15"></span>
         </div>
-        <div class="q-text">Weinberger's guinea pig study showed that after pairing 2500 Hz tone with shock:</div>
+        <div class="q-text">Which model(s) can account for generalization?</div>
       </div>
       <div class="q-options">
-        <button class="q-opt" onclick="answerQ(15,0)">A) Neurons throughout A1 became broadly responsive to all frequencies above 2000 Hz</button>
-        <button class="q-opt" onclick="answerQ(15,1)">B) Individual neurons that originally preferred ~1000 Hz shifted to respond best to ~2500 Hz (the trained frequency)</button>
-        <button class="q-opt" onclick="answerQ(15,2)">C) Trained tone caused nucleus basalis neurons to increase preferred frequency</button>
-        <button class="q-opt" onclick="answerQ(15,3)">D) Training reduced A1 responsiveness, reflecting habituation</button>
+        <button class="q-opt" onclick="answerQ(15,0)">A) only discrete-component models.</button>
+        <button class="q-opt" onclick="answerQ(15,1)">B) only distributed models.</button>
+        <button class="q-opt" onclick="answerQ(15,2)">C) both discrete-component and distributed models.</button>
+        <button class="q-opt" onclick="answerQ(15,3)">D) neither discrete-component nor distributed models.</button>
       </div>
-      <div class="q-explanation hidden" id="qexp-15"><strong>Correct: B.</strong> A1 neurons remapped their tuning toward the CS frequency (2500 Hz). More neurons now respond best to trained stimulus — consistent with principle that important stimuli earn more cortical real estate.</div>
+      <div class="q-explanation hidden" id="qexp-15"><strong>Correct: B.</strong> Only distributed models produce generalization, because only they encode stimuli as overlapping sets of internal nodes. Discrete-component models assign unique, non-overlapping nodes and therefore cannot generalize between similar stimuli.</div>
     </div>
 
     <!-- Q17 -->
@@ -1428,18 +1428,18 @@
       <div class="q-header">
         <div class="q-meta">
           <div class="q-num">17</div>
-          <span class="q-tag">ACh vs. Dopamine</span>
+          <span class="q-tag">Generalization</span>
           <span class="q-status" id="qstatus-16"></span>
         </div>
-        <div class="q-text">ACh's role relative to dopamine: "dopamine signals valence, ACh signals salience." In practical terms:</div>
+        <div class="q-text">Compared with the generalization gradient that is observed when no discrimination training is given, the generalization gradient that is observed after discrimination training is:</div>
       </div>
       <div class="q-options">
-        <button class="q-opt" onclick="answerQ(16,0)">A) ACh tells cortex whether event was good or bad; dopamine tells how surprising</button>
-        <button class="q-opt" onclick="answerQ(16,1)">B) Dopamine tells cortex whether event was good or bad; ACh tells that something important happened, without specifying valence</button>
-        <button class="q-opt" onclick="answerQ(16,2)">C) Both signal prediction errors identically; difference only anatomical</button>
-        <button class="q-opt" onclick="answerQ(16,3)">D) ACh involved in reward learning; dopamine in fear learning</button>
+        <button class="q-opt" onclick="answerQ(16,0)">A) shallower.</button>
+        <button class="q-opt" onclick="answerQ(16,1)">B) steeper.</button>
+        <button class="q-opt" onclick="answerQ(16,2)">C) the same.</button>
+        <button class="q-opt" onclick="answerQ(16,3)">D) shallower or steeper, depending on the stimulus.</button>
       </div>
-      <div class="q-explanation hidden" id="qexp-16"><strong>Correct: B.</strong> Dopamine codes signed value (positive or negative PE). ACh codes unsigned importance — "something happened that you need to represent more." This is why ACh can drive cortical remapping regardless of whether US was reward or punishment.</div>
+      <div class="q-explanation hidden" id="qexp-16"><strong>Correct: B.</strong> Discrimination training (S+ vs. S-) builds an inhibitory gradient around S- that sharpens the excitatory gradient around S+. The result is a much steeper, more narrowly focused generalization gradient — reflecting learned specificity.</div>
     </div>
 
     <!-- Q18 -->
@@ -1447,18 +1447,18 @@
       <div class="q-header">
         <div class="q-meta">
           <div class="q-num">18</div>
-          <span class="q-tag">Nucleus Basalis Lesion</span>
+          <span class="q-tag">Generalization</span>
           <span class="q-status" id="qstatus-17"></span>
         </div>
-        <div class="q-text">A researcher lesions cholinergic nucleus basalis neurons before training a rat on a NEW visual discrimination task; rat previously learned an auditory discrimination. Prediction:</div>
+        <div class="q-text">Studies have compared discrimination training with examples of two categories with standard acquisition training where participants were shown exemplars for only one category. Results show _____ generalization gradients after standard acquisition training and _____ generalization gradients after discrimination training.</div>
       </div>
       <div class="q-options">
-        <button class="q-opt" onclick="answerQ(17,0)">A) Rat loses previously learned auditory discrimination — ACh required to maintain established memories</button>
-        <button class="q-opt" onclick="answerQ(17,1)">B) Rat unable to learn new visual discrimination (overgeneralizes colors) but previously learned auditory discrimination remains intact</button>
-        <button class="q-opt" onclick="answerQ(17,2)">C) Rat unable to perform either auditory or visual discrimination</button>
-        <button class="q-opt" onclick="answerQ(17,3)">D) Rat learns visual discrimination normally but forgets auditory</button>
+        <button class="q-opt" onclick="answerQ(17,0)">A) broader, less focused; narrower, more focused.</button>
+        <button class="q-opt" onclick="answerQ(17,1)">B) narrower, more focused; broader, less focused.</button>
+        <button class="q-opt" onclick="answerQ(17,2)">C) broader, more focused; narrower, less focused.</button>
+        <button class="q-opt" onclick="answerQ(17,3)">D) narrower, less focused; broader, more focused.</button>
       </div>
-      <div class="q-explanation hidden" id="qexp-17"><strong>Correct: B.</strong> Auditory cortex remapping already occurred — doesn't need ongoing ACh to maintain. Nucleus basalis lesion prevents NEW cortical remapping, so new visual discrimination learning fails.</div>
+      <div class="q-explanation hidden" id="qexp-17"><strong>Correct: A.</strong> Without a contrasting category (S-), learners apply their knowledge broadly. Adding a contrasting category forces the learner to identify distinguishing features, narrowing the gradient to respond only to the most diagnostic properties of S+.</div>
     </div>
 
     <!-- Q19 -->
@@ -1466,18 +1466,18 @@
       <div class="q-header">
         <div class="q-meta">
           <div class="q-num">19</div>
-          <span class="q-tag">Gluck-Myers Model</span>
+          <span class="q-tag">Discrimination</span>
           <span class="q-status" id="qstatus-18"></span>
         </div>
-        <div class="q-text">Gluck &amp; Myers (1993) model proposes the hippocampal region performs two complementary operations on stimulus representations:</div>
+        <div class="q-text">A training procedure in which difficult discrimination is learned by starting with an easy version of the task and proceeding to incrementally harder versions as the easier ones are mastered is referred to as _____ learning.</div>
       </div>
       <div class="q-options">
-        <button class="q-opt" onclick="answerQ(18,0)">A) Encoding and retrieval</button>
-        <button class="q-opt" onclick="answerQ(18,1)">B) Excitation and inhibition</button>
-        <button class="q-opt" onclick="answerQ(18,2)">C) Compression of redundant/unimportant info AND differentiation (expansion) of useful info</button>
-        <button class="q-opt" onclick="answerQ(18,3)">D) Sensory preconditioning and acquired equivalence</button>
+        <button class="q-opt" onclick="answerQ(18,0)">A) consequential.</button>
+        <button class="q-opt" onclick="answerQ(18,1)">B) discrimination.</button>
+        <button class="q-opt" onclick="answerQ(18,2)">C) errorless discrimination.</button>
+        <button class="q-opt" onclick="answerQ(18,3)">D) integral.</button>
       </div>
-      <div class="q-explanation hidden" id="qexp-18"><strong>Correct: C.</strong> Hippocampus compresses redundant/unimportant stimuli (fewer resources) and differentiates stimuli that matter (expanding representations). The New Yorker map analogy: compressed Midwest, detailed 9th/10th Ave.</div>
+      <div class="q-explanation hidden" id="qexp-18"><strong>Correct: C.</strong> Errorless discrimination learning scaffolds the task by beginning with easily distinguishable stimuli and gradually reducing the difference. This avoids the frustration of repeated failures and produces rapid, strong learning — though later studies show it can be rigid and inflexible.</div>
     </div>
 
     <!-- Q20 -->
@@ -1485,18 +1485,18 @@
       <div class="q-header">
         <div class="q-meta">
           <div class="q-num">20</div>
-          <span class="q-tag">fMRI &amp; Hippocampus</span>
+          <span class="q-tag">Generalization</span>
           <span class="q-status" id="qstatus-19"></span>
         </div>
-        <div class="q-text">fMRI data showed hippocampal activation during Phase 1 (equivalence training) predicted Phase 3 accuracy, but hippocampal activation DURING Phase 3 did not. This supports:</div>
+        <div class="q-text">Training in which presentation of two stimuli together as a compound results in a later tendency to generalize what is known about one of these stimuli to the other is known as:</div>
       </div>
       <div class="q-options">
-        <button class="q-opt" onclick="answerQ(19,0)">A) Hippocampus primarily retrieval structure — must be active at test for generalization</button>
-        <button class="q-opt" onclick="answerQ(19,1)">B) Hippocampus builds representational scaffold during learning that other areas later use for transfer; critical work at encoding not generalization</button>
-        <button class="q-opt" onclick="answerQ(19,2)">C) Hippocampal activity unrelated to generalization</button>
-        <button class="q-opt" onclick="answerQ(19,3)">D) Midbrain, not hippocampus, primarily mediates acquired equivalence</button>
+        <button class="q-opt" onclick="answerQ(19,0)">A) consequential learning.</button>
+        <button class="q-opt" onclick="answerQ(19,1)">B) sensory preconditioning.</button>
+        <button class="q-opt" onclick="answerQ(19,2)">C) error discrimination learning.</button>
+        <button class="q-opt" onclick="answerQ(19,3)">D) integral learning.</button>
       </div>
-      <div class="q-explanation hidden" id="qexp-19"><strong>Correct: B.</strong> Confirms Gluck-Myers model: hippocampus constructs appropriate stimulus representations during learning. Once built, other brain areas execute transfer — hippocampus doesn't need to be active at test.</div>
+      <div class="q-explanation hidden" id="qexp-19"><strong>Correct: B.</strong> Sensory preconditioning uses a 3-phase procedure: compound exposure (tone + light), conditioning of one stimulus (light -&gt; US), then testing the other (tone alone). Co-occurrence in Phase 1 enables meaning-based generalization in Phase 3.</div>
     </div>
 
     <!-- Q21 -->
@@ -1504,18 +1504,18 @@
       <div class="q-header">
         <div class="q-meta">
           <div class="q-num">21</div>
-          <span class="q-tag">New Yorker Map</span>
+          <span class="q-tag">Acquired Equivalence</span>
           <span class="q-status" id="qstatus-20"></span>
         </div>
-        <div class="q-text">The New Yorker caricature (Steinberg, 1976) with 9th/10th Avenues taking up half the map illustrated:</div>
+        <div class="q-text">Suppose one pairs a light and a tone in the first phase of a sensory preconditioning paradigm. If one then pairs just the light with a food pellet, such that the light elicits a salivation response, the tone presented alone will:</div>
       </div>
       <div class="q-options">
-        <button class="q-opt" onclick="answerQ(20,0)">A) How stereotypes are formed through confirmation bias</button>
-        <button class="q-opt" onclick="answerQ(20,1)">B) How cortical and hippocampal representations expand for frequently discriminated stimuli and compress for rarely discriminated ones</button>
-        <button class="q-opt" onclick="answerQ(20,2)">C) How distributed representations naturally arise from co-occurrence</button>
-        <button class="q-opt" onclick="answerQ(20,3)">D) Why Sapir-Whorf predicts better color discrimination in New Yorkers</button>
+        <button class="q-opt" onclick="answerQ(20,0)">A) elicit no response.</button>
+        <button class="q-opt" onclick="answerQ(20,1)">B) elicit salivation only if the light is presented at the same time.</button>
+        <button class="q-opt" onclick="answerQ(20,2)">C) suppress salivation.</button>
+        <button class="q-opt" onclick="answerQ(20,3)">D) also elicit salivation.</button>
       </div>
-      <div class="q-explanation hidden" id="qexp-20"><strong>Correct: B.</strong> Analogy for representational distortion: regions requiring fine discrimination (9th/10th Ave for New Yorkers) get more resources; irrelevant regions (Midwest) are compressed. Mirrors both cortical maps and the Gluck-Myers hippocampal model.</div>
+      <div class="q-explanation hidden" id="qexp-20"><strong>Correct: D.</strong> Because the tone and light were paired together in Phase 1, the tone acquired the light's meaning (predicts food) through association. In Phase 3, the tone elicits salivation even though it was never directly paired with food — this is meaning-based generalization.</div>
     </div>
 
     <!-- Q22 -->
@@ -1523,18 +1523,18 @@
       <div class="q-header">
         <div class="q-meta">
           <div class="q-num">22</div>
-          <span class="q-tag">Sapir-Whorf</span>
+          <span class="q-tag">Generalization &amp; Discrimination</span>
           <span class="q-status" id="qstatus-21"></span>
         </div>
-        <div class="q-text">The Sapir-Whorf hypothesis predicts Russian speakers should show better discrimination of certain blue shades than English speakers. This is because:</div>
+        <div class="q-text">Austin and Evan both enjoy video games. If a person later learns that Austin also enjoys playing soccer, the person may infer that Evan also enjoys playing soccer. This is an example of:</div>
       </div>
       <div class="q-options">
-        <button class="q-opt" onclick="answerQ(21,0)">A) Russian speakers have larger primary visual cortices due to cultural emphasis on art</button>
-        <button class="q-opt" onclick="answerQ(21,1)">B) Russian has two distinct words for blue, which may tune perceptual/categorical boundaries and allocate more representational resources to distinguishing those shades</button>
-        <button class="q-opt" onclick="answerQ(21,2)">C) English lacks color terms entirely</button>
-        <button class="q-opt" onclick="answerQ(21,3)">D) Russian speakers receive more color feedback during childhood</button>
+        <button class="q-opt" onclick="answerQ(21,0)">A) acquired equivalence.</button>
+        <button class="q-opt" onclick="answerQ(21,1)">B) sensory preconditioning.</button>
+        <button class="q-opt" onclick="answerQ(21,2)">C) discrimination training.</button>
+        <button class="q-opt" onclick="answerQ(21,3)">D) negative patterning.</button>
       </div>
-      <div class="q-explanation hidden" id="qexp-21"><strong>Correct: B.</strong> Having separate words for categories (two words for blue in Russian) shapes how people perceive and discriminate stimuli — consistent with category labels tuning generalization gradients.</div>
+      <div class="q-explanation hidden" id="qexp-21"><strong>Correct: A.</strong> Austin and Evan have become functionally equivalent (both like video games), so new information about Austin (he likes soccer) generalizes to Evan. This is acquired equivalence: prior co-outcome history increases generalization between two stimuli.</div>
     </div>
 
     <!-- Q23 -->
@@ -1542,18 +1542,18 @@
       <div class="q-header">
         <div class="q-meta">
           <div class="q-num">23</div>
-          <span class="q-tag">Sapir-Whorf Directionality</span>
+          <span class="q-tag">Generalization</span>
           <span class="q-status" id="qstatus-22"></span>
         </div>
-        <div class="q-text">Ali mentioned the camel example: Arabic ~160 words for camel vs English one word. He asked about directionality. The two possible directions are:</div>
+        <div class="q-text">Even though physical similarity is a frequent cause of generalization, _____ demonstrated that learning can be generalized if dissimilar stimuli have a history of co-occurring or predicting the same consequence.</div>
       </div>
       <div class="q-options">
-        <button class="q-opt" onclick="answerQ(22,0)">A) Language shapes perception, OR perception shapes language — unclear which drives which</button>
-        <button class="q-opt" onclick="answerQ(22,1)">B) Culture shapes language, OR genetics shapes language</button>
-        <button class="q-opt" onclick="answerQ(22,2)">C) Childhood experience shapes vocabulary, OR adult experience shapes perception</button>
-        <button class="q-opt" onclick="answerQ(22,3)">D) Discrimination training creates words, OR words create discrimination training</button>
+        <button class="q-opt" onclick="answerQ(22,0)">A) similarity-based generalization.</button>
+        <button class="q-opt" onclick="answerQ(22,1)">B) negative patterning.</button>
+        <button class="q-opt" onclick="answerQ(22,2)">C) acquired equivalence.</button>
+        <button class="q-opt" onclick="answerQ(22,3)">D) stimulus generalization.</button>
       </div>
-      <div class="q-explanation hidden" id="qexp-22"><strong>Correct: A.</strong> Ali was explicit about this uncertainty: "Is it because of the language that I think in a certain way, or is it because the way I think that we develop this language?" Directionality of Sapir-Whorf remains an active debate.</div>
+      <div class="q-explanation hidden" id="qexp-22"><strong>Correct: C.</strong> Acquired equivalence shows that physical similarity is not required for generalization. Two stimuli that share outcomes (or co-occur) become functionally equivalent, and learning about one transfers to the other — this is meaning-based generalization.</div>
     </div>
 
     <!-- Q24 -->
@@ -1561,18 +1561,18 @@
       <div class="q-header">
         <div class="q-meta">
           <div class="q-num">24</div>
-          <span class="q-tag">Schizophrenia</span>
+          <span class="q-tag">Generalization &amp; Discrimination</span>
           <span class="q-status" id="qstatus-23"></span>
         </div>
-        <div class="q-text">Patients with schizophrenia are tested on acquired equivalence. On which phase do they show the clearest deficit?</div>
+        <div class="q-text">If one uses a red light and a blue light as stimuli in a negative-patterning task, one would reward responding:</div>
       </div>
       <div class="q-options">
-        <button class="q-opt" onclick="answerQ(23,0)">A) Phase 1: cannot learn that two people prefer same fish</button>
-        <button class="q-opt" onclick="answerQ(23,1)">B) Phase 2: cannot learn that one person newly prefers different fish</button>
-        <button class="q-opt" onclick="answerQ(23,2)">C) Phase 3: cannot infer that equivalent person also prefers the newly trained fish</button>
-        <button class="q-opt" onclick="answerQ(23,3)">D) Both Phase 1 and Phase 3 equally</button>
+        <button class="q-opt" onclick="answerQ(23,0)">A) to one light but not the other.</button>
+        <button class="q-opt" onclick="answerQ(23,1)">B) only when both lights are on at the same time.</button>
+        <button class="q-opt" onclick="answerQ(23,2)">C) only to a purple light.</button>
+        <button class="q-opt" onclick="answerQ(23,3)">D) to either light alone but not when both are on at the same time.</button>
       </div>
-      <div class="q-explanation hidden" id="qexp-23"><strong>Correct: C.</strong> Schizophrenia: intact acquisition (Phase 1) and retention, impaired transfer generalization (Phase 3). Behavioral signature points specifically to hippocampal region dysfunction during encoding of equivalences.</div>
+      <div class="q-explanation hidden" id="qexp-23"><strong>Correct: D.</strong> Negative patterning: each component stimulus (red, blue) individually predicts the US (reward), but the compound (red + blue together) predicts no US. The animal must learn that the combination has opposite meaning from the components.</div>
     </div>
 
     <!-- Q25 -->
@@ -1580,21 +1580,230 @@
       <div class="q-header">
         <div class="q-meta">
           <div class="q-num">25</div>
-          <span class="q-tag">Transitive Inference</span>
+          <span class="q-tag">Negative Patterning</span>
           <span class="q-status" id="qstatus-24"></span>
         </div>
-        <div class="q-text">Patients with schizophrenia succeed on non-relational pairs (AE) but fail on relational pairs (BD) in transitive inference. This is consistent with:</div>
+        <div class="q-text">Negative patterning is difficult to learn because it requires the organism to suppress its tendency to:</div>
       </div>
       <div class="q-options">
-        <button class="q-opt" onclick="answerQ(24,0)">A) Impaired hippocampal relational memory specifically affecting B-D comparison that requires inference across the chain</button>
-        <button class="q-opt" onclick="answerQ(24,1)">B) General memory deficit affecting all pair types equally</button>
-        <button class="q-opt" onclick="answerQ(24,2)">C) Impaired attention to pairs in the middle of the sequence</button>
-        <button class="q-opt" onclick="answerQ(24,3)">D) Enhanced discrimination that makes B and D appear more similar</button>
+        <button class="q-opt" onclick="answerQ(24,0)">A) make a motor response.</button>
+        <button class="q-opt" onclick="answerQ(24,1)">B) discriminate.</button>
+        <button class="q-opt" onclick="answerQ(24,2)">C) categorize.</button>
+        <button class="q-opt" onclick="answerQ(24,3)">D) generalize.</button>
       </div>
-      <div class="q-explanation hidden" id="qexp-24"><strong>Correct: A.</strong> AE pairs can be solved by rote (A always wins, E always loses). BD requires relational inference (B&gt;C&gt;D) — this is hippocampal relational memory. Schizophrenia disrupts the hippocampal circuit needed for this inferential transfer.</div>
+      <div class="q-explanation hidden" id="qexp-24"><strong>Correct: D.</strong> The natural tendency is to generalize from components to compounds — if A predicts the US and B predicts the US, then A+B together should also predict the US (even more strongly). Negative patterning requires overriding this default generalization.</div>
     </div>
 
-  </div><!-- /tab-quiz -->
+    <!-- Q26 -->
+    <div class="q-card" id="qcard-25">
+      <div class="q-header">
+        <div class="q-meta">
+          <div class="q-num">26</div>
+          <span class="q-tag">Negative Patterning</span>
+          <span class="q-status" id="qstatus-25"></span>
+        </div>
+        <div class="q-text">Negative patterning is one example of a larger class of learning phenomena that involve configurations of stimuli and that CANNOT be explained using:</div>
+      </div>
+      <div class="q-options">
+        <button class="q-opt" onclick="answerQ(25,0)">A) single-layer networks.</button>
+        <button class="q-opt" onclick="answerQ(25,1)">B) single-layer networks with more complex nodes.</button>
+        <button class="q-opt" onclick="answerQ(25,2)">C) a network with multiple layers of weights and nodes.</button>
+        <button class="q-opt" onclick="answerQ(25,3)">D) input or output nodes.</button>
+      </div>
+      <div class="q-explanation hidden" id="qexp-25"><strong>Correct: A.</strong> Single-layer networks cannot solve negative patterning because there is no weight assignment that allows responding to A and to B individually while withholding response to A+B. A multilayer network with configural nodes (AND gates) is required.</div>
+    </div>
+
+    <!-- Q27 -->
+    <div class="q-card" id="qcard-26">
+      <div class="q-header">
+        <div class="q-meta">
+          <div class="q-num">27</div>
+          <span class="q-tag">Representations</span>
+          <span class="q-status" id="qstatus-26"></span>
+        </div>
+        <div class="q-text">In a single-layer network using a discrete-component representation, negative patterning:</div>
+      </div>
+      <div class="q-options">
+        <button class="q-opt" onclick="answerQ(26,0)">A) is represented by assigning a weight of 1 to one stimulus and a weight of 0 to the other.</button>
+        <button class="q-opt" onclick="answerQ(26,1)">B) is represented by assigning a weight of 1 to both stimuli and a weight of 0 to their combination.</button>
+        <button class="q-opt" onclick="answerQ(26,2)">C) is represented by assigning a weight of 1 to both stimuli and to their combination.</button>
+        <button class="q-opt" onclick="answerQ(26,3)">D) cannot be represented in any way that would make the network respond correctly.</button>
+      </div>
+      <div class="q-explanation hidden" id="qexp-26"><strong>Correct: D.</strong> This is a mathematical impossibility in a single-layer network: raising weights for A and B (to get responding to each alone) necessarily increases activation when both are present, preventing suppression of the compound. No valid weight assignment exists.</div>
+    </div>
+
+    <!-- Q28 -->
+    <div class="q-card" id="qcard-27">
+      <div class="q-header">
+        <div class="q-meta">
+          <div class="q-num">28</div>
+          <span class="q-tag">Generalization</span>
+          <span class="q-status" id="qstatus-27"></span>
+        </div>
+        <div class="q-text">If one lesions the primary auditory cortex of a cat, the generalization gradient:</div>
+      </div>
+      <div class="q-options">
+        <button class="q-opt" onclick="answerQ(27,0)">A) becomes negative.</button>
+        <button class="q-opt" onclick="answerQ(27,1)">B) acquires two or more peaks.</button>
+        <button class="q-opt" onclick="answerQ(27,2)">C) acquires a much sharper peak.</button>
+        <button class="q-opt" onclick="answerQ(27,3)">D) flattens out.</button>
+      </div>
+      <div class="q-explanation hidden" id="qexp-27"><strong>Correct: D.</strong> Without A1, the cat loses the topographic distributed representation of tones. It can still respond to tones in general but cannot distinguish between frequencies — the gradient flattens to a horizontal line, reflecting massive overgeneralization.</div>
+    </div>
+
+    <!-- Q29 -->
+    <div class="q-card" id="qcard-28">
+      <div class="q-header">
+        <div class="q-meta">
+          <div class="q-num">29</div>
+          <span class="q-tag">Generalization &amp; Discrimination</span>
+          <span class="q-status" id="qstatus-28"></span>
+        </div>
+        <div class="q-text">If a tone and shock are repeatedly paired, neurons in A1:</div>
+      </div>
+      <div class="q-options">
+        <button class="q-opt" onclick="answerQ(28,0)">A) reduce their response to the tone.</button>
+        <button class="q-opt" onclick="answerQ(28,1)">B) change their best frequency to correspond with that of the tone.</button>
+        <button class="q-opt" onclick="answerQ(28,2)">C) do not change their response to the tone.</button>
+        <button class="q-opt" onclick="answerQ(28,3)">D) reduce their response to tones of similar frequency.</button>
+      </div>
+      <div class="q-explanation hidden" id="qexp-28"><strong>Correct: B.</strong> Weinberger's studies showed that conditioning causes A1 neurons to remap: neurons previously tuned to other frequencies shift to respond best to the CS frequency. More cortical real estate is allocated to the trained (now important) tone.</div>
+    </div>
+
+    <!-- Q30 -->
+    <div class="q-card" id="qcard-29">
+      <div class="q-header">
+        <div class="q-meta">
+          <div class="q-num">30</div>
+          <span class="q-tag">Generalization &amp; Discrimination</span>
+          <span class="q-status" id="qstatus-29"></span>
+        </div>
+        <div class="q-text">The different sensory cortices receive information about:</div>
+      </div>
+      <div class="q-options">
+        <button class="q-opt" onclick="answerQ(29,0)">A) whether a salient event has occurred.</button>
+        <button class="q-opt" onclick="answerQ(29,1)">B) the other sensory modalities.</button>
+        <button class="q-opt" onclick="answerQ(29,2)">C) the nature of an important consequence.</button>
+        <button class="q-opt" onclick="answerQ(29,3)">D) the type of response to make.</button>
+      </div>
+      <div class="q-explanation hidden" id="qexp-29"><strong>Correct: A.</strong> Primary sensory cortices do not receive direct input from reward or pain systems. They only receive a generic salience signal — something important happened — which is sufficient to trigger cortical remapping without specifying the nature of the consequence.</div>
+    </div>
+
+    <!-- Q31 -->
+    <div class="q-card" id="qcard-30">
+      <div class="q-header">
+        <div class="q-meta">
+          <div class="q-num">31</div>
+          <span class="q-tag">Cortical Plasticity</span>
+          <span class="q-status" id="qstatus-30"></span>
+        </div>
+        <div class="q-text">The nucleus basalis:</div>
+      </div>
+      <div class="q-options">
+        <button class="q-opt" onclick="answerQ(30,0)">A) provides information regarding whether consequences are good or bad.</button>
+        <button class="q-opt" onclick="answerQ(30,1)">B) selects what information enters memory and how it is to be encoded by other brain regions.</button>
+        <button class="q-opt" onclick="answerQ(30,2)">C) sends output to the cortex to enable cortical remapping.</button>
+        <button class="q-opt" onclick="answerQ(30,3)">D) compresses redundant or unimportant information.</button>
+      </div>
+      <div class="q-explanation hidden" id="qexp-30"><strong>Correct: C.</strong> The nucleus basalis releases acetylcholine (ACh) broadly across the cortex when salient events occur. ACh promotes synaptic plasticity, enabling cortical remapping that expands the representation of the CS. It signals salience, not valence (good vs. bad).</div>
+    </div>
+
+    <!-- Q32 -->
+    <div class="q-card" id="qcard-31">
+      <div class="q-header">
+        <div class="q-meta">
+          <div class="q-num">32</div>
+          <span class="q-tag">Generalization &amp; Discrimination</span>
+          <span class="q-status" id="qstatus-31"></span>
+        </div>
+        <div class="q-text">Lesions of the hippocampal region lead to:</div>
+      </div>
+      <div class="q-options">
+        <button class="q-opt" onclick="answerQ(31,0)">A) enhanced acquired equivalence.</button>
+        <button class="q-opt" onclick="answerQ(31,1)">B) impaired acquired equivalence.</button>
+        <button class="q-opt" onclick="answerQ(31,2)">C) increased generalization between stimuli that have co-occurred in the past.</button>
+        <button class="q-opt" onclick="answerQ(31,3)">D) enhanced latent inhibition.</button>
+      </div>
+      <div class="q-explanation hidden" id="qexp-31"><strong>Correct: B.</strong> The hippocampal region is required for meaning-based generalization. Animals with hippocampal lesions can learn simple associations (Phases 1 and 2) but cannot use previously established equivalences to support transfer generalization in Phase 3.</div>
+    </div>
+
+    <!-- Q33 -->
+    <div class="q-card" id="qcard-32">
+      <div class="q-header">
+        <div class="q-meta">
+          <div class="q-num">33</div>
+          <span class="q-tag">Generalization &amp; Discrimination</span>
+          <span class="q-status" id="qstatus-32"></span>
+        </div>
+        <div class="q-text">According to Gluck and Myers's model, the hippocampal region should be MOST active:</div>
+      </div>
+      <div class="q-options">
+        <button class="q-opt" onclick="answerQ(32,0)">A) throughout training.</button>
+        <button class="q-opt" onclick="answerQ(32,1)">B) at the end of training.</button>
+        <button class="q-opt" onclick="answerQ(32,2)">C) early in training.</button>
+        <button class="q-opt" onclick="answerQ(32,3)">D) after an association has been learned.</button>
+      </div>
+      <div class="q-explanation hidden" id="qexp-32"><strong>Correct: C.</strong> The Gluck-Myers model proposes that the hippocampus is most active early in learning, when it is computing new stimulus representations (compression and differentiation). Once representations are established, other areas (cortex, cerebellum) carry out the behavior — consistent with fMRI findings.</div>
+    </div>
+
+    <!-- Q34 -->
+    <div class="q-card" id="qcard-33">
+      <div class="q-header">
+        <div class="q-meta">
+          <div class="q-num">34</div>
+          <span class="q-tag">Brain &amp; Clinical</span>
+          <span class="q-status" id="qstatus-33"></span>
+        </div>
+        <div class="q-text">On an acquired-equivalence task, people with schizophrenia:</div>
+      </div>
+      <div class="q-options">
+        <button class="q-opt" onclick="answerQ(33,0)">A) perform as well as controls but take more time.</button>
+        <button class="q-opt" onclick="answerQ(33,1)">B) cannot perform any part of the task.</button>
+        <button class="q-opt" onclick="answerQ(33,2)">C) perform normally only in the third phase.</button>
+        <button class="q-opt" onclick="answerQ(33,3)">D) can learn the initial discrimination but cannot generalize in the third phase.</button>
+      </div>
+      <div class="q-explanation hidden" id="qexp-33"><strong>Correct: D.</strong> This is the hallmark deficit pattern: intact acquisition and retention (Phases 1 and 2) but impaired transfer generalization (Phase 3). It directly implicates hippocampal dysfunction in schizophrenia, since the hippocampus is specifically required for Phase 3 transfer.</div>
+    </div>
+
+    <!-- Q35 -->
+    <div class="q-card" id="qcard-34">
+      <div class="q-header">
+        <div class="q-meta">
+          <div class="q-num">35</div>
+          <span class="q-tag">Generalization</span>
+          <span class="q-status" id="qstatus-34"></span>
+        </div>
+        <div class="q-text">Which finding confirms Gluck and Myers's prediction regarding the role of the hippocampus in generalization?</div>
+      </div>
+      <div class="q-options">
+        <button class="q-opt" onclick="answerQ(34,0)">A) People with schizophrenia display reduced acquired-equivalency effects.</button>
+        <button class="q-opt" onclick="answerQ(34,1)">B) Antipsychotic medications can affect acquired equivalence.</button>
+        <button class="q-opt" onclick="answerQ(34,2)">C) Activity in the hippocampus during generalization trials on an acquired-equivalency task is correlated with accuracy.</button>
+        <button class="q-opt" onclick="answerQ(34,3)">D) Activity in the hippocampus during learning trials on an acquired-equivalency task is correlated with accuracy.</button>
+      </div>
+      <div class="q-explanation hidden" id="qexp-34"><strong>Correct: D.</strong> Gluck and Myers predicted the hippocampus does its critical work during learning (building representations), not at test. The fMRI finding that hippocampal activation during Phase 1 (learning), not Phase 3 (generalization), predicts transfer accuracy directly confirms this.</div>
+    </div>
+
+    <!-- Q36 -->
+    <div class="q-card" id="qcard-35">
+      <div class="q-header">
+        <div class="q-meta">
+          <div class="q-num">36</div>
+          <span class="q-tag">Brain &amp; Clinical</span>
+          <span class="q-status" id="qstatus-35"></span>
+        </div>
+        <div class="q-text">Suppose one gives the following information to a patient with schizophrenia: Joe is taller than Frank; Frank is taller than Jim; Jim is taller than Mike; and Mike is taller than Steve. With which comparison would the patient have the MOST difficulty?</div>
+      </div>
+      <div class="q-options">
+        <button class="q-opt" onclick="answerQ(35,0)">A) comparing Joe with Frank.</button>
+        <button class="q-opt" onclick="answerQ(35,1)">B) comparing Steve with Jim.</button>
+        <button class="q-opt" onclick="answerQ(35,2)">C) comparing Frank with Mike.</button>
+        <button class="q-opt" onclick="answerQ(35,3)">D) comparing Mike with Steve.</button>
+      </div>
+      <div class="q-explanation hidden" id="qexp-35"><strong>Correct: C.</strong> Frank vs. Mike is the relational BD pair (requiring hierarchical inference: Frank &gt; Jim &gt; Mike). Both Frank and Mike have appeared in both superior and inferior roles in the training pairs, so this comparison requires integrating the full relational hierarchy — the hippocampal-dependent operation most impaired in schizophrenia.</div>
+    </div>
+
+    </div><!-- /tab-quiz -->
 
 
   <!-- ════════════════════════════ BIG PICTURE ════════════════════════════ -->
@@ -1753,34 +1962,45 @@
   });
 
   // ─── QUIZ ───
-  const TOTAL_QUESTIONS = 25;
+  const TOTAL_QUESTIONS = 36;
   // correctAnswers array: 0-indexed (A=0, B=1, C=2, D=3)
   const correctAnswers = [
-    1, // Q1 B
+    2, // Q1 C
     2, // Q2 C
-    2, // Q3 C
-    1, // Q4 B
-    2, // Q5 C
-    0, // Q6 A
-    1, // Q7 B
-    2, // Q8 C
+    1, // Q3 B
+    3, // Q4 D
+    1, // Q5 B
+    3, // Q6 D
+    2, // Q7 C
+    1, // Q8 B
     1, // Q9 B
-    1, // Q10 B
-    1, // Q11 B
+    0, // Q10 A
+    0, // Q11 A
     1, // Q12 B
-    2, // Q13 C
+    3, // Q13 D
     2, // Q14 C
-    1, // Q15 B
+    3, // Q15 D
     1, // Q16 B
     1, // Q17 B
-    1, // Q18 B
+    0, // Q18 A
     2, // Q19 C
     1, // Q20 B
-    1, // Q21 B
-    1, // Q22 B
-    0, // Q23 A
-    2, // Q24 C
-    0  // Q25 A
+    3, // Q21 D
+    0, // Q22 A
+    2, // Q23 C
+    3, // Q24 D
+    3, // Q25 D
+    0, // Q26 A
+    3, // Q27 D
+    3, // Q28 D
+    1, // Q29 B
+    0, // Q30 A
+    2, // Q31 C
+    1, // Q32 B
+    2, // Q33 C
+    3, // Q34 D
+    3, // Q35 D
+    2, // Q36 C
   ];
 
   let answered = new Array(TOTAL_QUESTIONS).fill(false);

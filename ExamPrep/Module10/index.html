@@ -499,7 +499,7 @@
     <div class="progress-bar-wrap" title="Quiz progress">
       <div class="progress-bar-fill" id="quizProgressBar"></div>
     </div>
-    <span class="progress-label" id="quizProgressLabel">0 / 20</span>
+    <span class="progress-label" id="quizProgressLabel">0 / 30</span>
   </div>
   <button id="theme-toggle" onclick="__toggleTheme()" aria-label="Toggle theme"></button>
 </header>
@@ -1124,7 +1124,7 @@
     </div>
 
     <div class="quiz-stats">
-      <div class="stat-item"><div class="stat-val blue" id="statTotal">20</div><div class="stat-lbl">Questions</div></div>
+      <div class="stat-item"><div class="stat-val blue" id="statTotal">30</div><div class="stat-lbl">Questions</div></div>
       <div class="stat-item"><div class="stat-val green" id="statCorrect">0</div><div class="stat-lbl">Correct</div></div>
       <div class="stat-item"><div class="stat-val red" id="statWrong">0</div><div class="stat-lbl">Incorrect</div></div>
       <div class="stat-item"><div class="stat-val" id="statPct" style="color:var(--gray-light);">—</div><div class="stat-lbl">Score</div></div>
@@ -1271,245 +1271,215 @@ document.querySelectorAll('.filter-btn').forEach(btn => {
 // ─── QUIZ DATA ───
 const questions = [
   {
-    text: "In lecture, the three ways skill memory differs from declarative memory were: Communication, Awareness, and Acquisition Speed. Which correctly pairs a feature with its description?",
-    options: [
-      "Communication: skills can be communicated flexibly in different formats",
-      "Awareness: skill memories often acquired and retrieved without conscious awareness",
-      "Acquisition speed: skill memories can form after a single exposure",
-      "Brain systems: skill memories depend primarily on hippocampus"
-    ],
+    text: "A skill is a(n):",
+    options: ["ability to perform a task that has been honed through experience.", "fact that one can learn through repeated exposure.", "event one can remember from childhood.", "ability that is innate, such as a reflex."],
+    correct: 0,
+    tag: "Skill Memory",
+    explanation: "Skills are abilities improved through practice and experience. They are neither facts (declarative) nor reflexes (innate). This distinguishes procedural memory from both semantic and episodic memory."
+  },
+  {
+    text: "Learned movement patterns guided by sensory inputs are called _____ skills, while skills requiring the use of the brain to solve problems or apply strategies are called _____ skills.",
+    options: ["closed; open", "open; cognitive", "perceptual-motor; cognitive", "perceptual-motor; open"],
+    correct: 2,
+    tag: "Skill Memory",
+    explanation: "Perceptual-motor skills involve movement guided by sensory input (e.g., dancing, tennis). Cognitive skills involve problem-solving and strategy without primary reliance on body movement (e.g., chess, mental arithmetic). This is the foundational two-type taxonomy from Chapter 8."
+  },
+  {
+    text: "Psychologists sometimes classify memories that are not easily put into words, including skill memories, as:",
+    options: ["explicit memories.", "false memories.", "cognitive skills.", "nondeclarative memories."],
+    correct: 3,
+    tag: "Skill Memory",
+    explanation: "Skill memories are nondeclarative (also called implicit or procedural) because they resist verbal expression. Explicit memories — episodic and semantic — are consciously accessible and can be described in words. The explicit/nondeclarative distinction is central to memory systems taxonomy."
+  },
+  {
+    text: "Which activity is the BEST example of a closed skill?",
+    options: ["playing tennis", "driving a car", "playing a video game", "playing a particular piece on the piano"],
+    correct: 3,
+    tag: "Skill Memory",
+    explanation: "Closed skills involve predefined movement sequences performed the same way every time, independent of changing environmental demands. A fixed piano piece is always performed in the same order. Tennis, driving, and video games all require adapting to changing inputs (open skills)."
+  },
+  {
+    text: "Which activity is the BEST example of an open skill?",
+    options: ["performing an ice-skating routine", "catching a baseball", "synchronized swimmers performing their routine", "following a recipe to bake a cake"],
     correct: 1,
     tag: "Skill Memory",
-    explanation: "Skills are often acquired and retrieved <strong>WITHOUT conscious awareness</strong> (implicit). They are hard to verbalize (not flexible communication), require repeated practice (not single exposure), and depend on BG/cerebellum (not hippocampus)."
+    explanation: "Open skills require real-time adaptation to unpredictable environmental variables. Catching a baseball depends on the pitcher's speed, trajectory, spin, and wind — the movement must continuously update based on sensory feedback. The other options involve predetermined, repeatable sequences."
   },
   {
-    text: "A student learning to drive for two weeks consciously thinks about each gear change, mirrors, and speed limits. According to Fitts's three-stage model, this student is in the:",
-    options: [
-      "Autonomous stage — movements becoming motor programs",
-      "Associative stage — actions becoming stereotyped",
-      "Cognitive stage — performance based on verbalizable rules and active thinking",
-      "Implicit stage — learning occurring without awareness"
-    ],
+    text: "Which statement is FALSE about skill memories?",
+    options: ["They are difficult to convey except by demonstration.", "They may be acquired without awareness.", "They require several repetitions.", "They are short-lasting."],
+    correct: 3,
+    tag: "Skill Memory",
+    explanation: "Skill memories are long-lasting, not short-lasting — this is one of their defining features. They are difficult to verbalize (A is true), can be acquired implicitly (B is true), and do require repeated practice (C is true). The false statement is D."
+  },
+  {
+    text: "Dara is practicing a new gymnastic routine. Her practice will be MOST effective if she:",
+    options: ["practices many times a day.", "is given feedback about her performance.", "visualizes the routine in her mind before performing it.", "blocks out all other distractions."],
+    correct: 1,
+    tag: "Skill Memory",
+    explanation: "Thorndike's line-drawing experiment demonstrated that repetition alone does not produce improvement — feedback (knowledge of results) is essential. The group receiving feedback improved; the group without feedback showed no learning despite equal practice. This principle is central to skill acquisition."
+  },
+  {
+    text: "Suppose a child is learning to swim. If a person measures how long it takes the child to swim from one end of the pool to the other each day, the person will typically find that the child's speed will:",
+    options: ["increase rapidly over the first several days and then increase more slowly on subsequent days.", "increase gradually from day to day.", "increase slowly over the first several days and then increase more rapidly.", "remain the same for the first several days and then increase suddenly."],
+    correct: 0,
+    tag: "Skill Memory",
+    explanation: "This describes the power law of learning: early practice yields large improvements, and additional practice yields progressively smaller gains. This pattern holds across virtually all motor and cognitive skills and across species."
+  },
+  {
+    text: "Which statement is TRUE regarding the power law of practice?",
+    options: ["It cannot be overcome.", "It is different for cognitive skills than for perceptual-motor skills.", "It is different for different species.", "It is the same for most skills."],
+    correct: 3,
+    tag: "Skill Memory",
+    explanation: "The power law of learning is a universal finding: it applies across cognitive and perceptual-motor skills and across human and non-human animals. A can be overcome (e.g., observational learning can reset the curve). B and C are false — the law is remarkably consistent across skill types and species."
+  },
+  {
+    text: "Research on using massed and spaced practice to train postal workers to use a letter-sorting machine showed that:",
+    options: ["the group that was most satisfied also learned most quickly.", "those using spaced practice were more satisfied with their training.", "those using massed practice required the fewest hours of training.", "those using spaced practice required the fewest hours of training to learn the task."],
+    correct: 3,
+    tag: "Skill Memory",
+    explanation: "Baddeley & Longman (1978) found that workers practicing 1 hour/day (spaced) needed fewer total hours to reach proficiency than those practicing 2 or 4 hours/day, despite taking longer in total calendar time. Counterintuitively, the spaced group was LEAST satisfied with their training even though they learned most efficiently."
+  },
+  {
+    text: "Trey is trying to improve his public-speaking skills. He is practicing by giving speeches on different topics to different groups of friends. He is using _____ practice.",
+    options: ["massed", "spaced", "constant", "variable"],
+    correct: 3,
+    tag: "Skill Memory",
+    explanation: "Variable practice involves practicing a skill under varied conditions (different topics, different audiences here). Constant practice would mean always practicing the same speech to the same audience. Variable practice generally leads to better long-term retention and transfer than constant practice."
+  },
+  {
+    text: "The results of studies on twins' performance on the rotary pursuit task suggest that practice:",
+    options: ["decreases the effects of prior experience.", "increases the effects of prior experience.", "decreases the effects of genetic influences.", "has no impact on the effects of genetic influences."],
+    correct: 0,
+    tag: "Skill Memory",
+    explanation: "As training progressed, identical twins (100% shared genes) converged in performance while fraternal twins (50% shared genes) diverged. This suggests practice reduces the influence of prior environmental experiences and increases the role of genetic factors — a counterintuitive finding about nature vs. nurture in skill learning."
+  },
+  {
+    text: "Learning a skill without being aware that one has learned it is known as _____ learning.",
+    options: ["massed", "implicit", "open", "variable"],
+    correct: 1,
+    tag: "Skill Memory",
+    explanation: "Implicit learning is learning that occurs without conscious awareness of what has been learned. The learner improves but cannot verbally report the rules or patterns driving their improvement. This contrasts with explicit learning, where the learner is consciously aware of what they are acquiring."
+  },
+  {
+    text: "Individuals with anterograde amnesia can:",
+    options: ["not learn new facts or new skills.", "learn new skills but are unaware of having learned them.", "learn new skills if reminded each day of what they practiced the previous day.", "learn new facts but not new skills."],
+    correct: 1,
+    tag: "Skill Memory",
+    explanation: "Anterograde amnesia (e.g., H.M.) destroys the ability to form new declarative (explicit) memories, but leaves procedural/skill memory intact. H.M. improved on mirror-tracing across sessions yet had no recollection of ever having done the task. This is the key double dissociation demonstrating separate memory systems."
+  },
+  {
+    text: "An experimental task that requires individuals to press keys in specific sequences on the basis of visual cues provided by a computer is known as a:",
+    options: ["perceptual-motor task.", "motor program.", "reflex task.", "serial reaction time task."],
+    correct: 3,
+    tag: "Skill Memory",
+    explanation: "The serial reaction time (SRT) task is the standard laboratory tool for studying implicit sequence learning. Participants press keys in response to cues; unknown to them, cues follow a repeating pattern. Faster reaction times during sequential vs. random blocks, without verbal awareness of the pattern, demonstrates implicit learning."
+  },
+  {
+    text: "What has been found regarding the impact of sleep on people's ability to perform a sequenced key-tapping task?",
+    options: ["Practicing two sequences on the same day interferes with retention of the second sequence after sleep.", "Practicing two sequences on the same day interferes with retention of the first sequence after sleep.", "After sleep, reviewing a recently learned sequence before practicing a new one interferes with the new sequence.", "After sleep, reviewing a recently learned sequence before practicing a new one interferes with both sequences."],
+    correct: 1,
+    tag: "Skill Memory",
+    explanation: "When two sequences are practiced on the same day, sleep-dependent enhancement benefits only the second sequence — the first is disrupted by interference from the second. This shows that newly acquired skill memories are fragile and vulnerable to interference before consolidation during sleep."
+  },
+  {
+    text: "Which activity is the BEST example of the cognitive stage of skill learning?",
+    options: ["following the instructions in a recipe to bake cookies", "following a recipe from memory to bake cookies", "baking cookies without a recipe while listening to a child talk about her day", "trying out new ingredients in a traditional cookie recipe"],
+    correct: 0,
+    tag: "Skill Memory",
+    explanation: "The cognitive stage requires active reliance on verbalizable rules and written instructions. Using the recipe as a guide while consciously following each step is the defining feature of this first stage. Option B is associative (from memory but still deliberate). Option C is autonomous (automated, multitasking)."
+  },
+  {
+    text: "During the _____ stage of skill learning, learners begin using stereotyped actions when performing the skill and rely less on actively recalled memories of rules.",
+    options: ["cognitive", "associative", "autonomous", "expert"],
+    correct: 1,
+    tag: "Skill Memory",
+    explanation: "In the associative stage, the learner has internalized the basic pattern but still performs deliberately. Actions become more consistent (stereotyped) and rule recall decreases, but the skill is not yet fully automated. This is the middle stage between the rule-following cognitive stage and the automated autonomous stage."
+  },
+  {
+    text: "In the _____ stage of skill learning, learners' movements become automatic, and thinking too much about what is being done can hinder performance.",
+    options: ["cognitive", "associative", "autonomous", "acquisition"],
     correct: 2,
-    tag: "Fitts's Stages",
-    explanation: "The <strong>cognitive stage</strong> is characterized by heavy reliance on verbalizable rules, active thinking, and effortful control. This student consciously remembers each step — squarely in Stage 1."
+    tag: "Skill Memory",
+    explanation: "The autonomous stage is defined by automaticity — the skill runs as a motor program with minimal conscious attention. Critically, directing conscious attention to the movements can actually disrupt performance (the 'choking under pressure' phenomenon), because deliberate control interferes with the automated motor program."
   },
   {
-    text: "A ballet dancer performing a choreographed sequence is the BEST example of:",
-    options: [
-      "Open perceptual-motor skill",
-      "Open cognitive skill",
-      "Closed perceptual-motor skill",
-      "Closed cognitive skill"
-    ],
+    text: "Which stage of Fitts's three-stage model of skill learning would be exhibited by setting up a tent while carrying on a discussion about politics?",
+    options: ["cognitive", "associative", "autonomous", "acquisition"],
     correct: 2,
-    tag: "Types of Skills",
-    explanation: "<strong>Closed skills</strong> involve predefined movement sequences in stable, predictable environments. Choreographed ballet is performed the same way each time with no adaptation needed to changing demands."
+    tag: "Skill Memory",
+    explanation: "The ability to perform a skill simultaneously with an unrelated cognitive task (discussing politics) is the hallmark of the autonomous stage. The skill has become a motor program requiring so little conscious attention that full cognitive resources are available for other tasks. A person in the cognitive or associative stage could not do this."
   },
   {
-    text: "In chess grandmasters playing simultaneous games, the instructor suggested their skill type is:",
-    options: [
-      "Open cognitive — each game is unique and demands strategic planning",
-      "Closed perceptual-motor — board patterns trigger rapid, nearly automatic responses",
-      "Open perceptual-motor — hand movements must adapt to changing boards",
-      "Closed cognitive — explicit rules decide each move"
-    ],
+    text: "Which area of the brain is particularly important for controlling the velocity, direction, and amplitude of movements?",
+    options: ["basal ganglia", "cerebral cortex", "cerebellum", "brainstem"],
+    correct: 0,
+    tag: "Skill Memory",
+    explanation: "The basal ganglia are specifically important for controlling movement parameters including velocity, direction, and amplitude, as well as for preparing to move. This function underpins their critical role in skill learning, especially for stimulus-response (cue-to-action) associations."
+  },
+  {
+    text: "Rats with damage to the basal ganglia:",
+    options: ["have trouble learning to navigate a basic radial maze.", "have trouble learning to navigate a radial maze in which only the illuminated arms contain food.", "cannot learn to find the platform in a water maze.", "have trouble performing skills necessary to find food in a basic radial maze."],
     correct: 1,
-    tag: "Types of Skills",
-    explanation: "Grandmasters' pattern recognition has become nearly automatic — they 'see' the right move before consciously deliberating. With massive practice, cognitive skills approach the <strong>autonomous stage</strong>, resembling closed perceptual-motor."
+    tag: "Skill Memory",
+    explanation: "This is the key double dissociation. The cue-guided task (go to lit arms) is a perceptual-motor S-R skill dependent on basal ganglia. The memory-based task (visit every arm without repeating) depends on hippocampus. Basal ganglia lesions selectively impair the cue-guided version, demonstrating that the basal ganglia support stimulus-response skill learning."
   },
   {
-    text: "Thorndike's blindfolded line-drawing experiment demonstrated that:",
-    options: [
-      "Spaced practice is always superior to massed practice",
-      "Repetition alone is sufficient for skill improvement",
-      "Feedback about performance (knowledge of results) is necessary for improvement",
-      "Variable practice leads to better long-term retention"
-    ],
+    text: "If one measures the neural activity in a rat's basal ganglia as the rat learns to turn the correct way in a T-shaped maze, one finds that during the early stages of learning, most neurons fire _____, whereas after practicing, most neurons fire _____.",
+    options: ["when the rat turns; at the beginning and end of the task", "when the instructional sound is broadcast; when the rat turns", "when the rat turns; when the instructional sound is broadcast", "at the beginning and end of the trial; when the rat turns"],
+    correct: 0,
+    tag: "Skill Memory",
+    explanation: "Early in training, basal ganglia neurons fire at the decision/turn point — when the rat must choose. With practice, firing shifts to the start and end of the task, bracketing the entire action as a single 'chunk' or motor program. This shift from decision-point activity to task-boundary activity mirrors the cognitive-to-autonomous stage transition."
+  },
+  {
+    text: "Research suggests that the basal ganglia are involved in learning:",
+    options: ["perceptual-motor skills.", "cognitive skills.", "both perceptual-motor skills and cognitive skills.", "neither perceptual-motor skills nor cognitive skills."],
     correct: 2,
-    tag: "Practice Science",
-    explanation: "Both groups drew the same lines, but only the feedback group improved. <strong>Repetition without feedback does not produce learning</strong> — knowledge of results is essential. Maps onto RL: no TD error = no policy update."
+    tag: "Skill Memory",
+    explanation: "Neuroimaging studies (e.g., the weather prediction task) show increased basal ganglia activity during cognitive skill learning, in addition to its well-established role in perceptual-motor skill learning. This parallels the instructor's point that with extensive practice, cognitive skills can become motor programs — both types involve basal ganglia."
   },
   {
-    text: "The power law of learning predicts that:",
-    options: [
-      "Improvement is linear: each additional hour produces equal gains",
-      "Early practice yields the largest gains; additional practice produces progressively smaller improvements",
-      "Massed practice produces faster learning than spaced practice",
-      "Skill memory is immune to forgetting once autonomous stage is reached"
-    ],
-    correct: 1,
-    tag: "Power Law",
-    explanation: "<strong>Large early gains followed by diminishing returns</strong> — the defining pattern. Applies broadly across motor and cognitive skills and across species. Same pattern appears in BMI training."
-  },
-  {
-    text: "The post office keyboard study (Baddeley & Longman) showed 1-hour/day workers outperformed 4-hour/day workers. The instructor speculated one key reason spaced practice may be superior is:",
-    options: [
-      "Spaced practice allows more feedback per session",
-      "Memory consolidation may occur during sleep between sessions",
-      "Shorter sessions reduce muscle fatigue",
-      "Massed practice creates interference between sequentially learned skills"
-    ],
-    correct: 1,
-    tag: "Practice Science",
-    explanation: "The instructor mentioned <strong>sleep and memory consolidation</strong> (replay of daytime experiences) as a plausible explanation. Spaced group spent more days, meaning more nights of potential consolidation per unit of practice."
-  },
-  {
-    text: "The KEY evidence that SRT task learning has occurred IMPLICITLY rather than explicitly is:",
-    options: [
-      "Participants' reaction times are slower in sequential blocks than random blocks",
-      "Reaction times are faster in sequential blocks, yet participants cannot verbally report the repeating pattern",
-      "Participants who receive feedback improve more than those without",
-      "Participants consciously notice the pattern and use it to predict upcoming cues"
-    ],
-    correct: 1,
-    tag: "Implicit Learning",
-    explanation: "The hallmark of implicit SRT learning: <strong>behavioral improvement</strong> (faster RTs for sequential blocks) <strong>without verbal knowledge</strong> of what was learned. Dissociation between performance and awareness."
-  },
-  {
-    text: "Patient H.M. improved at mirror-tracing across multiple sessions yet had no memory of ever doing the task. This supports:",
-    options: [
-      "H.M. performed worse each session because hippocampal damage prevented consolidation",
-      "H.M. showed improvement despite no conscious memory — dissociating declarative memory from procedural/skill memory",
-      "H.M. could verbally describe how to perform the task after training",
-      "H.M.'s improvement was exclusively due to intact cerebellar circuits, not BG"
-    ],
-    correct: 1,
-    tag: "Implicit Learning",
-    explanation: "H.M.'s mirror-tracing improved session by session, yet each time he was brought in he had no recollection. Classic <strong>double dissociation</strong>: declarative (hippocampus, destroyed) vs. procedural/skill (BG, cerebellum, intact)."
-  },
-  {
-    text: "In the T-maze recording experiment, neurons in the basal ganglia shifted from firing mostly during the turn (decision point) to firing mostly at START and END of the maze run. This reflects:",
-    options: [
-      "Neurodegeneration — cells active at the decision point died with training",
-      "Chunking of the task — the entire action sequence becomes a motor program initiated and closed by the BG",
-      "Transfer of learning from BG to hippocampus as the task becomes more memory-based",
-      "Cerebellum taking over timing functions from basal ganglia"
-    ],
-    correct: 1,
-    tag: "Brain Substrates",
-    explanation: "<strong>Chunking</strong>: early in training the rat cognitively deliberates at the turn. With practice the whole run becomes automated — BG brackets the motor program, firing at start and end of the now-cached action sequence."
-  },
-  {
-    text: "The radial arm maze double dissociation showed:",
-    options: [
-      "BG lesions impaired memory-based version; hippocampal lesions impaired cue-guided version",
-      "BG lesions impaired cue-guided perceptual-motor version (lit arms); hippocampal lesions impaired memory-based version (visit every arm)",
-      "Both lesions equally impaired both versions",
-      "BG lesions had no effect; only hippocampal lesions produced deficits"
-    ],
-    correct: 1,
-    tag: "Brain Substrates",
-    explanation: "Key double dissociation: <strong>BG lesions</strong> selectively impaired stimulus-response (cue-guided, lit arms) — a perceptual-motor skill. <strong>Hippocampal lesions</strong> selectively impaired the memory-based version requiring episodic tracking."
-  },
-  {
-    text: "The cerebellum is especially critical for which aspect of skill learning?",
-    options: [
-      "Linking sensory cues to motor responses (S-R associations)",
-      "Learning and performing movement sequences that require precise timing",
-      "Encoding declarative knowledge about skill rules in the cognitive stage",
-      "Controlling vigor and amplitude of voluntary movements"
-    ],
-    correct: 1,
-    tag: "Brain Substrates",
-    explanation: "<strong>Cerebellum = timing.</strong> Basal ganglia = linking sensory events to responses. Motor cortex = complex action sequences. Cerebellum's role in conditioned timing (eyeblink conditioning) extends to skill timing."
-  },
-  {
-    text: "Where is skill memory most likely stored, according to lecture?",
-    options: [
-      "Cerebral ventricles, where CSF facilitates communication",
-      "Synaptic connections between cortical neurons and striatal/basal ganglia neurons",
-      "Size of individual motor cortex pyramidal cells",
-      "Myelination patterns of cerebellar Purkinje cells"
-    ],
-    correct: 1,
-    tag: "Brain Substrates",
-    explanation: "The instructor explicitly stated that skill memories are stored in the <strong>connections (synapses) between cortex and striatum/basal ganglia</strong> — consistent with LTP/LTD mechanisms. Not inside neurons themselves."
-  },
-  {
-    text: "Eberhard Fetz's 1969 Science paper was groundbreaking because it demonstrated for the first time:",
-    options: [
-      "Motor cortex neurons encode movement direction as cosine-tuned responses",
-      "A monkey could volitionally increase the firing rate of a single cortical neuron through operant conditioning",
-      "Spinal cord stimulation could restore voluntary arm movements in paralyzed monkeys",
-      "Population coding requires recording from at least 100 neurons simultaneously"
-    ],
-    correct: 1,
-    tag: "BMI — Fetz",
-    explanation: "Fetz showed that by rewarding the animal with food whenever a recorded neuron's firing rate exceeded baseline, the animal learned to <strong>volitionally elevate that cell's activity</strong> — operant conditioning of single-neuron firing. Conceptual foundation of BMI."
-  },
-  {
-    text: "Georgopoulos's center-out reach task revealed that individual motor cortex neurons:",
-    options: [
-      "Fire maximally for all movement directions equally",
-      "Are tuned to a preferred movement direction, with firing rates following a cosine function",
-      "Only fire after movement completion, providing error correction",
-      "Encode movement speed but not direction"
-    ],
-    correct: 1,
-    tag: "BMI — Population Coding",
-    explanation: "Each recorded neuron has a <strong>preferred direction</strong>; firing rate varies as the cosine of the angle between actual movement and preferred direction. 'Cosine tuning' was the foundation for population decoding of movement intent."
-  },
-  {
-    text: "In early BMI clinical trials, patients often needed daily recalibration. What caused this?",
-    options: [
-      "The prosthetic permanently maps to new neural code without recalibration needed",
-      "Neural representations shifted over days — the decoder trained on one day's patterns no longer worked the next",
-      "Neurons that changed preferred direction were automatically replaced by neurogenesis",
-      "Patients had to stop using the device for weeks to allow brain restabilization"
-    ],
-    correct: 1,
-    tag: "BMI — Neural Drift",
-    explanation: "<strong>Neural drift</strong>: in early BMI clinical trials, patients returned daily for neurologists to retune the decoder because neural representations shifted. One patient even dropped out because it was too burdensome."
-  },
-  {
-    text: "The cochlear implant is categorized as which type of BMI?",
-    options: [
-      "Read-only BMI — records neural activity and translates to machine command",
-      "Write-only (stimulation) BMI — records external signals (sound) and writes electrical patterns to auditory nerves",
-      "Closed-loop BMI — simultaneously reads from auditory cortex and stimulates cochlear neurons",
-      "Computational bypass BMI — replaces a damaged hippocampal pathway"
-    ],
-    correct: 1,
-    tag: "BMI — Types",
-    explanation: "<strong>Cochlear implant = write-only</strong>: records sound from a microphone, converts to electrical signals, stimulates auditory nerve — bypassing damaged hair cells. It does not read from the brain; it writes to it."
-  },
-  {
-    text: "The BMI lecture identified a major engineering challenge: brain representations of movement direction can change over time. This problem is directly analogous to which concept from skill learning?",
-    options: [
-      "Skill decay — representations weaken with non-use",
-      "Transfer specificity — skills learned in one context don't transfer",
-      "The plasticity that enables learning can also undermine the stability of existing representations",
-      "The power law — improvements plateau after initial rapid learning"
-    ],
+    text: "With practice, cortical expansion occurs in areas of:",
+    options: ["the somatosensory cortex that are relevant for performing the skill.", "the motor cortex that are relevant for performing the skill.", "both the somatosensory cortex and motor cortex that are relevant for performing the skill.", "the cortex that are not relevant for performing the skill."],
     correct: 2,
-    tag: "BMI — Neural Drift",
-    explanation: "The same <strong>neural plasticity</strong> enabling skill learning (remapping, synaptic change) also means representations can drift — creating instability for BMI decoders. The brain's malleability is both its greatest asset and a practical challenge."
+    tag: "Skill Memory",
+    explanation: "Skill-specific cortical expansion occurs in both somatosensory cortex (e.g., enlarged finger representations in expert violinists) and motor cortex (e.g., expanded finger-movement area after finger-tapping training). Only the regions relevant to the trained skill expand; irrelevant regions do not."
   },
   {
-    text: "An early BMI patient described training as 'like being a football player — 6-8 hours/day.' According to the lecture's framework, this is because:",
-    options: [
-      "The robotic arm's algorithm requires constant human calibration",
-      "Controlling a BMI is a skill — the brain must undergo genuine plastic reorganization to operate the new 'effector,' which takes time and practice",
-      "The patient must learn engineering specifications explicitly",
-      "BMI training stays in cognitive stage forever because automatization is impossible without proprioceptive feedback"
-    ],
+    text: "A person with damage to the cerebellum would have the MOST trouble with which task?",
+    options: ["learning the movements in a gymnastic routine", "synchronizing movements with a partner in ballroom dancing", "copying simple finger movements made by a therapist", "holding cards during a poker game"],
     correct: 1,
-    tag: "BMI — Skill Learning",
-    explanation: "The instructor framed BMI control as <strong>skill learning</strong>: the brain treats the device as a new tool/effector and must go through the same stages as any motor skill. Massive daily practice is required for the plasticity (remapping) needed for smooth, flexible control."
+    tag: "Skill Memory",
+    explanation: "The cerebellum is especially critical for movement sequences requiring precise timing — like synchronizing with a partner in dance. A without timing demands could be learned (slowly) by basal ganglia and cortex. C is a simple perceptual-motor task. D requires no motor skill timing. Ballroom dancing combines timing AND partner synchronization, demanding maximal cerebellar function."
   },
   {
-    text: "Which ethics concern about BMIs was specifically raised in the lecture?",
-    options: [
-      "Whether BMIs could implant false memories",
-      "Questions of agency, identity, and data ownership — including who bears legal responsibility if a BMI-controlled arm injures someone",
-      "Whether animal research on BMIs constitutes unacceptable harm",
-      "Whether universities should patent BMI technology or release it as open source"
-    ],
+    text: "Which disorder involves a reduction in the number of dopaminergic neurons in the substantia nigra pars compacta that control activity in the basal ganglia?",
+    options: ["tetraplegia", "Parkinson's disease", "Huntington's disease", "apraxia"],
     correct: 1,
-    tag: "BMI — Ethics",
-    explanation: "The instructor explicitly raised <strong>agency</strong> (if BMI-arm hits someone, who is responsible?), <strong>identity</strong> (is DBS-altered person still 'you'?), and <strong>data ownership</strong> (who owns decoded neural data?). Animal research and patent questions were not discussed."
-  }
+    tag: "Skill Memory",
+    explanation: "Parkinson's disease is specifically caused by loss of dopaminergic neurons in the substantia nigra pars compacta (SNc), which supply dopamine to the striatum/basal ganglia. This dopamine deficit disrupts basal ganglia-cortical loops controlling movement initiation and skill execution. Huntington's involves broader neuronal death throughout basal ganglia and cortex."
+  },
+  {
+    text: "People with Parkinson's disease:",
+    options: ["can be treated with deep brain stimulation.", "have trouble with mirror-reading tasks.", "usually begin experiencing symptoms in their twenties.", "have abnormally high levels of dopamine."],
+    correct: 0,
+    tag: "Skill Memory",
+    explanation: "DBS is an established treatment for Parkinson's, delivering electrical current to basal ganglia nuclei to disrupt pathological oscillatory patterns and restore more normal movement. B is false — Parkinson's patients can learn mirror reading (unlike Huntington's patients). C is false — symptoms typically emerge after age 50. D is false — dopamine is severely reduced."
+  },
+  {
+    text: "All of these brain areas have been found to be critical to skill learning EXCEPT the:",
+    options: ["cerebellum.", "amygdala.", "cerebral cortex.", "basal ganglia."],
+    correct: 1,
+    tag: "Skill Memory",
+    explanation: "The three brain regions critical for skill memory are the basal ganglia, cerebral cortex, and cerebellum. The amygdala is centrally involved in emotional learning and fear conditioning but is not considered a primary component of the skill memory system. This tests knowledge of the three-region skill learning framework."
+  },
+  {
+    text: "It is difficult to study the forgetting of perceptual-motor skills because:",
+    options: ["once a skill is learned, it is never forgotten.", "if a person cannot perform a skill, it usually means they have forgotten it.", "without practice, the ability to perform a skill tends to deteriorate.", "it is difficult to distinguish forgetting of the skill from impairment in motor control."],
+    correct: 3,
+    tag: "Skill Memory",
+    explanation: "The core methodological problem is that impaired skill performance could reflect either (1) loss of the skill memory itself, or (2) loss of motor control needed to execute the remembered skill. This makes it hard to determine whether a skill has been truly forgotten or merely cannot be physically expressed. This is why studying skill decay is harder than studying declarative forgetting. Selection Note These 30 questions were selected from the full Chapter 8 test bank to represent all major topic areas with a balance of conceptual (application and reasoning) and factual recall questions. Original question numbers from the test bank are as follows — Q1=TB#2, Q2=TB#4, Q3=TB#7, Q4=TB#11, Q5=TB#12, Q6=TB#8, Q7=TB#18, Q8=TB#19, Q9=TB#24, Q10=TB#28, Q11=TB#29, Q12=TB#53, Q13=TB#30, Q14=TB#33, Q15=TB#35, Q16=TB#64, Q17=TB#40, Q18=TB#41, Q19=TB#43, Q20=TB#47, Q21=TB#66, Q22=TB#68, Q23=TB#71, Q24=TB#74, Q25=TB#76, Q26=TB#79, Q27=TB#83, Q28=TB#84, Q29=TB#80, Q30=TB#61."
+  },
 ];
 
 let quizState = {};
