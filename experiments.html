@@ -1,60 +1,55 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Experiments | NLDM</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@600;700&display=swap"
-        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Lora:ital,wght@0,500;0,600;1,400&display=swap" rel="stylesheet">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
         :root {
-            --primary: #6366f1;
-            --secondary: #ec4899;
-            --accent: #06b6d4;
-            --dark: #0f172a;
-            --dark-light: #1e293b;
-            --gray: #64748b;
-            --light: #f1f5f9;
-            --white: #ffffff;
+            --bg:         #f7f4ef;
+            --bg-card:    #ffffff;
+            --bg-muted:   #f0ece4;
+            --border:     #e2ddd5;
+            --ink:        #1c1917;
+            --ink-light:  #57534e;
+            --ink-faint:  #a8a29e;
+            --teal:       #0d9488;
+            --teal-soft:  rgba(13,148,136,0.1);
+            --amber:      #b45309;
+            --amber-soft: rgba(180,83,9,0.1);
+            --violet:     #6d28d9;
+            --violet-soft:rgba(109,40,217,0.1);
+            --green:      #15803d;
+            --green-soft: rgba(21,128,61,0.1);
+            --shadow-sm:  0 1px 3px rgba(0,0,0,0.07), 0 1px 2px rgba(0,0,0,0.05);
+            --shadow-md:  0 4px 16px rgba(0,0,0,0.09), 0 1px 4px rgba(0,0,0,0.06);
+            --shadow-lg:  0 12px 32px rgba(0,0,0,0.1), 0 2px 8px rgba(0,0,0,0.07);
         }
 
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            background: var(--dark);
-            color: var(--white);
+            background: var(--bg);
+            color: var(--ink);
             line-height: 1.6;
         }
 
-        body::before {
-            content: '';
-            position: fixed;
-            inset: 0;
-            background:
-                radial-gradient(ellipse at 25% 60%, rgba(99,102,241,0.1) 0%, transparent 55%),
-                radial-gradient(ellipse at 75% 20%, rgba(236,72,153,0.07) 0%, transparent 50%);
-            z-index: -1;
-            pointer-events: none;
-        }
-
-        /* Header */
         header {
-            padding: 1.5rem 2.5rem;
+            padding: 1.25rem 2.5rem;
             display: flex;
             align-items: center;
             gap: 1rem;
-            max-width: 1200px;
+            max-width: 1100px;
             margin: 0 auto;
-            border-bottom: 1px solid rgba(255,255,255,0.06);
+            border-bottom: 1px solid var(--border);
         }
 
         .back-link {
-            color: var(--gray);
+            color: var(--ink-light);
             text-decoration: none;
             font-size: 0.88rem;
             font-weight: 500;
@@ -63,42 +58,52 @@
             gap: 0.4rem;
             transition: color 0.2s;
         }
-        .back-link:hover { color: var(--white); }
+        .back-link:hover { color: var(--ink); }
 
-        .header-divider { color: rgba(255,255,255,0.15); }
+        .header-divider { color: var(--border); }
 
         .logo {
             display: flex;
             align-items: center;
             gap: 0.6rem;
             text-decoration: none;
-            color: var(--white);
+            color: var(--ink);
         }
 
         .logo-icon {
             width: 32px;
             height: 32px;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            background: var(--ink);
             border-radius: 8px;
             display: flex;
             align-items: center;
             justify-content: center;
         }
 
-        .logo-text { font-weight: 700; font-size: 1rem; }
+        .logo-text { font-weight: 700; font-size: 1rem; color: var(--ink); }
 
-        /* Page title */
         .page-header {
-            max-width: 1200px;
+            max-width: 1100px;
             margin: 3rem auto 0;
             padding: 0 2.5rem 2.5rem;
         }
 
+        .page-header h1 {
+            font-family: 'Lora', Georgia, serif;
+            font-size: clamp(2rem, 4vw, 2.75rem);
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+            color: var(--ink);
+        }
+
+        .page-header p {
+            color: var(--ink-light);
+            font-size: 1.05rem;
+            max-width: 600px;
+        }
+
         .page-tag {
             display: inline-block;
-            background: rgba(99,102,241,0.12);
-            border: 1px solid rgba(99,102,241,0.2);
-            color: var(--primary);
             padding: 0.35rem 1rem;
             border-radius: 50px;
             font-size: 0.8rem;
@@ -108,41 +113,41 @@
             margin-bottom: 1.25rem;
         }
 
-        .page-header h1 {
-            font-family: 'Playfair Display', serif;
-            font-size: clamp(2rem, 4vw, 2.75rem);
-            font-weight: 700;
-            margin-bottom: 0.75rem;
-        }
-
-        .page-header p {
-            color: var(--gray);
-            font-size: 1.05rem;
-            max-width: 600px;
-        }
-
-        /* Content */
         .content {
-            max-width: 1200px;
+            max-width: 1100px;
             margin: 0 auto;
             padding: 0 2.5rem 6rem;
         }
 
-        /* Grid */
+        footer {
+            border-top: 1px solid var(--border);
+            padding: 1.75rem 2.5rem;
+            text-align: center;
+            color: var(--ink-faint);
+            font-size: 0.82rem;
+            background: var(--bg-card);
+        }
+
+        footer a { color: var(--ink-light); text-decoration: none; }
+        footer a:hover { color: var(--ink); text-decoration: underline; }
+
+        header { max-width: 1200px; }
+        .page-header { max-width: 1200px; }
+        .content { max-width: 1200px; }
+
+        .page-tag { background: var(--violet-soft); color: var(--violet); border: 1px solid rgba(109,40,217,0.15); }
+
         .experiments-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
             gap: 1.5rem;
         }
 
-        @media (max-width: 700px) {
-            .experiments-grid { grid-template-columns: 1fr; }
-        }
+        @media (max-width: 700px) { .experiments-grid { grid-template-columns: 1fr; } }
 
-        /* Card */
         .experiment-card {
-            background: var(--dark-light);
-            border: 1px solid rgba(255,255,255,0.07);
+            background: var(--bg-card);
+            border: 1px solid var(--border);
             border-radius: 20px;
             padding: 2rem;
             position: relative;
@@ -151,12 +156,13 @@
             text-decoration: none;
             color: inherit;
             display: block;
+            box-shadow: var(--shadow-sm);
         }
 
         .experiment-card[href]:hover {
             transform: translateY(-6px);
-            border-color: rgba(99,102,241,0.35);
-            box-shadow: 0 24px 50px rgba(0,0,0,0.3);
+            border-color: transparent;
+            box-shadow: var(--shadow-lg);
         }
 
         .experiment-card::before {
@@ -164,7 +170,7 @@
             position: absolute;
             top: 0; left: 0; right: 0;
             height: 3px;
-            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            background: linear-gradient(90deg, var(--violet), #9333ea);
             opacity: 0;
             transition: opacity 0.3s;
         }
@@ -183,9 +189,9 @@
             border-radius: 50px;
         }
 
-        .badge-live { background: rgba(34,197,94,0.18); color: #22c55e; }
-        .badge-soon { background: rgba(251,191,36,0.18); color: #fbbf24; }
-        .badge-new  { background: rgba(249,115,22,0.18); color: #f97316; }
+        .badge-live { background: rgba(21,128,61,0.1); color: var(--green); }
+        .badge-soon { background: var(--amber-soft); color: var(--amber); }
+        .badge-new  { background: rgba(234,88,12,0.1); color: #ea580c; }
 
         .card-icon {
             width: 56px;
@@ -197,27 +203,23 @@
             margin-bottom: 1.5rem;
         }
 
-        .experiment-card h3 { font-size: 1.25rem; font-weight: 600; margin-bottom: 0.65rem; }
+        .experiment-card h3 { font-size: 1.2rem; font-weight: 600; margin-bottom: 0.65rem; color: var(--ink); }
 
         .experiment-card p {
-            color: var(--gray);
+            color: var(--ink-light);
             font-size: 0.93rem;
             margin-bottom: 1.25rem;
             line-height: 1.7;
         }
 
-        .card-tags {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.5rem;
-        }
+        .card-tags { display: flex; flex-wrap: wrap; gap: 0.5rem; }
 
         .card-tag {
             font-size: 0.75rem;
             padding: 0.3rem 0.7rem;
-            background: rgba(255,255,255,0.05);
+            background: var(--bg-muted);
             border-radius: 50px;
-            color: var(--gray);
+            color: var(--ink-light);
         }
 
         .card-actions {
@@ -232,20 +234,20 @@
             align-items: center;
             gap: 0.45rem;
             padding: 0.55rem 1.1rem;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            color: var(--white);
+            background: var(--violet);
+            color: white;
             text-decoration: none;
             border-radius: 10px;
             font-weight: 600;
             font-size: 0.88rem;
             transition: all 0.25s;
-            box-shadow: 0 4px 15px rgba(99,102,241,0.25);
+            box-shadow: 0 2px 8px rgba(109,40,217,0.25);
         }
 
-        .btn-primary:hover { transform: translateY(-1px); box-shadow: 0 8px 25px rgba(99,102,241,0.4); }
+        .btn-primary:hover { background: #5b21b6; transform: translateY(-1px); box-shadow: 0 6px 20px rgba(109,40,217,0.35); }
 
         .btn-ghost {
-            color: var(--gray);
+            color: var(--ink-light);
             font-size: 0.88rem;
             text-decoration: none;
             display: flex;
@@ -254,7 +256,7 @@
             transition: color 0.2s;
         }
 
-        .btn-ghost:hover { color: var(--white); }
+        .btn-ghost:hover { color: var(--ink); }
 
         .card-arrow {
             position: absolute;
@@ -263,33 +265,22 @@
             width: 36px;
             height: 36px;
             border-radius: 50%;
-            background: rgba(255,255,255,0.05);
+            background: var(--bg-muted);
             display: flex;
             align-items: center;
             justify-content: center;
             transition: all 0.3s;
         }
 
-        .experiment-card[href]:hover .card-arrow { background: var(--primary); transform: translateX(4px); }
+        .experiment-card[href]:hover .card-arrow { background: var(--violet); }
+        .experiment-card[href]:hover .card-arrow svg { stroke: white; }
 
-        /* Muted card (coming soon) */
-        .experiment-card.muted { cursor: default; opacity: 0.75; }
-        .experiment-card.muted:hover { transform: none; border-color: rgba(255,255,255,0.07); box-shadow: none; }
+        .experiment-card.muted { cursor: default; opacity: 0.7; }
+        .experiment-card.muted:hover { transform: none; border-color: var(--border); box-shadow: var(--shadow-sm); }
         .experiment-card.muted:hover::before { opacity: 0; }
-
-        /* Footer */
-        footer {
-            border-top: 1px solid rgba(255,255,255,0.07);
-            padding: 2rem 2.5rem;
-            text-align: center;
-            color: var(--gray);
-            font-size: 0.85rem;
-        }
-
-        footer a { color: var(--primary); text-decoration: none; }
     </style>
+    <script src="analytics.js"></script>
 </head>
-
 <body>
 
     <header>
@@ -321,8 +312,8 @@
             <!-- Real-Time Allocation -->
             <div class="experiment-card">
                 <span class="card-badge badge-new">New</span>
-                <div class="card-icon" style="background: rgba(249,115,22,0.12);">
-                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#f97316" stroke-width="2">
+                <div class="card-icon" style="background: rgba(234,88,12,0.1);">
+                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#ea580c" stroke-width="2">
                         <path d="M18 20V10"/><path d="M12 20V4"/><path d="M6 20v-6"/>
                     </svg>
                 </div>
@@ -342,8 +333,8 @@
             <!-- Random Dot Motion -->
             <a href="./RandomDotMotionTask/" class="experiment-card">
                 <span class="card-badge badge-live">Live</span>
-                <div class="card-icon" style="background: rgba(99,102,241,0.12);">
-                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#6366f1" stroke-width="2">
+                <div class="card-icon" style="background: var(--violet-soft);">
+                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#6d28d9" stroke-width="2">
                         <circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/>
                         <circle cx="12" cy="5" r="1"/><circle cx="12" cy="19" r="1"/>
                         <circle cx="7" cy="7" r="1"/><circle cx="17" cy="17" r="1"/>
@@ -358,15 +349,15 @@
                     <span class="card-tag">Speed-Accuracy</span>
                 </div>
                 <div class="card-arrow">
-                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#6d28d9" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
                 </div>
             </a>
 
             <!-- Two-Armed Bandit -->
             <div class="experiment-card muted">
                 <span class="card-badge badge-soon">Coming Soon</span>
-                <div class="card-icon" style="background: rgba(236,72,153,0.12);">
-                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#ec4899" stroke-width="2">
+                <div class="card-icon" style="background: var(--violet-soft);">
+                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#6d28d9" stroke-width="2">
                         <rect x="3" y="3" width="7" height="18" rx="2"/>
                         <rect x="14" y="3" width="7" height="18" rx="2"/>
                         <circle cx="6.5" cy="12" r="1.5"/>
@@ -385,8 +376,8 @@
             <!-- Stroop Task -->
             <div class="experiment-card muted">
                 <span class="card-badge badge-soon">Coming Soon</span>
-                <div class="card-icon" style="background: rgba(6,182,212,0.12);">
-                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#06b6d4" stroke-width="2">
+                <div class="card-icon" style="background: var(--teal-soft);">
+                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#0d9488" stroke-width="2">
                         <path d="M4 7V4h16v3"/><path d="M9 20h6"/><path d="M12 4v16"/>
                     </svg>
                 </div>
@@ -402,8 +393,8 @@
             <!-- Rule Learning -->
             <div class="experiment-card muted">
                 <span class="card-badge badge-soon">Coming Soon</span>
-                <div class="card-icon" style="background: rgba(34,197,94,0.12);">
-                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2">
+                <div class="card-icon" style="background: var(--green-soft);">
+                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#15803d" stroke-width="2">
                         <rect x="3" y="3" width="6" height="8" rx="1"/>
                         <rect x="15" y="3" width="6" height="8" rx="1"/>
                         <rect x="9" y="13" width="6" height="8" rx="1"/>
