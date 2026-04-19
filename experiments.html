@@ -278,8 +278,51 @@
         .experiment-card.muted { cursor: default; opacity: 0.7; }
         .experiment-card.muted:hover { transform: none; border-color: var(--border); box-shadow: var(--shadow-sm); }
         .experiment-card.muted:hover::before { opacity: 0; }
+    
+        /* ── Dark mode overrides ── */
+        [data-theme="dark"] {
+            --bg:         #1c1917;
+            --bg-card:    #292524;
+            --bg-muted:   #231f1c;
+            --border:     #3c3632;
+            --ink:        #fafaf9;
+            --ink-light:  #d6d3d1;
+            --ink-faint:  #78716c;
+            --teal:       #2dd4bf;
+            --teal-soft:  rgba(45,212,191,0.12);
+            --amber:      #fbbf24;
+            --amber-soft: rgba(251,191,36,0.12);
+            --violet:     #a78bfa;
+            --violet-soft:rgba(167,139,250,0.12);
+            --green:      #4ade80;
+            --green-soft: rgba(74,222,128,0.12);
+            --shadow-sm:  0 1px 3px rgba(0,0,0,0.4);
+            --shadow-md:  0 4px 16px rgba(0,0,0,0.5);
+            --shadow-lg:  0 16px 40px rgba(0,0,0,0.6);
+        }
+        [data-theme="dark"] .logo-icon { background: #e7e5e4; }
+        [data-theme="dark"] .logo-icon svg { stroke: #1c1917 !important; }
+
+        /* ── Theme toggle button ── */
+        #theme-toggle {
+            background: none;
+            border: 1px solid var(--border);
+            color: var(--ink-light);
+            width: 34px; height: 34px;
+            border-radius: 8px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            padding: 0;
+            transition: background 0.2s, color 0.2s;
+        }
+        #theme-toggle:hover { background: var(--bg-muted); color: var(--ink); }
+
     </style>
-    <script src="analytics.js"></script>
+    <script src="theme.js"></script>
+  <script src="analytics.js"></script>
 </head>
 <body>
 
@@ -298,6 +341,7 @@
             </div>
             <span class="logo-text">NLDM</span>
         </a>
+            <button id="theme-toggle" onclick="__toggleTheme()" aria-label="Toggle theme" style="margin-left:auto"></button>
     </header>
 
     <div class="page-header">

@@ -349,7 +349,49 @@
       background: linear-gradient(90deg, var(--primary), var(--secondary));
       transition: width .1s; width: 0%;
     }
+  
+    /* ── Light mode overrides ── */
+    [data-theme="light"] {
+        --dark: #f7f4ef;
+        --dark-light: #ffffff;
+        --dark-mid: #f0ece4;
+        --white: #1c1917;
+        --gray: #57534e;
+        --gray-light: #44403c;
+        --light: #1c1917;
+        --border: rgba(0,0,0,0.1);
+        --primary: #4f46e5;
+        --primary-dark: #4338ca;
+        --secondary: #db2777;
+        --accent: #0891b2;
+        --emerald: #059669;
+        --amber: #b45309;
+        --rose: #e11d48;
+    }
+    [data-theme="light"] body { background: #f7f4ef; color: #1c1917; }
+    [data-theme="light"] .bg-layer { display: none; }
+    [data-theme="light"] .scroll-progress { background: linear-gradient(90deg, #4f46e5, #db2777); }
+    /* ... remainder of MODULE_LIGHT_CSS from query ... */
+    #theme-toggle {
+        background: none;
+        border: 1px solid var(--border);
+        color: var(--gray-light);
+        width: 34px; height: 34px;
+        border-radius: 8px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        padding: 0;
+        transition: background 0.2s, color 0.2s;
+    }
+    #theme-toggle:hover { background: rgba(255,255,255,0.08); color: var(--white); }
+    [data-theme="light"] #theme-toggle { border-color: #e2ddd5; color: #57534e; }
+    [data-theme="light"] #theme-toggle:hover { background: #f0ece4; color: #1c1917; }
+
   </style>
+  <script src="../../theme.js"></script>
   <script src="../../analytics.js"></script>
 </head>
 <body>
@@ -371,6 +413,7 @@
     </div>
     <span class="progress-label" id="quizProgressLabel">0 / 20</span>
   </div>
+  <button id="theme-toggle" onclick="__toggleTheme()" aria-label="Toggle theme"></button>
 </header>
 
 <!-- HERO -->
