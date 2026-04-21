@@ -380,6 +380,379 @@
                         <span class="card-count">Coming soon</span>
                         <svg class="card-arrow" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
                     </div>
+
+    <!-- Demonstrations Section -->
+    <section class="demonstrations-section" id="demonstrations">
+        <div class="section-header">
+            <span class="section-tag">🎓 Interactive Demonstrations</span>
+            <h2>Demonstrations</h2>
+            <p>Visual explanations of key concepts in cognitive neuroscience. Watch, interact, and build intuition for
+                how the brain makes decisions.</p>
+        </div>
+
+        <!-- Category: Decision Making -->
+        <div class="demo-category">
+            <div class="demo-category-header">
+                <div class="demo-category-icon" style="background: rgba(6, 182, 212, 0.15);">⚖️</div>
+                <div>
+                    <h3>Decision Making</h3>
+                    <span>How the brain accumulates evidence and commits to choices</span>
+                </div>
+            </div>
+            <div class="demonstrations-grid">
+                <div class="demo-card">
+                    <div class="demo-card-top">
+                        <div class="demo-number">1</div>
+                        <div class="demo-card-title">
+                            <h4>Trading Silver</h4>
+                            <span>Value-Based Decision Making</span>
+                        </div>
+                    </div>
+                    <p class="demo-card-desc">Should you buy the silver? Watch the brain weigh subjective value against market price, accumulating evidence toward a BUY or DON'T BUY boundary.</p>
+                    <div class="demo-card-tags">
+                        <span class="demo-tag">Drift Rate</span>
+                        <span class="demo-tag">Threshold</span>
+                        <span class="demo-tag">DDM</span>
+                    </div>
+                    <a href="./Demonstrations/TradingSilver/" target="_blank" class="demo-launch-btn">
+                        Launch Demo
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                    </a>
+                </div>
+
+                <div class="demo-card">
+                    <div class="demo-card-top">
+                        <div class="demo-number">2</div>
+                        <div class="demo-card-title">
+                            <h4>The Drift Diffusion Model</h4>
+                            <span>Mapping the Architecture of Choice</span>
+                        </div>
+                    </div>
+                    <p class="demo-card-desc">How does the brain decide what we perceive? See how an evidence accumulator integrates noisy sensory signals until committing to a choice.</p>
+                    <div class="demo-card-tags">
+                        <span class="demo-tag">Coherence</span>
+                        <span class="demo-tag">Speed-Accuracy</span>
+                        <span class="demo-tag">Shadlen & Newsome</span>
+                    </div>
+                    <a href="./Demonstrations/DriftDiffusionModel/" target="_blank" class="demo-launch-btn">
+                        Launch Demo
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Category: Learning -->
+        <div class="demo-category">
+            <div class="demo-category-header">
+                <div class="demo-category-icon" style="background: rgba(16, 185, 129, 0.15);">🧠</div>
+                <div>
+                    <h3>Learning & Prediction</h3>
+                    <span>How dopamine signals teach the brain to predict rewards</span>
+                </div>
+            </div>
+            <div class="demonstrations-grid">
+                <div class="demo-card">
+                    <div class="demo-card-top">
+                        <div class="demo-number">3</div>
+                        <div class="demo-card-title">
+                            <h4>Learning Value Through Experience</h4>
+                            <span>The Rescorla-Wagner Model</span>
+                        </div>
+                    </div>
+                    <p class="demo-card-desc">An agent discovers a restaurant's true quality through noisy feedback, updating its estimate one meal at a time. Watch prediction errors shrink as learning converges.</p>
+                    <div class="demo-card-tags">
+                        <span class="demo-tag">Learning Rate α</span>
+                        <span class="demo-tag">Prediction Error δ</span>
+                        <span class="demo-tag">Dopamine</span>
+                    </div>
+                    <a href="./Demonstrations/RescorlaWagner/" target="_blank" class="demo-launch-btn">
+                        Launch Demo
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                    </a>
+                </div>
+
+                <div class="demo-card">
+                    <div class="demo-card-top">
+                        <div class="demo-number">4</div>
+                        <div class="demo-card-title">
+                            <h4>Learning to Anticipate</h4>
+                            <span>TD Learning & Dopamine</span>
+                        </div>
+                    </div>
+                    <p class="demo-card-desc">Prediction errors shift backward from reward to the earliest predictive cue over learning — the exact pattern seen in dopamine neuron recordings.</p>
+                    <div class="demo-card-tags">
+                        <span class="demo-tag">TD Error</span>
+                        <span class="demo-tag">Discount γ</span>
+                        <span class="demo-tag">Schultz 1997</span>
+                    </div>
+                    <a href="./Demonstrations/TemporalDifference/" target="_blank" class="demo-launch-btn">
+                        Launch Demo
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                    </a>
+                </div>
+
+                <div class="demo-card">
+                    <div class="demo-card-top">
+                        <div class="demo-number">5</div>
+                        <div class="demo-card-title">
+                            <h4>The Coffee Walk</h4>
+                            <span>Learning State Values</span>
+                        </div>
+                    </div>
+                    <p class="demo-card-desc">Watch values propagate backward from a goal as an agent walks Home → Park → Street → Coffee Shop. See how discount factor shapes the value gradient.</p>
+                    <div class="demo-card-tags">
+                        <span class="demo-tag">State Values</span>
+                        <span class="demo-tag">Spatial TD</span>
+                        <span class="demo-tag">Discount γ</span>
+                    </div>
+                    <a href="./Demonstrations/CoffeeWalk/" target="_blank" class="demo-launch-btn">
+                        Launch Demo
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                    </a>
+                </div>
+
+                <div class="demo-card">
+                    <div class="demo-card-top">
+                        <div class="demo-number">11</div>
+                        <div class="demo-card-title">
+                            <h4>Teaching a Network to See</h4>
+                            <span>Backpropagation &amp; Gradient Descent</span>
+                        </div>
+                    </div>
+                    <p class="demo-card-desc">A 3-layer neural network learns to classify fruit by sweetness and redness. Watch the error ripple backward through the network via the chain rule, nudging every weight toward a better answer.</p>
+                    <div class="demo-card-tags">
+                        <span class="demo-tag">Backprop</span>
+                        <span class="demo-tag">Chain Rule</span>
+                        <span class="demo-tag">Gradient Descent</span>
+                        <span class="demo-tag">Decision Boundary</span>
+                    </div>
+                    <a href="./Demonstrations/Backpropagation/" target="_blank" class="demo-launch-btn">
+                        Launch Demo
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Category: Operant Conditioning -->
+        <div class="demo-category">
+            <div class="demo-category-header">
+                <div class="demo-category-icon" style="background: rgba(249, 115, 22, 0.15);">⏱️</div>
+                <div>
+                    <h3>Operant Conditioning</h3>
+                    <span>How reinforcement schedules shape the patterns of behavior</span>
+                </div>
+            </div>
+            <div class="demonstrations-grid">
+                <div class="demo-card">
+                    <div class="demo-card-top">
+                        <div class="demo-number">10</div>
+                        <div class="demo-card-title">
+                            <h4>Reinforcement Schedules</h4>
+                            <span>FR · FI · VR · VI</span>
+                        </div>
+                    </div>
+                    <p class="demo-card-desc">Press a lever under four different reinforcement schedules and watch the classic cumulative records emerge — from the steady slot-machine pull of variable ratio to the scalloped waiting pattern of fixed interval.</p>
+                    <div class="demo-card-tags">
+                        <span class="demo-tag">Schedules</span>
+                        <span class="demo-tag">Cumulative Record</span>
+                        <span class="demo-tag">Skinner</span>
+                    </div>
+                    <a href="./Demonstrations/ReinforcementSchedules/" target="_blank" class="demo-launch-btn">
+                        Launch Demo
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Category: Action Selection -->
+        <div class="demo-category">
+            <div class="demo-category-header">
+                <div class="demo-category-icon" style="background: rgba(99, 102, 241, 0.15);">🎯</div>
+                <div>
+                    <h3>Action Selection</h3>
+                    <span>How the brain chooses between competing actions under uncertainty</span>
+                </div>
+            </div>
+            <div class="demonstrations-grid">
+                <div class="demo-card">
+                    <div class="demo-card-top">
+                        <div class="demo-number">6</div>
+                        <div class="demo-card-title">
+                            <h4>The Softmax Bandit</h4>
+                            <span>Explore vs Exploit</span>
+                        </div>
+                    </div>
+                    <p class="demo-card-desc">Two slot machines with hidden payoff rates. Should you exploit the best arm or explore? Temperature τ controls the balance in this Boltzmann policy demo.</p>
+                    <div class="demo-card-tags">
+                        <span class="demo-tag">Temperature τ</span>
+                        <span class="demo-tag">Q-Values</span>
+                        <span class="demo-tag">Regret</span>
+                    </div>
+                    <a href="./Demonstrations/SoftmaxBandit/" target="_blank" class="demo-launch-btn">
+                        Launch Demo
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                    </a>
+                </div>
+
+                <div class="demo-card">
+                    <div class="demo-card-top">
+                        <div class="demo-number">7</div>
+                        <div class="demo-card-title">
+                            <h4>The Actor-Critic Model</h4>
+                            <span>Separating Evaluation from Action</span>
+                        </div>
+                    </div>
+                    <p class="demo-card-desc">The Critic learns state value V, the Actor learns action preferences m(a), both taught by a shared dopamine-like prediction error δ. Compare learning rates for each system.</p>
+                    <div class="demo-card-tags">
+                        <span class="demo-tag">Critic (V)</span>
+                        <span class="demo-tag">Actor (m)</span>
+                        <span class="demo-tag">Striatum</span>
+                    </div>
+                    <a href="./Demonstrations/ActorCritic/" target="_blank" class="demo-launch-btn">
+                        Launch Demo
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Category: Memory & Priming -->
+        <div class="demo-category">
+            <div class="demo-category-header">
+                <div class="demo-category-icon" style="background: rgba(139, 92, 246, 0.15);">💡</div>
+                <div>
+                    <h3>Memory &amp; Priming</h3>
+                    <span>How prior experience shapes perception and recall without awareness</span>
+                </div>
+            </div>
+            <div class="demonstrations-grid">
+                <div class="demo-card">
+                    <div class="demo-card-top">
+                        <div class="demo-number">8</div>
+                        <div class="demo-card-title">
+                            <h4>Word-Stem Completion</h4>
+                            <span>Implicit Memory &amp; Priming</span>
+                        </div>
+                    </div>
+                    <p class="demo-card-desc">Study a list of words, then complete word stems like MOT___. Does prior exposure bias what comes to mind? Experience the priming effect — a hallmark of implicit memory.</p>
+                    <div class="demo-card-tags">
+                        <span class="demo-tag">Priming</span>
+                        <span class="demo-tag">Implicit Memory</span>
+                        <span class="demo-tag">Schacter &amp; Graf</span>
+                    </div>
+                    <a href="./Demonstrations/WordStemCompletion/" target="_blank" class="demo-launch-btn">
+                        Launch Demo
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Category: Spatial Navigation -->
+        <div class="demo-category">
+            <div class="demo-category-header">
+                <div class="demo-category-icon" style="background: rgba(16, 185, 129, 0.15);">🗺️</div>
+                <div>
+                    <h3>Spatial Navigation</h3>
+                    <span>How the hippocampus builds a cognitive map of the environment</span>
+                </div>
+            </div>
+            <div class="demonstrations-grid">
+                <div class="demo-card">
+                    <div class="demo-card-top">
+                        <div class="demo-number">9</div>
+                        <div class="demo-card-title">
+                            <h4>Place Cells &amp; Visual Landmarks</h4>
+                            <span>Hippocampal Spatial Coding</span>
+                        </div>
+                    </div>
+                    <p class="demo-card-desc">Guide a rat through a three-armed maze and watch a hippocampal place cell fire. Rotate the maze and a visual cue card to discover that place fields are anchored to landmarks, not absolute position.</p>
+                    <div class="demo-card-tags">
+                        <span class="demo-tag">Place Fields</span>
+                        <span class="demo-tag">Hippocampus</span>
+                        <span class="demo-tag">O'Keefe &amp; Nadel</span>
+                    </div>
+                    <a href="./Demonstrations/PlaceCells/" target="_blank" class="demo-launch-btn">
+                        Launch Demo
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+    </section>
+
+    <!-- Experiments Section -->
+    <section class="experiments-section" id="experiments">
+        <div class="section-header">
+            <span class="section-tag">🧪 Interactive Labs</span>
+            <h2>Choose Your Experiment</h2>
+            <p>Each experiment is designed to illustrate key concepts in perception, learning, and decision-making. Run
+                them yourself and explore the data.</p>
+        </div>
+
+        <div class="experiments-grid">
+            <!-- Real-Time Allocation -->
+            <div class="experiment-card">
+                <span class="card-badge badge-live">New</span>
+                <div class="card-icon" style="background: rgba(249, 115, 22, 0.15);">
+                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#f97316" stroke-width="2">
+                        <path d="M18 20V10" />
+                        <path d="M12 20V4" />
+                        <path d="M6 20v-6" />
+                    </svg>
+                </div>
+                <h3>Real-Time Allocation</h3>
+                <p>Interactive classroom poll. Distribute 100 points across 5 categories and see the class consensus in
+                    real-time.</p>
+                <div class="card-tags">
+                    <span class="card-tag">Classroom</span>
+                    <span class="card-tag">Poll</span>
+                    <span class="card-tag">Real-time</span>
+                </div>
+                <div style="margin-top: 1.5rem; display: flex; gap: 1rem;">
+                    <a href="./ClassPolls/RealTimeAllocation/dist/index.html" class="demo-launch-btn"
+                        style="padding: 0.5rem 1rem; font-size: 0.9rem;">
+                        Join Poll
+                    </a>
+                    <a href="./ClassPolls/RealTimeAllocation/dist/index.html#/dashboard"
+                        style="color: var(--gray); font-size: 0.9rem; text-decoration: none; display: flex; align-items: center; gap: 0.5rem;">
+                        View Dashboard →
+                    </a>
+                </div>
+            </div>
+
+            <!-- Random Dot Motion -->
+            <a href="./RandomDotMotionTask/" class="experiment-card">
+                <span class="card-badge badge-live">Live</span>
+                <div class="card-icon purple">
+                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#6366f1" stroke-width="2">
+                        <circle cx="12" cy="12" r="1" />
+                        <circle cx="19" cy="12" r="1" />
+                        <circle cx="5" cy="12" r="1" />
+                        <circle cx="12" cy="5" r="1" />
+                        <circle cx="12" cy="19" r="1" />
+                        <circle cx="7" cy="7" r="1" />
+                        <circle cx="17" cy="17" r="1" />
+                        <circle cx="17" cy="7" r="1" />
+                        <circle cx="7" cy="17" r="1" />
+                    </svg>
+                </div>
+                <h3>Random Dot Motion</h3>
+                <p>The classic perceptual decision-making paradigm. Detect coherent motion in noisy dot fields and
+                    experience how the brain accumulates evidence over time.</p>
+                <div class="card-tags">
+                    <span class="card-tag">Perception</span>
+                    <span class="card-tag">Evidence Accumulation</span>
+                    <span class="card-tag">Speed-Accuracy</span>
+                </div>
+                <div class="card-arrow">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+                        <path d="M5 12h14M12 5l7 7-7 7" />
+                    </svg>
                 </div>
             </a>
 

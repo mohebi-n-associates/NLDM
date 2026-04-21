@@ -1,0 +1,1031 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Backpropagation | Teaching a Network to See</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Lora:ital,wght@0,400;0,700;1,400&display=swap');
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc;
+            line-height: 1.7;
+            color: #1e293b;
+        }
+
+        .serif { font-family: 'Lora', serif; }
+
+        input[type="range"] {
+            -webkit-appearance: none;
+            appearance: none;
+            height: 8px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: currentColor;
+            cursor: pointer;
+            border: 2px solid white;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .slider-blue   { background: #dbeafe; color: #2563eb; }
+        .slider-violet { background: #ede9fe; color: #7c3aed; }
+        .slider-rose   { background: #ffe4e6; color: #e11d48; }
+        .slider-emerald{ background: #d1fae5; color: #059669; }
+
+        .param-input {
+            width: 70px;
+            padding: 2px 6px;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-align: right;
+            background: white;
+        }
+        .param-input:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 2px rgba(59,130,246,0.2);
+        }
+
+        /* Network SVG */
+        #network-svg .neuron {
+            transition: fill 0.3s ease;
+        }
+        #network-svg .weight-line {
+            transition: stroke 0.4s ease, stroke-width 0.4s ease, opacity 0.4s ease;
+        }
+
+        /* Pulse animations */
+        @keyframes forwardPulse {
+            0%   { opacity: 0.2; r: 14; }
+            50%  { opacity: 1;   r: 20; }
+            100% { opacity: 0.2; r: 14; }
+        }
+        @keyframes backPulse {
+            0%   { opacity: 0.2; r: 14; }
+            50%  { opacity: 1;   r: 20; }
+            100% { opacity: 0.2; r: 14; }
+        }
+        .neuron-pulse-fwd { animation: forwardPulse 0.6s ease-out; }
+        .neuron-pulse-back { animation: backPulse 0.6s ease-out; }
+
+        @keyframes dashFlow {
+            to { stroke-dashoffset: -20; }
+        }
+        .edge-fwd {
+            stroke-dasharray: 6 4;
+            animation: dashFlow 0.5s linear infinite;
+        }
+        .edge-back {
+            stroke-dasharray: 6 4;
+            animation: dashFlow 0.5s linear reverse infinite;
+        }
+
+        /* Decision boundary canvas */
+        #boundary-canvas {
+            cursor: crosshair;
+            border-radius: 8px;
+        }
+
+        /* Loss chart */
+        #loss-canvas {
+            border-radius: 8px;
+        }
+
+        /* Weight delta badges */
+        .delta-badge {
+            font-size: 0.65rem;
+            font-weight: 700;
+            padding: 1px 5px;
+            border-radius: 4px;
+            transition: all 0.4s;
+        }
+        .delta-pos { background: #dcfce7; color: #15803d; }
+        .delta-neg { background: #fee2e2; color: #b91c1c; }
+
+        .prose h2 {
+            font-weight: 700;
+            font-size: 1.875rem;
+            margin-top: 2.5rem;
+            margin-bottom: 1.25rem;
+            color: #0f172a;
+        }
+        .prose p { margin-bottom: 1.5rem; font-size: 1.1rem; }
+
+        @keyframes pulseGlow {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(37,99,235,0.4); }
+            50%       { box-shadow: 0 0 0 8px rgba(37,99,235,0); }
+        }
+        .pulse-glow { animation: pulseGlow 1.5s ease-in-out infinite; }
+
+        /* Step indicator */
+        .phase-pill {
+            display: inline-block;
+            font-size: 0.72rem;
+            font-weight: 700;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            padding: 3px 10px;
+            border-radius: 20px;
+        }
+        .phase-idle    { background: #f1f5f9; color: #64748b; }
+        .phase-forward { background: #dbeafe; color: #1d4ed8; }
+        .phase-loss    { background: #fef3c7; color: #b45309; }
+        .phase-backward{ background: #fee2e2; color: #b91c1c; }
+        .phase-update  { background: #d1fae5; color: #065f46; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(4px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+        .fade-in { animation: fadeIn 0.3s ease-out forwards; }
+    </style>
+</head>
+<body class="min-h-screen p-4 md:p-8">
+<div class="max-w-7xl mx-auto space-y-8">
+
+    <!-- Header -->
+    <header class="bg-white border-b border-slate-200 pt-12 pb-10 -mx-4 md:-mx-8 -mt-4 md:-mt-8 px-4 md:px-8 mb-4">
+        <div class="max-w-4xl mx-auto text-center">
+            <h1 class="text-3xl md:text-5xl font-extrabold text-slate-900 mb-4 leading-tight">
+                Teaching a Network to See:
+                <br/><span class="text-blue-600">Backpropagation</span>
+            </h1>
+            <p class="text-lg text-slate-500 serif italic max-w-2xl mx-auto">
+                A neural network learns to classify fruit by sweetness and color — watch the error ripple backward through the network, nudging each weight toward a better answer.
+            </p>
+        </div>
+    </header>
+
+    <!-- Main Layout -->
+    <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
+
+        <!-- === Controls Panel === -->
+        <div class="lg:col-span-1 space-y-5 bg-white p-5 rounded-2xl shadow-sm border border-slate-100 h-fit">
+            <div class="flex items-center gap-2 text-base font-semibold border-b pb-2 mb-2">
+                <svg class="w-4 h-4 text-slate-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="3"/>
+                    <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06A1.65 1.65 0 0 0 4.6 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06A1.65 1.65 0 0 0 9 4.6a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+                </svg>
+                Parameters
+            </div>
+
+            <!-- Learning Rate -->
+            <div>
+                <div class="flex justify-between mb-1">
+                    <label class="text-sm font-medium text-slate-600">Learning Rate \(\eta\)</label>
+                    <input type="number" id="lr-val" class="param-input text-blue-600" value="0.3" min="0.001" max="2" step="0.01">
+                </div>
+                <input type="range" id="lr" min="0.001" max="2" step="0.001" value="0.3" class="w-full slider-blue">
+                <p class="text-[10px] text-slate-400 mt-1 italic">How big each gradient step is</p>
+            </div>
+
+            <!-- Hidden layer size -->
+            <div>
+                <div class="flex justify-between mb-1">
+                    <label class="text-sm font-medium text-slate-600">Hidden Neurons</label>
+                    <span id="hn-display" class="text-sm font-bold text-violet-600">4</span>
+                </div>
+                <input type="range" id="hn" min="2" max="8" step="1" value="4" class="w-full slider-violet">
+                <p class="text-[10px] text-slate-400 mt-1 italic">Network capacity (requires reset)</p>
+            </div>
+
+            <!-- Training sample shown -->
+            <div class="pt-2 border-t border-slate-100">
+                <p class="text-xs font-semibold text-slate-500 mb-2 uppercase tracking-wide">Current Sample</p>
+                <div class="flex gap-2 mb-2">
+                    <div class="flex-1 bg-slate-50 rounded-lg p-2 text-center">
+                        <div class="text-[10px] text-slate-400">Sweetness (x₁)</div>
+                        <div id="x1-display" class="font-bold text-blue-600 text-sm">—</div>
+                    </div>
+                    <div class="flex-1 bg-slate-50 rounded-lg p-2 text-center">
+                        <div class="text-[10px] text-slate-400">Redness (x₂)</div>
+                        <div id="x2-display" class="font-bold text-rose-600 text-sm">—</div>
+                    </div>
+                </div>
+                <div class="flex gap-2">
+                    <div class="flex-1 bg-slate-50 rounded-lg p-2 text-center">
+                        <div class="text-[10px] text-slate-400">True Label</div>
+                        <div id="label-display" class="font-bold text-sm">—</div>
+                    </div>
+                    <div class="flex-1 bg-slate-50 rounded-lg p-2 text-center">
+                        <div class="text-[10px] text-slate-400">Network Output</div>
+                        <div id="output-display" class="font-bold text-sm">—</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Loss & steps -->
+            <div class="pt-2 border-t border-slate-100">
+                <div class="flex justify-between items-center mb-1">
+                    <span class="text-xs font-semibold text-slate-500 uppercase tracking-wide">Loss (MSE)</span>
+                    <span id="loss-display" class="text-sm font-bold text-amber-600">—</span>
+                </div>
+                <div class="flex justify-between items-center">
+                    <span class="text-xs font-semibold text-slate-500 uppercase tracking-wide">Training Steps</span>
+                    <span id="steps-display" class="text-sm font-bold text-slate-700">0</span>
+                </div>
+            </div>
+
+            <!-- Phase indicator -->
+            <div class="pt-2 border-t border-slate-100 text-center">
+                <span id="phase-pill" class="phase-pill phase-idle">Idle</span>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="pt-2 space-y-2">
+                <button id="step-btn" class="flex items-center justify-center gap-2 w-full px-5 py-3 rounded-xl bg-blue-600 text-white hover:bg-blue-700 transition-colors shadow-lg shadow-blue-200 font-bold text-sm pulse-glow">
+                    <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                        <polygon points="5 3 19 12 5 21 5 3"/>
+                    </svg>
+                    Step Once
+                </button>
+                <div class="flex gap-2">
+                    <button id="run10-btn" class="flex-1 flex items-center justify-center gap-1 px-3 py-2.5 rounded-xl border border-slate-200 hover:bg-slate-50 transition-colors text-xs font-bold text-slate-600">
+                        <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="13 19 22 12 13 5 13 19"/><polygon points="2 19 11 12 2 5 2 19"/></svg>
+                        ×10
+                    </button>
+                    <button id="run100-btn" class="flex-1 flex items-center justify-center gap-1 px-3 py-2.5 rounded-xl border border-slate-200 hover:bg-slate-50 transition-colors text-xs font-bold text-slate-600">
+                        <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="13 19 22 12 13 5 13 19"/><polygon points="2 19 11 12 2 5 2 19"/></svg>
+                        ×100
+                    </button>
+                    <button id="run1k-btn" class="flex-1 flex items-center justify-center gap-1 px-3 py-2.5 rounded-xl border border-slate-200 hover:bg-slate-50 transition-colors text-xs font-bold text-slate-600">
+                        <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="13 19 22 12 13 5 13 19"/><polygon points="2 19 11 12 2 5 2 19"/></svg>
+                        ×1K
+                    </button>
+                </div>
+                <button id="reset-btn" class="flex items-center justify-center gap-2 w-full px-4 py-2.5 border border-slate-200 rounded-xl hover:bg-white transition-colors text-sm font-semibold text-slate-500">
+                    <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="1 4 1 10 7 10"/>
+                        <path d="M3.51 15a9 9 0 1 0 .49-4.5"/>
+                    </svg>
+                    Reset Network
+                </button>
+            </div>
+
+            <!-- Add data point -->
+            <div class="pt-2 border-t border-slate-100">
+                <p class="text-xs text-slate-400 italic text-center">Click on the decision boundary canvas to add training points</p>
+            </div>
+        </div>
+
+        <!-- === Right Panel === -->
+        <div class="lg:col-span-3 space-y-6">
+
+            <!-- Network Diagram + Equation row -->
+            <div class="grid grid-cols-1 xl:grid-cols-5 gap-5">
+
+                <!-- Network Diagram -->
+                <div class="xl:col-span-3 bg-white rounded-2xl shadow-sm border border-slate-100 p-5">
+                    <div class="flex items-center justify-between mb-3">
+                        <h3 class="font-bold text-slate-800 text-sm uppercase tracking-wide">Network Diagram</h3>
+                        <div class="flex items-center gap-3 text-xs text-slate-400">
+                            <span class="flex items-center gap-1"><span class="inline-block w-3 h-0.5 bg-blue-400 rounded"></span>positive weight</span>
+                            <span class="flex items-center gap-1"><span class="inline-block w-3 h-0.5 bg-rose-400 rounded"></span>negative weight</span>
+                        </div>
+                    </div>
+                    <svg id="network-svg" viewBox="0 0 480 340" class="w-full" style="max-height:280px;"></svg>
+                </div>
+
+                <!-- Weight Table + Phase Log -->
+                <div class="xl:col-span-2 bg-white rounded-2xl shadow-sm border border-slate-100 p-5 flex flex-col gap-4">
+                    <div>
+                        <h3 class="font-bold text-slate-800 text-sm uppercase tracking-wide mb-3">Last Update (Δw)</h3>
+                        <div id="weight-table" class="text-xs space-y-1 font-mono max-h-40 overflow-y-auto">
+                            <p class="text-slate-400 italic">Run a step to see weight updates...</p>
+                        </div>
+                    </div>
+                    <div class="border-t border-slate-100 pt-3">
+                        <h3 class="font-bold text-slate-800 text-sm uppercase tracking-wide mb-2">Step Log</h3>
+                        <div id="step-log" class="text-xs space-y-1 max-h-44 overflow-y-auto">
+                            <p class="text-slate-400 italic">Steps will appear here...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Decision Boundary + Loss Chart row -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+
+                <!-- Decision Boundary -->
+                <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-5">
+                    <div class="flex items-center justify-between mb-3">
+                        <h3 class="font-bold text-slate-800 text-sm uppercase tracking-wide">Decision Boundary</h3>
+                        <div class="flex items-center gap-3 text-xs text-slate-400">
+                            <span class="flex items-center gap-1">🍓 Strawberry</span>
+                            <span class="flex items-center gap-1">🍋 Lemon</span>
+                        </div>
+                    </div>
+                    <canvas id="boundary-canvas" width="320" height="280" class="w-full"></canvas>
+                    <p class="text-[10px] text-slate-400 mt-2 text-center italic">Click to add a strawberry (high sweet + red) or lemon point (low sweet, yellow). Left-click = 🍓, Right-click = 🍋</p>
+                </div>
+
+                <!-- Loss Chart -->
+                <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-5">
+                    <div class="flex items-center justify-between mb-3">
+                        <h3 class="font-bold text-slate-800 text-sm uppercase tracking-wide">Loss Over Time</h3>
+                        <span class="text-xs text-slate-400">Mean Squared Error</span>
+                    </div>
+                    <canvas id="loss-canvas" width="320" height="280" class="w-full bg-slate-50 rounded-lg"></canvas>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Explanation Section -->
+    <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-8 prose max-w-none">
+        <h2>How Backpropagation Works</h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div>
+                <div class="w-10 h-10 rounded-xl bg-blue-100 flex items-center justify-center mb-3">
+                    <span class="text-blue-700 font-bold">1</span>
+                </div>
+                <h3 class="text-base font-bold text-slate-800 mb-2">Forward Pass</h3>
+                <p class="text-sm text-slate-600 leading-relaxed">Input features (sweetness, redness) flow left to right through the network. Each neuron computes a weighted sum of its inputs, then squashes it through a sigmoid: \(\sigma(z) = \frac{1}{1+e^{-z}}\). The output neuron's activation is the network's prediction \(\hat{y} \in (0,1)\).</p>
+            </div>
+            <div>
+                <div class="w-10 h-10 rounded-xl bg-amber-100 flex items-center justify-center mb-3">
+                    <span class="text-amber-700 font-bold">2</span>
+                </div>
+                <h3 class="text-base font-bold text-slate-800 mb-2">Compute the Loss</h3>
+                <p class="text-sm text-slate-600 leading-relaxed">We compare the prediction to the true label using Mean Squared Error: \(\mathcal{L} = (\hat{y} - y)^2\). This scalar tells us how wrong the network is. The goal of training is to drive \(\mathcal{L}\) toward zero. The color of the output neuron reflects the error — bright red = high loss.</p>
+            </div>
+            <div>
+                <div class="w-10 h-10 rounded-xl bg-rose-100 flex items-center justify-center mb-3">
+                    <span class="text-rose-700 font-bold">3</span>
+                </div>
+                <h3 class="text-base font-bold text-slate-800 mb-2">Backward Pass</h3>
+                <p class="text-sm text-slate-600 leading-relaxed">The chain rule of calculus lets us compute \(\frac{\partial \mathcal{L}}{\partial w}\) for every weight. The error signal flows <em>backward</em> through the network — watch the red pulse. Each weight is then nudged in the direction that reduces the loss: \(w \leftarrow w - \eta \frac{\partial \mathcal{L}}{\partial w}\).</p>
+            </div>
+        </div>
+
+        <div class="mt-8 p-5 bg-slate-50 rounded-xl border border-slate-100">
+            <h3 class="text-base font-bold text-slate-800 mb-3">The Chain Rule in Action</h3>
+            <div class="text-sm text-slate-600 space-y-2">
+                <p>For a weight \(w^{(2)}_{jk}\) in the output layer connecting hidden neuron \(j\) to output neuron \(k\):</p>
+                <p class="font-mono text-xs bg-white rounded p-3 border border-slate-200">
+                    \(\frac{\partial \mathcal{L}}{\partial w^{(2)}_{jk}} = \underbrace{(\hat{y}_k - y_k)}_{\text{output error}} \cdot \underbrace{\sigma'(z_k)}_{\text{sigmoid gradient}} \cdot \underbrace{h_j}_{\text{hidden activation}}\)
+                </p>
+                <p>For a hidden-layer weight \(w^{(1)}_{ij}\), we must chain through the output layer — this is the "back" in backpropagation:</p>
+                <p class="font-mono text-xs bg-white rounded p-3 border border-slate-200">
+                    \(\frac{\partial \mathcal{L}}{\partial w^{(1)}_{ij}} = \underbrace{\delta_k \cdot w^{(2)}_{jk}}_{\text{error flowing back}} \cdot \underbrace{\sigma'(z_j)}_{\text{hidden sigmoid gradient}} \cdot \underbrace{x_i}_{\text{input}}\)
+                </p>
+            </div>
+        </div>
+
+        <div class="mt-8 grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="p-5 bg-blue-50 rounded-xl border border-blue-100">
+                <h3 class="text-base font-bold text-blue-900 mb-2">🧠 Biological Parallel</h3>
+                <p class="text-sm text-blue-800 leading-relaxed">While real neurons can't literally send error signals backward, backpropagation captures something profound: a global teaching signal (dopamine-like) that modifies synaptic strengths. The Rescorla-Wagner model and TD learning are single-layer versions of the same principle — the prediction error drives learning.</p>
+            </div>
+            <div class="p-5 bg-emerald-50 rounded-xl border border-emerald-100">
+                <h3 class="text-base font-bold text-emerald-900 mb-2">🍓 The Task</h3>
+                <p class="text-sm text-emerald-800 leading-relaxed">The network sees two features: <strong>sweetness</strong> (x₁) and <strong>redness</strong> (x₂), both in [0,1]. Strawberries cluster high-high (🍓), lemons cluster low-low (🍋). The network must learn to separate them. Watch the decision boundary carve out the correct regions as training progresses.</p>
+            </div>
+        </div>
+    </div>
+
+</div><!-- end max-w-7xl -->
+
+<script>
+// ─── Neural Network ────────────────────────────────────────────────────────────
+function sigmoid(x) { return 1 / (1 + Math.exp(-x)); }
+function sigmoidPrime(x) { const s = sigmoid(x); return s * (1 - s); }
+
+// Training data: [sweetness, redness] → label (1=strawberry, 0=lemon)
+const defaultData = [
+    [0.85, 0.90, 1], [0.80, 0.85, 1], [0.90, 0.80, 1], [0.75, 0.92, 1],
+    [0.92, 0.75, 1], [0.70, 0.88, 1], [0.88, 0.70, 1], [0.78, 0.82, 1],
+    [0.15, 0.10, 0], [0.10, 0.20, 0], [0.20, 0.12, 0], [0.12, 0.18, 0],
+    [0.22, 0.08, 0], [0.08, 0.22, 0], [0.18, 0.15, 0], [0.25, 0.10, 0],
+];
+
+let trainingData = defaultData.map(d => [...d]);
+let hiddenSize = 4;
+let W1, b1, W2, b2; // weights and biases
+let lossHistory = [];
+let totalSteps = 0;
+let currentSample = null;
+let animPhase = 'idle'; // 'idle','forward','loss','backward','update'
+
+function initNetwork(hs) {
+    hiddenSize = hs;
+    // Xavier init
+    const scale1 = Math.sqrt(2 / (2 + hs));
+    const scale2 = Math.sqrt(2 / (hs + 1));
+    W1 = Array.from({length: hs}, () => [randN()*scale1, randN()*scale1]);
+    b1 = Array.from({length: hs}, () => 0);
+    W2 = Array.from({length: hs}, () => randN()*scale2);
+    b2 = 0;
+    lossHistory = [];
+    totalSteps = 0;
+    currentSample = null;
+    trainingData = defaultData.map(d => [...d]);
+}
+
+function randN() { // Box-Muller
+    let u = 0, v = 0;
+    while(u===0) u=Math.random();
+    while(v===0) v=Math.random();
+    return Math.sqrt(-2*Math.log(u)) * Math.cos(2*Math.PI*v);
+}
+
+function forward(x1, x2) {
+    // Hidden layer
+    const z1 = W1.map((w, j) => w[0]*x1 + w[1]*x2 + b1[j]);
+    const h  = z1.map(sigmoid);
+    // Output layer
+    const z2 = W2.reduce((acc, w, j) => acc + w*h[j], 0) + b2;
+    const yhat = sigmoid(z2);
+    return { z1, h, z2, yhat };
+}
+
+function trainStep(eta) {
+    // Pick random sample
+    const idx = Math.floor(Math.random() * trainingData.length);
+    const [x1, x2, y] = trainingData[idx];
+    currentSample = { x1, x2, y, idx };
+
+    const { z1, h, z2, yhat } = forward(x1, x2);
+    const loss = (yhat - y) ** 2;
+
+    // Backprop
+    const dL_dyhat = 2 * (yhat - y);
+    const delta2 = dL_dyhat * sigmoidPrime(z2);
+
+    const dW2 = h.map(hj => delta2 * hj);
+    const db2 = delta2;
+
+    const delta1 = W2.map((w2j, j) => w2j * delta2 * sigmoidPrime(z1[j]));
+    const dW1 = W1.map((_, j) => [delta1[j]*x1, delta1[j]*x2]);
+    const db1 = delta1.slice();
+
+    // Collect deltas for display
+    const deltaInfo = { W1: dW1, b1: db1, W2: dW2, b2: db2 };
+
+    // Update
+    W2.forEach((_, j) => { W2[j] -= eta * dW2[j]; });
+    b2 -= eta * db2;
+    W1.forEach((_, j) => { W1[j][0] -= eta * dW1[j][0]; W1[j][1] -= eta * dW1[j][1]; b1[j] -= eta * db1[j]; });
+
+    lossHistory.push(loss);
+    totalSteps++;
+
+    return { x1, x2, y, yhat, loss, z1, h, z2, deltaInfo };
+}
+
+// ─── SVG Network Diagram ───────────────────────────────────────────────────────
+const SVG_NS = 'http://www.w3.org/2000/svg';
+
+function lerp(a, b, t) { return a + (b - a) * t; }
+function clamp(x, lo, hi) { return Math.max(lo, Math.min(hi, x)); }
+
+function networkPositions(hs) {
+    const W = 480, H = 340;
+    const layers = [
+        // Input layer: 2 neurons
+        [1/4, 1/3, 2/3].slice(1,3).map((fy, i) => ({ x: W*0.12, y: H*[0.35, 0.65][i] })),
+        // Hidden layer: hs neurons
+        Array.from({length: hs}, (_, j) => ({ x: W*0.5, y: H * (j+1)/(hs+1) })),
+        // Output layer: 1 neuron
+        [{ x: W*0.88, y: H*0.5 }],
+    ];
+    return layers;
+}
+
+function drawNetwork(z1, h, z2, yhat, lastDeltaInfo, animState) {
+    const svg = document.getElementById('network-svg');
+    svg.innerHTML = '';
+
+    const hs = hiddenSize;
+    const positions = networkPositions(hs);
+    const [inputPos, hiddenPos, outputPos] = positions;
+
+    // ── Defs (gradient for glow) ──
+    const defs = document.createElementNS(SVG_NS, 'defs');
+    const makeGlow = (id, color) => {
+        const f = document.createElementNS(SVG_NS, 'filter');
+        f.setAttribute('id', id); f.setAttribute('x', '-50%'); f.setAttribute('y', '-50%');
+        f.setAttribute('width', '200%'); f.setAttribute('height', '200%');
+        const blur = document.createElementNS(SVG_NS, 'feGaussianBlur');
+        blur.setAttribute('stdDeviation', '3'); blur.setAttribute('in', 'SourceGraphic');
+        f.appendChild(blur); defs.appendChild(f);
+    };
+    makeGlow('glow-blue', '#3b82f6');
+    makeGlow('glow-red',  '#ef4444');
+    svg.appendChild(defs);
+
+    // ── Helper: line ──
+    function addEdge(x1, y1, x2, y2, w, animClass) {
+        const absW = Math.abs(w);
+        const thick = clamp(absW * 3, 0.5, 5);
+        const alpha = clamp(absW * 1.5, 0.15, 0.9);
+        const color = w > 0 ? `rgba(37,99,235,${alpha})` : `rgba(220,38,38,${alpha})`;
+        const line = document.createElementNS(SVG_NS, 'line');
+        line.setAttribute('x1', x1); line.setAttribute('y1', y1);
+        line.setAttribute('x2', x2); line.setAttribute('y2', y2);
+        line.setAttribute('stroke', color);
+        line.setAttribute('stroke-width', thick);
+        if (animClass) line.setAttribute('class', 'weight-line ' + animClass);
+        else line.setAttribute('class', 'weight-line');
+        svg.appendChild(line);
+    }
+
+    // ── Draw edges: input → hidden ──
+    W1.forEach((w, j) => {
+        addEdge(inputPos[0].x, inputPos[0].y, hiddenPos[j].x, hiddenPos[j].y, w[0],
+            animState === 'forward' ? 'edge-fwd' : (animState === 'backward' ? 'edge-back' : ''));
+        addEdge(inputPos[1].x, inputPos[1].y, hiddenPos[j].x, hiddenPos[j].y, w[1],
+            animState === 'forward' ? 'edge-fwd' : (animState === 'backward' ? 'edge-back' : ''));
+    });
+
+    // ── Draw edges: hidden → output ──
+    W2.forEach((w, j) => {
+        addEdge(hiddenPos[j].x, hiddenPos[j].y, outputPos[0].x, outputPos[0].y, w,
+            animState === 'forward' ? 'edge-fwd' : (animState === 'backward' ? 'edge-back' : ''));
+    });
+
+    // ── Helper: neuron circle ──
+    function addNeuron(pos, activation, label, sublabel, isBack) {
+        const g = document.createElementNS(SVG_NS, 'g');
+        // Glow circle behind
+        const glow = document.createElementNS(SVG_NS, 'circle');
+        glow.setAttribute('cx', pos.x); glow.setAttribute('cy', pos.y); glow.setAttribute('r', 22);
+        const a = activation !== null ? clamp(activation, 0, 1) : 0.5;
+        if (isBack) {
+            glow.setAttribute('fill', `rgba(239,68,68,${a * 0.35})`);
+        } else {
+            glow.setAttribute('fill', `rgba(37,99,235,${a * 0.35})`);
+        }
+        g.appendChild(glow);
+
+        // Main circle
+        const c = document.createElementNS(SVG_NS, 'circle');
+        c.setAttribute('cx', pos.x); c.setAttribute('cy', pos.y); c.setAttribute('r', 16);
+        if (activation !== null) {
+            if (isBack) {
+                const v = Math.round(a * 255);
+                c.setAttribute('fill', `rgb(${255},${255-v},${255-v})`);
+            } else {
+                const v = Math.round(a * 255);
+                c.setAttribute('fill', `rgb(${255-v},${255-v},${255})`);
+            }
+        } else {
+            c.setAttribute('fill', '#e2e8f0');
+        }
+        c.setAttribute('stroke', isBack ? '#ef4444' : '#3b82f6');
+        c.setAttribute('stroke-width', 2);
+        c.setAttribute('class', 'neuron');
+        g.appendChild(c);
+
+        // Label
+        if (label) {
+            const t = document.createElementNS(SVG_NS, 'text');
+            t.setAttribute('x', pos.x); t.setAttribute('y', pos.y + 4);
+            t.setAttribute('text-anchor', 'middle');
+            t.setAttribute('font-size', '9');
+            t.setAttribute('font-weight', '700');
+            t.setAttribute('fill', '#1e293b');
+            t.textContent = label;
+            g.appendChild(t);
+        }
+        if (sublabel) {
+            const t2 = document.createElementNS(SVG_NS, 'text');
+            t2.setAttribute('x', pos.x); t2.setAttribute('y', pos.y + 30);
+            t2.setAttribute('text-anchor', 'middle');
+            t2.setAttribute('font-size', '8');
+            t2.setAttribute('fill', '#94a3b8');
+            t2.textContent = sublabel;
+            g.appendChild(t2);
+        }
+        svg.appendChild(g);
+    }
+
+    // ── Input neurons ──
+    const inputActs = currentSample ? [currentSample.x1, currentSample.x2] : [null, null];
+    addNeuron(inputPos[0], inputActs[0], inputActs[0] !== null ? inputActs[0].toFixed(2) : 'x₁', 'sweetness', false);
+    addNeuron(inputPos[1], inputActs[1], inputActs[1] !== null ? inputActs[1].toFixed(2) : 'x₂', 'redness', false);
+
+    // ── Hidden neurons ──
+    hiddenPos.forEach((pos, j) => {
+        const act = h ? h[j] : null;
+        const isBack = animState === 'backward';
+        addNeuron(pos, act, act !== null ? act.toFixed(2) : `h${j+1}`, `h${j+1}`, isBack);
+    });
+
+    // ── Output neuron ──
+    const outputAct = yhat !== null ? yhat : null;
+    const label = yhat !== null ? yhat.toFixed(3) : 'ŷ';
+    const isBackOut = animState === 'backward' || animState === 'loss';
+    addNeuron(outputPos[0], outputAct, label, 'ŷ', isBackOut);
+
+    // ── Layer labels ──
+    function addLayerLabel(x, text) {
+        const t = document.createElementNS(SVG_NS, 'text');
+        t.setAttribute('x', x); t.setAttribute('y', 16);
+        t.setAttribute('text-anchor', 'middle');
+        t.setAttribute('font-size', '9');
+        t.setAttribute('font-weight', '600');
+        t.setAttribute('fill', '#94a3b8');
+        t.setAttribute('letter-spacing', '0.05em');
+        t.textContent = text;
+        svg.appendChild(t);
+    }
+    addLayerLabel(inputPos[0].x, 'INPUT');
+    addLayerLabel(hiddenPos[Math.floor(hs/2)].x, `HIDDEN (${hs})`);
+    addLayerLabel(outputPos[0].x, 'OUTPUT');
+
+    // ── Backflow arrow if backward phase ──
+    if (animState === 'backward') {
+        const arrow = document.createElementNS(SVG_NS, 'text');
+        arrow.setAttribute('x', 240); arrow.setAttribute('y', 325);
+        arrow.setAttribute('text-anchor', 'middle');
+        arrow.setAttribute('font-size', '10');
+        arrow.setAttribute('fill', '#ef4444');
+        arrow.setAttribute('font-weight', '700');
+        arrow.textContent = '← error flowing backward (chain rule)';
+        svg.appendChild(arrow);
+    }
+}
+
+// ─── Decision Boundary Canvas ──────────────────────────────────────────────────
+function drawBoundary() {
+    const canvas = document.getElementById('boundary-canvas');
+    const ctx = canvas.getContext('2d');
+    const W = canvas.width, H = canvas.height;
+    const res = 60;
+    const step = W / res;
+
+    // Background heatmap
+    for (let ix = 0; ix < res; ix++) {
+        for (let iy = 0; iy < res; iy++) {
+            const x1 = (ix + 0.5) / res;
+            const x2 = 1 - (iy + 0.5) / res; // y axis flipped (top=1)
+            const { yhat } = forward(x1, x2);
+            const r = Math.round(lerp(220, 255, yhat));
+            const g = Math.round(lerp(250, 100, yhat));
+            const b = Math.round(lerp(100, 100, yhat));
+            ctx.fillStyle = `rgba(${r},${g},${b},0.55)`;
+            ctx.fillRect(ix * step, iy * step, step + 1, step + 1);
+        }
+    }
+
+    // Decision boundary line (0.5 contour)
+    ctx.strokeStyle = 'rgba(100,100,100,0.7)';
+    ctx.lineWidth = 1.5;
+    ctx.setLineDash([4, 3]);
+    for (let ix = 0; ix < res - 1; ix++) {
+        for (let iy = 0; iy < res - 1; iy++) {
+            const x1a = (ix + 0.5) / res, y1a = 1-(iy+0.5)/res;
+            const x1b = (ix + 1.5) / res, y1b = 1-(iy+0.5)/res;
+            const x1c = (ix + 0.5) / res, y1c = 1-(iy+1.5)/res;
+            const va = forward(x1a, y1a).yhat;
+            const vb = forward(x1b, y1b).yhat;
+            const vc = forward(x1c, y1c).yhat;
+            if ((va > 0.5) !== (vb > 0.5)) {
+                const px = (ix + 0.5) * step;
+                const py = (iy + 0.5) * step;
+                ctx.beginPath(); ctx.moveTo(px, py); ctx.lineTo(px + step, py); ctx.stroke();
+            }
+            if ((va > 0.5) !== (vc > 0.5)) {
+                const px = (ix + 0.5) * step;
+                const py = (iy + 0.5) * step;
+                ctx.beginPath(); ctx.moveTo(px, py); ctx.lineTo(px, py + step); ctx.stroke();
+            }
+        }
+    }
+    ctx.setLineDash([]);
+
+    // Axis labels
+    ctx.fillStyle = '#94a3b8';
+    ctx.font = '10px Inter, sans-serif';
+    ctx.fillText('Sweetness →', W / 2 - 30, H - 4);
+    ctx.save(); ctx.translate(10, H/2); ctx.rotate(-Math.PI/2);
+    ctx.fillText('Redness →', -20, 0); ctx.restore();
+
+    // Data points
+    trainingData.forEach(([x1, x2, y]) => {
+        const px = x1 * (W - 20) + 10;
+        const py = (1 - x2) * (H - 20) + 10;
+        ctx.beginPath();
+        ctx.arc(px, py, 6, 0, 2 * Math.PI);
+        if (y === 1) {
+            ctx.fillStyle = 'rgba(220,38,38,0.9)';
+            ctx.strokeStyle = '#fff';
+        } else {
+            ctx.fillStyle = 'rgba(234,179,8,0.9)';
+            ctx.strokeStyle = '#fff';
+        }
+        ctx.fill();
+        ctx.lineWidth = 1.5;
+        ctx.stroke();
+        ctx.font = '9px Inter';
+        ctx.fillStyle = '#fff';
+        ctx.fillText(y === 1 ? '🍓' : '🍋', px + 7, py + 4);
+    });
+
+    // Highlight current sample
+    if (currentSample) {
+        const px = currentSample.x1 * (W - 20) + 10;
+        const py = (1 - currentSample.x2) * (H - 20) + 10;
+        ctx.beginPath();
+        ctx.arc(px, py, 10, 0, 2 * Math.PI);
+        ctx.strokeStyle = '#1e293b';
+        ctx.lineWidth = 2.5;
+        ctx.stroke();
+    }
+}
+
+// ─── Loss Chart ───────────────────────────────────────────────────────────────
+function drawLossChart() {
+    const canvas = document.getElementById('loss-canvas');
+    const ctx = canvas.getContext('2d');
+    const W = canvas.width, H = canvas.height;
+    const pad = { top: 15, right: 15, bottom: 30, left: 42 };
+    const cW = W - pad.left - pad.right;
+    const cH = H - pad.top - pad.bottom;
+
+    ctx.clearRect(0, 0, W, H);
+    ctx.fillStyle = '#f8fafc';
+    ctx.fillRect(0, 0, W, H);
+
+    const data = lossHistory;
+    if (data.length < 2) {
+        ctx.fillStyle = '#94a3b8'; ctx.font = '12px Inter';
+        ctx.fillText('Run training steps to see loss...', pad.left + 10, H / 2);
+        return;
+    }
+
+    const maxLoss = Math.max(...data, 0.25);
+    const minLoss = 0;
+    const displayed = data.length > 500 ? data.slice(-500) : data;
+
+    // Grid lines
+    ctx.strokeStyle = '#e2e8f0'; ctx.lineWidth = 1;
+    for (let i = 0; i <= 4; i++) {
+        const y = pad.top + cH * (1 - i / 4);
+        ctx.beginPath(); ctx.moveTo(pad.left, y); ctx.lineTo(pad.left + cW, y); ctx.stroke();
+        ctx.fillStyle = '#94a3b8'; ctx.font = '9px Inter';
+        ctx.fillText((maxLoss * i / 4).toFixed(3), 2, y + 3);
+    }
+
+    // X axis
+    ctx.fillStyle = '#94a3b8'; ctx.font = '9px Inter';
+    ctx.fillText('Training steps', pad.left + cW / 2 - 25, H - 5);
+
+    // Loss curve
+    ctx.beginPath();
+    displayed.forEach((v, i) => {
+        const x = pad.left + (i / (displayed.length - 1)) * cW;
+        const y = pad.top + cH * (1 - (v - minLoss) / (maxLoss - minLoss));
+        i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+    });
+    ctx.strokeStyle = '#3b82f6'; ctx.lineWidth = 2; ctx.stroke();
+
+    // Smoothed average (every 10)
+    if (displayed.length > 20) {
+        ctx.beginPath();
+        const window = 10;
+        for (let i = window; i < displayed.length; i++) {
+            const avg = displayed.slice(i - window, i).reduce((a, b) => a + b, 0) / window;
+            const x = pad.left + (i / (displayed.length - 1)) * cW;
+            const y = pad.top + cH * (1 - (avg - minLoss) / (maxLoss - minLoss));
+            i === window ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+        }
+        ctx.strokeStyle = 'rgba(234, 88, 12, 0.7)'; ctx.lineWidth = 1.5;
+        ctx.setLineDash([3, 3]); ctx.stroke(); ctx.setLineDash([]);
+    }
+}
+
+// ─── Weight Table ─────────────────────────────────────────────────────────────
+function updateWeightTable(deltaInfo) {
+    const el = document.getElementById('weight-table');
+    if (!deltaInfo) { el.innerHTML = '<p class="text-slate-400 italic">Run a step to see weight updates...</p>'; return; }
+    const rows = [];
+    deltaInfo.W1.forEach((dw, j) => {
+        const eta = parseFloat(document.getElementById('lr').value);
+        const d0 = -(eta * dw[0]).toFixed(4), d1 = -(eta * dw[1]).toFixed(4);
+        rows.push(`<div class="flex items-center justify-between py-0.5 border-b border-slate-50">
+            <span class="text-slate-500">W1[${j}][x₁]</span>
+            <span class="delta-badge ${+d0>=0?'delta-pos':'delta-neg'}">${+d0>=0?'+':''}${d0}</span>
+        </div>`);
+        rows.push(`<div class="flex items-center justify-between py-0.5 border-b border-slate-50">
+            <span class="text-slate-500">W1[${j}][x₂]</span>
+            <span class="delta-badge ${+d1>=0?'delta-pos':'delta-neg'}">${+d1>=0?'+':''}${d1}</span>
+        </div>`);
+    });
+    deltaInfo.W2.forEach((dw, j) => {
+        const eta = parseFloat(document.getElementById('lr').value);
+        const d = -(eta * dw).toFixed(4);
+        rows.push(`<div class="flex items-center justify-between py-0.5">
+            <span class="text-slate-500">W2[${j}]</span>
+            <span class="delta-badge ${+d>=0?'delta-pos':'delta-neg'}">${+d>=0?'+':''}${d}</span>
+        </div>`);
+    });
+    el.innerHTML = rows.join('');
+}
+
+// ─── Step Log ─────────────────────────────────────────────────────────────────
+function logStep(result) {
+    const log = document.getElementById('step-log');
+    const fruitEmoji = result.y === 1 ? '🍓' : '🍋';
+    const correct = (result.yhat > 0.5 && result.y === 1) || (result.yhat <= 0.5 && result.y === 0);
+    const entry = document.createElement('div');
+    entry.className = 'py-0.5 border-b border-slate-50 fade-in';
+    entry.innerHTML = `<span class="text-slate-400">#${totalSteps}</span> ${fruitEmoji} ŷ=${result.yhat.toFixed(3)} y=${result.y} L=${result.loss.toFixed(4)} <span class="${correct?'text-emerald-600':'text-rose-500'}">${correct?'✓':'✗'}</span>`;
+    if (log.firstChild && log.firstChild.textContent === 'Steps will appear here...') log.innerHTML = '';
+    log.prepend(entry);
+    while (log.children.length > 30) log.removeChild(log.lastChild);
+}
+
+// ─── Phase Pill ───────────────────────────────────────────────────────────────
+function setPhase(phase) {
+    animPhase = phase;
+    const pill = document.getElementById('phase-pill');
+    const map = {
+        'idle':     ['phase-idle',     'Idle'],
+        'forward':  ['phase-forward',  '→ Forward Pass'],
+        'loss':     ['phase-loss',     '⚡ Computing Loss'],
+        'backward': ['phase-backward', '← Backward Pass'],
+        'update':   ['phase-update',   '✓ Weights Updated'],
+    };
+    const [cls, text] = map[phase] || map['idle'];
+    pill.className = 'phase-pill ' + cls;
+    pill.textContent = text;
+}
+
+// ─── Main UI Update ───────────────────────────────────────────────────────────
+function fullRefresh(result) {
+    if (result) {
+        document.getElementById('x1-display').textContent = result.x1.toFixed(3);
+        document.getElementById('x2-display').textContent = result.x2.toFixed(3);
+        const labelEl = document.getElementById('label-display');
+        labelEl.textContent = result.y === 1 ? '1 (🍓)' : '0 (🍋)';
+        labelEl.style.color = result.y === 1 ? '#dc2626' : '#ca8a04';
+
+        const outEl = document.getElementById('output-display');
+        outEl.textContent = result.yhat.toFixed(4);
+        const correct = (result.yhat > 0.5 && result.y === 1) || (result.yhat <= 0.5 && result.y === 0);
+        outEl.style.color = correct ? '#059669' : '#dc2626';
+
+        document.getElementById('loss-display').textContent = result.loss.toFixed(6);
+    }
+    document.getElementById('steps-display').textContent = totalSteps;
+    drawNetwork(null, null, null, currentSample ? forward(currentSample.x1, currentSample.x2).yhat : null, result ? result.deltaInfo : null, animPhase);
+    drawBoundary();
+    drawLossChart();
+}
+
+// ─── Animated Single Step ────────────────────────────────────────────────────
+async function animatedStep(eta) {
+    // 1. Forward
+    setPhase('forward');
+    const idx = Math.floor(Math.random() * trainingData.length);
+    const [x1, x2, y] = trainingData[idx];
+    currentSample = { x1, x2, y, idx };
+    const fwd = forward(x1, x2);
+    drawNetwork(fwd.z1, fwd.h, fwd.z2, fwd.yhat, null, 'forward');
+    drawBoundary();
+    await sleep(500);
+
+    // 2. Loss
+    setPhase('loss');
+    drawNetwork(fwd.z1, fwd.h, fwd.z2, fwd.yhat, null, 'loss');
+    await sleep(400);
+
+    // 3. Backward (before actual update — show error)
+    setPhase('backward');
+    drawNetwork(fwd.z1, fwd.h, fwd.z2, fwd.yhat, null, 'backward');
+    await sleep(600);
+
+    // 4. Actual update
+    // Recompute with current state (we haven't updated yet)
+    const { z1, h, z2, yhat } = fwd;
+    const loss = (yhat - y) ** 2;
+    const dL_dyhat = 2 * (yhat - y);
+    const delta2 = dL_dyhat * sigmoidPrime(z2);
+    const dW2 = h.map(hj => delta2 * hj);
+    const db2 = delta2;
+    const delta1 = W2.map((w2j, j) => w2j * delta2 * sigmoidPrime(z1[j]));
+    const dW1 = W1.map((_, j) => [delta1[j]*x1, delta1[j]*x2]);
+    const db1 = delta1.slice();
+    const deltaInfo = { W1: dW1, b1: db1, W2: dW2, b2: db2 };
+    W2.forEach((_, j) => { W2[j] -= eta * dW2[j]; });
+    b2 -= eta * db2;
+    W1.forEach((_, j) => { W1[j][0] -= eta * dW1[j][0]; W1[j][1] -= eta * dW1[j][1]; b1[j] -= eta * db1[j]; });
+    lossHistory.push(loss);
+    totalSteps++;
+    const result = { x1, x2, y, yhat, loss, deltaInfo };
+    currentSample.result = result;
+
+    setPhase('update');
+    updateWeightTable(deltaInfo);
+    logStep(result);
+    fullRefresh(result);
+    await sleep(400);
+
+    setPhase('idle');
+}
+
+function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
+
+// ─── Fast (non-animated) batch train ─────────────────────────────────────────
+function fastTrain(n) {
+    const eta = parseFloat(document.getElementById('lr').value);
+    let lastResult = null;
+    for (let i = 0; i < n; i++) {
+        lastResult = trainStep(eta);
+    }
+    if (lastResult) {
+        updateWeightTable(lastResult.deltaInfo);
+        logStep(lastResult);
+        fullRefresh(lastResult);
+    }
+    setPhase('idle');
+}
+
+// ─── Event Listeners ─────────────────────────────────────────────────────────
+document.getElementById('step-btn').addEventListener('click', () => {
+    const eta = parseFloat(document.getElementById('lr').value);
+    animatedStep(eta);
+});
+
+document.getElementById('run10-btn').addEventListener('click',  () => fastTrain(10));
+document.getElementById('run100-btn').addEventListener('click', () => fastTrain(100));
+document.getElementById('run1k-btn').addEventListener('click',  () => fastTrain(1000));
+
+document.getElementById('reset-btn').addEventListener('click', () => {
+    const hs = parseInt(document.getElementById('hn').value);
+    initNetwork(hs);
+    currentSample = null;
+    setPhase('idle');
+    document.getElementById('x1-display').textContent = '—';
+    document.getElementById('x2-display').textContent = '—';
+    document.getElementById('label-display').textContent = '—';
+    document.getElementById('output-display').textContent = '—';
+    document.getElementById('loss-display').textContent = '—';
+    document.getElementById('steps-display').textContent = '0';
+    document.getElementById('step-log').innerHTML = '<p class="text-slate-400 italic">Steps will appear here...</p>';
+    updateWeightTable(null);
+    fullRefresh(null);
+});
+
+// Sync lr slider ↔ input
+const lrSlider = document.getElementById('lr');
+const lrVal = document.getElementById('lr-val');
+lrSlider.addEventListener('input', () => { lrVal.value = parseFloat(lrSlider.value).toFixed(3); });
+lrVal.addEventListener('input', () => { lrSlider.value = lrVal.value; });
+
+// Sync hidden neurons
+const hnSlider = document.getElementById('hn');
+hnSlider.addEventListener('input', () => {
+    document.getElementById('hn-display').textContent = hnSlider.value;
+});
+
+// Click on boundary canvas to add training points
+const bCanvas = document.getElementById('boundary-canvas');
+bCanvas.addEventListener('click', (e) => {
+    const rect = bCanvas.getBoundingClientRect();
+    const scaleX = bCanvas.width / rect.width;
+    const scaleY = bCanvas.height / rect.height;
+    const px = (e.clientX - rect.left) * scaleX;
+    const py = (e.clientY - rect.top) * scaleY;
+    const x1 = clamp(px / bCanvas.width, 0, 1);
+    const x2 = clamp(1 - py / bCanvas.height, 0, 1);
+    const y = 1; // left-click = strawberry
+    trainingData.push([x1, x2, y]);
+    drawBoundary();
+});
+bCanvas.addEventListener('contextmenu', (e) => {
+    e.preventDefault();
+    const rect = bCanvas.getBoundingClientRect();
+    const scaleX = bCanvas.width / rect.width;
+    const scaleY = bCanvas.height / rect.height;
+    const px = (e.clientX - rect.left) * scaleX;
+    const py = (e.clientY - rect.top) * scaleY;
+    const x1 = clamp(px / bCanvas.width, 0, 1);
+    const x2 = clamp(1 - py / bCanvas.height, 0, 1);
+    const y = 0; // right-click = lemon
+    trainingData.push([x1, x2, y]);
+    drawBoundary();
+});
+
+// ─── Init ─────────────────────────────────────────────────────────────────────
+initNetwork(4);
+fullRefresh(null);
+</script>
+</body>
+</html>
