@@ -1,0 +1,870 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Projects | NLDM</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Lora:ital,wght@0,500;0,600;1,400&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --bg:          #f7f4ef;
+            --bg-card:     #ffffff;
+            --bg-muted:    #f0ece4;
+            --border:      #e2ddd5;
+            --ink:         #1c1917;
+            --ink-light:   #57534e;
+            --ink-faint:   #a8a29e;
+            --teal:        #0d9488;
+            --teal-soft:   rgba(13,148,136,0.1);
+            --amber:       #b45309;
+            --amber-soft:  rgba(180,83,9,0.1);
+            --violet:      #6d28d9;
+            --violet-soft: rgba(109,40,217,0.1);
+            --green:       #15803d;
+            --green-soft:  rgba(21,128,61,0.1);
+            --rose:        #be185d;
+            --rose-soft:   rgba(190,24,93,0.1);
+            --shadow-sm:   0 1px 3px rgba(0,0,0,0.07), 0 1px 2px rgba(0,0,0,0.05);
+            --shadow-md:   0 4px 16px rgba(0,0,0,0.09), 0 1px 4px rgba(0,0,0,0.06);
+            --shadow-lg:   0 12px 32px rgba(0,0,0,0.1), 0 2px 8px rgba(0,0,0,0.07);
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg);
+            color: var(--ink);
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* ── Header ── */
+        header {
+            padding: 1.25rem 2.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            max-width: 1100px;
+            margin: 0 auto;
+            width: 100%;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .back-link {
+            color: var(--ink-light);
+            text-decoration: none;
+            font-size: 0.88rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            transition: color 0.2s;
+        }
+        .back-link:hover { color: var(--ink); }
+
+        .header-divider { color: var(--border); font-size: 1.2rem; }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            text-decoration: none;
+            color: var(--ink);
+        }
+
+        .logo-icon {
+            width: 32px;
+            height: 32px;
+            background: var(--ink);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .logo-text { font-weight: 700; font-size: 1rem; color: var(--ink); }
+
+        /* ── Page header ── */
+        .page-header {
+            max-width: 1100px;
+            margin: 3rem auto 0;
+            padding: 0 2.5rem 2.5rem;
+            width: 100%;
+        }
+
+        .page-tag {
+            display: inline-block;
+            padding: 0.35rem 1rem;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+            margin-bottom: 1.25rem;
+            background: var(--rose-soft);
+            color: var(--rose);
+            border: 1px solid rgba(190,24,93,0.15);
+        }
+
+        .page-header h1 {
+            font-family: 'Lora', Georgia, serif;
+            font-size: clamp(2rem, 4vw, 2.75rem);
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+            color: var(--ink);
+        }
+
+        .page-header p {
+            color: var(--ink-light);
+            font-size: 1.05rem;
+            max-width: 600px;
+        }
+
+        /* ── Content ── */
+        .content {
+            flex: 1;
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 2.5rem 6rem;
+            width: 100%;
+        }
+
+        .section-label {
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--ink-faint);
+            margin-bottom: 1rem;
+            margin-top: 2.5rem;
+        }
+
+        /* ── Project accordion ── */
+        .projects-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        details.project-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            box-shadow: var(--shadow-sm);
+            overflow: hidden;
+            transition: box-shadow 0.2s, border-color 0.2s;
+        }
+
+        details.project-card[open] {
+            box-shadow: var(--shadow-md);
+            border-color: rgba(190,24,93,0.2);
+        }
+
+        details.project-card summary {
+            list-style: none;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1.2rem 1.5rem;
+            cursor: pointer;
+            user-select: none;
+            transition: background 0.15s;
+        }
+
+        details.project-card summary::-webkit-details-marker { display: none; }
+
+        details.project-card summary:hover {
+            background: var(--bg-muted);
+        }
+
+        .summary-chevron {
+            width: 22px;
+            height: 22px;
+            flex-shrink: 0;
+            color: var(--ink-faint);
+            transition: transform 0.2s;
+            margin-left: auto;
+        }
+
+        details.project-card[open] .summary-chevron {
+            transform: rotate(90deg);
+        }
+
+        .project-number {
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            background: var(--rose-soft);
+            color: var(--rose);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.85rem;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .summary-text { flex: 1; min-width: 0; }
+
+        .project-title {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--ink);
+            display: block;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .project-members {
+            font-size: 0.8rem;
+            color: var(--ink-light);
+            margin-top: 0.1rem;
+            display: block;
+        }
+
+        /* ── Expanded body ── */
+        .project-body {
+            padding: 0 1.5rem 1.5rem;
+            border-top: 1px solid var(--border);
+        }
+
+        .project-body-inner {
+            padding-top: 1.25rem;
+        }
+
+        .link-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.6rem;
+        }
+
+        .proj-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.45rem;
+            padding: 0.45rem 1rem;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            text-decoration: none;
+            border: 1px solid var(--border);
+            background: var(--bg-muted);
+            color: var(--ink-light);
+            transition: background 0.15s, color 0.15s, border-color 0.15s;
+        }
+
+        .proj-link:hover {
+            background: var(--rose-soft);
+            color: var(--rose);
+            border-color: rgba(190,24,93,0.25);
+        }
+
+        .proj-link.primary {
+            background: var(--rose);
+            color: #fff;
+            border-color: transparent;
+        }
+
+        .proj-link.primary:hover {
+            background: #9f1239;
+            color: #fff;
+        }
+
+        /* ── Footer ── */
+        footer {
+            border-top: 1px solid var(--border);
+            padding: 1.75rem 2.5rem;
+            text-align: center;
+            color: var(--ink-faint);
+            font-size: 0.82rem;
+            background: var(--bg-card);
+        }
+
+        footer a { color: var(--ink-light); text-decoration: none; }
+        footer a:hover { color: var(--ink); text-decoration: underline; }
+
+        /* ── Dark mode ── */
+        [data-theme="dark"] {
+            --bg:          #1c1917;
+            --bg-card:     #292524;
+            --bg-muted:    #231f1c;
+            --border:      #3c3632;
+            --ink:         #fafaf9;
+            --ink-light:   #d6d3d1;
+            --ink-faint:   #78716c;
+            --rose:        #fb7185;
+            --rose-soft:   rgba(251,113,133,0.12);
+            --shadow-sm:   0 1px 3px rgba(0,0,0,0.4);
+            --shadow-md:   0 4px 16px rgba(0,0,0,0.5);
+            --shadow-lg:   0 16px 40px rgba(0,0,0,0.6);
+        }
+        [data-theme="dark"] .logo-icon { background: #e7e5e4; }
+        [data-theme="dark"] .logo-icon svg { stroke: #1c1917 !important; }
+        [data-theme="dark"] .proj-link.primary { background: var(--rose); color: #1c1917; }
+        [data-theme="dark"] .proj-link.primary:hover { background: #f43f5e; }
+
+        /* ── Theme toggle ── */
+        #theme-toggle {
+            background: none;
+            border: 1px solid var(--border);
+            color: var(--ink-light);
+            width: 34px; height: 34px;
+            border-radius: 8px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            transition: background 0.2s, color 0.2s;
+            margin-left: auto;
+        }
+        #theme-toggle:hover { background: var(--bg-muted); color: var(--ink); }
+
+        @media (max-width: 600px) {
+            header { padding: 1rem 1.25rem; }
+            .page-header { padding: 0 1.25rem 2rem; margin-top: 2rem; }
+            .content { padding: 0 1.25rem 4rem; }
+            .project-title { white-space: normal; }
+        }
+    </style>
+    <script src="theme.js"></script>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-415Y93T7N4"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-415Y93T7N4');
+    </script>
+</head>
+
+<body>
+
+    <header>
+        <a href="index.html" class="back-link">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+            Home
+        </a>
+        <span class="header-divider">/</span>
+        <a href="index.html" class="logo">
+            <div class="logo-icon">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+                    <path d="M12 2a9 9 0 0 1 9 9c0 3.6-3.4 6.2-5.5 8.5-1.1 1.2-2.3 2.5-3.5 2.5s-2.4-1.3-3.5-2.5C6.4 17.2 3 14.6 3 11a9 9 0 0 1 9-9z"/>
+                    <circle cx="12" cy="10" r="3"/>
+                </svg>
+            </div>
+            <span class="logo-text">NLDM</span>
+        </a>
+        <button id="theme-toggle" onclick="__toggleTheme()" aria-label="Toggle theme"></button>
+    </header>
+
+    <div class="page-header">
+        <span class="page-tag">Spring 2026</span>
+        <h1>Student Projects</h1>
+        <p>Final projects from Psych 505 &mdash; each group designed, implemented, and collected data for an original behavioral experiment.</p>
+    </div>
+
+    <div class="content">
+        <p class="section-label">20 Projects &middot; Spring 2026</p>
+
+        <div class="projects-list">
+
+            <!-- 1. Explore vs. Exploit -->
+            <details class="project-card">
+                <summary>
+                    <div class="project-number">1</div>
+                    <div class="summary-text">
+                        <span class="project-title">Explore vs. Exploit</span>
+                        <span class="project-members">Quincy Bianchi &middot; Samantha Baniel &middot; Emma Cooley</span>
+                    </div>
+                    <svg class="summary-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+                </summary>
+                <div class="project-body">
+                    <div class="project-body-inner">
+                        <div class="link-row">
+                            <a class="proj-link primary" href="https://qbianchi.github.io/Explore-vs-Exploit/" target="_blank" rel="noopener">
+                                &#127919; Task
+                            </a>
+                            <a class="proj-link" href="https://docs.google.com/spreadsheets/d/1wMz3aXg6xwtHjHejY4bYRRmcIpHkkodAoIG7WttUZvk/edit?usp=sharing" target="_blank" rel="noopener">
+                                &#128202; Data
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </details>
+
+            <!-- 2. Final Project (Cassady / Lauber group) -->
+            <details class="project-card">
+                <summary>
+                    <div class="project-number">2</div>
+                    <div class="summary-text">
+                        <span class="project-title">Final Project</span>
+                        <span class="project-members">Charlie Cassady</span>
+                    </div>
+                    <svg class="summary-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+                </summary>
+                <div class="project-body">
+                    <div class="project-body-inner">
+                        <div class="link-row">
+                            <a class="proj-link primary" href="https://allauber.github.io/Final-project/" target="_blank" rel="noopener">
+                                &#127919; Task
+                            </a>
+                            <a class="proj-link" href="https://docs.google.com/spreadsheets/d/1WTIRjrf5JycWCYpZPH91bWu8BbSI8LZ3OIvQDeWrTY8/edit?usp=sharing" target="_blank" rel="noopener">
+                                &#128202; Data
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </details>
+
+            <!-- 3. Anagram Experiment -->
+            <details class="project-card">
+                <summary>
+                    <div class="project-number">3</div>
+                    <div class="summary-text">
+                        <span class="project-title">Anagram Experiment</span>
+                        <span class="project-members">Eleanor Flanigan</span>
+                    </div>
+                    <svg class="summary-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+                </summary>
+                <div class="project-body">
+                    <div class="project-body-inner">
+                        <div class="link-row">
+                            <a class="proj-link primary" href="https://eleanor761.github.io/anagram--experiment/" target="_blank" rel="noopener">
+                                &#127919; Task
+                            </a>
+                            <a class="proj-link" href="https://osf.io/dchjy/overview?view_only=227b6856fd01494d9af39a1e7dec1704" target="_blank" rel="noopener">
+                                &#128202; Data (OSF)
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </details>
+
+            <!-- 4. Reaction Task -->
+            <details class="project-card">
+                <summary>
+                    <div class="project-number">4</div>
+                    <div class="summary-text">
+                        <span class="project-title">Reaction Task</span>
+                        <span class="project-members">Jacob Folkers &middot; Mairin Syth</span>
+                    </div>
+                    <svg class="summary-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+                </summary>
+                <div class="project-body">
+                    <div class="project-body-inner">
+                        <div class="link-row">
+                            <a class="proj-link primary" href="https://jacobfolkers.github.io/reactiontask/" target="_blank" rel="noopener">
+                                &#127919; Task
+                            </a>
+                            <a class="proj-link" href="https://docs.google.com/spreadsheets/d/1fDptG5F7CFlhJEsYtKbUmyNewLj_7GCtxVgA7g6MEHM/edit?usp=sharing" target="_blank" rel="noopener">
+                                &#128202; Data
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </details>
+
+            <!-- 5. Priming Experiment -->
+            <details class="project-card">
+                <summary>
+                    <div class="project-number">5</div>
+                    <div class="summary-text">
+                        <span class="project-title">Priming Experiment</span>
+                        <span class="project-members">Brennen Haynes &middot; Ashrita Patil &middot; Maia-Maria Stanciu</span>
+                    </div>
+                    <svg class="summary-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+                </summary>
+                <div class="project-body">
+                    <div class="project-body-inner">
+                        <div class="link-row">
+                            <a class="proj-link primary" href="https://mstanciu222.github.io/Priming_Experiment/" target="_blank" rel="noopener">
+                                &#127919; Task
+                            </a>
+                            <a class="proj-link" href="https://github.com/mstanciu222/Priming_Experiment" target="_blank" rel="noopener">
+                                &#128279; GitHub
+                            </a>
+                            <a class="proj-link" href="https://docs.google.com/spreadsheets/d/1Qi1VPtm-RNJyB2ChXAoP1l_WN3cqrpSindtlOQh7WDg/edit?usp=sharing" target="_blank" rel="noopener">
+                                &#128202; Data
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </details>
+
+            <!-- 6. Psych 505 Project (Homar) -->
+            <details class="project-card">
+                <summary>
+                    <div class="project-number">6</div>
+                    <div class="summary-text">
+                        <span class="project-title">Psych 505 Project</span>
+                        <span class="project-members">Elena Homar</span>
+                    </div>
+                    <svg class="summary-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+                </summary>
+                <div class="project-body">
+                    <div class="project-body-inner">
+                        <div class="link-row">
+                            <a class="proj-link primary" href="https://ehomar22.github.io/Psych505project/" target="_blank" rel="noopener">
+                                &#127919; Task
+                            </a>
+                            <a class="proj-link" href="https://docs.google.com/spreadsheets/d/132DWUVnndBfwLCzGeixdlRrvVHIWF1z_z1sAL2he_P8/edit?gid=0#gid=0" target="_blank" rel="noopener">
+                                &#128202; Data
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </details>
+
+            <!-- 7. Two-Bandit Attention & Volatility Task -->
+            <details class="project-card">
+                <summary>
+                    <div class="project-number">7</div>
+                    <div class="summary-text">
+                        <span class="project-title">Two-Bandit Attention &amp; Volatility Task</span>
+                        <span class="project-members">Dominic Jaccard &middot; Anders Kvalsvik</span>
+                    </div>
+                    <svg class="summary-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+                </summary>
+                <div class="project-body">
+                    <div class="project-body-inner">
+                        <div class="link-row">
+                            <a class="proj-link primary" href="https://kvalsvika.github.io/two_bandit_attention_volatility_task/" target="_blank" rel="noopener">
+                                &#127919; Task
+                            </a>
+                            <a class="proj-link" href="https://docs.google.com/spreadsheets/d/1Th-TPilMc2JxGGgyr0MVzjRd3Me_D9syxSwSQjN6hPE/edit?gid=1024042156#gid=1024042156" target="_blank" rel="noopener">
+                                &#128202; Data (Kvalsvik)
+                            </a>
+                            <a class="proj-link" href="https://uwprod-my.sharepoint.com/:x:/g/personal/djaccard_wisc_edu/IQBdmgrAo69PSboCcfwWaMkqAZH58_kHkau1wfaobJWokwM?e=tm78GB" target="_blank" rel="noopener">
+                                &#128202; Data (Jaccard)
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </details>
+
+            <!-- 8. Multi-task & Risk Taking -->
+            <details class="project-card">
+                <summary>
+                    <div class="project-number">8</div>
+                    <div class="summary-text">
+                        <span class="project-title">Multi-task &amp; Risk Taking</span>
+                        <span class="project-members">Joanna Jiang</span>
+                    </div>
+                    <svg class="summary-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+                </summary>
+                <div class="project-body">
+                    <div class="project-body-inner">
+                        <div class="link-row">
+                            <a class="proj-link primary" href="https://github.com/JoannaJ1020/Multi-task-and-Risk-Taking" target="_blank" rel="noopener">
+                                &#128279; GitHub
+                            </a>
+                            <a class="proj-link" href="https://docs.google.com/spreadsheets/d/1mprwn0XytAiDM78uIjeRvSukWL5ZiXC8Tq1mEhWzwGQ/edit?usp=sharing" target="_blank" rel="noopener">
+                                &#128202; Data
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </details>
+
+            <!-- 9. Picture-Word Stroop -->
+            <details class="project-card">
+                <summary>
+                    <div class="project-number">9</div>
+                    <div class="summary-text">
+                        <span class="project-title">Picture-Word Stroop</span>
+                        <span class="project-members">Soumil Kalra</span>
+                    </div>
+                    <svg class="summary-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+                </summary>
+                <div class="project-body">
+                    <div class="project-body-inner">
+                        <div class="link-row">
+                            <a class="proj-link primary" href="https://soumilklr.github.io/psych505-picture-word-stroop/" target="_blank" rel="noopener">
+                                &#127919; Task
+                            </a>
+                            <a class="proj-link" href="https://docs.google.com/spreadsheets/d/16929myVuRVHgtdbMjHSUdguVsG6fN2U_h3oW6PuVg0Y/edit?gid=0#gid=0" target="_blank" rel="noopener">
+                                &#128202; Data
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </details>
+
+            <!-- 10. RDK Bandit Task -->
+            <details class="project-card">
+                <summary>
+                    <div class="project-number">10</div>
+                    <div class="summary-text">
+                        <span class="project-title">RDK Bandit Task</span>
+                        <span class="project-members">Coleman Klapheke &middot; Maxwell Rautmann &middot; Claire Min</span>
+                    </div>
+                    <svg class="summary-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+                </summary>
+                <div class="project-body">
+                    <div class="project-body-inner">
+                        <div class="link-row">
+                            <a class="proj-link primary" href="https://whoiscolek.github.io/rdk-bandit-task/" target="_blank" rel="noopener">
+                                &#127919; Task
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </details>
+
+            <!-- 11. Ellsberg Paradox -->
+            <details class="project-card">
+                <summary>
+                    <div class="project-number">11</div>
+                    <div class="summary-text">
+                        <span class="project-title">Ellsberg Paradox</span>
+                        <span class="project-members">Yifan Lin &middot; Jacob Meuler</span>
+                    </div>
+                    <svg class="summary-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+                </summary>
+                <div class="project-body">
+                    <div class="project-body-inner">
+                        <div class="link-row">
+                            <a class="proj-link primary" href="https://lin524-ai.github.io/ellberg-paradox/" target="_blank" rel="noopener">
+                                &#127919; Task
+                            </a>
+                            <a class="proj-link" href="https://docs.google.com/spreadsheets/d/1S5aMx-ofQ0TaIM_7-JW8WO33IK3uvMHZR8E6iG1VUqA/edit?usp=sharing" target="_blank" rel="noopener">
+                                &#128202; Data
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </details>
+
+            <!-- 12. Random Dot Motion Task -->
+            <details class="project-card">
+                <summary>
+                    <div class="project-number">12</div>
+                    <div class="summary-text">
+                        <span class="project-title">Random Dot Motion Task</span>
+                        <span class="project-members">Riya Mathews &middot; Natalie Pinka &middot; Ryane N.</span>
+                    </div>
+                    <svg class="summary-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+                </summary>
+                <div class="project-body">
+                    <div class="project-body-inner">
+                        <div class="link-row">
+                            <a class="proj-link primary" href="https://nataliep27.github.io/RDM-Task/" target="_blank" rel="noopener">
+                                &#127919; Task
+                            </a>
+                            <a class="proj-link" href="https://docs.google.com/spreadsheets/d/11q51oJHdpvFZCDNtcCZMY1ewC-YSzknHcDKUabuurGk/edit?usp=sharing" target="_blank" rel="noopener">
+                                &#128202; Data
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </details>
+
+            <!-- 13. Image Rating Task -->
+            <details class="project-card">
+                <summary>
+                    <div class="project-number">13</div>
+                    <div class="summary-text">
+                        <span class="project-title">Image Rating Task</span>
+                        <span class="project-members">Alexander McGinty</span>
+                    </div>
+                    <svg class="summary-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+                </summary>
+                <div class="project-body">
+                    <div class="project-body-inner">
+                        <div class="link-row">
+                            <a class="proj-link primary" href="https://ammcginty.github.io/Image-rating-task/" target="_blank" rel="noopener">
+                                &#127919; Task
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </details>
+
+            <!-- 14. Numerosity Discrimination Task -->
+            <details class="project-card">
+                <summary>
+                    <div class="project-number">14</div>
+                    <div class="summary-text">
+                        <span class="project-title">Numerosity Discrimination Task</span>
+                        <span class="project-members">Tristan Molkentin</span>
+                    </div>
+                    <svg class="summary-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+                </summary>
+                <div class="project-body">
+                    <div class="project-body-inner">
+                        <div class="link-row">
+                            <a class="proj-link primary" href="https://tmolkentin.github.io/Numerosity-Discrimination-Task/" target="_blank" rel="noopener">
+                                &#127919; Task
+                            </a>
+                            <a class="proj-link" href="https://docs.google.com/spreadsheets/d/1UALBpbGlS96tzYTL3p6RJDwfHIquBioUwaQIUJ70Cvc/edit?usp=sharing" target="_blank" rel="noopener">
+                                &#128202; Data
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </details>
+
+            <!-- 15. PSYCH 505 Final Project (Ortiz) -->
+            <details class="project-card">
+                <summary>
+                    <div class="project-number">15</div>
+                    <div class="summary-text">
+                        <span class="project-title">PSYCH 505 Final Project</span>
+                        <span class="project-members">Kiera Ortiz</span>
+                    </div>
+                    <svg class="summary-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+                </summary>
+                <div class="project-body">
+                    <div class="project-body-inner">
+                        <div class="link-row">
+                            <a class="proj-link primary" href="https://keortiz2-gif.github.io/PSYCH-505-Final-Project/" target="_blank" rel="noopener">
+                                &#127919; Task
+                            </a>
+                            <a class="proj-link" href="https://docs.google.com/spreadsheets/d/1Ac68YEDGUzfhYULJKArk-g6NEB0Z2RumTdkuZOj0fik/edit?usp=sharing" target="_blank" rel="noopener">
+                                &#128202; Data
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </details>
+
+            <!-- 16. Target Hitting Game -->
+            <details class="project-card">
+                <summary>
+                    <div class="project-number">16</div>
+                    <div class="summary-text">
+                        <span class="project-title">Target Hitting Game</span>
+                        <span class="project-members">Jenna Shen</span>
+                    </div>
+                    <svg class="summary-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+                </summary>
+                <div class="project-body">
+                    <div class="project-body-inner">
+                        <div class="link-row">
+                            <a class="proj-link primary" href="https://jennashen00.github.io/target-hitting-game/" target="_blank" rel="noopener">
+                                &#127919; Task
+                            </a>
+                            <a class="proj-link" href="https://docs.google.com/spreadsheets/d/1iwIKbwxOWQQ3jL2dBv49QInXdylxivYp17bZP7A49-Q/edit?usp=sharing" target="_blank" rel="noopener">
+                                &#128202; Data
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </details>
+
+            <!-- 17. Psych 505 Final Project (Tardiff / Wolff) -->
+            <details class="project-card">
+                <summary>
+                    <div class="project-number">17</div>
+                    <div class="summary-text">
+                        <span class="project-title">Psych 505 Final Project</span>
+                        <span class="project-members">Brayden Tardiff &middot; Nina Wolff</span>
+                    </div>
+                    <svg class="summary-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+                </summary>
+                <div class="project-body">
+                    <div class="project-body-inner">
+                        <div class="link-row">
+                            <a class="proj-link primary" href="https://nfwolff-sketch.github.io/Psych-505-Final-Project/" target="_blank" rel="noopener">
+                                &#127919; Task
+                            </a>
+                            <a class="proj-link" href="https://docs.google.com/spreadsheets/d/1j-XKMAil9eY3owZ36Q9jlY2f0E9B5ojXEr4oJpQL168/edit?usp=sharing" target="_blank" rel="noopener">
+                                &#128202; Data
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </details>
+
+            <!-- 18. Drivers of Value -->
+            <details class="project-card">
+                <summary>
+                    <div class="project-number">18</div>
+                    <div class="summary-text">
+                        <span class="project-title">Drivers of Value</span>
+                        <span class="project-members">Merrick Thomas</span>
+                    </div>
+                    <svg class="summary-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+                </summary>
+                <div class="project-body">
+                    <div class="project-body-inner">
+                        <div class="link-row">
+                            <a class="proj-link primary" href="https://warnervillar.github.io/Drivers-Of-Value/" target="_blank" rel="noopener">
+                                &#127919; Task
+                            </a>
+                            <a class="proj-link" href="https://github.com/warnervillar/Drivers-Of-Value" target="_blank" rel="noopener">
+                                &#128279; GitHub
+                            </a>
+                            <a class="proj-link" href="https://docs.google.com/spreadsheets/d/1nGXPXLmDUb5DC67XV5nPZDoWgscfNpzNZIUqauq6v9Y/edit?usp=sharing" target="_blank" rel="noopener">
+                                &#128202; Data
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </details>
+
+            <!-- 19. Coin Flipping Task -->
+            <details class="project-card">
+                <summary>
+                    <div class="project-number">19</div>
+                    <div class="summary-text">
+                        <span class="project-title">Coin Flipping Task</span>
+                        <span class="project-members">Brielle Lauber</span>
+                    </div>
+                    <svg class="summary-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+                </summary>
+                <div class="project-body">
+                    <div class="project-body-inner">
+                        <div class="link-row">
+                            <a class="proj-link primary" href="https://bvlauber.github.io/Coin-Flipping-Task/" target="_blank" rel="noopener">
+                                &#127919; Task
+                            </a>
+                            <a class="proj-link" href="https://docs.google.com/spreadsheets/d/1BvuCQFBCPPlwRzbMUis4C7XMuvSewZRxDzbr0G8OJLo/edit?usp=sharing" target="_blank" rel="noopener">
+                                &#128202; Data
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </details>
+
+            <!-- 20. Psych 505 Project (Wu) -->
+            <details class="project-card">
+                <summary>
+                    <div class="project-number">20</div>
+                    <div class="summary-text">
+                        <span class="project-title">Psych 505 Project</span>
+                        <span class="project-members">Bingye Wu</span>
+                    </div>
+                    <svg class="summary-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+                </summary>
+                <div class="project-body">
+                    <div class="project-body-inner">
+                        <div class="link-row">
+                            <a class="proj-link primary" href="https://github.com/Justbinging/Psych_505_project" target="_blank" rel="noopener">
+                                &#128279; GitHub
+                            </a>
+                            <a class="proj-link" href="https://docs.google.com/spreadsheets/d/1wEdxKZnEqKg-wYiQO-C5HryytWhmCGYZXgbmE2k-eYc/edit?usp=sharing" target="_blank" rel="noopener">
+                                &#128202; Data
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </details>
+
+        </div>
+    </div>
+
+    <footer>
+        Built for <strong>Neurobiology of Learning &amp; Decision Making</strong> &nbsp;&middot;&nbsp;
+        <a href="https://github.com/mohebi-n-associates/NLDM" target="_blank">GitHub</a>
+    </footer>
+
+</body>
+</html>
