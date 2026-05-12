@@ -43,7 +43,6 @@
             flex-direction: column;
         }
 
-        /* ── Header ── */
         header {
             padding: 1.25rem 2.5rem;
             display: flex;
@@ -89,7 +88,6 @@
 
         .logo-text { font-weight: 700; font-size: 1rem; color: var(--ink); }
 
-        /* ── Page header ── */
         .page-header {
             max-width: 1100px;
             margin: 3rem auto 0;
@@ -125,7 +123,6 @@
             max-width: 600px;
         }
 
-        /* ── Content ── */
         .content {
             flex: 1;
             max-width: 1100px;
@@ -144,7 +141,6 @@
             margin-top: 2.5rem;
         }
 
-        /* ── Project accordion ── */
         .projects-list {
             display: flex;
             flex-direction: column;
@@ -177,10 +173,7 @@
         }
 
         details.project-card summary::-webkit-details-marker { display: none; }
-
-        details.project-card summary:hover {
-            background: var(--bg-muted);
-        }
+        details.project-card summary:hover { background: var(--bg-muted); }
 
         .summary-chevron {
             width: 22px;
@@ -191,9 +184,7 @@
             margin-left: auto;
         }
 
-        details.project-card[open] .summary-chevron {
-            transform: rotate(90deg);
-        }
+        details.project-card[open] .summary-chevron { transform: rotate(90deg); }
 
         .project-number {
             width: 36px;
@@ -228,14 +219,18 @@
             display: block;
         }
 
-        /* ── Expanded body ── */
         .project-body {
             padding: 0 1.5rem 1.5rem;
             border-top: 1px solid var(--border);
         }
 
-        .project-body-inner {
-            padding-top: 1.25rem;
+        .project-body-inner { padding-top: 1.25rem; }
+
+        .project-abstract {
+            font-size: 0.9rem;
+            color: var(--ink-light);
+            line-height: 1.7;
+            margin-bottom: 1rem;
         }
 
         .link-row {
@@ -271,12 +266,58 @@
             border-color: transparent;
         }
 
-        .proj-link.primary:hover {
-            background: #9f1239;
-            color: #fff;
+        .proj-link.primary:hover { background: #9f1239; color: #fff; }
+
+        details.learn-more {
+            margin-top: 1rem;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            background: var(--bg-muted);
+            overflow: hidden;
+        }
+        details.learn-more > summary {
+            list-style: none;
+            padding: 0.65rem 1rem;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--ink-light);
+            cursor: pointer;
+            user-select: none;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            transition: background 0.15s, color 0.15s;
+        }
+        details.learn-more > summary::-webkit-details-marker { display: none; }
+        details.learn-more > summary::before {
+            content: "▸";
+            font-size: 0.75rem;
+            transition: transform 0.2s;
+            display: inline-block;
+        }
+        details.learn-more[open] > summary::before { transform: rotate(90deg); }
+        details.learn-more > summary:hover { background: var(--border); color: var(--ink); }
+
+        .learn-more-body {
+            padding: 1rem 1.25rem 1.25rem;
+            border-top: 1px solid var(--border);
+        }
+        .learn-more-body h4 {
+            font-size: 0.78rem;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            color: var(--rose);
+            margin-top: 1rem;
+            margin-bottom: 0.35rem;
+        }
+        .learn-more-body h4:first-child { margin-top: 0; }
+        .learn-more-body p {
+            font-size: 0.875rem;
+            color: var(--ink-light);
+            line-height: 1.7;
         }
 
-        /* ── Footer ── */
         footer {
             border-top: 1px solid var(--border);
             padding: 1.75rem 2.5rem;
@@ -289,7 +330,6 @@
         footer a { color: var(--ink-light); text-decoration: none; }
         footer a:hover { color: var(--ink); text-decoration: underline; }
 
-        /* ── Dark mode ── */
         [data-theme="dark"] {
             --bg:          #1c1917;
             --bg-card:     #292524;
@@ -309,7 +349,6 @@
         [data-theme="dark"] .proj-link.primary { background: var(--rose); color: #1c1917; }
         [data-theme="dark"] .proj-link.primary:hover { background: #f43f5e; }
 
-        /* ── Theme toggle ── */
         #theme-toggle {
             background: none;
             border: 1px solid var(--border);
@@ -334,7 +373,6 @@
         }
     </style>
     <script src="theme.js"></script>
-    <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-415Y93T7N4"></script>
     <script>
       window.dataLayer = window.dataLayer || [];
@@ -375,7 +413,7 @@
 
         <div class="projects-list">
 
-            <!-- 1. Effects of Motivation on Exploratory Behavior -->
+            <!-- 1 -->
             <details class="project-card">
                 <summary>
                     <div class="project-number">1</div>
@@ -387,118 +425,156 @@
                 </summary>
                 <div class="project-body">
                     <div class="project-body-inner">
+                        <p class="project-abstract">Can a competitive leaderboard shift the balance between exploration and exploitation? Sixty-seven undergraduates completed two rounds of a 6&times;6 grid foraging task, with a distraction task between rounds, under leaderboard-aware or leaderboard-unaware conditions. Both groups exploited more in round two, and the leaderboard had no discernible effect &mdash; suggesting competitive incentives act as a peripheral distractor rather than a strategic motivator.</p>
                         <div class="link-row">
-                            <a class="proj-link primary" href="https://qbianchi.github.io/Explore-vs-Exploit/" target="_blank" rel="noopener">
-                                &#127919; Task
-                            </a>
-                            <a class="proj-link" href="https://docs.google.com/spreadsheets/d/1wMz3aXg6xwtHjHejY4bYRRmcIpHkkodAoIG7WttUZvk/edit?usp=sharing" target="_blank" rel="noopener">
-                                &#128202; Data
-                            </a>
+                            <a class="proj-link primary" href="https://qbianchi.github.io/Explore-vs-Exploit/" target="_blank" rel="noopener">&#127919; Task</a>
+                            <a class="proj-link" href="https://docs.google.com/spreadsheets/d/1wMz3aXg6xwtHjHejY4bYRRmcIpHkkodAoIG7WttUZvk/edit?usp=sharing" target="_blank" rel="noopener">&#128202; Data</a>
                         </div>
+                        <details class="learn-more">
+                            <summary>Learn More</summary>
+                            <div class="learn-more-body">
+                                <h4>Introduction</h4>
+                                <p>Exploration and exploitation represent a fundamental tension in adaptive behavior: committing to known rewards forgoes potentially better alternatives. Adults tend to exploit more than children, a pattern linked to maturing prefrontal control over novelty-seeking. Competitive rankings plausibly foreground performance outcomes and might amplify exploitative tendencies, yet their influence on the explore&ndash;exploit tradeoff had not been directly tested.</p>
+                                <h4>Methods</h4>
+                                <p>Sixty-seven UW&ndash;Madison undergraduates were randomly assigned to a leaderboard-aware or leaderboard-unaware between-subjects condition. Each participant completed two rounds of a 6&times;6 grid task, clicking 20 cells per round to reveal hidden point values; a filler distraction task separated the rounds to limit carryover effects. A mixed-design ANOVA examined the main effects of condition and round and their interaction on exploratory choice patterns.</p>
+                                <h4>Key Findings</h4>
+                                <p>A significant main effect of round emerged (F(1,65)&nbsp;=&nbsp;11.93, p&nbsp;&lt;&nbsp;.001): participants in both conditions shifted toward exploitation in round two. Neither the leaderboard condition nor the condition &times; round interaction reached significance. The leaderboard appears to function as a sensory distractor rather than a genuine motivational manipulation, leaving the natural round-to-round increase in exploitation unchanged.</p>
+                            </div>
+                        </details>
                     </div>
                 </div>
             </details>
 
-            <!-- 2. Gender Differences in Ambiguous Risk-seeking Behavior -->
+            <!-- 2 -->
             <details class="project-card">
                 <summary>
                     <div class="project-number">2</div>
                     <div class="summary-text">
-                        <span class="project-title">Gender Differences in Ambiguous, Risk-seeking Behavior Under Different Risk Structures</span>
+                        <span class="project-title">Gender Effects on Ambiguity Aversion</span>
                         <span class="project-members">Charlie Cassady &middot; Anna Lauber &middot; Ian Kerkman &middot; Sec. 302</span>
                     </div>
                     <svg class="summary-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
                 </summary>
                 <div class="project-body">
                     <div class="project-body-inner">
+                        <p class="project-abstract">A modified Ellsberg Paradox task examined whether gender predicts the threshold at which participants abandon a known-probability gamble in favor of an ambiguous alternative of equal expected value. Fifty-four participants chose between a risky option whose win probability decreased from 70% to 0% across selections and a matched-ambiguity alternative. Both men and women converged near the 50% risk threshold; females switched marginally earlier, though risk level &mdash; not gender &mdash; explained the bulk of variance.</p>
                         <div class="link-row">
-                            <a class="proj-link primary" href="https://allauber.github.io/Final-project/" target="_blank" rel="noopener">
-                                &#127919; Task
-                            </a>
-                            <a class="proj-link" href="https://docs.google.com/spreadsheets/d/1WTIRjrf5JycWCYpZPH91bWu8BbSI8LZ3OIvQDeWrTY8/edit?usp=sharing" target="_blank" rel="noopener">
-                                &#128202; Data
-                            </a>
+                            <a class="proj-link primary" href="https://allauber.github.io/Final-project/" target="_blank" rel="noopener">&#127919; Task</a>
+                            <a class="proj-link" href="https://docs.google.com/spreadsheets/d/1WTIRjrf5JycWCYpZPH91bWu8BbSI8LZ3OIvQDeWrTY8/edit?usp=sharing" target="_blank" rel="noopener">&#128202; Data</a>
                         </div>
+                        <details class="learn-more">
+                            <summary>Learn More</summary>
+                            <div class="learn-more-body">
+                                <h4>Introduction</h4>
+                                <p>Decision theory distinguishes aleatory uncertainty &mdash; randomness with known probabilities &mdash; from epistemic uncertainty, where probabilities are unspecified. The Ellsberg Paradox demonstrates that people reliably prefer known risks to matched-EV ambiguous options, a pattern attributed to uncertainty aversion. Prior work on gender differences in ambiguity tolerance is mixed, motivating a design that tracks the precise switch point rather than a single binary choice.</p>
+                                <h4>Methods</h4>
+                                <p>Fifty-four participants (25 male, 26 female, 3 non-binary) completed a web-based gambling task in which the risky option began at 70% and declined by 10% every four selections, while the alternative remained ambiguous throughout. The dependent variable was the selection number at which each participant first switched to the ambiguous option. A two-way ANOVA crossed gender with the current risk level at the time of switching.</p>
+                                <h4>Key Findings</h4>
+                                <p>Risk level accounted for approximately 12.7% of variance, confirming expected sensitivity to declining probability. Gender produced a small directional effect &mdash; female participants switched slightly earlier than males &mdash; but the difference did not reach conventional significance. The near-universal convergence toward a 50% switch point suggests participants treated the boundary between risk and ambiguity as a rational equivalence threshold rather than responding to stable gender-linked risk dispositions.</p>
+                            </div>
+                        </details>
                     </div>
                 </div>
             </details>
 
-            <!-- 3. Cognitive Ability, Metacognitive Accuracy, and Learned Helplessness -->
+            <!-- 3 -->
             <details class="project-card">
                 <summary>
                     <div class="project-number">3</div>
                     <div class="summary-text">
-                        <span class="project-title">Cognitive Ability, Metacognitive Accuracy, and Learned Helplessness</span>
-                        <span class="project-members">Eleanor Flanigan &middot;  Vicki Ferrarini &middot; Junfeng Ma &middot; Reese Mengwasser &middot;</span>
+                        <span class="project-title">Learned Helplessness Effects on Cognitive Ability and Metacognitive Accuracy</span>
+                        <span class="project-members">Reese Mengwasser &middot; Eleanor Flanigan &middot; Vicki Ferrarini &middot; Sec. 303</span>
                     </div>
                     <svg class="summary-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
                 </summary>
                 <div class="project-body">
                     <div class="project-body-inner">
+                        <p class="project-abstract">Unsolvable anagrams were used to induce learned helplessness and test whether uncontrollable failure impairs objective performance, metacognitive monitoring, or both. Signal detection theory was applied to separate sensitivity (d&prime;) from response criterion (c) in participants&rsquo; self-assessments. The induction reliably lowered perceived competence; while criterion was unaffected, only the control group showed improved metacognitive sensitivity across the session &mdash; a selective disruption that dissociates performance from self-monitoring.</p>
                         <div class="link-row">
-                            <a class="proj-link primary" href="https://eleanor761.github.io/anagram--experiment/" target="_blank" rel="noopener">
-                                &#127919; Task
-                            </a>
-                            <a class="proj-link" href="https://osf.io/dchjy/overview?view_only=227b6856fd01494d9af39a1e7dec1704" target="_blank" rel="noopener">
-                                &#128202; Data (OSF)
-                            </a>
+                            <a class="proj-link primary" href="https://eleanor761.github.io/anagram--experiment/" target="_blank" rel="noopener">&#127919; Task</a>
+                            <a class="proj-link" href="https://osf.io/dchjy/overview?view_only=227b6856fd01494d9af39a1e7dec1704" target="_blank" rel="noopener">&#128202; Data (OSF)</a>
                         </div>
+                        <details class="learn-more">
+                            <summary>Learn More</summary>
+                            <div class="learn-more-body">
+                                <h4>Introduction</h4>
+                                <p>Seligman&rsquo;s learned helplessness framework holds that repeated uncontrollable failure induces a generalized expectation of response&ndash;outcome independence, reducing persistence and motivation. Subsequent work linked helplessness to impaired Iowa Gambling Task performance, yet whether the mechanism acts on cognitive capacity, metacognitive calibration, or both remains underspecified. Signal detection theory offers a principled way to separate discriminability (sensitivity) from response threshold (criterion), enabling a clean dissociation of these two hypotheses.</p>
+                                <h4>Methods</h4>
+                                <p>Nineteen English-literate participants (7 control, 12 experimental) completed three sequential phases: an initial judgment task establishing baseline metacognitive calibration, a decipher task presenting impossible anagrams (experimental condition) or solvable ones (control), and a post-task self-evaluation on Likert scales. Signal detection parameters d&prime; and c were derived from the metacognitive judgments and compared with repeated-measures ANOVA.</p>
+                                <h4>Key Findings</h4>
+                                <p>The helplessness manipulation was verified: experimental participants rated their performance significantly lower after the impossible anagram phase. No reliable criterion shift distinguished the two groups, indicating that response bias remained intact under the induction. Crucially, control participants showed a significant within-session improvement in metacognitive sensitivity while experimental participants did not &mdash; evidence that helplessness selectively disrupts the capacity for self-monitoring calibration rather than altering perceptual thresholds.</p>
+                            </div>
+                        </details>
                     </div>
                 </div>
             </details>
 
-            <!-- 4. Peer Influence Effects on Risk-Taking Decisions -->
+            <!-- 4 -->
             <details class="project-card">
                 <summary>
                     <div class="project-number">4</div>
                     <div class="summary-text">
-                        <span class="project-title">Peer Influence Effects on Risk-Taking Decisions</span>
+                        <span class="project-title">Peer Influence Effects on Risk-Taking Decision Making During a BART Task</span>
                         <span class="project-members">Anna Herlache &middot; Jacob Folkers &middot; Lydia Ellis &middot; Mairin Syth &middot; Sec. 306</span>
                     </div>
                     <svg class="summary-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
                 </summary>
                 <div class="project-body">
                     <div class="project-body-inner">
+                        <p class="project-abstract">Social context size &mdash; individual, groups of three, or groups of six &mdash; was varied within subjects in a balloon analogue risk task to test whether peer presence amplifies risk-taking. Contrary to expectation, balloon explosion rates were significantly higher when participants acted alone, with no significant difference in average adjusted pumps across conditions. The pattern suggests that social contexts activate loss-avoidance mechanisms that suppress catastrophic outcomes, rather than simply amplifying approach behavior.</p>
                         <div class="link-row">
-                            <a class="proj-link primary" href="https://jacobfolkers.github.io/reactiontask/" target="_blank" rel="noopener">
-                                &#127919; Task
-                            </a>
-                            <a class="proj-link" href="https://docs.google.com/spreadsheets/d/1fDptG5F7CFlhJEsYtKbUmyNewLj_7GCtxVgA7g6MEHM/edit?usp=sharing" target="_blank" rel="noopener">
-                                &#128202; Data
-                            </a>
+                            <a class="proj-link primary" href="https://jacobfolkers.github.io/reactiontask/" target="_blank" rel="noopener">&#127919; Task</a>
+                            <a class="proj-link" href="https://docs.google.com/spreadsheets/d/1fDptG5F7CFlhJEsYtKbUmyNewLj_7GCtxVgA7g6MEHM/edit?usp=sharing" target="_blank" rel="noopener">&#128202; Data</a>
                         </div>
+                        <details class="learn-more">
+                            <summary>Learn More</summary>
+                            <div class="learn-more-body">
+                                <h4>Introduction</h4>
+                                <p>Risk evaluation engages a circuit spanning the striatum, prefrontal cortex, and insula, with dopaminergic modulation governing sensitivity to reward and threat. Adolescent studies consistently document peer-presence-driven risk amplification, but results in college-aged adults are less consistent. Social Impact Theory predicts that larger groups exert stronger social influence; whether this translates to elevated or suppressed risk-taking depends on whether peers are experienced as an audience or a source of loss-avoidance norms.</p>
+                                <h4>Methods</h4>
+                                <p>Thirty-seven UW&ndash;Madison undergraduates completed a within-subjects design across three counterbalanced social conditions: individual, small group (three participants), and large group (six participants). Primary outcomes were balloon explosion rate and average adjusted pumps per trial. Paired-samples t-tests compared conditions, and a brief questionnaire assessed perceived social pressure during the task.</p>
+                                <h4>Key Findings</h4>
+                                <p>Balloon explosion rates were significantly higher in the individual condition than in either social context &mdash; the opposite of the peer-facilitation hypothesis. Average adjusted pump counts did not differ significantly across conditions, indicating that participants approached the same threshold but were more willing to cross it alone. Risk-taking also varied non-monotonically across trials (a dip at trial 2, peak at trial 4), suggesting that within-session dynamics operate independently of social context.</p>
+                            </div>
+                        </details>
                     </div>
                 </div>
             </details>
 
-            <!-- 5. The Effect of Priming Duration on Unconscious Stimuli Recall -->
+            <!-- 5 -->
             <details class="project-card">
                 <summary>
                     <div class="project-number">5</div>
                     <div class="summary-text">
-                        <span class="project-title">The Effect of Priming Duration on Unconscious Stimuli Recall</span>
+                        <span class="project-title">The Effect of Priming Duration on Unconscious Stimuli Recall: Assessing the Effectiveness of Subliminal Advertising Through the Use of the Word-Stem Completion Task</span>
                         <span class="project-members">Maia-Maria Stanciu &middot; Ashrita Patil &middot; Brennen Haynes &middot; Sec. 303</span>
                     </div>
                     <svg class="summary-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
                 </summary>
                 <div class="project-body">
                     <div class="project-body-inner">
+                        <p class="project-abstract">Four prime durations (17, 34, 51, and 1000 ms) were crossed with a word-stem completion task and Remember/Know/Guess phenomenological judgments to test whether brief exposures selectively boost implicit, unconscious memory traces. Conscious &ldquo;Remember&rdquo; accuracy rose monotonically from 65% to 96% across durations, while the &ldquo;Guess&rdquo; rate at 17 ms did not differ significantly from the longer conditions. The absence of a subliminal-duration advantage for implicit recall challenges behavioral accounts of subliminal advertising efficacy.</p>
                         <div class="link-row">
-                            <a class="proj-link primary" href="https://mstanciu222.github.io/Priming_Experiment/" target="_blank" rel="noopener">
-                                &#127919; Task
-                            </a>
-                            <a class="proj-link" href="https://github.com/mstanciu222/Priming_Experiment" target="_blank" rel="noopener">
-                                &#128279; GitHub
-                            </a>
-                            <a class="proj-link" href="https://docs.google.com/spreadsheets/d/1Qi1VPtm-RNJyB2ChXAoP1l_WN3cqrpSindtlOQh7WDg/edit?usp=sharing" target="_blank" rel="noopener">
-                                &#128202; Data
-                            </a>
+                            <a class="proj-link primary" href="https://mstanciu222.github.io/Priming_Experiment/" target="_blank" rel="noopener">&#127919; Task</a>
+                            <a class="proj-link" href="https://github.com/mstanciu222/Priming_Experiment" target="_blank" rel="noopener">&#128279; GitHub</a>
+                            <a class="proj-link" href="https://docs.google.com/spreadsheets/d/1Qi1VPtm-RNJyB2ChXAoP1l_WN3cqrpSindtlOQh7WDg/edit?usp=sharing" target="_blank" rel="noopener">&#128202; Data</a>
                         </div>
+                        <details class="learn-more">
+                            <summary>Learn More</summary>
+                            <div class="learn-more-body">
+                                <h4>Introduction</h4>
+                                <p>James Vicary&rsquo;s disputed 1957 claim that subliminal Coca-Cola messages boosted concession sales ignited decades of debate about unconscious memory and commercial persuasion. Priming research suggests that very brief exposures may paradoxically enhance implicit recognition by bypassing conscious interference that would otherwise overwrite the trace. The Remember/Know/Guess paradigm, combined with word-stem completion, provides a sensitive tool for dissociating recollection-based from familiarity-based and purely implicit memory contributions across the same stimulus set.</p>
+                                <h4>Methods</h4>
+                                <p>A within-subjects design exposed each participant to prime words at all four durations in randomized order, immediately followed by word-stem completions. For each completed stem, participants selected a phenomenological classification: Remember (conscious recollection with contextual detail), Know (familiarity without recollection), or Guess (no subjective memory experience). Accuracy rates within each classification were compared across duration conditions using a one-way MANOVA.</p>
+                                <h4>Key Findings</h4>
+                                <p>Remember accuracy increased in a clear monotonic gradient from 65.2% at 17 ms to 96.2% at 1000 ms, confirming that longer exposures support explicit encoding. Guess accuracy peaked at 50% for the 17-ms condition but did not differ significantly across the remaining conditions in the MANOVA. No subliminal-duration advantage for unconscious retrieval was detected, providing no behavioral support for the premise that fleeting exposures generate exploitable implicit memory traces.</p>
+                            </div>
+                        </details>
                     </div>
                 </div>
             </details>
 
-            <!-- 6. Emotional Priming Effects on the Interpretation of Ambiguous Images -->
+            <!-- 6 -->
             <details class="project-card">
                 <summary>
                     <div class="project-number">6</div>
@@ -510,70 +586,92 @@
                 </summary>
                 <div class="project-body">
                     <div class="project-body-inner">
+                        <p class="project-abstract">Positive, negative, and neutral word lists were used to prime affective states before 30 participants rated five ambiguous TAT images on a valence scale. The negativity bias hypothesis predicted an asymmetry: negative primes should color ambiguous percepts more strongly than positive ones. A one-way ANOVA found no statistically significant differences between conditions, though descriptive trends ran in the predicted direction, pointing to a genuine effect obscured by limited power.</p>
                         <div class="link-row">
-                            <a class="proj-link primary" href="https://ehomar22.github.io/Psych505project/" target="_blank" rel="noopener">
-                                &#127919; Task
-                            </a>
-                            <a class="proj-link" href="https://docs.google.com/spreadsheets/d/132DWUVnndBfwLCzGeixdlRrvVHIWF1z_z1sAL2he_P8/edit?gid=0#gid=0" target="_blank" rel="noopener">
-                                &#128202; Data
-                            </a>
+                            <a class="proj-link primary" href="https://ehomar22.github.io/Psych505project/" target="_blank" rel="noopener">&#127919; Task</a>
+                            <a class="proj-link" href="https://docs.google.com/spreadsheets/d/132DWUVnndBfwLCzGeixdlRrvVHIWF1z_z1sAL2he_P8/edit?gid=0#gid=0" target="_blank" rel="noopener">&#128202; Data</a>
                         </div>
+                        <details class="learn-more">
+                            <summary>Learn More</summary>
+                            <div class="learn-more-body">
+                                <h4>Introduction</h4>
+                                <p>Affective priming research (Murphy &amp; Zajonc, 1993) demonstrates that emotional stimuli shape subsequent judgments outside conscious awareness, mediated by reciprocal connections between the amygdala and prefrontal cortex. The negativity bias &mdash; the disproportionate cognitive weight assigned to negative relative to positive information &mdash; predicts an asymmetry in how valenced primes color ambiguous percepts. Thematic Apperception Test images, which invite projected emotional interpretation, provide a validated set of stimuli for probing this affective-cognitive interaction.</p>
+                                <h4>Methods</h4>
+                                <p>Thirty participants were randomly assigned to one of three between-subjects conditions: a positive word list, a negative word list, or a neutral word list. After reading the assigned list, each participant rated five ambiguous TAT images on a &plusmn;1 emotional valence scale. Summed valence scores across the five images served as the dependent variable and were analyzed with a one-way ANOVA.</p>
+                                <h4>Key Findings</h4>
+                                <p>The ANOVA did not reach significance (F(2,22)&nbsp;=&nbsp;1.94, p&nbsp;=&nbsp;.168). Descriptively, participants in the negative-prime condition produced more negative image interpretations than those in the positive or neutral conditions, a pattern consistent with the negativity bias. With only 30 participants divided across three conditions, the study was likely underpowered to detect a modest priming effect; a well-powered replication could resolve whether the directional trend reflects a true asymmetry.</p>
+                            </div>
+                        </details>
                     </div>
                 </div>
             </details>
 
-            <!-- 7. Two-Bandit Attention & Volatility Task -->
+            <!-- 7 -->
             <details class="project-card">
                 <summary>
                     <div class="project-number">7</div>
                     <div class="summary-text">
-                        <span class="project-title">Two-Bandit Attention &amp; Volatility Task</span>
-                        <span class="project-members">Dominic Jaccard &middot; Anders Kvalsvik &middot; Jane Liu</span>
+                        <span class="project-title">Effects of Reward Volatility and Perceptual Alterations on Human Reinforcement Learning</span>
+                        <span class="project-members">Anders Kvalsvik &middot; Dominic Jaccard &middot; Jane Liu</span>
                     </div>
                     <svg class="summary-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
                 </summary>
                 <div class="project-body">
                     <div class="project-body-inner">
+                        <p class="project-abstract">Two factors that challenge adaptive learning &mdash; environmental volatility and divided attention &mdash; were independently manipulated in a two-bandit task and their effects on learning rate (&alpha;) and decision consistency (&beta;) estimated via the Rescorla&ndash;Wagner/Softmax model. Volatile reward contingencies elicited significantly higher learning rates, while attentional disruption reduced decision consistency in the opening block. The results tie distinct computational parameters to separable cognitive demands.</p>
                         <div class="link-row">
-                            <a class="proj-link primary" href="https://kvalsvika.github.io/two_bandit_attention_volatility_task/" target="_blank" rel="noopener">
-                                &#127919; Task
-                            </a>
-                            <a class="proj-link" href="https://docs.google.com/spreadsheets/d/1Th-TPilMc2JxGGgyr0MVzjRd3Me_D9syxSwSQjN6hPE/edit?gid=1024042156#gid=1024042156" target="_blank" rel="noopener">
-                                &#128202; Data (Kvalsvik)
-                            </a>
-                            <a class="proj-link" href="https://uwprod-my.sharepoint.com/:x:/g/personal/djaccard_wisc_edu/IQBdmgrAo69PSboCcfwWaMkqAZH58_kHkau1wfaobJWokwM?e=tm78GB" target="_blank" rel="noopener">
-                                &#128202; Data (Jaccard)
-                            </a>
+                            <a class="proj-link primary" href="https://kvalsvika.github.io/two_bandit_attention_volatility_task/" target="_blank" rel="noopener">&#127919; Task</a>
+                            <a class="proj-link" href="https://docs.google.com/spreadsheets/d/1Th-TPilMc2JxGGgyr0MVzjRd3Me_D9syxSwSQjN6hPE/edit?gid=1024042156#gid=1024042156" target="_blank" rel="noopener">&#128202; Data (Kvalsvik)</a>
+                            <a class="proj-link" href="https://uwprod-my.sharepoint.com/:x:/g/personal/djaccard_wisc_edu/IQBdmgrAo69PSboCcfwWaMkqAZH58_kHkau1wfaobJWokwM?e=tm78GB" target="_blank" rel="noopener">&#128202; Data (Jaccard)</a>
                         </div>
+                        <details class="learn-more">
+                            <summary>Learn More</summary>
+                            <div class="learn-more-body">
+                                <h4>Introduction</h4>
+                                <p>The Rescorla&ndash;Wagner model formalizes learning as prediction-error-driven value updates scaled by a learning rate &alpha;; the Softmax decision rule captures the determinism of value-guided choice via inverse temperature &beta;. Volatile environments &mdash; where reward contingencies shift unpredictably &mdash; are thought to demand higher &alpha; to track changes in real time, a regulation linked to the frontoparietal attention network and OFC&ndash;VTA circuitry. A concurrent attentional load may degrade the precision of value integration, lowering &beta; without necessarily altering the learning process itself.</p>
+                                <h4>Methods</h4>
+                                <p>Thirty-four volunteers completed three within-subjects blocks of 80 trials each &mdash; stable, volatile, and attention-divided &mdash; in counterbalanced order. In the attention block, a secondary digit-counting task ran concurrently. Individual &alpha; and &beta; parameters were fit to trial-by-trial choice data using the Rescorla&ndash;Wagner/Softmax framework in Python, and mixed-effects regression tested block differences in both parameters.</p>
+                                <h4>Key Findings</h4>
+                                <p>Learning rate was significantly higher in the volatile than the stable block (b&nbsp;=&nbsp;3.112, p&nbsp;=&nbsp;.028), confirming that participants dynamically recalibrated their update speed to match environmental statistics. In the attention block, inverse temperature was significantly lower in the first 40 trials (b&nbsp;=&nbsp;&minus;0.798, p&nbsp;=&nbsp;.006), indicating that early dual-task interference reduced the precision of value-based responding. Learning rates increased across all conditions over the course of each block, suggesting a within-session calibration process independent of volatility.</p>
+                            </div>
+                        </details>
                     </div>
                 </div>
             </details>
 
-            <!-- 8. Multitasking and Risky Decisions -->
+            <!-- 8 -->
             <details class="project-card">
                 <summary>
                     <div class="project-number">8</div>
                     <div class="summary-text">
-                        <span class="project-title">Multitasking and Risky Decisions</span>
-                        <span class="project-members">Joanna Jiang &middot; Mahriana Merkel &middot; Ximena Franco &middot; Samuel Cantu Vasquez &middot; Sec. 306</span>
+                        <span class="project-title">Multitasking and Risky Decisions: A Study Exploring the Effects of Multitasking on Risky Decisions</span>
+                        <span class="project-members">Joanna Jiang &middot; Mahriana Merkel &middot; Samuel Cantu Vazquez &middot; Ximena Franco &middot; Sec. 306</span>
                     </div>
                     <svg class="summary-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
                 </summary>
                 <div class="project-body">
                     <div class="project-body-inner">
+                        <p class="project-abstract">A concurrent digit-monitoring task was used to impose cognitive load during binary risky decisions, testing the prediction that depleted executive resources shift choice toward riskier options. Thirty-seven participants completed single-task and multi-task conditions with a safe option (80% / 10 pts) versus a risky alternative (20% / variable pts). Risky choice rates did not differ significantly between conditions, suggesting that the imposed load was insufficient to measurably alter value-based preferences.</p>
                         <div class="link-row">
-                            <a class="proj-link primary" href="https://joannaj1020.github.io/Multi-task-and-Risk-Taking/" target="_blank" rel="noopener">
-                                &#128279; Task
-                            </a>
-                            <a class="proj-link" href="https://docs.google.com/spreadsheets/d/1mprwn0XytAiDM78uIjeRvSukWL5ZiXC8Tq1mEhWzwGQ/edit?usp=sharing" target="_blank" rel="noopener">
-                                &#128202; Data
-                            </a>
+                            <a class="proj-link primary" href="https://joannaj1020.github.io/Multi-task-and-Risk-Taking/" target="_blank" rel="noopener">&#127919; Task</a>
+                            <a class="proj-link" href="https://docs.google.com/spreadsheets/d/1mprwn0XytAiDM78uIjeRvSukWL5ZiXC8Tq1mEhWzwGQ/edit?usp=sharing" target="_blank" rel="noopener">&#128202; Data</a>
                         </div>
+                        <details class="learn-more">
+                            <summary>Learn More</summary>
+                            <div class="learn-more-body">
+                                <h4>Introduction</h4>
+                                <p>The ventromedial prefrontal cortex integrates value signals during risky choices; cognitive load that draws on overlapping prefrontal resources may shift processing toward heuristic strategies. Prospect Theory predicts that reduced deliberation amplifies sensitivity to potential gains while impairing accurate probability weighting. The switch cost associated with multitasking offers a naturalistic manipulation of executive availability without altering the decision stimuli themselves.</p>
+                                <h4>Methods</h4>
+                                <p>Thirty-seven participants completed a within-subjects design with conditions presented in counterbalanced order. In the multi-task block, participants simultaneously monitored a digit stream for target numbers while making risky choices; the single-task block required only the choice. Option A was safe (80% probability of 10 points) and Option B risky (20% probability of a variable larger payoff). Data were logged to Google Sheets and analyzed with paired t-tests.</p>
+                                <h4>Key Findings</h4>
+                                <p>Risky choice rates did not differ significantly between single-task and multi-task conditions. The null result suggests that digit-monitoring imposed insufficient load to alter deliberative processes, or that participants successfully time-shared resources across tasks. Individual differences in baseline risk preference and ambiguity tolerance may be stronger predictors of risky decision-making than momentary variations in cognitive load.</p>
+                            </div>
+                        </details>
                     </div>
                 </div>
             </details>
 
-            <!-- 9. Attentional Extremes: Interference Control in ADHD -->
+            <!-- 9 -->
             <details class="project-card">
                 <summary>
                     <div class="project-number">9</div>
@@ -585,40 +683,58 @@
                 </summary>
                 <div class="project-body">
                     <div class="project-body-inner">
+                        <p class="project-abstract">A web-based Picture-Word Stroop task compared interference control in self-reported ADHD and neurotypical participants across reaction time and accuracy measures. After applying a 75% accuracy inclusion threshold, 11 participants remained for analysis. No significant interference effects were detected for either measure, though accuracy differences trended in the predicted direction, underscoring the methodological challenges of assessing attentional control in small online samples.</p>
                         <div class="link-row">
-                            <a class="proj-link primary" href="https://soumilklr.github.io/psych505-picture-word-stroop/" target="_blank" rel="noopener">
-                                &#127919; Task
-                            </a>
-                            <a class="proj-link" href="https://docs.google.com/spreadsheets/d/16929myVuRVHgtdbMjHSUdguVsG6fN2U_h3oW6PuVg0Y/edit?gid=0#gid=0" target="_blank" rel="noopener">
-                                &#128202; Data
-                            </a>
+                            <a class="proj-link primary" href="https://soumilklr.github.io/psych505-picture-word-stroop/" target="_blank" rel="noopener">&#127919; Task</a>
+                            <a class="proj-link" href="https://docs.google.com/spreadsheets/d/16929myVuRVHgtdbMjHSUdguVsG6fN2U_h3oW6PuVg0Y/edit?gid=0#gid=0" target="_blank" rel="noopener">&#128202; Data</a>
                         </div>
+                        <details class="learn-more">
+                            <summary>Learn More</summary>
+                            <div class="learn-more-body">
+                                <h4>Introduction</h4>
+                                <p>Selective attention and response inhibition depend critically on the lateral prefrontal cortex, with the anterior cingulate monitoring conflict between competing response tendencies. ADHD is associated with impaired inhibitory control and goal maintenance, making interference paradigms a natural probe of the disorder&rsquo;s core deficit. The Picture-Word Stroop &mdash; in which an incongruent word label overlays a competing picture &mdash; measures selective attention more directly than the classical color-word version by removing the confound of semantic color knowledge.</p>
+                                <h4>Methods</h4>
+                                <p>Fifteen participants (21 trials each, yielding 315 data rows) completed a web-based Picture-Word Stroop in which each trial displayed a picture with a superimposed word followed by a categorical test-stimulus judgment. Congruent and incongruent conditions were intermixed. Participants scoring below 75% overall accuracy were excluded, leaving 11 for analysis. Reaction time and accuracy interference effects were compared across congruency conditions within subjects.</p>
+                                <h4>Key Findings</h4>
+                                <p>Neither reaction-time nor accuracy interference effects reached significance. Descriptively, ADHD participants showed a larger accuracy cost on incongruent trials, consistent with impaired interference suppression. The pattern highlights the fundamental tension between statistical sensitivity and the practical constraints of a web-based undergraduate sample &mdash; directionally consistent with theory, yet underpowered for formal inference.</p>
+                            </div>
+                        </details>
                     </div>
                 </div>
             </details>
 
-            <!-- 10. Decision-Making Under Uncertainty: Two-Armed Bandit + RDM -->
+            <!-- 10 -->
             <details class="project-card">
                 <summary>
                     <div class="project-number">10</div>
                     <div class="summary-text">
-                        <span class="project-title">Decision-Making Under Uncertainty: A Two-Armed Bandit Task Incorporating Random Dot Motion</span>
+                        <span class="project-title">Optimizing Reward Under Uncertainty: Shifts in Reliance on Reward History vs. Sensory Evidence</span>
                         <span class="project-members">Claire Min &middot; Coleman Klapheke &middot; Maxwell Rautmann &middot; Sec. 306</span>
                     </div>
                     <svg class="summary-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
                 </summary>
                 <div class="project-body">
                     <div class="project-body-inner">
+                        <p class="project-abstract">A novel paradigm combined a two-armed bandit (70/30% reward) with random dot motion (RDM) displays at four coherence levels (5&ndash;35%) to probe how participants arbitrate between learned reward history and incoming perceptual evidence as their relative reliability shifts. A Q-learning model with a logistic choice rule was fit to individual data; two alignment scores quantified reliance on each information source. When perceptual signals were weak, participants defaulted to reward history; as coherence increased, sensory evidence took precedence &mdash; a continuous reweighting confirmed by a positive slope across coherence levels.</p>
                         <div class="link-row">
-                            <a class="proj-link primary" href="https://whoiscolek.github.io/rdk-bandit-task/" target="_blank" rel="noopener">
-                                &#127919; Task
-                            </a>
+                            <a class="proj-link primary" href="https://whoiscolek.github.io/rdk-bandit-task/" target="_blank" rel="noopener">&#127919; Task</a>
                         </div>
+                        <details class="learn-more">
+                            <summary>Learn More</summary>
+                            <div class="learn-more-body">
+                                <h4>Introduction</h4>
+                                <p>Adaptive decision-making requires the continuous weighting of multiple information streams in proportion to their current reliability. The bandit task probes reward-history learning, canonically implemented via dopaminergic prediction error signals in the striatum; the random dot motion task probes perceptual evidence accumulation in parietal and prefrontal circuits. Combining both within a single trial enables a direct test of how the brain dynamically integrates &mdash; or selectively discounts &mdash; these two streams as their relative signal-to-noise changes across conditions.</p>
+                                <h4>Methods</h4>
+                                <p>Participants completed 100 trials in which coherence level was randomized across presentations. A Rescorla&ndash;Wagner Q-learning model with a logistic choice rule was fit to each participant&rsquo;s trial-by-trial selections. Two behavioral metrics were computed: a reward-history alignment score (proportion of choices matching the historically rewarded option) and a stimulus-indicated alignment score (proportion matching the dot-motion direction). Data were stored via Firebase and analyzed in Python.</p>
+                                <h4>Key Findings</h4>
+                                <p>Under low-coherence conditions, choices aligned significantly more with the historically rewarded option, indicating that participants fell back on learned reward associations when sensory evidence was ambiguous. Under high-coherence conditions, choices tracked the dot-motion direction, reflecting a shift to perceptual inference. A monotonically increasing slope in sensory weighting across coherence levels confirmed the predicted adaptive arbitration, providing behavioral evidence for dynamic integration of reinforcement learning and perceptual decision-making.</p>
+                            </div>
+                        </details>
                     </div>
                 </div>
             </details>
 
-            <!-- 11. Loss Aversion in Ambiguous Decision Making -->
+            <!-- 11 -->
             <details class="project-card">
                 <summary>
                     <div class="project-number">11</div>
@@ -630,160 +746,218 @@
                 </summary>
                 <div class="project-body">
                     <div class="project-body-inner">
+                        <p class="project-abstract">A modified Ellsberg Paradox framed an urn-sampling choice &mdash; red ball (known 30/90 probability) versus black ball (unknown probability) &mdash; as either a potential $100 gain or a $100 loss, testing whether loss framing amplifies ambiguity aversion. Recruitment difficulties limited the sample to 17 participants, precluding formal inference. Descriptive trends favored the predicted direction, with the loss group showing a higher rate of choosing the known-probability option.</p>
                         <div class="link-row">
-                            <a class="proj-link primary" href="https://lin524-ai.github.io/ellberg-paradox/" target="_blank" rel="noopener">
-                                &#127919; Task
-                            </a>
-                            <a class="proj-link" href="https://docs.google.com/spreadsheets/d/1S5aMx-ofQ0TaIM_7-JW8WO33IK3uvMHZR8E6iG1VUqA/edit?usp=sharing" target="_blank" rel="noopener">
-                                &#128202; Data
-                            </a>
+                            <a class="proj-link primary" href="https://lin524-ai.github.io/ellberg-paradox/" target="_blank" rel="noopener">&#127919; Task</a>
+                            <a class="proj-link" href="https://docs.google.com/spreadsheets/d/1S5aMx-ofQ0TaIM_7-JW8WO33IK3uvMHZR8E6iG1VUqA/edit?usp=sharing" target="_blank" rel="noopener">&#128202; Data</a>
                         </div>
+                        <details class="learn-more">
+                            <summary>Learn More</summary>
+                            <div class="learn-more-body">
+                                <h4>Introduction</h4>
+                                <p>The Ellsberg Paradox (1961) reveals that ambiguity aversion &mdash; preferring known-probability gambles over matched-EV ambiguous ones &mdash; is a robust feature of human choice, attributed in part to anterior cingulate and dorsolateral prefrontal engagement. Prospect Theory&rsquo;s loss aversion principle holds that losses loom larger than equivalent gains. Their interaction predicts that loss framing should heighten preference for certainty: when the cost of a bad outcome is salient, the additional uncertainty of an ambiguous option becomes doubly aversive.</p>
+                                <h4>Methods</h4>
+                                <p>A between-subjects design assigned UW&ndash;Madison undergraduates (target n&nbsp;=&nbsp;100&ndash;120, recruited by email) to a gain condition (winning $100) or a loss condition (losing $100). Each participant viewed an urn of 90 balls &mdash; 30 red (known probability) and 60 black/yellow (ambiguous ratio) &mdash; and made a single choice between betting on red or black. Response time was recorded alongside the binary choice.</p>
+                                <h4>Key Findings</h4>
+                                <p>Recruitment difficulties yielded only 17 completions (7 gain, 10 loss), rendering the planned inferential tests underpowered. Descriptively, the loss condition showed a higher rate of selecting the known-probability option, consistent with the prediction that threat of financial loss amplifies preference for certainty over ambiguity. A well-powered replication remains necessary to evaluate the statistical reliability of this interaction.</p>
+                            </div>
+                        </details>
                     </div>
                 </div>
             </details>
 
-            <!-- 12. Experimental Manipulation of Time Pressure in a RDM Task -->
+            <!-- 12 -->
             <details class="project-card">
                 <summary>
                     <div class="project-number">12</div>
                     <div class="summary-text">
-                        <span class="project-title">Experimental Manipulation of Time Pressure in a Random Dot Motion Task</span>
+                        <span class="project-title">Experimental Manipulation of Time Pressure in a Random Dot Motion Task: Effects on Reaction Time and Accuracy</span>
                         <span class="project-members">Natalie Pinka &middot; Riya Mathews &middot; Ryane Neal &middot; Sec. 302</span>
                     </div>
                     <svg class="summary-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
                 </summary>
                 <div class="project-body">
                     <div class="project-body-inner">
+                        <p class="project-abstract">Three between-subjects conditions &mdash; no timer, an implicit visible countdown, and an explicit speed instruction paired with a countdown &mdash; were compared in a 5%-coherence random dot motion task across 29 participants. Neither reaction time nor accuracy differed significantly across conditions, suggesting that at near-threshold signal quality, temporal pressure cues are insufficient to recalibrate the decision boundary regardless of their format.</p>
                         <div class="link-row">
-                            <a class="proj-link primary" href="https://nataliep27.github.io/RDM-Task/" target="_blank" rel="noopener">
-                                &#127919; Task
-                            </a>
-                            <a class="proj-link" href="https://docs.google.com/spreadsheets/d/11q51oJHdpvFZCDNtcCZMY1ewC-YSzknHcDKUabuurGk/edit?usp=sharing" target="_blank" rel="noopener">
-                                &#128202; Data
-                            </a>
+                            <a class="proj-link primary" href="https://nataliep27.github.io/RDM-Task/" target="_blank" rel="noopener">&#127919; Task</a>
+                            <a class="proj-link" href="https://docs.google.com/spreadsheets/d/11q51oJHdpvFZCDNtcCZMY1ewC-YSzknHcDKUabuurGk/edit?usp=sharing" target="_blank" rel="noopener">&#128202; Data</a>
                         </div>
+                        <details class="learn-more">
+                            <summary>Learn More</summary>
+                            <div class="learn-more-body">
+                                <h4>Introduction</h4>
+                                <p>The speed-accuracy tradeoff is a foundational feature of perceptual decision-making: lowering the evidence threshold speeds responses at the cost of accuracy. Accumulate-to-bound models formalize this as a shift in the boundary parameter. Implicit cues may engage automatic threshold adjustment via the dlPFC, while explicit instructions recruit deliberate strategy change &mdash; potentially activating distinct neural mechanisms for urgency signaling. Testing them within the same paradigm allows a within-study contrast of conscious and non-conscious time pressure.</p>
+                                <h4>Methods</h4>
+                                <p>Twenty-nine participants were randomly assigned to one of three conditions: control (no temporal information), implicit timer (visible countdown, no instructions), or explicit timer (visible countdown plus written speed instructions). All participants completed 10 trials of a 5%-coherence random dot motion stimulus deployed on GitHub Pages, indicating the majority direction of dot motion. Reaction time and accuracy were analyzed with one-way ANOVAs, linear trend tests, and post-hoc comparisons in RStudio.</p>
+                                <h4>Key Findings</h4>
+                                <p>One-way ANOVAs were non-significant for both reaction time (F(2,26)&nbsp;=&nbsp;0.42, p&nbsp;=&nbsp;.663) and accuracy (F(2,26)&nbsp;=&nbsp;0.65, p&nbsp;=&nbsp;.532), with no significant linear trends across conditions. The absence of any time-pressure effect, even under explicit instruction, likely reflects a floor in signal quality: at 5% coherence, the perceptual evidence stream is too weak for participants to trade caution for speed in a way that produces measurable behavioral differences.</p>
+                            </div>
+                        </details>
                     </div>
                 </div>
             </details>
 
-            <!-- 13. Social Influence on Subjective Rating of Images -->
+            <!-- 13 -->
             <details class="project-card">
                 <summary>
                     <div class="project-number">13</div>
                     <div class="summary-text">
-                        <span class="project-title">Social Influence on Subjective Rating of Images</span>
+                        <span class="project-title">The Impact of Social Information on Subjective Value Representations</span>
                         <span class="project-members">Kylie Burroughs &middot; Alex McGinty &middot; Alex Schlender &middot; Kate Walsh &middot; Sec. 307</span>
                     </div>
                     <svg class="summary-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
                 </summary>
                 <div class="project-body">
                     <div class="project-body-inner">
+                        <p class="project-abstract">Sixty-three participants rated 20 neutral images twice, with social feedback &mdash; engineered to conflict with their initial responses &mdash; inserted between sessions in one of four formats: group distribution only, group average only, both, or no feedback. A mixed ANOVA found no significant effect of feedback type or session on rating change. Descriptively, conditions that included a numerical average produced slightly larger shifts, suggesting summary statistics may be marginally more persuasive than distributional displays for social value updating.</p>
                         <div class="link-row">
-                            <a class="proj-link primary" href="https://ammcginty.github.io/Image-rating-task/" target="_blank" rel="noopener">
-                                &#127919; Task
-                            </a>
+                            <a class="proj-link primary" href="https://ammcginty.github.io/Image-rating-task/" target="_blank" rel="noopener">&#127919; Task</a>
                         </div>
+                        <details class="learn-more">
+                            <summary>Learn More</summary>
+                            <div class="learn-more-body">
+                                <h4>Introduction</h4>
+                                <p>The vmPFC and medial OFC encode subjective value and update it in response to social information through mechanisms akin to prediction error signaling &mdash; sometimes termed &ldquo;social prediction error.&rdquo; Prior work shows that group norms can reshape aesthetic and preference ratings even for neutral stimuli. Whether the format of social feedback (a precise numerical average versus a distributional display) modulates the magnitude of this conformity effect is a practically relevant but underexplored question.</p>
+                                <h4>Methods</h4>
+                                <p>Sixty-three participants were remotely assigned in a between-subjects design to one of four feedback conditions. After providing initial ratings of 20 neutral images on a numerical scale, they received feedback constructed to conflict with their prior responses, then re-rated the same images. A mixed ANOVA (between: feedback condition; within: session) and linear regression assessed the effects of feedback format on magnitude of rating change in RStudio.</p>
+                                <h4>Key Findings</h4>
+                                <p>Neither the main effect of condition (F(3,59)&nbsp;=&nbsp;1.25, p&nbsp;=&nbsp;.300) nor the main effect of session (F(1,59)&nbsp;=&nbsp;2.86, p&nbsp;=&nbsp;.096) reached significance. Descriptively, conditions presenting a numerical group average produced slightly larger rating changes between sessions, suggesting that quantitative anchors may carry more updating weight than distributional formats alone. The overall null result may reflect the inherent stability of subjective value representations for affectively neutral images.</p>
+                            </div>
+                        </details>
                     </div>
                 </div>
             </details>
 
-            <!-- 14. The Effect of Decreased Attention on the Drift Diffusion Model -->
+            <!-- 14 -->
             <details class="project-card">
                 <summary>
                     <div class="project-number">14</div>
                     <div class="summary-text">
-                        <span class="project-title">The Effect of Decreased Attention on the Drift Diffusion Model</span>
+                        <span class="project-title">Attentional Divergence from a Numerosity Discrimination Task Reveals an Overall Change in Boundary Separation in the EZ-Drift Diffusion Model</span>
                         <span class="project-members">Louise Jang &middot; Diana Lee &middot; Tristan Molkentin &middot; Arina Phannavinh &middot; Sec. 304</span>
                     </div>
                     <svg class="summary-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
                 </summary>
                 <div class="project-body">
                     <div class="project-body-inner">
+                        <p class="project-abstract">A dual-task design paired a numerosity discrimination task with a concurrent auditory monitoring task to examine how divided attention reshapes the latent parameters of perceptual decision-making. The EZ-Drift Diffusion Model was fit to single-task and dual-task data from 30 participants; dual-task performance was both less accurate and faster, a pattern the model attributed to reduced boundary separation &mdash; a principled speed-accuracy tradeoff driven by attentional resource competition.</p>
                         <div class="link-row">
-                            <a class="proj-link primary" href="https://tmolkentin.github.io/Numerosity-Discrimination-Task/" target="_blank" rel="noopener">
-                                &#127919; Task
-                            </a>
-                            <a class="proj-link" href="https://docs.google.com/spreadsheets/d/1UALBpbGlS96tzYTL3p6RJDwfHIquBioUwaQIUJ70Cvc/edit?usp=sharing" target="_blank" rel="noopener">
-                                &#128202; Data
-                            </a>
+                            <a class="proj-link primary" href="https://tmolkentin.github.io/Numerosity-Discrimination-Task/" target="_blank" rel="noopener">&#127919; Task</a>
+                            <a class="proj-link" href="https://docs.google.com/spreadsheets/d/1UALBpbGlS96tzYTL3p6RJDwfHIquBioUwaQIUJ70Cvc/edit?usp=sharing" target="_blank" rel="noopener">&#128202; Data</a>
                         </div>
+                        <details class="learn-more">
+                            <summary>Learn More</summary>
+                            <div class="learn-more-body">
+                                <h4>Introduction</h4>
+                                <p>The drift diffusion model decomposes response-time distributions and accuracy into three latent parameters: drift rate (evidence quality), boundary separation (decision caution), and non-decision time. Numerosity perception draws on subitizing, approximate number system, and texture-density representations distributed across parietal and occipital cortex. Divided attention is expected to lower boundary separation via a central processing bottleneck (Pashler, 1994), producing the counterintuitive combination of faster but less accurate responses under higher cognitive load.</p>
+                                <h4>Methods</h4>
+                                <p>Thirty UW&ndash;Madison undergraduates completed a within-subjects design: single-task first (50 numerosity discrimination trials: 80 blue/yellow circles, coherence 0.05&ndash;0.35), then dual-task (same discrimination task with a concurrent auditory spacebar-response requirement). The EZ-DDM was fit to accuracy and mean RT for each condition. Paired t-tests compared accuracy and RT between conditions; Pearson correlations examined relationships between model parameters across participants.</p>
+                                <h4>Key Findings</h4>
+                                <p>Dual-task accuracy was significantly lower (t(29)&nbsp;=&nbsp;2.55, p&nbsp;=&nbsp;.016, d&nbsp;=&nbsp;0.47) while dual-task RT was significantly faster (t(29)&nbsp;=&nbsp;2.11, p&nbsp;=&nbsp;.043, d&nbsp;=&nbsp;0.39) relative to the single-task baseline. The EZ-DDM attributed both changes primarily to a reduction in boundary separation, consistent with participants adopting a less cautious decision criterion when attentional resources were divided across modalities. The correlation between accuracy change and boundary-separation change further validated the model-based interpretation.</p>
+                            </div>
+                        </details>
                     </div>
                 </div>
             </details>
 
-            <!-- 15. Peer Influence on Risk Taking Behavior in College Students -->
+            <!-- 15 -->
             <details class="project-card">
                 <summary>
                     <div class="project-number">15</div>
                     <div class="summary-text">
-                        <span class="project-title">Peer Influence on Risk Taking Behavior in College Students</span>
+                        <span class="project-title">Peer Influence on Decision-Making for Social Activity vs. Academic Performance</span>
                         <span class="project-members">Isabella Laws &middot; Julia Harju &middot; Kiera Ortiz &middot; Luke Scanlan &middot; Sec. 306</span>
                     </div>
                     <svg class="summary-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
                 </summary>
                 <div class="project-body">
                     <div class="project-body-inner">
+                        <p class="project-abstract">A pre/post design tested whether a single peer-norm cue &mdash; stating that the majority of peers had chosen the social option &mdash; shifts college students&rsquo; decisions between social activities and academic performance. Across 51 participants completing 10 ecologically grounded scenarios, social choices increased significantly from pre- to post-exposure, yielding a medium-sized effect that underscores the potency of normative reference information during a developmentally sensitive period.</p>
                         <div class="link-row">
-                            <a class="proj-link primary" href="https://keortiz2-gif.github.io/PSYCH-505-Final-Project/" target="_blank" rel="noopener">
-                                &#127919; Task
-                            </a>
-                            <a class="proj-link" href="https://docs.google.com/spreadsheets/d/1Ac68YEDGUzfhYULJKArk-g6NEB0Z2RumTdkuZOj0fik/edit?usp=sharing" target="_blank" rel="noopener">
-                                &#128202; Data
-                            </a>
+                            <a class="proj-link primary" href="https://keortiz2-gif.github.io/PSYCH-505-Final-Project/" target="_blank" rel="noopener">&#127919; Task</a>
+                            <a class="proj-link" href="https://docs.google.com/spreadsheets/d/1Ac68YEDGUzfhYULJKArk-g6NEB0Z2RumTdkuZOj0fik/edit?usp=sharing" target="_blank" rel="noopener">&#128202; Data</a>
                         </div>
+                        <details class="learn-more">
+                            <summary>Learn More</summary>
+                            <div class="learn-more-body">
+                                <h4>Introduction</h4>
+                                <p>Prefrontal cortex maturation extends into the mid-twenties, leaving college-aged individuals particularly susceptible to social influence on goal-directed behavior. The ventral striatum amplifies reward signals in social comparison contexts, while the anterior cingulate tracks the conflict between immediate social incentives and long-term academic goals. The academic-versus-social dilemma faced by college students offers an ecologically valid analogue to laboratory risk tasks in which the pull of immediate reward competes with future payoff.</p>
+                                <h4>Methods</h4>
+                                <p>Fifty-one participants completed a web-based task with 10 college-environment scenarios (5 pre-exposure, 5 post-exposure), each offering a binary academic/social choice (scored 0/1). Between phases, participants viewed a single peer-norm cue stating that the majority of their peers had chosen the social option. Running academic standing and social satisfaction scores updated dynamically after each selection. A paired t-test compared mean social-choice proportions across the two phases.</p>
+                                <h4>Key Findings</h4>
+                                <p>Social choice proportion increased significantly from pre-exposure (M&nbsp;=&nbsp;0.490) to post-exposure (M&nbsp;=&nbsp;0.588), t(50)&nbsp;=&nbsp;3.62, p&nbsp;&lt;&nbsp;.001, Cohen&rsquo;s d<sub>z</sub>&nbsp;=&nbsp;0.51 (medium effect). Even a single normative cue was sufficient to meaningfully shift willingness to prioritize immediate social reward over academic performance, suggesting that descriptive social norms exert rapid and substantial influence on choice during emerging adulthood.</p>
+                            </div>
+                        </details>
                     </div>
                 </div>
             </details>
 
-            <!-- 16. Physical and Perceptual Costs Trade Off in Decision-Making -->
+            <!-- 16 -->
             <details class="project-card">
                 <summary>
                     <div class="project-number">16</div>
                     <div class="summary-text">
                         <span class="project-title">Physical and Perceptual Costs Trade Off in Decision-Making: Based on a Target-Hitting Game</span>
-                        <span class="project-members">Patrick &middot; Paige &middot; Jenna Shen</span>
+                        <span class="project-members">Paige Williams &middot; Patrick Lowenstein &middot; Jenna Shen &middot; Sec. 307</span>
                     </div>
                     <svg class="summary-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
                 </summary>
                 <div class="project-body">
                     <div class="project-body-inner">
+                        <p class="project-abstract">A target-hitting game orthogonally manipulated physical distance and perceptual salience (three blur levels) to examine how participants integrate two types of action cost when selecting among competing targets. Twenty-nine participants strongly preferred targets that minimized total cost; in trials where distance and salience cues conflicted, distance dominated, with participants choosing the closer target approximately 72% of the time regardless of its blur level.</p>
                         <div class="link-row">
-                            <a class="proj-link primary" href="https://jennashen00.github.io/target-hitting-game/" target="_blank" rel="noopener">
-                                &#127919; Task
-                            </a>
-                            <a class="proj-link" href="https://docs.google.com/spreadsheets/d/1iwIKbwxOWQQ3jL2dBv49QInXdylxivYp17bZP7A49-Q/edit?usp=sharing" target="_blank" rel="noopener">
-                                &#128202; Data
-                            </a>
+                            <a class="proj-link primary" href="https://jennashen00.github.io/target-hitting-game/" target="_blank" rel="noopener">&#127919; Task</a>
+                            <a class="proj-link" href="https://docs.google.com/spreadsheets/d/1iwIKbwxOWQQ3jL2dBv49QInXdylxivYp17bZP7A49-Q/edit?usp=sharing" target="_blank" rel="noopener">&#128202; Data</a>
                         </div>
+                        <details class="learn-more">
+                            <summary>Learn More</summary>
+                            <div class="learn-more-body">
+                                <h4>Introduction</h4>
+                                <p>Action cost encompasses both physical dimensions (distance, effort) and perceptual dimensions (discriminability, salience). The striatum encodes action-specific value and effort tradeoffs; the vmPFC and OFC represent stimulus value; and the anterior cingulate cortex evaluates action cost in the context of expected reward. Dissociating physical from perceptual cost within a single naturalistic task allows a direct test of their relative weights in human motor decision-making, a question with implications for theories of embodied value-based action selection.</p>
+                                <h4>Methods</h4>
+                                <p>Thirty-six participants were recruited; 29 were retained after exclusions. Circular targets (180 px) appeared at three distance levels &times; three blur (salience) levels, producing congruent trials (distance and salience costs aligned) and three conflict variants (distance-only, salience-only, and fully conflicting). Participants completed 40 main trials plus 4 practice trials. Logistic regression and binomial tests assessed the proportion of optimal choices per condition in RStudio.</p>
+                                <h4>Key Findings</h4>
+                                <p>In the fully congruent condition, participants chose the optimal target 82% of the time (p&nbsp;&lt;&nbsp;.001). Distance-only and salience-only conflict conditions produced near-chance performance (52% and 58%, both n.s.). In the critical full-conflict condition, participants selected the closer, blurrier target approximately 72% of the time (p&nbsp;&lt;&nbsp;.001), demonstrating that physical proximity constitutes a stronger action-cost signal than perceptual discriminability when both dimensions compete.</p>
+                            </div>
+                        </details>
                     </div>
                 </div>
             </details>
 
-            <!-- 17. Peer Influence Effects on the Bandit Task -->
+            <!-- 17 -->
             <details class="project-card">
                 <summary>
                     <div class="project-number">17</div>
                     <div class="summary-text">
-                        <span class="project-title">Peer Influence Effects on the Bandit Task</span>
+                        <span class="project-title">Peer Influence Effects on the Bandit Task: A Four-Armed Bandit Experiment Regarding Peer Information and Its Impacts on Exploration and Exploitation</span>
                         <span class="project-members">Anastassia Olijnyk &middot; Brayden Tardiff &middot; Emma Grindstaff &middot; Nina Wolff &middot; Sec. 301</span>
                     </div>
                     <svg class="summary-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
                 </summary>
                 <div class="project-body">
                     <div class="project-body-inner">
+                        <p class="project-abstract">Forty-three participants completed a four-armed bandit task across three blocks &mdash; private, continuous social feedback, and intermittent social feedback &mdash; to test how the format of peer information shapes exploration and exploitation. Block significantly predicted arm-switching behavior, but contrary to the directional hypothesis, intermittent feedback produced the most switching while continuous feedback produced the least, implying that gaps in social information induce uncertainty that encourages exploration.</p>
                         <div class="link-row">
-                            <a class="proj-link primary" href="https://nfwolff-sketch.github.io/Psych-505-Final-Project/" target="_blank" rel="noopener">
-                                &#127919; Task
-                            </a>
-                            <a class="proj-link" href="https://docs.google.com/spreadsheets/d/1j-XKMAil9eY3owZ36Q9jlY2f0E9B5ojXEr4oJpQL168/edit?usp=sharing" target="_blank" rel="noopener">
-                                &#128202; Data
-                            </a>
+                            <a class="proj-link primary" href="https://nfwolff-sketch.github.io/Psych-505-Final-Project/" target="_blank" rel="noopener">&#127919; Task</a>
+                            <a class="proj-link" href="https://docs.google.com/spreadsheets/d/1j-XKMAil9eY3owZ36Q9jlY2f0E9B5ojXEr4oJpQL168/edit?usp=sharing" target="_blank" rel="noopener">&#128202; Data</a>
                         </div>
+                        <details class="learn-more">
+                            <summary>Learn More</summary>
+                            <div class="learn-more-body">
+                                <h4>Introduction</h4>
+                                <p>Credit assignment in multi-option environments requires agents to balance exploiting high-value options against exploring potentially superior alternatives. Dopaminergic prediction error signals in the striatum drive reward-based value updating, while occipital-parietal circuits support the integration of social comparison information. Social information can act as a bonus input biasing choices toward majority-preferred options, but whether continuous versus intermittent delivery of that bonus differentially alters explore&ndash;exploit balance is unknown.</p>
+                                <h4>Methods</h4>
+                                <p>Forty-three college-aged participants completed three within-subjects blocks of 30 trials each in counterbalanced order using a web-based four-armed bandit with reward probabilities of 20, 40, 60, and 80%. In the continuous block, a leaderboard displaying peer choices updated after every trial; in the intermittent block, it updated every five trials; the private block showed no social information. Arm-switching rate and social conformity score (proportion of choices matching the current majority) were the primary outcomes, analyzed with two-tailed tests at &alpha;&nbsp;=&nbsp;.05.</p>
+                                <h4>Key Findings</h4>
+                                <p>A significant main effect of block on arm-switching was found (F(2,2967)&nbsp;=&nbsp;5.22, p&nbsp;=&nbsp;.005, &eta;&sup2;&nbsp;=&nbsp;.004). Against prediction, the intermittent block produced the highest switching rate (M&nbsp;=&nbsp;0.422) and the continuous block the lowest (M&nbsp;=&nbsp;0.359). The pattern suggests that when social feedback is constant and predictable it becomes a stable background cue that reduces uncertainty; periodic gaps re-introduce that uncertainty, driving exploratory switching.</p>
+                            </div>
+                        </details>
                     </div>
                 </div>
             </details>
 
-            <!-- 18. Decisions as Drivers of Value -->
+            <!-- 18 -->
             <details class="project-card">
                 <summary>
                     <div class="project-number">18</div>
@@ -795,65 +969,87 @@
                 </summary>
                 <div class="project-body">
                     <div class="project-body-inner">
+                        <p class="project-abstract">Pre- and post-ratings of three course attributes &mdash; Instructor Quality, Grade Distribution, and Class Time &mdash; were collected around a 20-trial forced-choice task using real-world RateMyProfessor and MadGrades data to test whether repeated trade-off experience reshapes stated preferences. Contrary to cognitive dissonance predictions, Instructor Quality ratings declined and Grade Distribution edged upward; none of the changes reached significance, but the unexpected directions raise intriguing questions about how choice experience recalibrates salient educational priorities.</p>
                         <div class="link-row">
-                            <a class="proj-link primary" href="https://warnervillar.github.io/Drivers-Of-Value/" target="_blank" rel="noopener">
-                                &#127919; Task
-                            </a>
-                            <a class="proj-link" href="https://github.com/warnervillar/Drivers-Of-Value" target="_blank" rel="noopener">
-                                &#128279; GitHub
-                            </a>
-                            <a class="proj-link" href="https://docs.google.com/spreadsheets/d/1nGXPXLmDUb5DC67XV5nPZDoWgscfNpzNZIUqauq6v9Y/edit?usp=sharing" target="_blank" rel="noopener">
-                                &#128202; Data
-                            </a>
+                            <a class="proj-link primary" href="https://warnervillar.github.io/Drivers-Of-Value/" target="_blank" rel="noopener">&#127919; Task</a>
+                            <a class="proj-link" href="https://github.com/warnervillar/Drivers-Of-Value" target="_blank" rel="noopener">&#128279; GitHub</a>
+                            <a class="proj-link" href="https://docs.google.com/spreadsheets/d/1nGXPXLmDUb5DC67XV5nPZDoWgscfNpzNZIUqauq6v9Y/edit?usp=sharing" target="_blank" rel="noopener">&#128202; Data</a>
                         </div>
+                        <details class="learn-more">
+                            <summary>Learn More</summary>
+                            <div class="learn-more-body">
+                                <h4>Introduction</h4>
+                                <p>Cognitive dissonance theory predicts that choosing between options elevates the chosen alternative&rsquo;s subjective value through post-decisional rationalization. Slovic&rsquo;s preference construction framework extends this: repeated trade-off experience actively builds rather than merely reveals preferences. The vmPFC updates value representations through choice history, while the anterior cingulate tracks decisional conflict. Testing this in the domain of course selection connects the laboratory mechanism to a high-stakes naturalistic decision context familiar to every undergraduate.</p>
+                                <h4>Methods</h4>
+                                <p>Twenty-three UW&ndash;Madison undergraduates (recruited via the subject pool) rated Instructor Quality, Grade Distribution, and Class Time on 5-point Likert scales before and after completing 20 forced-choice trials between pairs of hypothetical courses described by RateMyProfessor scores and MadGrades grade distributions. Paired t-tests compared pre- and post-ratings for each attribute separately in RStudio.</p>
+                                <h4>Key Findings</h4>
+                                <p>Instructor Quality declined (M: 4.22&rarr;3.91; t(22)&nbsp;=&nbsp;1.82, p&nbsp;=&nbsp;.083, d&nbsp;=&nbsp;&minus;0.39), Grade Distribution slightly increased (M: 4.09&rarr;4.22; t(22)&nbsp;=&nbsp;&minus;2.03, p&nbsp;=&nbsp;.056, d&nbsp;=&nbsp;0.43), and Class Time was unchanged (p&nbsp;=&nbsp;.665). None reached significance at &alpha;&nbsp;=&nbsp;.05. The downward shift in Instructor Quality &mdash; the most salient academic attribute &mdash; may reflect task-induced recalibration: exposure to realistic grade distributions across 20 trials may have shifted the pragmatic weighting of what determines course outcomes.</p>
+                            </div>
+                        </details>
                     </div>
                 </div>
             </details>
 
-            <!-- 19. Framing Effect and Risk Taking: A Coin Flipping Task -->
+            <!-- 19 -->
             <details class="project-card">
                 <summary>
                     <div class="project-number">19</div>
                     <div class="summary-text">
-                        <span class="project-title">Framing Effect and Risk Taking: A Coin Flipping Task</span>
+                        <span class="project-title">Framing Effect, Risk Taking, and Ambiguity Aversion: A Coin Flipping Task</span>
                         <span class="project-members">Brielle Lauber &middot; Praneeth Puli &middot; Lina Robayo &middot; Sec. 302</span>
                     </div>
                     <svg class="summary-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
                 </summary>
                 <div class="project-body">
                     <div class="project-body-inner">
+                        <p class="project-abstract">A coin-flipping paradigm pitted positive (gain) against negative (loss) framing to test how outcome valence interacts with ambiguity aversion across 20 choice trials. Coin A offered a known asymmetric probability (40% win $15, 60% lose $7); Coin B was ambiguous with the same expected value. The negative framing group was predicted to select the ambiguous coin more frequently &mdash; a counterintuitive prediction arising from the interaction of Prospect Theory and the Ellsberg Paradox. Data collection was ongoing at time of submission.</p>
                         <div class="link-row">
-                            <a class="proj-link primary" href="https://bvlauber.github.io/Coin-Flipping-Task/" target="_blank" rel="noopener">
-                                &#127919; Task
-                            </a>
-                            <a class="proj-link" href="https://docs.google.com/spreadsheets/d/1BvuCQFBCPPlwRzbMUis4C7XMuvSewZRxDzbr0G8OJLo/edit?usp=sharing" target="_blank" rel="noopener">
-                                &#128202; Data
-                            </a>
+                            <a class="proj-link primary" href="https://bvlauber.github.io/Coin-Flipping-Task/" target="_blank" rel="noopener">&#127919; Task</a>
+                            <a class="proj-link" href="https://docs.google.com/spreadsheets/d/1BvuCQFBCPPlwRzbMUis4C7XMuvSewZRxDzbr0G8OJLo/edit?usp=sharing" target="_blank" rel="noopener">&#128202; Data</a>
                         </div>
+                        <details class="learn-more">
+                            <summary>Learn More</summary>
+                            <div class="learn-more-body">
+                                <h4>Introduction</h4>
+                                <p>Prospect Theory (Tversky &amp; Kahneman, 1981) establishes that framing equivalent outcomes as losses versus gains systematically alters choice, with losses carrying disproportionate psychological weight. Classical ambiguity aversion predicts avoidance of unknown probabilities regardless of framing, yet loss aversion may counterintuitively push participants toward ambiguity: when the known coin&rsquo;s structure guarantees frequent small losses, the alternative&rsquo;s unknown probability could appear relatively attractive. This interaction between aleatory and epistemic uncertainty under valenced framing has received limited direct experimental attention.</p>
+                                <h4>Methods</h4>
+                                <p>A between-subjects web-based design randomly assigned participants to a gain or loss framing condition (target n&nbsp;=&nbsp;60; 30 per condition). Coin A presented a known skewed probability (40% win $15, 60% lose $7); Coin B was described as having an unknown probability with the same expected value. Participants completed 20 choice trials per session, followed by a Likert-scale satisfaction survey. An independent-samples t-test was planned to compare the proportion of ambiguous-coin selections across framing conditions.</p>
+                                <h4>Key Findings</h4>
+                                <p>This paper was submitted ahead of complete data collection; the findings reflect pre-registered predictions. The negative-framing group was expected to select the ambiguous coin more frequently, while the gain-framed group was expected to favor the known probability &mdash; consistent with risk aversion under gains. Whether the counterintuitive loss-driven shift toward ambiguity actually obtains awaits empirical confirmation.</p>
+                            </div>
+                        </details>
                     </div>
                 </div>
             </details>
 
-            <!-- 20. Psych 505 Project (Wu et al.) -->
+            <!-- 20 -->
             <details class="project-card">
                 <summary>
                     <div class="project-number">20</div>
                     <div class="summary-text">
-                        <span class="project-title">Psych 505 Project</span>
+                        <span class="project-title">Time Pressure and Reward Incentives Shape Confidence and Accuracy in Decision-Making</span>
                         <span class="project-members">Cal Metoxen &middot; Mikaela Geraghty &middot; Bingye Wu &middot; Grace Plummer</span>
                     </div>
                     <svg class="summary-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
                 </summary>
                 <div class="project-body">
                     <div class="project-body-inner">
+                        <p class="project-abstract">A 2&times;2 between-subjects design crossing time pressure (timed/untimed) with reward incentives (reward/no reward) examined how these factors jointly shape confidence and accuracy on a video comprehension task scored with a 6-point certainty scale. Approximately 60 participants watched a short documentary clip and answered 10 True/False questions; the untimed-reward condition was predicted to yield the highest confidence-weighted accuracy. Data collection was ongoing at time of submission.</p>
                         <div class="link-row">
-                            <a class="proj-link primary" href="https://github.com/Justbinging/Psych_505_project" target="_blank" rel="noopener">
-                                &#128279; GitHub
-                            </a>
-                            <a class="proj-link" href="https://docs.google.com/spreadsheets/d/1wEdxKZnEqKg-wYiQO-C5HryytWhmCGYZXgbmE2k-eYc/edit?usp=sharing" target="_blank" rel="noopener">
-                                &#128202; Data
-                            </a>
+                            <a class="proj-link primary" href="https://github.com/Justbinging/Psych_505_project" target="_blank" rel="noopener">&#128279; GitHub</a>
+                            <a class="proj-link" href="https://docs.google.com/spreadsheets/d/1wEdxKZnEqKg-wYiQO-C5HryytWhmCGYZXgbmE2k-eYc/edit?usp=sharing" target="_blank" rel="noopener">&#128202; Data</a>
                         </div>
+                        <details class="learn-more">
+                            <summary>Learn More</summary>
+                            <div class="learn-more-body">
+                                <h4>Introduction</h4>
+                                <p>The speed-accuracy tradeoff is well established for low-level perceptual decisions, but its extension to comprehension-based judgment under naturalistic viewing conditions is less explored. Reward incentives are theorized to raise decision thresholds &mdash; increasing caution and accuracy &mdash; while time pressure is expected to force heuristic processing that reduces both response quality and expressed certainty. Understanding how these two moderators interact has practical implications for high-stakes assessment, medical triage, and time-limited examination contexts.</p>
+                                <h4>Methods</h4>
+                                <p>Approximately 60 participants (n&nbsp;&asymp;&nbsp;15 per cell; ages 20&ndash;22) were randomly assigned to one of four conditions. All participants watched a 4:12-minute YouTube video, then answered 10 True/False statements rated on a 6-point certainty scale. The timed condition imposed a 15-second response window per question. Confidence-weighted accuracy scores were computed automatically via Google Apps Script with Gemini assistance for data export and scoring.</p>
+                                <h4>Key Findings</h4>
+                                <p>This paper was submitted ahead of complete data collection; the findings reflect pre-registered predictions. The untimed-reward group was expected to achieve the highest accuracy and confidence, with time-pressured conditions showing degraded performance attributable to heuristic responding under resource constraints. Reward incentives were expected to independently boost expressed certainty regardless of objective accuracy. Empirical results are pending final data collection and analysis.</p>
+                            </div>
+                        </details>
                     </div>
                 </div>
             </details>
