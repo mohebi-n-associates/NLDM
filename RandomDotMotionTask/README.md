@@ -2,9 +2,10 @@
 
 A browser-based implementation of the classic **random dot motion paradigm** used in perceptual decision-making research.
 
-**[▶️ Try the live demo](https://YOUR-USERNAME.github.io/dot-motion-task/)**
+**[▶️ Try the live demo](https://mohebi-n-associates.github.io/NLDM/RandomDotMotionTask/)**
 
-![Task Screenshot](screenshot.png)
+The course version is deliberately local-only: task responses remain in React
+state for the current browser tab and are neither transmitted nor saved.
 
 ---
 
@@ -19,19 +20,11 @@ This paradigm has been foundational in understanding:
 
 ---
 
-## 🚀 Quick Start: Deploy Your Own
+## 🚀 Quick Start
 
-### Option 1: GitHub Pages (Easiest)
-
-1. **Fork this repository** (click "Fork" in the top right)
-2. Go to your fork's **Settings** → **Pages**
-3. Under "Source", select **main** branch and **/ (root)** folder
-4. Click **Save**
-5. Your game will be live at `https://YOUR-USERNAME.github.io/dot-motion-task/`
-
-### Option 2: Run Locally
-
-Just open `index.html` in any modern browser. That's it—no server needed!
+Open `index.html` in a modern browser or serve the repository with a local static
+web server. The page loads React, Babel, Tailwind, Chart.js, and course analytics
+from their respective web services, but it does not send task responses to them.
 
 ---
 
@@ -154,7 +147,7 @@ const rt = Date.now() - stimulusStartTime;  // When response occurs
 ## 🛠️ Technical Notes
 
 - **No build step required:** Uses React and Tailwind via CDN
-- **Works offline:** Once loaded, no internet connection needed
+- **No participant database:** Results disappear when the page is closed or reset
 - **Mobile-friendly:** Touch the buttons on phones/tablets
 - **Browser support:** Any modern browser (Chrome, Firefox, Safari, Edge)
 

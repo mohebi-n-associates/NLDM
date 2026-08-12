@@ -2,13 +2,33 @@ rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
     match /sessions/{sessionId}/allocations/{allocationId} {
-      // Allow anyone to read for the dashboard (in a real app, you'd restrict this)
+      // The public dashboard reads anonymous allocations. No names, IDs, email
+      // addresses, free text, or other fields may be written.
       allow read: if true;
-      
-      // Allow creation only if total is approximately 100 (handling floating point) and it has 5 values
-      allow create: if 
+
+      allow create: if
+        request.resource.data.keys().hasOnly([
+          'values', 'total', 'originalTotal', 'createdAt'
+        ]) &&
+        request.resource.data.values is list &&
+        request.resource.data.total is number &&
+        request.resource.data.originalTotal is number &&
+        request.resource.data.createdAt == request.time &&
         request.resource.data.total >= 99 && request.resource.data.total <= 101 &&
-        request.resource.data.values.size() == 5;
+        request.resource.data.originalTotal > 0 &&
+        request.resource.data.values.size() == 5 &&
+        request.resource.data.values[0] is number &&
+        request.resource.data.values[1] is number &&
+        request.resource.data.values[2] is number &&
+        request.resource.data.values[3] is number &&
+        request.resource.data.values[4] is number &&
+        request.resource.data.values[0] >= 0 && request.resource.data.values[0] <= 100 &&
+        request.resource.data.values[1] >= 0 && request.resource.data.values[1] <= 100 &&
+        request.resource.data.values[2] >= 0 && request.resource.data.values[2] <= 100 &&
+        request.resource.data.values[3] >= 0 && request.resource.data.values[3] <= 100 &&
+        request.resource.data.values[4] >= 0 && request.resource.data.values[4] <= 100;
+
+      allow update, delete: if false;
     }
   }
 }

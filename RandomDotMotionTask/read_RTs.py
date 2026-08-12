@@ -3,6 +3,7 @@ from firebase_admin import credentials, firestore
 import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
+import os
 
 # Set up publication-quality plot style
 plt.style.use('seaborn-v0_8-whitegrid')
@@ -22,7 +23,7 @@ plt.rcParams.update({
     'axes.spines.right': False,
 })
 
-file = '/Users/mohebial/Downloads/randomdotmotiontask-778bf-firebase-adminsdk-fbsvc-870e53c9b4.json'
+file = os.environ['DOT_MOTION_FIREBASE_CREDENTIALS']
 cred = credentials.Certificate(file)
 firebase_admin.initialize_app(cred)
 db = firestore.client()
@@ -33,7 +34,8 @@ n_participants = 0
 for doc in db.collection('dot_motion_results').stream():
     n_participants += 1
     data = doc.to_dict()
-    participant = data.get('participantName', 'Unknown')
+    # Use the document ID only for within-file grouping. Do not export names.
+    participant = doc.id
     for trial in data.get('trials', []):
         trial['participant'] = participant
         all_trials.append(trial)

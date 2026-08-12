@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="A public practice assignment for building and deploying a privacy-safe reaction-time experiment with an AI coding assistant.">
+  <title>Vibe Coding Experiment | NLDM</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Lora:wght@500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="course.css">
+  <script src="theme.js"></script>
+  <script src="accessibility.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-header">
+    <a class="brand" href="index.html"><span class="brand-mark">N</span><span>NLDM</span></a>
+    <span class="header-divider">/</span><span class="header-title">Vibe Coding Experiment</span>
+    <span class="header-spacer"></span>
+    <button id="theme-toggle" type="button" onclick="__toggleTheme()" aria-label="Toggle theme"></button>
+  </header>
+
+  <main id="main">
+    <section class="hero">
+      <div class="hero-inner">
+        <span class="eyebrow">Individual practice · Open to everyone</span>
+        <h1>Build a reaction-time experiment with AI</h1>
+        <p>Use an AI coding assistant to plan, build, debug, and deploy a complete browser-based task. This practice gives everyone the technical workflow needed for the final project; no prior coding experience is required.</p>
+        <div class="hero-actions">
+          <a class="button primary" href="#assignment">Start the assignment →</a>
+          <a class="button" href="project.html">See the final project</a>
+        </div>
+      </div>
+    </section>
+
+    <div class="container">
+      <section class="section" aria-labelledby="purpose-title">
+        <div class="section-heading">
+          <span class="section-kicker">Why this comes first</span>
+          <h2 id="purpose-title">A small rehearsal for the final project</h2>
+          <p>The scientific task is intentionally simple so you can focus on the development cycle: specify behavior precisely, prompt the model, test what it produces, diagnose failures, protect participant data, and deploy a working site.</p>
+        </div>
+        <div class="grid three">
+          <article class="card"><div class="card-icon">✍️</div><h3>Specify</h3><p class="muted">Turn a research task into explicit screens, events, trial rules, and saved fields.</p></article>
+          <article class="card"><div class="card-icon">🧪</div><h3>Test</h3><p class="muted">Verify trial counts, timing, random placement, network behavior, and visualization.</p></article>
+          <article class="card"><div class="card-icon">🚀</div><h3>Deploy</h3><p class="muted">Publish a live experiment and learn what changes when code leaves your own computer.</p></article>
+        </div>
+      </section>
+
+      <section class="section" id="assignment" aria-labelledby="assignment-title">
+        <div class="section-heading">
+          <span class="section-kicker">Target product</span>
+          <h2 id="assignment-title">The reaction-time task</h2>
+          <p>Build one <code>index.html</code> page with a welcome screen, ten reaction-time trials, a results screen, and a histogram that compares the current session with an anonymous aggregate.</p>
+        </div>
+        <div class="callout"><strong>Your role is lead investigator.</strong> Gemini—or another instructor-approved AI coding assistant—may generate and revise code, but you must give precise requirements, test every behavior, protect the data, and be able to explain the finished system.</div>
+      </section>
+
+      <section class="section" aria-labelledby="phases-title">
+        <div class="section-heading"><span class="section-kicker">Build sequence</span><h2 id="phases-title">Five phases</h2></div>
+        <div class="timeline">
+          <article class="timeline-item"><span class="timeline-marker">1</span><div class="timeline-copy"><h3>Prepare private data storage</h3><p class="muted">Create a Google Sheet named <code>RT_Experiment_Data</code> with the headers <code>Timestamp</code>, <code>Random_Participant_Code</code>, <code>Trial_Number</code>, and <code>Reaction_Time</code>. Keep the sheet private and share its view-only link only through the course portal.</p></div></article>
+          <article class="timeline-item"><span class="timeline-marker">2</span><div class="timeline-copy"><h3>Build the Apps Script endpoint</h3><p class="muted">Ask the coding assistant for a validated <code>doPost(e)</code> that accepts only the random code, trial number, and reaction time, adds a server timestamp, and appends one row per trial. The public <code>doGet(e)</code> response should contain aggregate histogram bins and counts—not rows, identifiers, or raw trial records.</p></div></article>
+          <article class="timeline-item"><span class="timeline-marker">3</span><div class="timeline-copy"><h3>Build the browser task</h3><p class="muted">Generate a random session code automatically. Present a circle at a random valid screen location; record the click latency; hide it; wait about 500 ms; and repeat until exactly ten trials are complete. Submit the ten records only after successful completion.</p></div></article>
+          <article class="timeline-item"><span class="timeline-marker">4</span><div class="timeline-copy"><h3>Visualize feedback</h3><p class="muted">Calculate the current user's average reaction time. Use Chart.js or an equivalent library to plot the aggregate histogram returned by the endpoint and add a clear marker for the current average.</p></div></article>
+          <article class="timeline-item"><span class="timeline-marker">5</span><div class="timeline-copy"><h3>Test and publish</h3><p class="muted">Test blank and repeated starts, all ten trials, small screens, failed requests, and chart loading. Publish the task with GitHub Pages and retest the live URL before submitting it in Canvas.</p></div></article>
+        </div>
+      </section>
+
+      <section class="section" aria-labelledby="prompt-title">
+        <div class="section-heading"><span class="section-kicker">Prompting pattern</span><h2 id="prompt-title">Tell the assistant what success means</h2><p>Build one phase at a time. Paste error messages back exactly and ask for the smallest targeted correction.</p></div>
+        <div class="grid two">
+          <article class="card"><h3>Include in every build prompt</h3><ul class="clean-list"><li>The current phase and desired output</li><li>Exact field names and trial count</li><li>Screen-by-screen behavior</li><li>Privacy and access constraints</li><li>Failure and retry behavior</li><li>A checklist of acceptance tests</li></ul></article>
+          <article class="card"><h3>Ask during review</h3><ul class="clean-list"><li>Can the task submit twice?</li><li>Can the circle appear partly off-screen?</li><li>Does timing begin only when the circle appears?</li><li>What happens when the network fails?</li><li>Can any public request reveal raw records?</li><li>Does the live deployment pass all ten trials?</li></ul></article>
+        </div>
+      </section>
+
+      <section class="section" aria-labelledby="privacy-title">
+        <div class="section-heading"><span class="section-kicker">Required safeguard</span><h2 id="privacy-title">Practice privacy from the first prototype</h2></div>
+        <div class="callout privacy"><strong>Do not collect names, emails, student IDs, free text, or browser fingerprints.</strong> Generate a new random code in the task, keep the Google Sheet private, submit its link only through Canvas, and expose only aggregated comparison data from the public endpoint. Never place the sheet or Apps Script management link on this website or in a public README.</div>
+      </section>
+
+      <section class="section" aria-labelledby="deliverables-title">
+        <div class="section-heading"><span class="section-kicker">What to submit</span><h2 id="deliverables-title">Four deliverables</h2></div>
+        <div class="grid two">
+          <article class="card number-card"><span class="number">1</span><div><h3>Live experiment</h3><p class="muted">A public GitHub Pages URL where the ten-trial task and histogram work.</p></div></article>
+          <article class="card number-card"><span class="number">2</span><div><h3>Codebase</h3><p class="muted">The GitHub repository containing the frontend and documentation, without secrets or private data links.</p></div></article>
+          <article class="card number-card"><span class="number">3</span><div><h3>Private database link</h3><p class="muted">A view-only Google Sheet link submitted privately in Canvas so the instructor can verify the ten trial rows.</p></div></article>
+          <article class="card number-card"><span class="number">4</span><div><h3>AI reflection</h3><p class="muted">At most two paragraphs describing the hardest instruction, a specific bug, and how your prompts changed during debugging.</p></div></article>
+        </div>
+      </section>
+
+      <section class="section" aria-labelledby="rubric-title">
+        <div class="section-heading"><span class="section-kicker">Evaluation</span><h2 id="rubric-title">100-point rubric</h2></div>
+        <div class="grid two">
+          <article class="card"><h3>Task mechanics · 35 points</h3><ul class="clean-list"><li>Automatic random participant code: 10</li><li>Random, fully visible circle placement: 10</li><li>Accurate timing and exactly ten trials: 15</li></ul></article>
+          <article class="card"><h3>Data handling · 30 points</h3><ul class="clean-list"><li>Reliable deployed endpoint: 10</li><li>Ten accurate, validated rows: 20</li></ul></article>
+          <article class="card"><h3>Visualization · 20 points</h3><ul class="clean-list"><li>Fetch aggregate comparison data: 10</li><li>Histogram with current-average marker: 10</li></ul></article>
+          <article class="card"><h3>Deployment and reflection · 15 points</h3><ul class="clean-list"><li>Live, functional GitHub Pages site: 5</li><li>Specific, thoughtful AI reflection: 10</li></ul></article>
+        </div>
+        <div class="callout warning" style="margin-top:1rem;"><strong>Use Canvas for submission and current logistics.</strong> Submit private links, confirm the due date, and follow any instructor announcements there. This public page contains no roster, group assignment, student submission, or database link.</div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="site-footer">Vibe Coding Experiment · Practice for the <a href="project.html">final project</a> · <a href="index.html">NLDM home</a></footer>
+</body>
+</html>

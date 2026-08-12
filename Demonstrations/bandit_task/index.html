@@ -212,12 +212,12 @@
                 <p>You will see two colored circles on each trial. Your goal is to choose the circle that gives you a reward more often.</p>
                 <p>Click on a circle to make your choice. You'll see whether you won or lost points.</p>
                 <p>The better option may change during the task, so pay attention to your outcomes!</p>
-                <p>There are 200 trials total. Try to earn as many points as possible.</p>
+                <p>There are 120 trials total. Reward probabilities change across blocks, so keep learning as you play.</p>
+                <p><strong>Privacy:</strong> This demonstration does not ask for your name and does not transmit or retain your trial data.</p>
             </div>
 
             <form id="subject-form">
-                <input type="text" id="subject-id" placeholder="Enter your participant ID" required>
-                <button type="submit" class="btn">Start Task</button>
+                <button type="submit" class="btn">Start Anonymous Task</button>
             </form>
         </div>
 
@@ -232,12 +232,12 @@
             
             <div id="choice-area" style="display: none;">
                 <div class="bandits">
-                    <div class="bandit left" id="bandit-left" onclick="makeChoice('left')">
+                    <button type="button" class="bandit left" id="bandit-left" onclick="makeChoice('left')">
                         <span>LEFT</span>
-                    </div>
-                    <div class="bandit right" id="bandit-right" onclick="makeChoice('right')">
+                    </button>
+                    <button type="button" class="bandit right" id="bandit-right" onclick="makeChoice('right')">
                         <span>RIGHT</span>
-                    </div>
+                    </button>
                 </div>
             </div>
             
@@ -248,20 +248,17 @@
             <h2>Task Complete! 🎉</h2>
             <p>Thank you for participating!</p>
             <p id="final-score"></p>
-            <p style="margin-top: 20px; color: #666;">Your data has been saved.</p>
+            <p style="margin-top: 20px; color: #666;">Your responses remained in this browser session and were not transmitted.</p>
         </div>
     </div>
 
     <script>
         // Configuration
-        const TOTAL_TRIALS = 20;
+        const TOTAL_TRIALS = 120;
         const FIXATION_DURATION = 500; // ms
         const FEEDBACK_DURATION = 1000; // ms
         const ITI_DURATION = 500; // ms
         
-        // Google Apps Script Web App URL - YOU NEED TO REPLACE THIS
-        const SHEET_URL = 'https://script.google.com/macros/s/AKfycbwrbFKW5TQcTi5iLA_c2ertdIc10yeh2T0vnZWg76Vrl32q6jjUoCtY6VJ158WJWNlq/exec';
-
         // Task state
         let subjectID = '';
         let currentTrial = 0;
@@ -302,14 +299,11 @@
         // Start task
         document.getElementById('subject-form').addEventListener('submit', function(e) {
             e.preventDefault();
-            subjectID = document.getElementById('subject-id').value.trim();
-            
-            if (subjectID) {
-                blockSchedule = generateBlockSchedule();
-                document.getElementById('setup-area').style.display = 'none';
-                document.getElementById('task-area').style.display = 'block';
-                startTrial();
-            }
+            subjectID = 'anonymous-session';
+            blockSchedule = generateBlockSchedule();
+            document.getElementById('setup-area').style.display = 'none';
+            document.getElementById('task-area').style.display = 'block';
+            startTrial();
         });
 
         function startTrial() {
@@ -376,9 +370,6 @@
             
             trialData.push(trial);
 
-            // Send to Google Sheets (async, don't wait)
-            sendToGoogleSheets(trial);
-
             currentTrial++;
 
             // Next trial after feedback + ITI
@@ -401,22 +392,6 @@
                 `You earned ${totalScore} out of ${TOTAL_TRIALS} possible points!`;
         }
 
-        async function sendToGoogleSheets(trial) {
-            try {
-                await fetch(SHEET_URL, {
-                    method: 'POST',
-                    mode: 'no-cors',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify(trial)
-                });
-            } catch (error) {
-                console.error('Error sending data to Google Sheets:', error);
-                // Store locally as backup
-                localStorage.setItem('bandit_backup_' + Date.now(), JSON.stringify(trial));
-            }
-        }
     </script>
 </body>
 </html>
