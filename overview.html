@@ -1,312 +1,107 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Course Overview | NLDM</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Lora:ital,wght@0,500;0,600;1,400&display=swap" rel="stylesheet">
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-
-        :root {
-            --bg:         #f7f4ef;
-            --bg-card:    #ffffff;
-            --bg-muted:   #f0ece4;
-            --border:     #e2ddd5;
-            --ink:        #1c1917;
-            --ink-light:  #57534e;
-            --ink-faint:  #a8a29e;
-            --teal:       #0d9488;
-            --teal-soft:  rgba(13,148,136,0.1);
-            --amber:      #b45309;
-            --amber-soft: rgba(180,83,9,0.1);
-            --violet:     #6d28d9;
-            --violet-soft:rgba(109,40,217,0.1);
-            --green:      #15803d;
-            --green-soft: rgba(21,128,61,0.1);
-            --shadow-sm:  0 1px 3px rgba(0,0,0,0.07), 0 1px 2px rgba(0,0,0,0.05);
-            --shadow-md:  0 4px 16px rgba(0,0,0,0.09), 0 1px 4px rgba(0,0,0,0.06);
-            --shadow-lg:  0 12px 32px rgba(0,0,0,0.1), 0 2px 8px rgba(0,0,0,0.07);
-        }
-
-        body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            background: var(--bg);
-            color: var(--ink);
-            line-height: 1.6;
-        }
-
-        header {
-            padding: 1.25rem 2.5rem;
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            max-width: 1100px;
-            margin: 0 auto;
-            border-bottom: 1px solid var(--border);
-        }
-
-        .back-link {
-            color: var(--ink-light);
-            text-decoration: none;
-            font-size: 0.88rem;
-            font-weight: 500;
-            display: flex;
-            align-items: center;
-            gap: 0.4rem;
-            transition: color 0.2s;
-        }
-        .back-link:hover { color: var(--ink); }
-
-        .header-divider { color: var(--border); }
-
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: 0.6rem;
-            text-decoration: none;
-            color: var(--ink);
-        }
-
-        .logo-icon {
-            width: 32px;
-            height: 32px;
-            background: var(--ink);
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .logo-text { font-weight: 700; font-size: 1rem; color: var(--ink); }
-
-        .page-header {
-            max-width: 1100px;
-            margin: 3rem auto 0;
-            padding: 0 2.5rem 2.5rem;
-        }
-
-        .page-header h1 {
-            font-family: 'Lora', Georgia, serif;
-            font-size: clamp(2rem, 4vw, 2.75rem);
-            font-weight: 600;
-            margin-bottom: 0.75rem;
-            color: var(--ink);
-        }
-
-        .page-header p {
-            color: var(--ink-light);
-            font-size: 1.05rem;
-            max-width: 600px;
-        }
-
-        .page-tag {
-            display: inline-block;
-            padding: 0.35rem 1rem;
-            border-radius: 50px;
-            font-size: 0.8rem;
-            font-weight: 600;
-            letter-spacing: 0.04em;
-            text-transform: uppercase;
-            margin-bottom: 1.25rem;
-        }
-
-        .content {
-            max-width: 1100px;
-            margin: 0 auto;
-            padding: 0 2.5rem 6rem;
-        }
-
-        footer {
-            border-top: 1px solid var(--border);
-            padding: 1.75rem 2.5rem;
-            text-align: center;
-            color: var(--ink-faint);
-            font-size: 0.82rem;
-            background: var(--bg-card);
-        }
-
-        footer a { color: var(--ink-light); text-decoration: none; }
-        footer a:hover { color: var(--ink); text-decoration: underline; }
-
-        body { min-height: 100vh; display: flex; flex-direction: column; }
-
-        main {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 4rem 2.5rem;
-            text-align: center;
-        }
-
-        .placeholder-icon { font-size: 3.5rem; margin-bottom: 1.5rem; line-height: 1; }
-
-        h1 {
-            font-family: 'Lora', Georgia, serif;
-            font-size: clamp(2rem, 4vw, 2.75rem);
-            font-weight: 600;
-            margin-bottom: 1rem;
-            color: var(--ink);
-        }
-
-        h1 em { font-style: italic; color: var(--green); }
-
-        .main-p {
-            color: var(--ink-light);
-            font-size: 1.05rem;
-            max-width: 480px;
-            margin: 0 auto 2.5rem;
-        }
-
-        .pill {
-            display: inline-block;
-            background: var(--green-soft);
-            border: 1px solid rgba(21,128,61,0.2);
-            color: var(--green);
-            padding: 0.45rem 1.1rem;
-            border-radius: 50px;
-            font-size: 0.85rem;
-            font-weight: 600;
-            margin-bottom: 2.5rem;
-        }
-
-        .back-btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            padding: 0.7rem 1.4rem;
-            background: var(--bg-card);
-            border: 1px solid var(--border);
-            color: var(--ink-light);
-            text-decoration: none;
-            border-radius: 10px;
-            font-weight: 500;
-            font-size: 0.9rem;
-            box-shadow: var(--shadow-sm);
-            transition: all 0.2s;
-        }
-
-        .back-btn:hover { border-color: var(--green); color: var(--ink); box-shadow: var(--shadow-md); }
-    
-
-        /* ── Light mode explicit (belt-and-suspenders over :root defaults) ── */
-        [data-theme="light"] {
-            --bg:         #f7f4ef;
-            --bg-card:    #ffffff;
-            --bg-muted:   #f0ece4;
-            --border:     #e2ddd5;
-            --ink:        #1c1917;
-            --ink-light:  #44403c;
-            --ink-faint:  #78716c;
-            --teal:       #0d9488;
-            --teal-soft:  rgba(13,148,136,0.1);
-            --amber:      #b45309;
-            --amber-soft: rgba(180,83,9,0.1);
-            --violet:     #6d28d9;
-            --violet-soft:rgba(109,40,217,0.1);
-            --green:      #15803d;
-            --green-soft: rgba(21,128,61,0.1);
-            --shadow-sm:  0 1px 3px rgba(0,0,0,0.07), 0 1px 2px rgba(0,0,0,0.05);
-            --shadow-md:  0 4px 16px rgba(0,0,0,0.09), 0 1px 4px rgba(0,0,0,0.06);
-            --shadow-lg:  0 12px 32px rgba(0,0,0,0.1), 0 2px 8px rgba(0,0,0,0.07);
-        }
-        [data-theme="light"] body { background: #f7f4ef; color: #1c1917; }
-        [data-theme="light"] .logo-icon { background: #1c1917; }
-        [data-theme="light"] header { background: #f7f4ef; border-bottom-color: #e2ddd5; }
-        [data-theme="light"] footer { background: #ffffff; border-top-color: #e2ddd5; color: #78716c; }
-        [data-theme="light"] footer a { color: #44403c; }
-
-        /* ── Dark mode overrides ── */
-        [data-theme="dark"] {
-            --bg:         #1c1917;
-            --bg-card:    #292524;
-            --bg-muted:   #231f1c;
-            --border:     #3c3632;
-            --ink:        #fafaf9;
-            --ink-light:  #d6d3d1;
-            --ink-faint:  #78716c;
-            --teal:       #2dd4bf;
-            --teal-soft:  rgba(45,212,191,0.12);
-            --amber:      #fbbf24;
-            --amber-soft: rgba(251,191,36,0.12);
-            --violet:     #a78bfa;
-            --violet-soft:rgba(167,139,250,0.12);
-            --green:      #4ade80;
-            --green-soft: rgba(74,222,128,0.12);
-            --shadow-sm:  0 1px 3px rgba(0,0,0,0.4);
-            --shadow-md:  0 4px 16px rgba(0,0,0,0.5);
-            --shadow-lg:  0 16px 40px rgba(0,0,0,0.6);
-        }
-        [data-theme="dark"] .logo-icon { background: #e7e5e4; }
-        [data-theme="dark"] .logo-icon svg { stroke: #1c1917 !important; }
-
-        /* ── Theme toggle button ── */
-        #theme-toggle {
-            background: none;
-            border: 1px solid var(--border);
-            color: var(--ink-light);
-            width: 34px; height: 34px;
-            border-radius: 8px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-shrink: 0;
-            padding: 0;
-            transition: background 0.2s, color 0.2s;
-        }
-        #theme-toggle:hover { background: var(--bg-muted); color: var(--ink); }
-
-    </style>
-    <script src="theme.js"></script>
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-415Y93T7N4"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', 'G-415Y93T7N4');
-</script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Course map, learning objectives, resources, and policies for Neurobiology of Learning and Decision Making.">
+  <title>Course Overview | NLDM</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Lora:wght@500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="course.css">
+  <script src="theme.js"></script>
+  <script src="accessibility.js" defer></script>
 </head>
 <body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-header">
+    <a class="brand" href="index.html"><span class="brand-mark">N</span><span>NLDM</span></a>
+    <span class="header-divider">/</span><span class="header-title">Course Overview</span>
+    <span class="header-spacer"></span>
+    <button id="theme-toggle" type="button" onclick="__toggleTheme()" aria-label="Toggle theme"></button>
+  </header>
 
-    <header>
-        <a href="index.html" class="back-link">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
-            Back
-        </a>
-        <span class="header-divider">/</span>
-        <a href="index.html" class="logo">
-            <div class="logo-icon">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
-                    <path d="M12 2a9 9 0 0 1 9 9c0 3.6-3.4 6.2-5.5 8.5-1.1 1.2-2.3 2.5-3.5 2.5s-2.4-1.3-3.5-2.5C6.4 17.2 3 14.6 3 11a9 9 0 0 1 9-9z"/>
-                    <circle cx="12" cy="10" r="3"/>
-                </svg>
-            </div>
-            <span class="logo-text">NLDM</span>
-        </a>
-            <button id="theme-toggle" onclick="__toggleTheme()" aria-label="Toggle theme" style="margin-left:auto"></button>
-    </header>
+  <main id="main">
+    <section class="hero">
+      <div class="hero-inner">
+        <span class="eyebrow">Psychology 505 · Course map</span>
+        <h1>Neurobiology of Learning &amp; Decision Making</h1>
+        <p>How brains assign value, choose under uncertainty, learn from prediction errors, build skills and memories, and inspire machines that learn.</p>
+        <div class="hero-actions">
+          <a class="button primary" href="review.html">Explore the modules →</a>
+          <a class="button" href="demonstrations.html">Open demonstrations</a>
+          <a class="button" href="project.html">Final project guide</a>
+        </div>
+      </div>
+    </section>
 
-    <main>
-        <div class="placeholder-icon">&#128193;</div>
-        <div class="pill">Coming Soon</div>
-        <h1>Course <em>Overview</em></h1>
-        <p class="main-p">The syllabus, lecture schedule, grading policy, and course information will be available here at the start of term.</p>
-        <a href="index.html" class="back-btn">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
-            Back to home
-        </a>
-    </main>
+    <div class="container">
+      <section class="section" aria-labelledby="purpose-title">
+        <div class="section-heading">
+          <span class="section-kicker">Course purpose</span>
+          <h2 id="purpose-title">From behavior to computation to circuits</h2>
+          <p>The course integrates psychology, neuroscience, economics, and computational modeling. The lecture slides are the source of truth for the instructional sequence represented here.</p>
+        </div>
+        <div class="grid two">
+          <article class="card"><div class="card-icon">🧠</div><h3>Neural mechanisms</h3><p class="muted">Identify circuits involved in reward, learning, memory, motivation, cognitive control, and choice.</p></article>
+          <article class="card"><div class="card-icon">📐</div><h3>Computational models</h3><p class="muted">Use formal tools such as expected utility, drift diffusion, Rescorla–Wagner, temporal-difference learning, and actor–critic models.</p></article>
+          <article class="card"><div class="card-icon">🔬</div><h3>Evidence</h3><p class="muted">Evaluate behavioral, electrophysiological, lesion, neuroimaging, and causal evidence across species.</p></article>
+          <article class="card"><div class="card-icon">🧪</div><h3>Research design</h3><p class="muted">Translate a course question into a testable hypothesis, web-based behavioral task, analysis, and scientific interpretation.</p></article>
+        </div>
+      </section>
 
-    <footer>
-        <a href="index.html">&larr; Back to NLDM</a> &nbsp;&middot;&nbsp;
-        <a href="https://github.com/mohebi-n-associates/NLDM" target="_blank">GitHub</a>
-    </footer>
+      <section class="section" aria-labelledby="map-title">
+        <div class="section-heading">
+          <span class="section-kicker">Slide-aligned sequence</span>
+          <h2 id="map-title">The course in thirteen modules</h2>
+          <p>The sequence moves from foundational definitions and choice to learning systems, memory, social learning, and the relationship between biological and machine intelligence.</p>
+        </div>
+        <div class="module-grid">
+          <a class="module-card" href="ExamPrep/Module01/"><span class="number">01</span><span><strong>Foundations</strong><small>What count as learning, choice, and decision?</small></span><span class="arrow">→</span></a>
+          <a class="module-card" href="ExamPrep/Module02/"><span class="number">02</span><span><strong>Value, Risk &amp; Ambiguity</strong><small>Common currency, utility, and uncertainty</small></span><span class="arrow">→</span></a>
+          <a class="module-card" href="ExamPrep/Module03/"><span class="number">03</span><span><strong>Choice Under Uncertainty</strong><small>Prefrontal and cingulate computations</small></span><span class="arrow">→</span></a>
+          <a class="module-card" href="ExamPrep/Module04/"><span class="number">04</span><span><strong>Perceptual Decisions</strong><small>Signals, noise, evidence, and commitment</small></span><span class="arrow">→</span></a>
+          <a class="module-card" href="ExamPrep/Module05/"><span class="number">05</span><span><strong>Value Learning</strong><small>Prediction errors, dopamine, and RL</small></span><span class="arrow">→</span></a>
+          <a class="module-card" href="ExamPrep/Module06/"><span class="number">06</span><span><strong>Habituation &amp; Perceptual Learning</strong><small>Learning from repetition and familiarity</small></span><span class="arrow">→</span></a>
+          <a class="module-card" href="ExamPrep/Module07/"><span class="number">07</span><span><strong>Classical Conditioning</strong><small>Prediction, timing, and conditioned responses</small></span><span class="arrow">→</span></a>
+          <a class="module-card" href="ExamPrep/Module08/"><span class="number">08</span><span><strong>Operant Conditioning</strong><small>Actions, consequences, and reinforcement</small></span><span class="arrow">→</span></a>
+          <a class="module-card" href="ExamPrep/Module09/"><span class="number">09</span><span><strong>Generalization &amp; Discrimination</strong><small>Similarity, categories, and representations</small></span><span class="arrow">→</span></a>
+          <a class="module-card" href="ExamPrep/Module10/"><span class="number">10</span><span><strong>Skill Memory</strong><small>Practice, automaticity, and brain–machine interfaces</small></span><span class="arrow">→</span></a>
+          <a class="module-card" href="ExamPrep/Module11/"><span class="number">11</span><span><strong>Working Memory &amp; Control</strong><small>PFC gating, stability, and flexibility</small></span><span class="arrow">→</span></a>
+          <a class="module-card" href="ExamPrep/Module12/"><span class="number">12</span><span><strong>Emotion &amp; Social Learning</strong><small>Amygdala, observation, imitation, and culture</small></span><span class="arrow">→</span></a>
+          <a class="module-card" href="ExamPrep/Module13/"><span class="number">13</span><span><strong>Learning in Carbon &amp; Silicon</strong><small>Brains, machine learning, and their limits</small></span><span class="arrow">→</span></a>
+        </div>
+      </section>
 
+      <section class="section" aria-labelledby="use-title">
+        <div class="section-heading">
+          <span class="section-kicker">How to use this site</span>
+          <h2 id="use-title">A virtual lab, not a replacement for Canvas</h2>
+        </div>
+        <div class="grid three">
+          <article class="card"><h3>1. Learn</h3><p class="muted">Use module guides to organize concepts, terms, mechanisms, and equations from lecture.</p></article>
+          <article class="card"><h3>2. Manipulate</h3><p class="muted">Change parameters in demonstrations and observe how formal models behave.</p></article>
+          <article class="card"><h3>3. Apply</h3><p class="muted">Run experiments, interpret data patterns, and develop a research project.</p></article>
+        </div>
+        <div class="callout warning" style="margin-top:1rem;">
+          <strong>Canvas remains authoritative for current logistics.</strong>
+          Dates, rooms, deadlines, grading values, assigned readings, announcements, and submission links can change. Always use the current Canvas course for those details.
+        </div>
+      </section>
+
+      <section class="section" aria-labelledby="boundaries-title">
+        <div class="section-heading">
+          <span class="section-kicker">Publication boundaries</span>
+          <h2 id="boundaries-title">What is—and is not—published</h2>
+        </div>
+        <div class="callout privacy">
+          <strong>Student privacy and course integrity come first.</strong>
+          This site publishes instructional summaries, interactive tools, an anonymous classroom poll, and credited public student projects. It does not publish grades, original submissions, identified student records, participant-level research datasets, exam keys, instructor-only notes, publisher test banks, or copyrighted readings. Student names appear only with their showcased projects.
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="site-footer">Neurobiology of Learning &amp; Decision Making · <a href="index.html">NLDM home</a></footer>
 </body>
 </html>

@@ -11,11 +11,6 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-    <!-- Firebase SDK -->
-    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
-
     <style>
         body {
             margin: 0;
@@ -74,56 +69,13 @@
 <body>
     <div id="root"></div>
 
-    <script>
-        /*
-        ╔═══════════════════════════════════════════════════════════════════════════╗
-        ║                     FIREBASE CONFIGURATION                                ║
-        ║                                                                           ║
-        ║  To enable data saving and population comparison:                         ║
-        ║  1. Go to https://console.firebase.google.com/                            ║
-        ║  2. Create a new project (or use existing)                                ║
-        ║  3. Add a web app to get your config                                      ║
-        ║  4. Enable Firestore Database (start in test mode)                        ║
-        ║  5. Enable Anonymous Authentication                                       ║
-        ║  6. Replace the config below with your values                             ║
-        ╚═══════════════════════════════════════════════════════════════════════════╝
-        */
-
-        // For Firebase JS SDK v7.20.0 and later, measurementId is optional
-        const firebaseConfig = {
-            apiKey: "AIzaSyBEnZxDo-N3ZKGbA1nAD64jzPWtMviA-nw",
-            authDomain: "randomdotmotiontask-778bf.firebaseapp.com",
-            projectId: "randomdotmotiontask-778bf",
-            storageBucket: "randomdotmotiontask-778bf.firebasestorage.app",
-            messagingSenderId: "360791624435",
-            appId: "1:360791624435:web:b59fb9877409e3cc7cc586",
-            measurementId: "G-17EB8MY2KB"
-        };
-
-        // Check if Firebase is configured
-        const isFirebaseConfigured = firebaseConfig.apiKey !== "YOUR_API_KEY";
-
-        let db = null;
-        let auth = null;
-
-        if (isFirebaseConfigured) {
-            try {
-                firebase.initializeApp(firebaseConfig);
-                db = firebase.firestore();
-                auth = firebase.auth();
-            } catch (e) {
-                console.error("Firebase initialization error:", e);
-            }
-        }
-    </script>
-
     <script type="text/babel">
         const { useState, useEffect, useRef, useCallback } = React;
 
         /*
         ╔═══════════════════════════════════════════════════════════════════════════╗
         ║                     RANDOM DOT MOTION TASK                                ║
-        ║                     WITH POPULATION COMPARISON                            ║
+        ║                     LOCAL, PRIVACY-SAFE DEMO                              ║
         ╚═══════════════════════════════════════════════════════════════════════════╝
         */
 
@@ -467,9 +419,6 @@
 
             // Game state
             const [gameState, setGameState] = useState('intro');
-            const [participantId, setParticipantId] = useState(null);
-            const [participantName, setParticipantName] = useState('');
-
             // Parameters
             const [coherence, setCoherence] = useState(0.3);
             const [numDots, setNumDots] = useState(100);
@@ -492,14 +441,9 @@
             const [trialDurations, setTrialDurations] = useState([]);
 
             // Population data
-            const [populationData, setPopulationData] = useState([]);
-            const [isLoadingPopulation, setIsLoadingPopulation] = useState(false);
-            const [dataSaved, setDataSaved] = useState(false);
-
-            // Firebase status
-            const [firebaseStatus, setFirebaseStatus] = useState(
-                isFirebaseConfigured ? 'connecting' : 'not_configured'
-            );
+            const [populationData] = useState([]);
+            const isLoadingPopulation = false;
+            const firebaseStatus = 'local_only';
 
             // Display constants
             const CANVAS_SIZE = 300;
@@ -533,109 +477,11 @@
             }, [totalTrials]);
 
             // ═══════════════════════════════════════════════════════════════
-            // FIREBASE AUTHENTICATION
+            // LOCAL-ONLY DATA HANDLING
             // ═══════════════════════════════════════════════════════════════
-            useEffect(() => {
-                console.log('Firebase initialization check...');
-                console.log('isFirebaseConfigured:', isFirebaseConfigured);
-                console.log('auth:', !!auth);
-                console.log('db:', !!db);
-
-                if (!isFirebaseConfigured || !auth) {
-                    console.log('Firebase not configured or auth not available');
-                    setFirebaseStatus('not_configured');
-                    return;
-                }
-
-                console.log('Attempting anonymous authentication...');
-                auth.signInAnonymously()
-                    .then((result) => {
-                        console.log('✅ Successfully authenticated with Firebase');
-                        console.log('User ID:', result.user.uid);
-                        setParticipantId(result.user.uid);
-                        setFirebaseStatus('connected');
-                    })
-                    .catch((error) => {
-                        console.error("❌ Firebase auth error:", error);
-                        console.error("Error code:", error.code);
-                        console.error("Error message:", error.message);
-                        setFirebaseStatus('error');
-                    });
-            }, []);
-
-            // ═══════════════════════════════════════════════════════════════
-            // LOAD POPULATION DATA
-            // ═══════════════════════════════════════════════════════════════
-            const loadPopulationData = async () => {
-                if (!db || firebaseStatus !== 'connected') {
-                    console.log('Cannot load population data: Firebase not connected. Status:', firebaseStatus);
-                    return;
-                }
-
-                console.log('Loading population data from Firebase...');
-                setIsLoadingPopulation(true);
-                try {
-                    const snapshot = await db.collection('dot_motion_results')
-                        .orderBy('timestamp', 'desc')
-                        .limit(500)
-                        .get();
-
-                    const data = snapshot.docs.map(doc => doc.data());
-                    console.log('Successfully loaded', data.length, 'results from Firebase');
-                    setPopulationData(data);
-                } catch (error) {
-                    console.error("Error loading population data:", error);
-                    console.error("Error message:", error.message);
-                    if (error.code) console.error("Error code:", error.code);
-                }
-                setIsLoadingPopulation(false);
-            };
-
-            // ═══════════════════════════════════════════════════════════════
-            // SAVE RESULTS TO FIREBASE
-            // ═══════════════════════════════════════════════════════════════
-            const saveResults = async (accuracy, meanRT, correctRT) => {
-                if (!db || firebaseStatus !== 'connected') {
-                    console.log('Cannot save: Firebase not connected. Status:', firebaseStatus);
-                    return;
-                }
-
-                console.log('Attempting to save results to Firebase...');
-
-                try {
-                    const resultData = {
-                        participantId,
-                        participantName: participantName || 'Anonymous',
-                        // Save summary statistics
-                        accuracy,
-                        meanRT,
-                        correctRT,
-                        totalTrials,
-                        numDots,
-                        // Save fixed parameter config
-                        coherenceConfig: "Discrete: 5, 10, 20, 50%",
-                        durationConfig: "Until response",
-                        // Save full trial-by-trial data with individual parameters
-                        // Save full trial-by-trial data with individual parameters
-                        trials,
-                        timestamp: firebase.firestore.FieldValue.serverTimestamp(),
-                        userAgent: navigator.userAgent
-                    };
-
-                    console.log('Saving data:', resultData);
-
-                    const docRef = await db.collection('dot_motion_results').add(resultData);
-                    console.log('Successfully saved with ID:', docRef.id);
-
-                    setDataSaved(true);
-                    // Reload population data to include this result
-                    await loadPopulationData();
-                } catch (error) {
-                    console.error("Error saving results:", error);
-                    console.error("Error details:", error.message);
-                    alert('Failed to save results: ' + error.message);
-                }
-            };
+            // Results exist only in React state for the current browser tab. No
+            // names, identifiers, trial records, or browser metadata are sent.
+            const loadPopulationData = () => {};
 
             // ═══════════════════════════════════════════════════════════════
             // DOT MOTION LOGIC
@@ -862,19 +708,10 @@
             }, [trials]);
 
             // Save and load when reaching results
-            useEffect(() => {
-                if (gameState === 'results' && !dataSaved) {
-                    const { accuracy, meanRT, correctRT } = getResults();
-                    saveResults(accuracy, meanRT, correctRT);
-                    loadPopulationData();
-                }
-            }, [gameState, dataSaved, getResults]);
-
             const resetGame = () => {
                 setTrials([]);
                 setTrialCount(0);
                 setFeedback(null);
-                setDataSaved(false);
                 setGameState('intro');
             };
 
@@ -896,23 +733,11 @@
                             A classic perceptual decision-making paradigm
                         </p>
 
-                        {/* Firebase Status */}
+                        {/* Privacy status */}
                         <div className="text-center mb-4">
-                            {firebaseStatus === 'connected' && (
-                                <span className="text-xs bg-green-900 text-green-300 px-2 py-1 rounded">
-                                    ● Data saving enabled
-                                </span>
-                            )}
-                            {firebaseStatus === 'not_configured' && (
-                                <span className="text-xs bg-yellow-900 text-yellow-300 px-2 py-1 rounded">
-                                    ○ Demo mode (data not saved)
-                                </span>
-                            )}
-                            {firebaseStatus === 'error' && (
-                                <span className="text-xs bg-red-900 text-red-300 px-2 py-1 rounded">
-                                    ✕ Connection error
-                                </span>
-                            )}
+                            <span className="text-xs bg-green-900 text-green-300 px-2 py-1 rounded">
+                                ● Private demo: results stay in this browser tab
+                            </span>
                         </div>
 
                         {/* ─────────────────────────────────────────────────────── */}
@@ -931,22 +756,6 @@
                                     <li>• Press <span className="bg-slate-700 px-2 py-1 rounded font-mono">←</span>/<span className="bg-slate-700 px-2 py-1 rounded font-mono">→</span> or tap LEFT/RIGHT buttons to respond</li>
                                     <li>• Respond as quickly and accurately as possible</li>
                                 </ul>
-
-                                {/* Name input */}
-                                {firebaseStatus === 'connected' && (
-                                    <div className="mb-4">
-                                        <label className="block text-sm text-slate-400 mb-1">
-                                            Your name (optional, for leaderboard):
-                                        </label>
-                                        <input
-                                            type="text"
-                                            value={participantName}
-                                            onChange={(e) => setParticipantName(e.target.value)}
-                                            placeholder="Anonymous"
-                                            className="w-full bg-slate-700 border border-slate-600 rounded px-3 py-2 text-white placeholder-slate-500"
-                                        />
-                                    </div>
-                                )}
 
                                 <div className="border-t border-slate-700 pt-4 mt-4">
                                     <h3 className="text-sm font-semibold text-slate-400 mb-3">
@@ -1053,23 +862,12 @@
                             <div className="bg-slate-800 rounded-lg p-6">
                                 <h2 className="text-xl font-bold mb-6 text-center">Experiment Results</h2>
 
-                                {firebaseStatus !== 'connected' && (
-                                    <div className="bg-amber-900/30 border border-amber-600 rounded-lg p-4 mb-6 text-center">
-                                        <p className="text-amber-300 font-semibold mb-2">
-                                            ⚠️ Firebase Status: {firebaseStatus}
-                                        </p>
-                                        <p className="text-sm text-slate-300">
-                                            {firebaseStatus === 'not_configured' && 'Firebase not configured. Data will not be saved.'}
-                                            {firebaseStatus === 'error' && 'Firebase connection error. Check console for details.'}
-                                            {firebaseStatus === 'connecting' && 'Connecting to Firebase...'}
-                                        </p>
-                                        {firebaseStatus !== 'connecting' && (
-                                            <p className="text-xs text-slate-400 mt-2">
-                                                Open browser console (F12) for more details
-                                            </p>
-                                        )}
-                                    </div>
-                                )}
+                                <div className="bg-green-900/30 border border-green-700 rounded-lg p-4 mb-6 text-center">
+                                    <p className="text-green-300 font-semibold mb-2">Private, local results</p>
+                                    <p className="text-sm text-slate-300">
+                                        Your task responses are shown below only for this session. They are not uploaded or saved.
+                                    </p>
+                                </div>
 
                                 {/* Individual Performance Summary */}
                                 <div className="mb-6">
@@ -1301,13 +1099,6 @@
                                         ))}
                                     </div>
                                 </div>
-
-                                {/* Data saved indicator */}
-                                {dataSaved && (
-                                    <div className="text-center text-sm text-green-400 mb-4">
-                                        ✓ Your results have been saved
-                                    </div>
-                                )}
 
                                 <button
                                     onClick={resetGame}

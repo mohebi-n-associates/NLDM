@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Public guide to designing, building, analyzing, and presenting a behavioral experiment for Psychology 505.">
+  <title>Final Project Guide | NLDM</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Lora:wght@500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="course.css">
+  <script src="theme.js"></script>
+  <script src="accessibility.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-header">
+    <a class="brand" href="index.html"><span class="brand-mark">N</span><span>NLDM</span></a>
+    <span class="header-divider">/</span><span class="header-title">Final Project</span>
+    <span class="header-spacer"></span>
+    <button id="theme-toggle" type="button" onclick="__toggleTheme()" aria-label="Toggle theme"></button>
+  </header>
+
+  <main id="main">
+    <section class="hero">
+      <div class="hero-inner">
+        <span class="eyebrow">Design · Build · Test · Explain</span>
+        <h1>From course idea to behavioral experiment</h1>
+        <p>Design a focused question, implement a browser-based task, collect anonymous data responsibly, analyze the result, and explain what it means.</p>
+        <div class="hero-actions">
+          <a class="button primary" href="#workflow">View workflow →</a>
+          <a class="button" href="vibe-coding.html">Start with vibe coding</a>
+          <a class="button" href="student-projects.html">See project examples</a>
+          <a class="button" href="experiments.html">Explore course experiments</a>
+        </div>
+      </div>
+    </section>
+
+    <div class="container">
+      <section class="section" aria-labelledby="practice-title">
+        <div class="callout">
+          <strong id="practice-title">New to building browser experiments?</strong>
+          Complete the <a href="vibe-coding.html">Vibe Coding Experiment</a> first. It is an individual practice assignment that rehearses prompting, debugging, data handling, visualization, and GitHub Pages deployment before the larger final project.
+        </div>
+      </section>
+
+      <section class="section" id="workflow" aria-labelledby="workflow-title">
+        <div class="section-heading"><span class="section-kicker">Workflow</span><h2 id="workflow-title">Six connected stages</h2><p>Each stage should reduce uncertainty for the next one. Do not start coding until the hypothesis, variables, and trial structure are explicit.</p></div>
+        <div class="timeline">
+          <article class="timeline-item"><span class="timeline-marker">1</span><div class="timeline-copy"><h3>Question and hypothesis</h3><p class="muted">Choose one course-linked mechanism and state a directional, falsifiable prediction.</p></div></article>
+          <article class="timeline-item"><span class="timeline-marker">2</span><div class="timeline-copy"><h3>Design specification</h3><p class="muted">Define the independent variable, dependent variable, conditions, trial sequence, exclusion rules, sample, and planned analysis.</p></div></article>
+          <article class="timeline-item"><span class="timeline-marker">3</span><div class="timeline-copy"><h3>Prototype and pilot</h3><p class="muted">Build the smallest complete version, then test instructions, timing, edge cases, mobile behavior, and saved fields.</p></div></article>
+          <article class="timeline-item"><span class="timeline-marker">4</span><div class="timeline-copy"><h3>Ethical data collection</h3><p class="muted">Recruit voluntarily, explain the general purpose, collect no direct identifiers, permit withdrawal, and restrict access to raw data.</p></div></article>
+          <article class="timeline-item"><span class="timeline-marker">5</span><div class="timeline-copy"><h3>Analysis and interpretation</h3><p class="muted">Validate the dataset, apply the planned test, report effect sizes and uncertainty, and distinguish evidence from speculation.</p></div></article>
+          <article class="timeline-item"><span class="timeline-marker">6</span><div class="timeline-copy"><h3>Report and presentation</h3><p class="muted">Connect the hypothesis, method, result, limitation, and neuroscientific implication into one coherent argument.</p></div></article>
+        </div>
+      </section>
+
+      <section class="section" aria-labelledby="spec-title">
+        <div class="section-heading"><span class="section-kicker">Before coding</span><h2 id="spec-title">Write the experiment on paper first</h2></div>
+        <div class="grid two">
+          <article class="card"><h3>Scientific specification</h3><ul class="clean-list"><li>Research question and explicit hypothesis</li><li>Manipulated and measured variables</li><li>Within- or between-subjects structure</li><li>Operational definitions</li><li>Expected pattern and statistical test</li><li>Connection to a neural or computational mechanism</li></ul></article>
+          <article class="card"><h3>Technical specification</h3><ul class="clean-list"><li>Screen-by-screen flow</li><li>Practice and main-trial structure</li><li>Stimulus timing and valid responses</li><li>Fields saved on every trial</li><li>Completion, failure, and withdrawal behavior</li><li>Browser and mobile requirements</li></ul></article>
+        </div>
+      </section>
+
+      <section class="section" aria-labelledby="privacy-title">
+        <div class="section-heading"><span class="section-kicker">Data responsibility</span><h2 id="privacy-title">Privacy by design</h2></div>
+        <div class="callout privacy"><strong>Raw participant data must not be public.</strong> Use random participant codes, never collect names or email addresses, limit database access to the research group and teaching team, and share only deidentified summaries. A public task URL does not imply a public data URL.</div>
+        <div class="grid three" style="margin-top:1rem;">
+          <article class="card"><h3>Collect less</h3><p class="muted">Save only fields required to test the hypothesis. Avoid free-text fields and device fingerprints.</p></article>
+          <article class="card"><h3>Control access</h3><p class="muted">Do not use publicly readable spreadsheets or databases for participant-level records.</p></article>
+          <article class="card"><h3>Explain clearly</h3><p class="muted">Tell participants what is collected, why, whether it is stored, and how to stop.</p></article>
+        </div>
+      </section>
+
+      <section class="section" aria-labelledby="ai-title">
+        <div class="section-heading"><span class="section-kicker">AI-assisted development</span><h2 id="ai-title">Use AI as a coding collaborator</h2><p>You remain responsible for the design, scientific reasoning, privacy, testing, and every behavior of the finished task.</p></div>
+        <div class="grid two">
+          <article class="card"><h3>A productive prompt includes</h3><ul class="clean-list"><li>Goal and participant flow</li><li>Exact number and order of trials</li><li>Timing and response rules</li><li>Required data schema</li><li>Privacy constraints</li><li>Acceptance tests</li></ul></article>
+          <article class="card"><h3>A productive review checks</h3><ul class="clean-list"><li>Does the code match the design?</li><li>Can a participant double-submit?</li><li>What happens offline or on failure?</li><li>Are reaction times measured correctly?</li><li>Can private data be read publicly?</li><li>Can every group member explain it?</li></ul></article>
+        </div>
+      </section>
+
+      <section class="section" aria-labelledby="deliver-title">
+        <div class="section-heading"><span class="section-kicker">Deliverable quality</span><h2 id="deliver-title">What a complete project communicates</h2></div>
+        <div class="grid three">
+          <article class="card"><h3>Web task</h3><p class="muted">Clear instructions, practice, reliable timing, anonymous records, tested edge cases, and an accessible interface.</p></article>
+          <article class="card"><h3>Scientific report</h3><p class="muted">Motivation, explicit hypothesis, reproducible methods, inferential statistics, effect sizes, limitations, neuroscience, and contribution attribution.</p></article>
+          <article class="card"><h3>Presentation</h3><p class="muted">A concise question, hypothesis, task demonstration, readable figure, answer, limitation, and prepared Q&amp;A.</p></article>
+        </div>
+        <div class="callout warning" style="margin-top:1rem;"><strong>Use Canvas for exact requirements.</strong> Current deadlines, weights, minimum reference counts, submission links, group assignments, and presentation schedules are intentionally not duplicated here.</div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="site-footer">Public project guide · <a href="student-projects.html">Spring 2026 showcase</a> · <a href="index.html">NLDM home</a></footer>
+</body>
+</html>

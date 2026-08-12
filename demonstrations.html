@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Interactive demonstrations of decision-making, reinforcement learning, memory, skill, and neural computation.">
     <title>Demonstrations | NLDM</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -262,6 +263,16 @@
 
         .demo-launch-btn svg { width: 15px; height: 15px; transition: transform 0.2s; }
         .demo-launch-btn:hover svg { transform: translateX(3px); }
+        .demo-module-link {
+            display: inline-block;
+            width: 100%;
+            margin: 0.7rem 0 0.35rem;
+            color: var(--ink-light);
+            font-size: 0.78rem;
+            font-weight: 700;
+            text-decoration: none;
+        }
+        .demo-module-link:hover { color: var(--teal); text-decoration: underline; }
     
 
         /* ── Light mode explicit (belt-and-suspenders over :root defaults) ── */
@@ -334,6 +345,7 @@
 
     </style>
     <script src="theme.js"></script>
+    <script src="accessibility.js" defer></script>
 <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-415Y93T7N4"></script>
 <script>
@@ -386,7 +398,8 @@
                     </div>
                     <p class="demo-card-desc">Should you buy the silver? Watch the brain weigh subjective value against market price, accumulating evidence toward a BUY or DON&rsquo;T BUY boundary.</p>
                     <div class="demo-card-tags"><span class="demo-tag">Drift Rate</span><span class="demo-tag">Threshold</span><span class="demo-tag">DDM</span></div>
-                    <a href="./Demonstrations/TradingSilver/" target="_blank" class="demo-launch-btn">Launch Demo <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+                    <a class="demo-module-link" href="./ExamPrep/Module02/">Study in Module 2 →</a>
+                    <a href="./Demonstrations/TradingSilver/" target="_blank" rel="noopener" class="demo-launch-btn">Launch Demo <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
                 </div>
 
                 <div class="demo-card">
@@ -396,7 +409,8 @@
                     </div>
                     <p class="demo-card-desc">How does the brain decide what we perceive? See how an evidence accumulator integrates noisy sensory signals until committing to a choice.</p>
                     <div class="demo-card-tags"><span class="demo-tag">Coherence</span><span class="demo-tag">Speed-Accuracy</span><span class="demo-tag">Shadlen &amp; Newsome</span></div>
-                    <a href="./Demonstrations/DriftDiffusionModel/" target="_blank" class="demo-launch-btn">Launch Demo <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+                    <a class="demo-module-link" href="./ExamPrep/Module04/">Study in Module 4 →</a>
+                    <a href="./Demonstrations/DriftDiffusionModel/" target="_blank" rel="noopener" class="demo-launch-btn">Launch Demo <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
                 </div>
 
             </div>
@@ -417,7 +431,8 @@
                     </div>
                     <p class="demo-card-desc">An agent discovers a restaurant&rsquo;s true quality through noisy feedback, updating its estimate one meal at a time. Watch prediction errors shrink as learning converges.</p>
                     <div class="demo-card-tags"><span class="demo-tag">Learning Rate &alpha;</span><span class="demo-tag">Prediction Error &delta;</span><span class="demo-tag">Dopamine</span></div>
-                    <a href="./Demonstrations/RescorlaWagner/" target="_blank" class="demo-launch-btn">Launch Demo <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+                    <a class="demo-module-link" href="./ExamPrep/Module05/">Study in Module 5 →</a>
+                    <a href="./Demonstrations/RescorlaWagner/" target="_blank" rel="noopener" class="demo-launch-btn">Launch Demo <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
                 </div>
 
                 <div class="demo-card">
@@ -427,7 +442,8 @@
                     </div>
                     <p class="demo-card-desc">Prediction errors shift backward from reward to the earliest predictive cue over learning &mdash; the exact pattern seen in dopamine neuron recordings.</p>
                     <div class="demo-card-tags"><span class="demo-tag">TD Error</span><span class="demo-tag">Discount &gamma;</span><span class="demo-tag">Schultz 1997</span></div>
-                    <a href="./Demonstrations/TemporalDifference/" target="_blank" class="demo-launch-btn">Launch Demo <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+                    <a class="demo-module-link" href="./ExamPrep/Module05/">Study in Module 5 →</a>
+                    <a href="./Demonstrations/TemporalDifference/" target="_blank" rel="noopener" class="demo-launch-btn">Launch Demo <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
                 </div>
 
                 <div class="demo-card">
@@ -437,7 +453,8 @@
                     </div>
                     <p class="demo-card-desc">Watch values propagate backward from a goal as an agent walks Home &rarr; Park &rarr; Street &rarr; Coffee Shop. See how discount factor shapes the value gradient.</p>
                     <div class="demo-card-tags"><span class="demo-tag">State Values</span><span class="demo-tag">Spatial TD</span><span class="demo-tag">Discount &gamma;</span></div>
-                    <a href="./Demonstrations/CoffeeWalk/" target="_blank" class="demo-launch-btn">Launch Demo <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+                    <a class="demo-module-link" href="./ExamPrep/Module05/">Study in Module 5 →</a>
+                    <a href="./Demonstrations/CoffeeWalk/" target="_blank" rel="noopener" class="demo-launch-btn">Launch Demo <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
                 </div>
 
                 <div class="demo-card">
@@ -447,7 +464,8 @@
                     </div>
                     <p class="demo-card-desc">A 3-layer neural network learns to classify fruit by sweetness and redness. Watch the error ripple backward through the network via the chain rule, nudging every weight toward a better answer.</p>
                     <div class="demo-card-tags"><span class="demo-tag">Backprop</span><span class="demo-tag">Chain Rule</span><span class="demo-tag">Gradient Descent</span><span class="demo-tag">Decision Boundary</span></div>
-                    <a href="./Demonstrations/Backpropagation/" target="_blank" class="demo-launch-btn">Launch Demo <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+                    <a class="demo-module-link" href="./ExamPrep/Module13/">Study in Module 13 →</a>
+                    <a href="./Demonstrations/Backpropagation/" target="_blank" rel="noopener" class="demo-launch-btn">Launch Demo <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
                 </div>
 
             </div>
@@ -463,12 +481,13 @@
 
                 <div class="demo-card">
                     <div class="demo-card-top">
-                        <div class="demo-number">6</div>
+                        <div class="demo-number">7</div>
                         <div class="demo-card-title"><h4>Reinforcement Schedules</h4><span>FR &middot; FI &middot; VR &middot; VI</span></div>
                     </div>
                     <p class="demo-card-desc">Press a lever under four different reinforcement schedules and watch the classic cumulative records emerge &mdash; from the steady slot-machine pull of variable ratio to the scalloped waiting pattern of fixed interval.</p>
                     <div class="demo-card-tags"><span class="demo-tag">Schedules</span><span class="demo-tag">Cumulative Record</span><span class="demo-tag">Skinner</span></div>
-                    <a href="./Demonstrations/ReinforcementSchedules/" target="_blank" class="demo-launch-btn">Launch Demo <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+                    <a class="demo-module-link" href="./ExamPrep/Module08/">Study in Module 8 →</a>
+                    <a href="./Demonstrations/ReinforcementSchedules/" target="_blank" rel="noopener" class="demo-launch-btn">Launch Demo <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
                 </div>
 
             </div>
@@ -484,22 +503,24 @@
 
                 <div class="demo-card">
                     <div class="demo-card-top">
-                        <div class="demo-number">7</div>
+                        <div class="demo-number">8</div>
                         <div class="demo-card-title"><h4>The Softmax Bandit</h4><span>Explore vs Exploit</span></div>
                     </div>
                     <p class="demo-card-desc">Two slot machines with hidden payoff rates. Should you exploit the best arm or explore? Temperature &tau; controls the balance in this Boltzmann policy demo.</p>
                     <div class="demo-card-tags"><span class="demo-tag">Temperature &tau;</span><span class="demo-tag">Q-Values</span><span class="demo-tag">Regret</span></div>
-                    <a href="./Demonstrations/SoftmaxBandit/" target="_blank" class="demo-launch-btn">Launch Demo <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+                    <a class="demo-module-link" href="./ExamPrep/Module03/">Study in Module 3 →</a>
+                    <a href="./Demonstrations/SoftmaxBandit/" target="_blank" rel="noopener" class="demo-launch-btn">Launch Demo <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
                 </div>
 
                 <div class="demo-card">
                     <div class="demo-card-top">
-                        <div class="demo-number">8</div>
+                        <div class="demo-number">9</div>
                         <div class="demo-card-title"><h4>The Actor-Critic Model</h4><span>Separating Evaluation from Action</span></div>
                     </div>
                     <p class="demo-card-desc">The Critic learns state value V, the Actor learns action preferences m(a), both taught by a shared dopamine-like prediction error &delta;. Compare learning rates for each system.</p>
                     <div class="demo-card-tags"><span class="demo-tag">Critic (V)</span><span class="demo-tag">Actor (m)</span><span class="demo-tag">Striatum</span></div>
-                    <a href="./Demonstrations/ActorCritic/" target="_blank" class="demo-launch-btn">Launch Demo <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+                    <a class="demo-module-link" href="./ExamPrep/Module05/">Study in Module 5 →</a>
+                    <a href="./Demonstrations/ActorCritic/" target="_blank" rel="noopener" class="demo-launch-btn">Launch Demo <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
                 </div>
 
             </div>
@@ -515,12 +536,13 @@
 
                 <div class="demo-card">
                     <div class="demo-card-top">
-                        <div class="demo-number">9</div>
+                        <div class="demo-number">10</div>
                         <div class="demo-card-title"><h4>Word-Stem Completion</h4><span>Implicit Memory &amp; Priming</span></div>
                     </div>
                     <p class="demo-card-desc">Study a list of words, then complete word stems like MOT___. Does prior exposure bias what comes to mind? Experience the priming effect &mdash; a hallmark of implicit memory.</p>
                     <div class="demo-card-tags"><span class="demo-tag">Priming</span><span class="demo-tag">Implicit Memory</span><span class="demo-tag">Schacter &amp; Graf</span></div>
-                    <a href="./Demonstrations/WordStemCompletion/" target="_blank" class="demo-launch-btn">Launch Demo <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+                    <a class="demo-module-link" href="./ExamPrep/Module06/">Study in Module 6 →</a>
+                    <a href="./Demonstrations/WordStemCompletion/" target="_blank" rel="noopener" class="demo-launch-btn">Launch Demo <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
                 </div>
 
             </div>
@@ -536,12 +558,13 @@
 
                 <div class="demo-card">
                     <div class="demo-card-top">
-                        <div class="demo-number">10</div>
+                        <div class="demo-number">11</div>
                         <div class="demo-card-title"><h4>Place Cells &amp; Visual Landmarks</h4><span>Hippocampal Spatial Coding</span></div>
                     </div>
                     <p class="demo-card-desc">Guide a rat through a three-armed maze and watch a hippocampal place cell fire. Rotate the maze and a visual cue card to discover that place fields are anchored to landmarks, not absolute position.</p>
                     <div class="demo-card-tags"><span class="demo-tag">Place Fields</span><span class="demo-tag">Hippocampus</span><span class="demo-tag">O&rsquo;Keefe &amp; Nadel</span></div>
-                    <a href="./Demonstrations/PlaceCells/" target="_blank" class="demo-launch-btn">Launch Demo <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+                    <a class="demo-module-link" href="./ExamPrep/Module06/">Study in Module 6 →</a>
+                    <a href="./Demonstrations/PlaceCells/" target="_blank" rel="noopener" class="demo-launch-btn">Launch Demo <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
                 </div>
 
             </div>
@@ -551,7 +574,7 @@
 
     <footer>
         <a href="index.html">&larr; Back to NLDM</a> &nbsp;&middot;&nbsp;
-        <a href="https://github.com/mohebi-n-associates/NLDM" target="_blank">GitHub</a>
+        <a href="https://github.com/mohebi-n-associates/NLDM" target="_blank" rel="noopener noreferrer">GitHub</a>
     </footer>
 
 </body>

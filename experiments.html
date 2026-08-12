@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Anonymous behavioral tasks and classroom experiments for Psychology 505.">
     <title>Experiments | NLDM</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -350,6 +351,7 @@
 
     </style>
     <script src="theme.js"></script>
+    <script src="accessibility.js" defer></script>
 <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-415Y93T7N4"></script>
 <script>
@@ -433,8 +435,8 @@
             </a>
 
             <!-- Two-Armed Bandit -->
-            <div class="experiment-card muted">
-                <span class="card-badge badge-soon">Coming Soon</span>
+            <a href="./Demonstrations/bandit_task/" class="experiment-card">
+                <span class="card-badge badge-live">Live</span>
                 <div class="card-icon" style="background: var(--violet-soft);">
                     <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#6d28d9" stroke-width="2">
                         <rect x="3" y="3" width="7" height="18" rx="2"/>
@@ -450,7 +452,10 @@
                     <span class="card-tag">Explore vs Exploit</span>
                     <span class="card-tag">Reward</span>
                 </div>
-            </div>
+                <div class="card-arrow">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#6d28d9" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                </div>
+            </a>
 
             <!-- Stroop Task -->
             <div class="experiment-card muted">
@@ -495,7 +500,7 @@
 
     <footer>
         <a href="index.html">&larr; Back to NLDM</a> &nbsp;&middot;&nbsp;
-        <a href="https://github.com/mohebi-n-associates/NLDM" target="_blank">GitHub</a>
+        <a href="https://github.com/mohebi-n-associates/NLDM" target="_blank" rel="noopener noreferrer">GitHub</a>
     </footer>
 
 </body>
