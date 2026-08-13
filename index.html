@@ -252,9 +252,9 @@
 
         /* ── Course community photos ── */
         .community {
-            margin-top: 4.5rem;
-            padding-top: 3.5rem;
-            border-top: 1px solid var(--border);
+            margin-bottom: 4.5rem;
+            padding-bottom: 3.75rem;
+            border-bottom: 1px solid var(--border);
         }
 
         .community-heading {
@@ -346,7 +346,7 @@
         @media (max-width: 620px) {
             .photo-wall { grid-template-columns: 1fr; gap: 1.6rem; }
             .photo-card.class-photo { grid-column: auto; }
-            .community { margin-top: 3.5rem; padding-top: 3rem; }
+            .community { margin-bottom: 3.5rem; padding-bottom: 3rem; }
         }
 
         /* ── Footer ── */
@@ -443,6 +443,7 @@
   gtag('js', new Date());
   gtag('config', 'G-415Y93T7N4');
 </script>
+  <script src="site-navigation.js" defer></script>
 </head>
 
 <body>
@@ -469,6 +470,29 @@
             <h1>Neurobiology of <em>Learning &amp; Decision Making</em></h1>
             <p>Explore interactive demonstrations, run experiments, and prepare for exams — all in one place.</p>
         </div>
+
+        <section class="community" aria-labelledby="community-title">
+            <div class="community-heading">
+                <span class="community-kicker">Beyond the syllabus</span>
+                <h2 id="community-title">The people who make NLDM feel like a community</h2>
+                <p>A few favorite moments from the classroom, the teaching team, and the conversations that continue over tea.</p>
+            </div>
+
+            <div class="photo-wall">
+                <figure class="photo-card class-photo">
+                    <img src="assets/course-community/class-photo.jpg" width="2200" height="1466" decoding="async" fetchpriority="high" alt="Psychology 505 class gathered at the front of a lecture hall">
+                    <figcaption>One class, many ways of thinking about learning and choice.</figcaption>
+                </figure>
+                <figure class="photo-card">
+                    <img src="assets/course-community/instructor-and-tas.jpg" width="1600" height="1066" loading="lazy" decoding="async" alt="The instructor and teaching assistants sitting together in an office">
+                    <figcaption>The teaching team behind the scenes.</figcaption>
+                </figure>
+                <figure class="photo-card">
+                    <img src="assets/course-community/tea-hour.jpg" width="1600" height="1066" loading="lazy" decoding="async" alt="Teaching assistants sharing tea during an informal tea hour">
+                    <figcaption>Tea hour: ideas, questions, and a well-earned pause.</figcaption>
+                </figure>
+            </div>
+        </section>
 
         <div class="nav-grid">
 
@@ -568,29 +592,6 @@
             </a>
 
         </div>
-
-        <section class="community" aria-labelledby="community-title">
-            <div class="community-heading">
-                <span class="community-kicker">Beyond the syllabus</span>
-                <h2 id="community-title">The people who make NLDM feel like a community</h2>
-                <p>A few favorite moments from the classroom, the teaching team, and the conversations that continue over tea.</p>
-            </div>
-
-            <div class="photo-wall">
-                <figure class="photo-card class-photo">
-                    <img src="assets/course-community/class-photo.jpg" width="2200" height="1466" loading="lazy" decoding="async" alt="Psychology 505 class gathered at the front of a lecture hall">
-                    <figcaption>One class, many ways of thinking about learning and choice.</figcaption>
-                </figure>
-                <figure class="photo-card">
-                    <img src="assets/course-community/instructor-and-tas.jpg" width="1600" height="1066" loading="lazy" decoding="async" alt="The instructor and teaching assistants sitting together in an office">
-                    <figcaption>The teaching team behind the scenes.</figcaption>
-                </figure>
-                <figure class="photo-card">
-                    <img src="assets/course-community/tea-hour.jpg" width="1600" height="1066" loading="lazy" decoding="async" alt="Teaching assistants sharing tea during an informal tea hour">
-                    <figcaption>Tea hour: ideas, questions, and a well-earned pause.</figcaption>
-                </figure>
-            </div>
-        </section>
     </main>
 
     <footer>

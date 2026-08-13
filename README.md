@@ -14,6 +14,7 @@ Public course website for **Psychology 505: Neurobiology of Learning & Decision 
 - `project.html` — public final-project workflow and privacy guidance
 - `vibe-coding.html` — public individual practice assignment for AI-assisted experiment development
 - `student-projects.html` — credited public project showcase
+- `site-navigation.js` — shared course-home and laboratory navigation for static pages
 
 The site is static and can be served directly by GitHub Pages. The real-time allocation activity is the only component with a build step; its deployed output is committed under `ClassPolls/RealTimeAllocation/dist/`.
 
