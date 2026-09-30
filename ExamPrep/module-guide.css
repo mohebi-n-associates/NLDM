@@ -1,0 +1,56 @@
+.guide-hero { padding-bottom: 3.5rem; }
+.guide-hero h1 { font-size: clamp(2.2rem, 6vw, 4.4rem); }
+.guide-meta { display: flex; flex-wrap: wrap; gap: .45rem; margin-top: 1.2rem; }
+.guide-meta span { padding: .3rem .65rem; border: 1px solid var(--line); border-radius: 999px; background: var(--surface); color: var(--ink-soft); font-size: .76rem; font-weight: 750; }
+.objective-list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .7rem; padding: 0; list-style: none; }
+.objective-list li { position: relative; padding: .9rem 1rem .9rem 2.55rem; border: 1px solid var(--line); border-radius: 12px; background: var(--surface); }
+.objective-list li::before { content: "✓"; position: absolute; left: .9rem; top: .9rem; color: var(--green); font-weight: 900; }
+
+.study-sections { display: grid; gap: .75rem; }
+.study-section { border: 1px solid var(--line); border-radius: 14px; background: var(--surface); overflow: clip; }
+.study-section summary { display: flex; align-items: center; gap: .8rem; padding: 1rem 1.15rem; cursor: pointer; font-weight: 800; }
+.study-section summary::marker { content: ""; }
+.study-section summary::after { content: "+"; margin-left: auto; color: var(--indigo); font-size: 1.25rem; }
+.study-section[open] summary::after { content: "−"; }
+.section-index { width: 30px; height: 30px; display: grid; place-items: center; border-radius: 9px; background: var(--indigo-soft); color: var(--indigo); font-size: .76rem; }
+.study-copy { padding: .1rem 1.25rem 1.3rem; border-top: 1px solid var(--line); color: var(--ink-soft); }
+.study-copy h3 { margin-top: 1.2rem; color: var(--ink); }
+.study-copy strong { color: var(--ink); }
+.study-copy table { width: 100%; border-collapse: collapse; margin: 1rem 0; font-size: .9rem; }
+.study-copy th, .study-copy td { padding: .7rem; border: 1px solid var(--line); text-align: left; vertical-align: top; }
+.study-copy th { background: var(--surface-soft); color: var(--ink); }
+.equation { margin: 1rem 0; padding: 1rem; border-left: 4px solid var(--indigo); border-radius: 8px; background: var(--indigo-soft); color: var(--ink); font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-weight: 700; overflow-x: auto; }
+.concept-check { margin: 1rem 0; padding: 1rem; border-radius: 10px; background: var(--amber-soft); color: var(--ink); }
+
+.flashcard-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .75rem; }
+.flashcard { min-height: 150px; padding: 1.15rem; border: 1px solid var(--line); border-radius: 14px; background: var(--surface); color: var(--ink); text-align: left; cursor: pointer; font: inherit; }
+.flashcard:hover { border-color: var(--indigo); }
+.flashcard-term { display: block; color: var(--indigo); font-weight: 850; }
+.flashcard-hint { display: block; margin-top: .45rem; color: var(--ink-faint); font-size: .78rem; }
+.flashcard-definition { display: none; margin-top: .7rem; color: var(--ink-soft); }
+.flashcard[aria-expanded="true"] .flashcard-definition { display: block; }
+.flashcard[aria-expanded="true"] .flashcard-hint { display: none; }
+
+.quiz-list { display: grid; gap: 1rem; }
+.quiz-card { padding: 1.2rem; border: 1px solid var(--line); border-radius: 14px; background: var(--surface); }
+.quiz-card fieldset { padding: 0; border: 0; }
+.quiz-card legend { width: 100%; margin-bottom: .8rem; color: var(--ink); font-weight: 800; }
+.quiz-option { display: flex; gap: .65rem; padding: .55rem .7rem; border-radius: 8px; cursor: pointer; color: var(--ink-soft); }
+.quiz-option:hover { background: var(--surface-soft); }
+.quiz-option input { margin-top: .35rem; accent-color: var(--indigo); }
+.quiz-check { margin-top: .8rem; }
+.quiz-feedback { display: none; margin-top: .8rem; padding: .75rem; border-radius: 8px; }
+.quiz-feedback.correct { display: block; background: var(--green-soft); }
+.quiz-feedback.incorrect { display: block; background: var(--rose-soft); }
+.quiz-score { margin-bottom: 1rem; padding: 1rem; border-radius: 12px; background: var(--surface-soft); color: var(--ink-soft); font-weight: 750; }
+
+.related-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .75rem; }
+.related-card { display: block; padding: 1rem; border: 1px solid var(--line); border-radius: 12px; background: var(--surface); color: var(--ink); text-decoration: none; }
+.related-card:hover { border-color: var(--indigo); }
+.related-card small { display: block; margin-top: .25rem; color: var(--ink-soft); }
+.module-nav { display: flex; justify-content: space-between; gap: 1rem; margin-top: 3rem; }
+
+@media (max-width: 700px) {
+  .objective-list, .flashcard-grid, .related-grid { grid-template-columns: 1fr; }
+  .study-copy { overflow-x: auto; }
+}

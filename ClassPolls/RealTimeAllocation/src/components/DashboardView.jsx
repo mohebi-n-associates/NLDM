@@ -29,10 +29,7 @@ export default function DashboardView() {
 
     const [error, setError] = useState(null);
 
-    const loadData = () => {
-        setLoading(true);
-        setError(null);
-
+    useEffect(() => {
         const q = query(collection(db, 'sessions', 'class_01', 'allocations'), orderBy('createdAt', 'desc'));
 
         // Timeout check
@@ -62,18 +59,10 @@ export default function DashboardView() {
             clearTimeout(timeoutId);
             unsubscribe();
         };
-    };
-
-    useEffect(() => {
-        const cleanup = loadData();
-        return cleanup;
     }, []);
 
     const generateHistogramData = (sectionIndex) => {
         const bins = new Array(10).fill(0);
-        // Labels for 0-10, 11-20, ... 91-100
-        const labels = ["0-10", "11-20", "21-30", "31-40", "41-50", "51-60", "61-70", "71-80", "81-90", "91-100"];
-
         data.forEach(sub => {
             if (sub.values && sub.values[sectionIndex] !== undefined) {
                 const val = sub.values[sectionIndex];
@@ -171,7 +160,7 @@ export default function DashboardView() {
             <header className="mb-10 flex flex-col md:flex-row justify-between items-center gap-4">
                 <div>
                     <h1 className="text-3xl font-bold text-gray-900">Real-Time Allocation Results</h1>
-                    <p className="text-gray-500">Live view of student submissions</p>
+                    <p className="text-gray-500">Live anonymous response distributions</p>
                 </div>
                 <div className="bg-white px-6 py-4 rounded-xl shadow-lg border border-blue-100 flex items-center">
                     <div className="mr-4 p-3 bg-blue-100 rounded-full text-blue-600">
